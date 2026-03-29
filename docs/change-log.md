@@ -20,6 +20,12 @@ This file records the major version changes of the projects.
 
 ## [1.0.1] - Mar 29, 2026
 
+### Added
+
+- setup express server with https, ssl/tls and security settings
+
+<br/>
+
 ## [1.0.0] - Mar 28, 2026
 
 ### Added

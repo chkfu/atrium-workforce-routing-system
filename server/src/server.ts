@@ -1,9 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import express, { Express } from 'express';
+import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import https from 'https';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
+import cookie_parser from 'cookie-parser';
 
 //  Setup dotenv
 
@@ -11,12 +15,55 @@ dotenv.config({ path: `${__dirname}/../process.env.example` });
 
 //  Setup express server
 
-const exp_app: Express = express();
-exp_app.use(express.json());
+const exp_app: Application = express();
 
-//  Setup cors
-const cors_opts = {}; //  remarks: to be applied for frontend communication
+//  Setup additional security opts
+
+//  1.  secure http response headers
+exp_app.use(helmet());
+
+//  TODO: to be applied for frontend communication
+//  2. setup cors, enabling to access server url from designated sites
+const cors_opts = {
+  origin: [''],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
 exp_app.use(cors());
+
+//  TODO: whitelist to be set for routes
+//  3.  prevent pollution from parameter attacks
+exp_app.use(hpp());
+
+//  4.  prevent overloading memories from clients
+exp_app.use(express.json({ limit: '50kb' })); // remarks: from api requests
+exp_app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '50kb', // remarks: from html form submission
+  }),
+);
+
+//  5. prevent clients pollute secret with signed cookies
+exp_app.use(cookie_parser(process.env.COOKIE_SECRET));
+
+//  2.  prevent overloading request with rate limit
+const rate_restriction = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000, // remarks: restrict 100 visits each hour
+  statusCode: 429,
+  message: {
+    status: 'failure',
+    message:
+      '[SERVER] failure: client requests overloadding, please try it later.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+//  Setup express router
+exp_app.use('/api/v1', rate_restriction);
 
 //  Setup https server with SSL/TLS
 const cert_path = path.resolve(__dirname, './ssl/localhost.pem');
@@ -42,7 +89,7 @@ const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
 try {
   httpsServer.listen(exp_server_port, () => {
     console.log(
-      `[SERVER] succeed: listening to https://localhost:128.0.0.1:${exp_server_port}`,
+      `[SERVER] success: listening to https://localhost:127.0.0.1:${exp_server_port}`,
     );
   });
 } catch (err) {

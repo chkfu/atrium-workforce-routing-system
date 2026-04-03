@@ -1,0 +1,11 @@
+--  SECTION A: INITIALISATION
+
+CREATE TABLE IF NOT EXISTS departments(
+  _id  SERIAL  PRIMARY KEY,
+  dept_name  VARCHAR(50),
+  dept_capacity  INTEGER, 
+  importance_weight  NUMERIC(4,3),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
+);

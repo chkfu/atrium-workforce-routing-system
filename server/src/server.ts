@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import express, { Application } from 'express';
+import pool from './database/pool';
 import dotenv from 'dotenv';
 import https from 'https';
 import cors from 'cors';
@@ -8,6 +9,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import cookie_parser from 'cookie-parser';
+import departmentRoute from './routes/department_route';
 
 //  Setup dotenv
 
@@ -30,7 +32,7 @@ const cors_opts = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
-exp_app.use(cors());
+exp_app.use(cors(cors_opts));
 
 //  TODO: whitelist to be set for routes
 //  3.  prevent pollution from parameter attacks
@@ -64,6 +66,7 @@ const rate_restriction = rateLimit({
 
 //  Setup express router
 exp_app.use('/api/v1', rate_restriction);
+exp_app.use('/api/v1/departments', departmentRoute);
 
 //  Setup https server with SSL/TLS
 const cert_path = path.resolve(__dirname, './ssl/localhost.pem');
@@ -84,12 +87,21 @@ const httpsServer: https.Server = https.createServer(
   exp_app,
 );
 
+//  Verify database connection
+pool.connect((err, client, release) => {
+  if (err) {
+    throw new Error(`[DATABASE] error: failed to connect to database\n${err}`);
+  }
+  release();
+  console.log('[DATABASE] success: connected to database');
+});
+
 //  Listen to server
 const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
 try {
   httpsServer.listen(exp_server_port, () => {
     console.log(
-      `[SERVER] success: listening to https://localhost:127.0.0.1:${exp_server_port}`,
+      `[SERVER] success: listening to https://localhost:${exp_server_port}`,
     );
   });
 } catch (err) {

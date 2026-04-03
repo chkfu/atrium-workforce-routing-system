@@ -43,7 +43,31 @@ specific structure.
 
 <br/>
 
-## IV. Workflow Logic
+## IV. Dataabse Setups
+
+### A. Initialise Neon PostGre database
+
+You may check the current postgresql version with:
+
+```
+$ psql --version
+```
+
+Please run the below CLI instructions at terminal if it has not been installed:
+
+```
+$ brew install postgresql@17
+$ brew services start postgresql@17
+
+```
+
+Once installed, the initialised codes in `package.json` will be excuted by running:
+
+```
+$ npm run db:init
+```
+
+Finally, the designated codes will check whether the database and tables are available, in case missing tables leads to system crashes.
 
 <br/>
 

@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start": "node dist/server.js",
+    "db:init": "dotenv -e process.env.example -- psql \"$POSTGRE_CONN\" -f src/database/schema.sql",
     "build": "tsc",
     "test": "jest"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",

@@ -22,7 +22,7 @@ const get_department_by_id = async (id: string) => {
 //  2.  POST methods
 
 //  learnt: `returning *` for returning inserted records, not available for `SELECT` methods
-const create_departments_batch = async (
+const create_department_batch = async (
   dept_name: string,
   dept_capacity: number,
   importance_weight: number,
@@ -100,7 +100,7 @@ const empty_department_all = async () => {
 export default {
   get_departments_batch,
   get_department_by_id,
-  create_departments_batch,
+  create_department_batch,
   update_department_details_batch,
   activate_department_batch,
   inactivate_department_batch,

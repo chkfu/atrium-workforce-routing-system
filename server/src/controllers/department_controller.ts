@@ -1,13 +1,14 @@
+import { RequestHandler } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { handle_async } from '../util/handle_async';
-import department_services from '../services/department_service';
+import dept_repository from '../repository/department_repository';
 import { type_dept_row } from '../types/types';
 
 //  GET /api/v1/departments
 //  INPUT: none
-const get_departments_batch = handle_async(
+const get_departments_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
-    const departments = await department_services.get_departments_batch();
+    const departments = await dept_repository.get_departments_batch();
     res.status(200).json({
       status: 'success',
       count: departments.length,
@@ -20,14 +21,14 @@ const get_departments_batch = handle_async(
 
 //  GET /api/v1/departments/:id
 //  INPUT: id in req.params
-const get_department_by_id = handle_async(
+const get_department_by_id: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  remarks: in case of spec case as req.params['id'] is an array, normally string
     const id: string =
       typeof req.params['id'] === 'string'
         ? req.params['id']
         : req.params['id'][0];
-    const department = await department_services.get_department_by_id(id);
+    const department = await dept_repository.get_department_by_id(id);
     res.status(200).json({
       status: 'success',
       count: 1,
@@ -40,7 +41,7 @@ const get_department_by_id = handle_async(
 
 //  POST /api/v1/departments
 //  INPUT: array of departments objects
-const create_departments_batch = handle_async(
+const create_department_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  declarations
     const dept_arr: type_dept_row[] = req.body.departments;
@@ -51,7 +52,7 @@ const create_departments_batch = handle_async(
       dept_arr.map((el: type_dept_row) => {
         const { dept_name, dept_capacity, importance_weight, is_active } = el;
         // reamrks: put the new string into service function to proceed
-        department_services.create_departments_batch(
+        dept_repository.create_department_batch(
           dept_name,
           dept_capacity,
           importance_weight,
@@ -71,7 +72,7 @@ const create_departments_batch = handle_async(
 
 //  PATCH /api/v1/departments
 //  INPUT: array of id strings, single input for each column update (enable null)
-const update_department_details_batch = handle_async(
+const update_department_details_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  remarks: deduplicate ids into an array
     const id_arr: string[] = Array.from(
@@ -85,7 +86,7 @@ const update_department_details_batch = handle_async(
     const { dept_name, dept_capacity, importance_weight, is_active } = req.body;
     const departments =
       //  remarks: enable leaving empty or null for unchanged, with sql `COALESCE`
-      await department_services.update_department_details_batch(
+      await dept_repository.update_department_details_batch(
         dept_name ?? null,
         dept_capacity ?? null,
         importance_weight ?? null,
@@ -105,7 +106,7 @@ const update_department_details_batch = handle_async(
 //  PATCH /api/v1/departments/activate
 //  INPUT: array of department ids
 //  remarks: for recovery for inactive records for flexibility
-const activate_department_batch = handle_async(
+const activate_department_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  declarations
     const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
@@ -113,7 +114,7 @@ const activate_department_batch = handle_async(
     );
     const id_set: Set<string> = new Set(id_arr);
     // remarks: update is_active as true
-    const departments = await department_services.activate_department_batch(
+    const departments = await dept_repository.activate_department_batch(
       Array.from(id_set),
     );
     res.status(200).json({
@@ -129,7 +130,7 @@ const activate_department_batch = handle_async(
 //  PATCH /api/v1/departments/inactivate
 //  INPUT: array of department ids
 //  remartks: for soft-deletion, records will still be kept in database
-const inactivate_department_batch = handle_async(
+const inactivate_department_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  declarations
     const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
@@ -137,7 +138,7 @@ const inactivate_department_batch = handle_async(
     );
     const id_set: Set<string> = new Set(id_arr);
     // remarks: update is_active as false
-    const departments = await department_services.inactivate_department_batch(
+    const departments = await dept_repository.inactivate_department_batch(
       Array.from(id_set),
     );
     res.status(200).json({
@@ -153,14 +154,14 @@ const inactivate_department_batch = handle_async(
 //  DELETE  /api/v1/departments
 //  INPUT: array of department ids
 //  remarks: for forceful delete [for system admin only]
-const remove_department_batch = handle_async(
+const remove_department_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     //  declarations
     const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
       typeof id === 'string' ? id : id[0],
     );
     const id_set: Set<string> = new Set(id_arr);
-    await department_services.remove_department_batch(Array.from(id_set));
+    await dept_repository.remove_department_batch(Array.from(id_set));
     res.status(204).send();
   },
 );
@@ -168,9 +169,9 @@ const remove_department_batch = handle_async(
 //  DELETE  /api/v1/departments/empty
 //  INPUT: null
 //  remarks: return to empty table
-const empty_department_all = handle_async(
+const empty_department_all: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
-    await department_services.empty_department_all();
+    await dept_repository.empty_department_all();
     res.status(204).send();
   },
 );
@@ -180,7 +181,7 @@ const empty_department_all = handle_async(
 export default {
   get_departments_batch,
   get_department_by_id,
-  create_departments_batch,
+  create_department_batch,
   update_department_details_batch,
   activate_department_batch,
   inactivate_department_batch,

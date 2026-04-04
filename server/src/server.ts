@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import pool from './database/pool';
 import dotenv from 'dotenv';
 import https from 'https';
@@ -94,6 +94,15 @@ pool.connect((err, client, release) => {
   }
   release();
   console.log('[DATABASE] success: connected to database');
+});
+
+//  Global error handler
+exp_app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(500).json({
+    status: 'failed',
+    message: `[API] error: unspecified failures at the application:\n${err}`,
+  });
 });
 
 //  Listen to server

@@ -1,7 +1,8 @@
 import { RequestHandler } from 'express';
+
 import { Request, Response, NextFunction } from 'express';
 import { handle_async } from '../util/handle_async';
-import dept_repository from '../repository/department_repository';
+import dept_repository from '../repositories/department_repository';
 import { type_dept_row } from '../types/types';
 
 //  GET /api/v1/departments
@@ -52,7 +53,7 @@ const create_department_batch: RequestHandler = handle_async(
       dept_arr.map((el: type_dept_row) => {
         const { dept_name, dept_capacity, importance_weight, is_active } = el;
         // reamrks: put the new string into service function to proceed
-        dept_repository.create_department_batch(
+        return dept_repository.create_department_batch(
           dept_name,
           dept_capacity,
           importance_weight,

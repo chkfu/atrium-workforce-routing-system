@@ -13,6 +13,13 @@ import departmentRoute from './routes/department_route';
 import logger from './infra/loggers';
 import { downtime } from './util/error_control/downtime';
 
+//  BEFORE RUNNING: handle uncaught exceptions
+//  learnt: hard downtime, as no impact when server has not been started
+//  remarks: https_server not yet available, exit directly
+process.on('uncaughtException', (err) => {
+  downtime(null, 'uncaughtException', err);
+});
+
 //  Setup dotenv
 
 dotenv.config({ path: `${__dirname}/../process.env.example` });
@@ -81,8 +88,7 @@ if (!fs.existsSync(key_path)) {
   throw new Error(`[SERVER] error: SSL key not found at ${key_path}`);
 }
 
-//  remarks: https_server is exported for downtime function
-export const https_server: https.Server = https.createServer(
+const https_server: https.Server = https.createServer(
   {
     cert: fs.readFileSync(cert_path),
     key: fs.readFileSync(key_path),
@@ -131,3 +137,10 @@ try {
     `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`,
   );
 }
+
+//  AFTER RUNNING: handle unhandle rejections
+//  learnt: soft downtime, as the server is supposed to be running
+//          ensure all tcp handshakes completed before the forceful exit
+process.on('unhandledRejection', (reason, promise) => {
+  downtime(https_server, 'unhandledRejection', reason);
+});

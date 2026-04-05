@@ -99,7 +99,8 @@ const https_server: https.Server = https.createServer(
 //  Verify database connection
 pool.connect((err, client, release) => {
   if (err) {
-    throw new Error(`[DATABASE] error: failed to connect to database\n${err}`);
+    logger.critical_logger.error(`[DATABASE] error: ${err.message}`);
+    throw err;
   }
   release();
   logger.app_logger.info('[DATABASE] success: connected to database');

@@ -15,8 +15,7 @@ process.on('uncaughtException', (err: Error) => {
   downtime(null, 'uncaughtException', err);
 });
 
-//  Setup dotenv
-
+//  Setup doten
 dotenv.config({ path: `${__dirname}/../process.env.example` });
 
 //  Setup https server with SSL/TLS
@@ -24,10 +23,14 @@ const cert_path = path.resolve(__dirname, './ssl/localhost.pem');
 const key_path = path.resolve(__dirname, './ssl/localhost-key.pem');
 
 if (!fs.existsSync(cert_path)) {
-  throw new Error(`[SERVER] error: SSL cert not found at ${cert_path}`);
+  const err_message: string = `[SERVER] error: SSL cert not found at ${cert_path}`;
+  logger.critical_logger.error(err_message);
+  throw new Error(err_message);
 }
 if (!fs.existsSync(key_path)) {
-  throw new Error(`[SERVER] error: SSL key not found at ${key_path}`);
+  const err_message: string = `[SERVER] error: SSL key not found at ${key_path}`;
+  logger.critical_logger.error(err_message);
+  throw new Error(err_message);
 }
 
 const https_server: https.Server = https.createServer(
@@ -52,11 +55,14 @@ pool.connect((err, client, release) => {
 const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
 try {
   https_server.listen(exp_server_port, () => {
-    console.log(
+    logger.app_logger.info(
       `[SERVER] success: listening to https://localhost:${exp_server_port}`,
     );
   });
 } catch (err) {
+  logger.critical_logger.error(
+    `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`,
+  );
   throw Error(
     `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`,
   );

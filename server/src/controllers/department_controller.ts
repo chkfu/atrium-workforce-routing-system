@@ -1,15 +1,19 @@
-import { RequestHandler } from 'express';
-
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler, Request, Response, NextFunction } from 'express';
 import { handle_async } from '../util/handle_async';
 import dept_repository from '../repositories/department_repository';
 import { type_dept_row } from '../types/types';
+import AppError from '../util/error_control/AppError';
 
 //  GET /api/v1/departments
 //  INPUT: none
 const get_departments_batch: RequestHandler = handle_async(
   async (req: Request, res: Response, next: NextFunction) => {
     const departments = await dept_repository.get_departments_batch();
+    //  error handling
+    if (!departments) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(200).json({
       status: 'success',
       count: departments.length,
@@ -30,6 +34,11 @@ const get_department_by_id: RequestHandler = handle_async(
         ? req.params['id']
         : req.params['id'][0];
     const department = await dept_repository.get_department_by_id(id);
+    //  error handling
+    if (!department) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(200).json({
       status: 'success',
       count: 1,
@@ -61,6 +70,11 @@ const create_department_batch: RequestHandler = handle_async(
         );
       }),
     );
+    //  error handling
+    if (!departments) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(201).json({
       status: 'success',
       count: departments.length,
@@ -94,6 +108,11 @@ const update_department_details_batch: RequestHandler = handle_async(
         is_active ?? null,
         id_arr,
       );
+    //  error handling
+    if (!departments) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(200).json({
       status: 'success',
       count: departments.length,
@@ -118,6 +137,11 @@ const activate_department_batch: RequestHandler = handle_async(
     const departments = await dept_repository.activate_department_batch(
       Array.from(id_set),
     );
+    //  error handling
+    if (!departments) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(200).json({
       status: 'success',
       count: departments.length,
@@ -142,6 +166,11 @@ const inactivate_department_batch: RequestHandler = handle_async(
     const departments = await dept_repository.inactivate_department_batch(
       Array.from(id_set),
     );
+    //  error handling
+    if (!departments) {
+      return next(new AppError(404, '[DEPARTMENT] error: no department is found.'));
+    }
+    //  normal response
     res.status(200).json({
       status: 'success',
       count: departments.length,

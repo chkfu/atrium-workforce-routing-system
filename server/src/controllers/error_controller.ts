@@ -32,7 +32,7 @@ function global_err_handler(
     //  2. without expectation
     else {
       statusCode = 400;
-      message = `[POSTGRES] error: unknown operational condition. ${err.message || ''}`;
+      message = `[APP] error: operational condition not specified - ${err.message || ''}`;
     }
 
     //  remarks: for operational errors not from AppError, but with postgre code
@@ -42,7 +42,7 @@ function global_err_handler(
   //  B. programmatic cases
   if (!isOperational) {
     statusCode = 500;
-    message = `[CRITICAL] error: unknown programmatic condition. ${err}`;
+    message = `[CRITICAL] error: programmatic condition not specified -  ${err}`;
   }
 
   //  error responses

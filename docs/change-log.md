@@ -18,7 +18,32 @@ This file records the major version changes of the projects.
 
 <br/>
 
+## [1.0.2] - Apr 8, 2026
+
+<i>Mission: setup basic api structure, and implement error handling and logging</i>
+
+### Added
+
+- setup postgre database schema for regulating record inputs
+- setup centralised logging, global error handlers and its middlewares
+- setup centralised types and enums management
+- created basic crud for table `departments` and `staff`
+
+### Edited
+
+- improved logging mechanism with rotation setting
+- improve error handling with fatal, sepcific postgre and operational errors
+- refined sql queries to prevent direct sql injection
+
+### Fixed
+
+- fixed postgre warning of ssl related settings at `pool.ts`
+
+<br/>
+
 ## [1.0.1] - Apr 4, 2026
+
+<i>Mission: setup backend server and database connection</i>
 
 ### Added
 
@@ -34,6 +59,8 @@ This file records the major version changes of the projects.
 <br/>
 
 ## [1.0.0] - Mar 28, 2026
+
+<i>Mission: setup the project base </i>
 
 ### Added
 

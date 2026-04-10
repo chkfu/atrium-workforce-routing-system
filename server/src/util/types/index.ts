@@ -1,11 +1,10 @@
+//  consideration: as schema library, zod could validate types with built-in codes.
+
 export type type_dept_row = {
-  _id: string;
   dept_name: string;
   dept_capacity: number;
   importance_weight: number;
   is_active: boolean;
-  created_at: Date;
-  updated_at: Date;
 };
 
 export type type_staff_row = {
@@ -19,5 +18,35 @@ export type type_staff_row = {
   dept_id: number | null;
   date_hired: Date | null;
   date_quit: Date | null;
+  is_active: boolean;
+};
+// ＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋＋÷
+
+export type TSchemaBase = {
+  _id: number;
+  created_at: Date;
+  updated_at: Date;
+};
+
+//  tags: departments
+export type TDepartmentBase = {
+  dept_name: string;
+  dept_capacity?: number;
+  importance_weight?: number;
+  is_active: boolean;
+};
+
+//  tags: staff
+export type TStaffBase = {
+  first_name: string;
+  last_name: string;
+  gender?: string;
+  work_position: string;
+  work_grade: string;
+  work_email?: string;
+  work_ext?: string;
+  dept_id?: number;
+  date_hired?: Date;
+  date_quit?: Date;
   is_active: boolean;
 };

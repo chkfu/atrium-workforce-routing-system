@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.2] - Apr 8, 2026
+## [1.0.2] - Apr 10, 2026
 
 <i>Mission: setup basic api structure, and implement error handling and logging</i>
 
@@ -32,7 +32,8 @@ This file records the major version changes of the projects.
 ### Edited
 
 - improved logging mechanism with rotation setting
-- improve error handling with fatal, sepcific postgre and operational errors
+- improved error handling with fatal, sepcific postgre and operational errors
+- refactored the duplicated repository codes under centralised class at `BaseRepository.ts`
 - refined sql queries to prevent direct sql injection
 
 ### Fixed

@@ -1,10 +1,10 @@
 /*
   [DISCLAIMER]
 
-  Base Repository serves as centralised management of shared SQL query platform
+  Base Controller serves as centralised management of CRUD functionalities
   between different tables. 
   
-  Additional repository scripts will only serve for specific business requirements 
+  Additional controller scripts will only serve for specific business requirements 
   for their affiliated table.
 */
 

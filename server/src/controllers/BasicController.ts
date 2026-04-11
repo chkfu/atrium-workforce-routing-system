@@ -217,8 +217,8 @@ class BaseController<T> {
   //  DELETE  /api/v1/{table_name}
   //  INPUT: array of record ids
   //  remarks: for forceful delete [for system admin only]
-  remove_records_batch: RequestHandler = handle_async(
-    async (req: Request, res: Response, next: NextFunction) => {
+  public remove_record_batch = (): RequestHandler =>
+    handle_async(async (req: Request, res: Response, next: NextFunction) => {
       //  declarations
       const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
         typeof id === 'string' ? id : id[0],
@@ -235,14 +235,13 @@ class BaseController<T> {
           ),
         );
       return res.status(204).send();
-    },
-  );
+    });
 
   //  DELETE  /api/v1/{table_name}/empty
   //  INPUT: null
   //  remarks: return to empty table [for system admin only]
-  empty_records_all: RequestHandler = handle_async(
-    async (req: Request, res: Response, next: NextFunction) => {
+  public empty_record_all = (): RequestHandler =>
+    handle_async(async (req: Request, res: Response, next: NextFunction) => {
       const records = await this.repository.empty_record_all();
       if (records.length < 1)
         return next(
@@ -252,8 +251,7 @@ class BaseController<T> {
           ),
         );
       return res.status(204).send();
-    },
-  );
+    });
 }
 
 //  Export

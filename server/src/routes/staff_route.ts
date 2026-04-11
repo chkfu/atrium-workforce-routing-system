@@ -1,23 +1,48 @@
 import express from 'express';
-import staff_controller from '../controllers/staff_controller';
+import BaseController from '../controllers/BasicController';
+import { TStaffBase } from '../util/types';
 
 //  Import router
 
 const router = express.Router();
 
+//  Setup new controller
+//  for binding entry criteria, added 'satisfies readonly (keyof TDepartmentBase)'
+const staff_cols = [
+  'first_name',
+  'last_name',
+  'gender',
+  'work_position',
+  'work_grade',
+  'work_email',
+  'work_ext',
+  'dept_id',
+  'date_hired',
+  'date_quit',
+  'is_active',
+] as const satisfies readonly (keyof TStaffBase)[];
+
+const staff_controller = new BaseController<TStaffBase>(
+  'staff',
+  [...staff_cols], // remarks: for suit into string[] required
+  '_id',
+);
+
 //  Build routes
 
 router
   .route('/')
-  .get(staff_controller.get_staff_batch)
-  .post(staff_controller.create_staff_batch)
-  .patch(staff_controller.update_staff_details_batch)
-  .delete(staff_controller.remove_staff_batch);
+  .get(staff_controller.get_record_batch())
+  .post(staff_controller.create_record_batch())
+  .patch(staff_controller.update_record_details_batch())
+  .delete(staff_controller.remove_record_batch());
 
-router.route('/activation').patch(staff_controller.update_staff_active_batch);
-router.route('/empty').delete(staff_controller.empty_staff_all);
+router
+  .route('/activation')
+  .patch(staff_controller.update_record_active_batch());
+router.route('/empty').delete(staff_controller.empty_record_all());
 
-router.route('/:id').get(staff_controller.get_staff_by_id);
+router.route('/:id').get(staff_controller.get_record_by_id());
 
 //  Export
 

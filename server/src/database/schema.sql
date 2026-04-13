@@ -2,12 +2,13 @@ BEGIN;
 
 --  ENUMS
 
-CREATE TYPE enum_user_role AS ENUM ('candidate', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive', 'sys_admin');
-CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive');
-CREATE TYPE enum_gender AS ENUM ('male', 'female', 'other');
-CREATE TYPE enum_prob_status AS ENUM ('selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed');
+--  remarks: postgres enums are not supported by 'create if not exists'
+--           'DO $$ $$' for static catching; if not, script will crash
+DO $$ BEGIN CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE enum_gender AS ENUM ('male', 'female', 'other'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE enum_prob_status AS ENUM ('selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
---  1.  core tables
+--  1.  Core tables
 
 CREATE TABLE IF NOT EXISTS departments(
   _id  SERIAL  PRIMARY KEY,
@@ -77,6 +78,95 @@ CREATE TABLE IF NOT EXISTS sys_users(
   )
 );
 
+-- CREATE TABLE IF NOT EXISTS sys_audit(
+--   _id  SERIAL  PRIMARY KEY,
+--   processor_id  INTEGER,
+--   tb_name  VARCHAR(50),
+--   action_type  VARCHAR(50),
+--   messages  TEXT,
+--   CONSTRAINT fk_candidate_tests
+--       FOREIGN KEY (candidate_id)
+--       REFERENCES candidates(_id)
+--       ON DELETE CASCADE,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
+
+
+--  2.  Candidates-supported table
+
+CREATE TABLE IF NOT EXISTS candidate_education(
+  _id  SERIAL  PRIMARY KEY,
+  candidate_id  INTEGER,
+  cert_degree  VARCHAR(50),
+  cert_institute  VARCHAR(50),
+  cert_major  VARCHAR(50),
+  year_issued  INTEGER,
+  is_verified  BOOLEAN  DEFAULT FALSE,
+  CONSTRAINT fk_candidate_qual
+    FOREIGN KEY (candidate_id) 
+    REFERENCES candidates(_id)
+    ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS candidate_experience(
+  _id  SERIAL  PRIMARY KEY,
+  candidate_id  INTEGER,
+  exp_nature  VARCHAR(50),
+  exp_role  VARCHAR(50),
+  exp_institute  VARCHAR(50),
+  year_start  INTEGER,
+  year_end  INTEGER,
+  is_verified  BOOLEAN  DEFAULT FALSE,
+  CONSTRAINT fk_candidate_exp
+    FOREIGN KEY (candidate_id)
+    REFERENCES candidates(_id)
+    ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS candidate_tests(
+  _id  SERIAL  PRIMARY KEY,
+  candidate_id  INTEGER,
+  score_aptitude  NUMERIC(5,2),
+  score_interview_1st  NUMERIC(5,2),
+  score_interview_2nd  NUMERIC(5,2),
+  score_overall  NUMERIC(5,2),
+  CONSTRAINT fk_candidate_tests
+    FOREIGN KEY (candidate_id)
+    REFERENCES candidates(_id)
+    ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS candidate_preferences(
+  _id SERIAL  PRIMARY KEY,
+  candidate_id  INTEGER,
+  pref_dept_1st  INTEGER,
+  pref_dept_2nd  INTEGER,
+  pref_dept_3rd  INTEGER,
+  CONSTRAINT fk_candidate_pref_1st
+    FOREIGN KEY (pref_dept_1st)
+    REFERENCES departments(_id)
+    ON DELETE SET NULL,
+  CONSTRAINT fk_candidate_pref_2nd
+    FOREIGN KEY (pref_dept_2nd)
+    REFERENCES departments(_id)
+    ON DELETE SET NULL,
+  CONSTRAINT fk_candidate_pref_3rd
+    FOREIGN KEY (pref_dept_3rd)
+    REFERENCES departments(_id)
+    ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
+);
 
 
 

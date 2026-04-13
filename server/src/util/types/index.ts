@@ -8,6 +8,8 @@
 
 import { enum_gender, enum_user_role, enum_prob_status } from '../enums';
 
+//  1.  Core tables
+
 //  tags: all records
 export type TSchemaBase = {
   _id: number;
@@ -55,5 +57,49 @@ export type TSysUserBase = {
   _password: string;
   staff_id?: number;
   candidate_id?: number;
+  is_active: boolean;
+};
+
+//  2.  Candidates-supported table
+
+//  tags: cdd_education
+export type TCddEduBase = {
+  candidate_id: number;
+  cert_degree: string;
+  cert_institute: string;
+  cert_major: string;
+  year_issued?: number;
+  is_verified: boolean;
+  is_active: boolean;
+};
+
+//  tags: cdd_experience
+export type TCddExpBase = {
+  candidate_id: number;
+  exp_nature: string;
+  exp_role: string;
+  exp_institute: string;
+  year_start: number;
+  year_end?: number;
+  is_verified: boolean;
+  is_active: boolean;
+};
+
+//  tags: cdd_test
+export type TCddTestBase = {
+  candidate_id: number;
+  score_aptitude: number;
+  score_interview_1st: number;
+  score_interview_2nd: number;
+  score_overall?: number;
+  is_active: boolean;
+};
+
+//  tags: cdd_preferences
+export type TCddPrefBase = {
+  candidate_id: number;
+  pref_dept_1st: number;
+  pref_dept_2nd: number;
+  pref_dept_3rd: number;
   is_active: boolean;
 };

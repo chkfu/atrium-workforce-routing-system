@@ -35,18 +35,17 @@ CREATE TABLE IF NOT EXISTS candidates(
   last_name  VARCHAR(50),
   _email  VARCHAR(200),
   _password  VARCHAR(200),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  is_active BOOLEAN DEFAULT TRUE
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active  BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE IF NOT EXISTS database_edit_history(
+CREATE TABLE IF NOT EXISTS sys_audit(
   _id  SERIAL  PRIMARY KEY,
   processor_id  INTEGER,
   tb_name  VARCHAR(50),
   action_type  VARCHAR(50),
-  old_value  TEXT,
-  new_value  TEXT,
+  updates  TEXT,
   CONSTRAINT fk_processor_history
     FOREIGN KEY (processor_id)
     REFERENCES staff(_id),

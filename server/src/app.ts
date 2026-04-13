@@ -8,6 +8,10 @@ import dept_route from './routes/department_route';
 import staff_route from './routes/staff_route';
 import candidate_route from './routes/candidate_route';
 import sys_user_route from './routes/sys_user_route';
+import cdd_edu_route from './routes/cdd_edu_route';
+import cdd_exp_route from './routes/cdd_exp_route';
+import cdd_test_route from './routes/cdd_test_route';
+import cdd_pref_route from './routes/cdd_pref_route';
 import global_err_handler from './infra/middlewares/error_handler';
 
 //  Setup express server
@@ -65,6 +69,10 @@ exp_app.use('/api/v1/departments', dept_route);
 exp_app.use('/api/v1/staff', staff_route);
 exp_app.use('/api/v1/candidates', candidate_route);
 exp_app.use('/api/v1/sys_users', sys_user_route);
+exp_app.use('/api/v1/candidate_education', cdd_edu_route);
+exp_app.use('/api/v1/candidate_experience', cdd_exp_route);
+exp_app.use('/api/v1/candidate_tests', cdd_test_route);
+exp_app.use('/api/v1/candidate_preferences', cdd_pref_route);
 
 //  Catch-all handler for 404: invalid routes
 //  learnt: '*' is not supported from express 5

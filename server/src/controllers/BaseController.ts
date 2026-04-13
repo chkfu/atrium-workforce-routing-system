@@ -18,7 +18,7 @@ import { TSchemaBase } from '../util/types';
 
 //  CLASS
 
-class BaseController<T> {
+abstract class BaseController<T> {
   //  Attributes
   protected table: string;
   protected columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
@@ -30,18 +30,12 @@ class BaseController<T> {
     table: string,
     columns: Extract<keyof T, string>[],
     primary_key: string,
-    repository?: BaseRepository<T>,
+    repository: BaseRepository<T>,
   ) {
     this.table = table;
     this.columns = columns;
     this.primary_key = primary_key;
-    this.repository =
-      repository ??
-      new BaseRepository(
-        this.table,
-        this.columns, //  remarks: hard-code, as fail to get column name from types
-        this.primary_key,
-      );
+    this.repository = repository;
   }
 
   //  Methods

@@ -25,7 +25,7 @@ import { TSchemaBase } from '../util/types';
 
 //   CLASS
 
-class BaseRepository<T> {
+abstract class BaseRepository<T> {
   //  1.  Attributes
   private table: string;
   private columns: Extract<keyof (T & TSchemaBase), string>[];
@@ -79,7 +79,7 @@ class BaseRepository<T> {
     //  querying
     const result = await pool.query(query_str);
     return result.rows ?? [];
-  };
+  }
 
   //  remarks: GET specific record(s) by single / multiple id
   //  INPUT: array of stringified id

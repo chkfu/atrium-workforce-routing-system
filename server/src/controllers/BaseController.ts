@@ -5,7 +5,8 @@
   between different tables. 
   
   Additional controller scripts will only serve for specific business requirements 
-  for their affiliated table.
+  for their affiliated table. Decide whether the shared methods should be
+  specifically disabled or altered.
 */
 
 import { RequestHandler, Request, Response, NextFunction } from 'express';
@@ -19,10 +20,10 @@ import { TSchemaBase } from '../util/types';
 
 class BaseController<T> {
   //  Attributes
-  private table: string;
-  private columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
-  private primary_key: string;
-  private repository: BaseRepository<T>;
+  protected table: string;
+  protected columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
+  protected primary_key: string;
+  protected repository: BaseRepository<T>;
 
   //  Constructor
   constructor(

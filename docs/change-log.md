@@ -18,9 +18,23 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.2] - Apr 11, 2026
+## [1.0.3] - Apr 12, 2026 - In Progress
 
-<i>Objective: setup basic api structure, and implement error handling and logging</i>
+<i>Objective: implement authentication and candidate selection APIs with secure access control and validation</i>
+
+### Added
+
+### Edited
+
+### Fixed
+
+### Delete
+
+<br/>
+
+## [1.0.2] - Apr 12, 2026
+
+<i>Objective: establish core API architecture with centralised error handling and structured logging</i>
 
 ### Added
 
@@ -35,6 +49,7 @@ This file records the major version changes of the projects.
 - improved error handling with fatal, sepcific postgre and operational errors
 - refactored the duplicated repository codes under centralised class at `BaseRepository.ts`
 - refactored the duplicated controller codes under centralised class at `BaseController.ts`
+- extended affiliated controllers and repositories for each table, inherited from their base classes
 - refined sql queries to prevent direct sql injection
 - re-organised file structure for the server side
 
@@ -50,7 +65,7 @@ This file records the major version changes of the projects.
 
 ## [1.0.1] - Apr 4, 2026
 
-<i>Objective: setup backend server and database connection</i>
+<i>Objective: initialise backend service with database connectivity and secure server configuration</i>
 
 ### Added
 

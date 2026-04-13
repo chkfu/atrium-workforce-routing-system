@@ -6,6 +6,8 @@ import hpp from 'hpp';
 import cookie_parser from 'cookie-parser';
 import dept_route from './routes/department_route';
 import staff_route from './routes/staff_route';
+import candidate_route from './routes/candidate_route';
+import sys_user_route from './routes/sys_user_route';
 import global_err_handler from './infra/middlewares/error_handler';
 
 //  Setup express server
@@ -61,6 +63,8 @@ const rate_restriction = rateLimit({
 exp_app.use('/api/v1', rate_restriction);
 exp_app.use('/api/v1/departments', dept_route);
 exp_app.use('/api/v1/staff', staff_route);
+exp_app.use('/api/v1/candidates', candidate_route);
+exp_app.use('/api/v1/sys_users', sys_user_route);
 
 //  Catch-all handler for 404: invalid routes
 //  learnt: '*' is not supported from express 5

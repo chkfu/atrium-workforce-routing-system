@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start": "node dist/server.js",
-    "db:init": "dotenv-cli -e process.env.example -- psql \"$POSTGRE_CONN\" -f src/database/schema.sql",
+    "db:init": "dotenv -e .env -- psql \"$POSTGRE_CONN\" -f src/database/schema.sql",
     "build": "tsc",
     "test": "jest"
   },
@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/chkfu/workforce-routing-system#readme",
   "devDependencies": {
+    "dotenv-cli": "^8.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",

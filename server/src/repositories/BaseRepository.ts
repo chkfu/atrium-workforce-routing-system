@@ -48,10 +48,10 @@ class BaseRepository<T> {
 
   //  remarks: GET batch records, potentially sorting
   //  INPUT: stringified for sort column, boolean for sort order
-  public get_record_batch = async (
+  public async get_record_batch(
     sort_col: string | null,
     is_ascending: boolean | null,
-  ) => {
+  ) {
     //  error handling
     //  learnt: required to convert into recognise type for column name string
     if (

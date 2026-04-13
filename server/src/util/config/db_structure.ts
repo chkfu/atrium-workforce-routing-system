@@ -27,6 +27,30 @@ const db_structure = {
     ],
     primary_key: SHARED_PRIMARY_KEY,
   },
+  candidates: {
+    table: 'candidates',
+    columns: [
+      'first_name',
+      'last_name',
+      'gender',
+      'email',
+      'prob_status',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+  sys_users: {
+    table: 'sys_users',
+    columns: [
+      'username',
+      '_password',
+      'user_role',
+      'staff_id',
+      'candidate_id',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
 };
 
 //  Export

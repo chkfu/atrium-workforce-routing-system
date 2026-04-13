@@ -6,7 +6,9 @@
   better maintenance.
 */
 
-//  tags: departments, staff
+import { enum_gender, enum_user_role, enum_prob_status } from '../enums';
+
+//  tags: all records
 export type TSchemaBase = {
   _id: number;
   created_at: Date;
@@ -33,5 +35,25 @@ export type TStaffBase = {
   dept_id?: number;
   date_hired?: Date;
   date_quit?: Date;
+  is_active: boolean;
+};
+
+//  tags: candidates
+export type TCandidateBase = {
+  first_name: string;
+  last_name: string;
+  gender?: enum_gender;
+  email?: string;
+  prob_status?: enum_prob_status;
+  is_active: boolean;
+};
+
+//  tags: sys_users
+//  remarks: contains both staff and candidates, for accessing the system
+export type TSysUserBase = {
+  username: string;
+  _password: string;
+  staff_id?: number;
+  candidate_id?: number;
   is_active: boolean;
 };

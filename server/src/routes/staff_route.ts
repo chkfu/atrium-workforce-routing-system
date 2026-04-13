@@ -1,5 +1,5 @@
 import express from 'express';
-import BaseController from '../controllers/BasicController';
+import StaffController from '../controllers/StaffController';
 import { TStaffBase, TSchemaBase } from '../util/types';
 import db_structure from '../util/config/db_structure';
 
@@ -7,7 +7,7 @@ import db_structure from '../util/config/db_structure';
 
 const router = express.Router();
 
-const staff_controller = new BaseController<TStaffBase & TSchemaBase>(
+const staff_controller = new StaffController(
   db_structure.staff.table,
   [...db_structure.staff.columns] as Extract<
     keyof (TStaffBase & TSchemaBase),

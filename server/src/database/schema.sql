@@ -3,7 +3,7 @@ BEGIN;
 --  ENUMS
 
 CREATE TYPE enum_user_role AS ENUM ('candidate', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive', 'sys_admin');
-CREATE TYPE enum_staff_role AS ENUM ('grade_1_assistant', 'grade_2_manager', 'grade_3_executive');
+CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive');
 CREATE TYPE enum_gender AS ENUM ('male', 'female', 'other');
 CREATE TYPE enum_prob_status AS ENUM ('selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed');
 
@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS candidates(
   _id  SERIAL  PRIMARY KEY,
   first_name  VARCHAR(50) NOT NULL,
   last_name  VARCHAR(50) NOT NULL,
+  gender  enum_gender  NOT NULL,
+  email  VARCHAR(50) UNIQUE,
   prob_status  enum_prob_status NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -54,11 +56,11 @@ CREATE TABLE IF NOT EXISTS candidates(
 --  remarks: users table for system login, but staff and candidates refers to personal profiles
 --  remarks: authentication related tables should be seperated, if needed to be in multi-cloud architecture
 --           tradeoff: data lantency, systematic complexity, and cost of maintenance
-CREATE TABLE IF NOT EXISTS users(
+CREATE TABLE IF NOT EXISTS sys_users(
   _id          SERIAL PRIMARY KEY,
   username     VARCHAR(50) UNIQUE NOT NULL,
   _password    VARCHAR(255) NOT NULL,
-  user_role    enum_user_role NOT NULL,
+  user_role    enum_user_role,
   staff_id     INTEGER UNIQUE REFERENCES staff(_id) ON DELETE SET NULL,
   candidate_id INTEGER UNIQUE REFERENCES candidates(_id) ON DELETE SET NULL,
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

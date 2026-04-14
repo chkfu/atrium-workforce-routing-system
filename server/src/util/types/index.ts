@@ -6,7 +6,7 @@
   better maintenance.
 */
 
-import { enum_gender, enum_user_role, enum_prob_status } from '../enums';
+import { enum_gender, enum_user_role, enum_prob_status, enum_hire_decision } from '../enums';
 
 //  1.  Core tables
 
@@ -150,5 +150,77 @@ export type TPbtIntakeBase = {
   intake_round: number;
   training_start: Date;
   training_end: Date;
+  is_active: boolean;
+};
+
+//  tags: prob_score
+export type TPbtScoreBase = {
+  candidate_id: number;
+  department_id: number;
+  count_awarding: number;
+  count_warning: number;
+  score_performance: number;
+  score_attendance: number;
+  score_adaptability: number;
+  is_active: boolean;
+};
+
+//  5. Hire stage
+
+//  tags: hire_weight
+export type THireWeightBase = {
+  method_name: string;
+  method_goal: string;
+  weight_performance: number;
+  weight_attendance: number;
+  weight_adaptability: number;
+  is_active: boolean;
+};
+
+//  tags: hire_criteria
+export type THireCriteriaBase = {
+  dept_id: number;
+  min_score_foundation: number;
+  min_score_preference: number;
+  pref_criteria: Record<string, any>;
+  blacklist: Record<string, any>;
+  is_active: boolean;
+};
+
+//  tags: hire_scoring
+export type THireScoreBase = {
+  candidate_id: number;
+  hire_weight_id: number;
+  score_performance: number;
+  score_attendance: number;
+  score_adaptability: number;
+  score_overall: number;
+  is_active: boolean;
+};
+
+//  tags: hire_decisions
+export type THireDecisionBase = {
+  candidate_id: number;
+  department_id: number;
+  hire_weight_id: number;
+  hire_criteria_id: number;
+  hire_score_id: number;
+  decision_date?: Date;
+  final_decision: enum_hire_decision;
+  is_active: boolean;
+};
+
+
+//  tags: hire_intakes
+export type THireIntakeBase = {
+  candidate_id: number;
+  department_id: number;
+  hire_weight_id: number;
+  hire_criteria_id: number;
+  hire_score_id: number;
+  intake_round: number;
+  onboarding_start: Date;
+  onboarding_end?: Date;
+  final_decision?: enum_hire_decision;
   is_active: boolean;
 };

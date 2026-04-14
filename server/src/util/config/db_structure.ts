@@ -173,6 +173,95 @@ const db_structure = {
     ],
     primary_key: SHARED_PRIMARY_KEY,
   },
+
+  pbt_score: {
+    table: 'probation_scoring',
+    columns: [
+      'candidate_id',
+      'department_id',
+      'count_awarding',
+      'count_warning',
+      'score_performance',
+      'score_attendance',
+      'score_adaptability',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+
+  //  5. hire stage
+
+  hire_weight: {
+    table: 'hire_weighting',
+    columns: [
+      'method_name',
+      'method_goal',
+      'weight_performance',
+      'weight_attendance',
+      'weight_adaptability',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+
+  hire_criteria: {
+    table: 'hire_criteria',
+    columns: [
+      'dept_id',
+      'min_score_foundation',
+      'min_score_preference',
+      'pref_criteria',
+      'blacklist',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+
+  hire_score: {
+    table: 'hire_scoring',
+    columns: [
+      'candidate_id',
+      'hire_weight_id',
+      'score_performance',
+      'score_attendance',
+      'score_adaptability',
+      'score_overall',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+
+  hire_decision: {
+    table: 'hire_decisions',
+    columns: [
+      'candidate_id',
+      'department_id',
+      'hire_weight_id',
+      'hire_criteria_id',
+      'hire_score_id',
+      'decision_date',
+      'final_decision',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
+
+  hire_intakes: {
+    table: 'hire_intakes',
+    columns: [
+      'candidate_id',
+      'department_id',
+      'hire_weight_id',
+      'hire_criteria_id',
+      'hire_score_id',
+      'intake_round',
+      'onboarding_start',
+      'onboarding_end',
+      'final_decision',
+      'is_active',
+    ],
+    primary_key: SHARED_PRIMARY_KEY,
+  },
 };
 
 //  Export

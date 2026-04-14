@@ -27,3 +27,9 @@ export enum enum_prob_status {
   withdrawn = 'withdrawn',
   failed = 'failed',
 }
+
+export enum enum_hire_decision {
+  approved = 'approved',
+  rejected = 'rejected',
+  deferred = 'deferred',
+}

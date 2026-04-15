@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { THireCriteriaBase, TSchemaBase } from '../util/types';
-import HireCriteriaRepository from '../repositories/HireCriteriaRepository';
+import HireCriteriaService from '../services/HireCriteriaService';
 
-//  Declarations
+//  Controller class
 
 class HireCriteriaController extends BaseController<
   THireCriteriaBase & TSchemaBase
@@ -13,8 +13,8 @@ class HireCriteriaController extends BaseController<
     columns: Extract<keyof (THireCriteriaBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new HireCriteriaRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new HireCriteriaService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

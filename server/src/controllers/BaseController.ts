@@ -11,31 +11,28 @@
 
 import { RequestHandler, Request, Response, NextFunction } from 'express';
 import { handle_async } from '../infra/middlewares/handle_async';
-import BaseRepository from '../repositories/BaseRepository';
-import AppError from '../util/errors/AppError';
-import ValueError from '../util/errors/ValueError';
-import { TSchemaBase } from '../util/types';
+import BaseService from '../services/BaseService';
 
-//  CLASS
+//  Controller class
 
 abstract class BaseController<T> {
   //  Attributes
   protected table: string;
   protected columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
   protected primary_key: string;
-  protected repository: BaseRepository<T>;
+  protected service: BaseService<T>;
 
   //  Constructor
   constructor(
     table: string,
     columns: Extract<keyof T, string>[],
     primary_key: string,
-    repository: BaseRepository<T>,
+    service: BaseService<T>,
   ) {
     this.table = table;
     this.columns = columns;
     this.primary_key = primary_key;
-    this.repository = repository;
+    this.service = service;
   }
 
   //  Methods
@@ -44,19 +41,9 @@ abstract class BaseController<T> {
 
   //  GET /api/v1/{table_name}
   //  INPUT: null
-  //  remarks: exception for empty checks, as empty is also the info for clients
   public get_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      const result = await this.repository.get_record_batch(null, null);
-      //  validation: check received records
-      if (!result) {
-        return next(
-          new ValueError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
-      }
+      const result = await this.service.get_record_batch();
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -71,20 +58,8 @@ abstract class BaseController<T> {
   //  INPUT: id in req.params
   public get_record_by_id = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      //  remarks: this.primary_key is development setting, skip column validation
-      //  remarks: in case of spec case as req.params['id'] is an array, normally string
-      //  leanrt: express `params` always return string, but not affect in schema types
-      const id = req.params['id'] as string;
-      const record = await this.repository.get_record_by_id(id);
-      //  error handling
-      if (!record) {
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
-      }
+      const id: string = req.params['id'] as string;
+      const record = await this.service.get_record_by_id(id);
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -101,30 +76,8 @@ abstract class BaseController<T> {
   //  INPUT: array of record objects
   public create_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      //  declarations
       const obj_arr: any = req.body[this.table];
-      //  remarks: for batch insert, customised inserted values with new string
-      //  learnt: prevent sql injection without inserting req.body directly.
-      //  learnt: postgre `CREATE` runs in sequence, required Promise for handling batch items
-      const records = await Promise.all(
-        //  learnt: clear the type with unknown first, then exercise the omit type
-        obj_arr.map(async (el: any) => {
-          const new_item = Object.fromEntries(
-            this.columns.map((key) => [key, el[key]]),
-          ) as unknown as Omit<T, keyof TSchemaBase>;
-          // reamrks: put the new string into service function to proceed
-          return this.repository.create_record_single(new_item);
-        }),
-      );
-      //  error handling
-      if (!records || records.length < 1) {
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
-      }
+      const records = await this.service.create_record_batch(obj_arr);
       //  normal response
       res.status(201).json({
         status: 'success',
@@ -141,32 +94,7 @@ abstract class BaseController<T> {
   //  INPUT: array of id strings, single input for each column update (enable null)
   public update_record_details_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      //  remarks: deduplicate ids into an array
-      const id_arr: string[] = Array.from(
-        new Set(
-          req.body._ids.map((id: string | string[]) =>
-            typeof id === 'string' ? id : id[0],
-          ),
-        ),
-      );
-      //  learnt: get the update values; null means keep existing value
-      const update_data = Object.fromEntries(
-        //  remarks: enable leaving empty or null for unchanged, with sql `COALESCE`
-        this.columns.map((key) => [key, req.body[key] ?? null]),
-      );
-      const records = await this.repository.update_record_details_batch(
-        id_arr,
-        update_data,
-      );
-      //  error handling
-      if (!records || records.length < 1) {
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
-      }
+      const records = await this.service.update_record_details_batch(req.body);
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -179,37 +107,10 @@ abstract class BaseController<T> {
 
   //  PATCH /api/v1/{table_name}/activation
   //  INPUT: array of records ids, is_active as boolean
-  //  remarks: for recovery for inactive records for flexibility
   public update_record_active_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      //  declarations
-      const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
-        typeof id === 'string' ? id : id[0],
-      );
-      const id_set: Set<string> = new Set(id_arr);
-      const is_active: boolean | null = req.body.is_active ?? null;
-      if (is_active == null) {
-        return next(
-          new ValueError(
-            400,
-            `[${this.table.toUpperCase()}] error: invalid value input of req.body.is_active.`,
-          ),
-        );
-      }
       // remarks: update is_active as true
-      const records = await this.repository.update_record_active_batch(
-        Array.from(id_set),
-        is_active,
-      );
-      //  error handling
-      if (!records || records.length < 1) {
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
-      }
+      const records = await this.service.update_record_active_batch(req.body);
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -224,24 +125,13 @@ abstract class BaseController<T> {
 
   //  DELETE  /api/v1/{table_name}
   //  INPUT: array of record ids
-  //  remarks: for forceful delete [for system admin only]
   public remove_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       //  declarations
       const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
         typeof id === 'string' ? id : id[0],
       );
-      const id_set: Set<string> = new Set(id_arr);
-      const records = await this.repository.remove_record_batch(
-        Array.from(id_set),
-      );
-      if (records.length < 1)
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
+      await this.service.remove_record_batch(id_arr);
       return res.status(204).send();
     });
 
@@ -250,14 +140,7 @@ abstract class BaseController<T> {
   //  remarks: return to empty table [for system admin only]
   public empty_record_all = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      const records = await this.repository.empty_record_all();
-      if (records.length < 1)
-        return next(
-          new AppError(
-            404,
-            `[${this.table.toUpperCase()}] error: no record is found.`,
-          ),
-        );
+      const records = await this.service.empty_record_all();
       return res.status(204).send();
     });
 }

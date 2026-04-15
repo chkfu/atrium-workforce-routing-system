@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { TPbtIntakeBase, TSchemaBase } from '../util/types';
-import PbtIntakeRepository from '../repositories/PbtIntakeRepository';
+import PbtIntakeService from '../services/PbtIntakeService';
 
-//  Declarations
+//  Controller class
 
 class PbtIntakeController extends BaseController<TPbtIntakeBase & TSchemaBase> {
   //  Constructor
@@ -11,8 +11,8 @@ class PbtIntakeController extends BaseController<TPbtIntakeBase & TSchemaBase> {
     columns: Extract<keyof (TPbtIntakeBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new PbtIntakeRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new PbtIntakeService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

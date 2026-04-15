@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { THireIntakeBase, TSchemaBase } from '../util/types';
-import HireIntakeRepository from '../repositories/HireIntakeRepository';
+import HireIntakeService from '../services/HireIntakeService';
 
-//  Declarations
+//  Controller class
 
 class HireIntakeController extends BaseController<
   THireIntakeBase & TSchemaBase
@@ -13,8 +13,8 @@ class HireIntakeController extends BaseController<
     columns: Extract<keyof (THireIntakeBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new HireIntakeRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new HireIntakeService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

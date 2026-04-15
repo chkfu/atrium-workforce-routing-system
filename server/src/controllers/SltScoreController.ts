@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TSltScoreBase, TSchemaBase } from '../util/types';
-import SltScoreRepository from '../repositories/SltScoreRepository';
-//  Declarations
+import SltScoreService from '../services/SltScoreService';
+
+//  Controller class
 
 class SltScoreController extends BaseController<TSltScoreBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class SltScoreController extends BaseController<TSltScoreBase & TSchemaBase> {
     columns: Extract<keyof (TSltScoreBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new SltScoreRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new SltScoreService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

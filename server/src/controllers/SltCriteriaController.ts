@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { TSltCriteriaBase, TSchemaBase } from '../util/types';
-import SltCriteriaRepository from '../repositories/SltCriteriaRepository';
+import SltCriteriaService from '../services/SltCriteriaService';
 
-//  Declarations
+//  Controller class
 
 class SltCriteriaController extends BaseController<
   TSltCriteriaBase & TSchemaBase
@@ -13,8 +13,8 @@ class SltCriteriaController extends BaseController<
     columns: Extract<keyof (TSltCriteriaBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new SltCriteriaRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new SltCriteriaService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

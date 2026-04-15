@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TSltWeightBase, TSchemaBase } from '../util/types';
-import SltWeightRepository from '../repositories/SltWeightRepository';
-//  Declarations
+import SltWeightService from '../services/SltWeightService';
+
+//  Controller class
 
 class SltWeightController extends BaseController<TSltWeightBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class SltWeightController extends BaseController<TSltWeightBase & TSchemaBase> {
     columns: Extract<keyof (TSltWeightBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new SltWeightRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new SltWeightService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

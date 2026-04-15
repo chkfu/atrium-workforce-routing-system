@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { THireWeightBase, TSchemaBase } from '../util/types';
-import HireWeightRepository from '../repositories/HireWeightRepository';
+import HireWeightService from '../services/HireWeightService';
 
-//  Declarations
+//  Controller class
 
 class HireWeightController extends BaseController<
   THireWeightBase & TSchemaBase
@@ -13,8 +13,8 @@ class HireWeightController extends BaseController<
     columns: Extract<keyof (THireWeightBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new HireWeightRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new HireWeightService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

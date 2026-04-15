@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { THireScoreBase, TSchemaBase } from '../util/types';
-import HireScoreRepository from '../repositories/HireScoreRepository';
+import HireScoreService from '../services/HireScoreService';
 
-//  Declarations
+//  Controller class
 
 class HireScoreController extends BaseController<THireScoreBase & TSchemaBase> {
   //  Constructor
@@ -11,8 +11,8 @@ class HireScoreController extends BaseController<THireScoreBase & TSchemaBase> {
     columns: Extract<keyof (THireScoreBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new HireScoreRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new HireScoreService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

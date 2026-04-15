@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TCddPrefBase, TSchemaBase } from '../util/types';
-import CddPrefRepository from '../repositories/CddPrefRepository';
-//  Declarations
+import CddPrefService from '../services/CddPrefService';
+
+//  Controller class
 
 class CddPrefController extends BaseController<TCddPrefBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class CddPrefController extends BaseController<TCddPrefBase & TSchemaBase> {
     columns: Extract<keyof (TCddPrefBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new CddPrefRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new CddPrefService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

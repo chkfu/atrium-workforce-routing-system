@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
-import DepartmentRepository from '../repositories/DepartmentRepository';
+import DepartmentService from '../services/DepartmentService';
 import { TDepartmentBase, TSchemaBase } from '../util/types';
 
-//  CLASS
+//  Controller class
 
 class DepartmentsController extends BaseController<
   TDepartmentBase & TSchemaBase
@@ -13,8 +13,8 @@ class DepartmentsController extends BaseController<
     columns: Extract<keyof (TDepartmentBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new DepartmentRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new DepartmentService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

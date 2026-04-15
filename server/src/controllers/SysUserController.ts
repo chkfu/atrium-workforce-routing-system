@@ -1,10 +1,11 @@
 import BaseController from './BaseController';
 import { TSysUserBase, TSchemaBase } from '../util/types';
-import SysUserRepository from '../repositories/SysUserRepository';
+import SysUserService from '../services/SysUserService';
 import AppError from '../util/errors/AppError';
 import { RequestHandler, Request, Response, NextFunction } from 'express';
 import { handle_async } from '../infra/middlewares/handle_async';
-//  Declarations
+
+//  Controller class
 
 class SysUserController extends BaseController<TSysUserBase & TSchemaBase> {
   //  Constructor
@@ -13,8 +14,8 @@ class SysUserController extends BaseController<TSysUserBase & TSchemaBase> {
     columns: Extract<keyof (TSysUserBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new SysUserRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new SysUserService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 
   //  Methods

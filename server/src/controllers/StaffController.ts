@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TStaffBase, TSchemaBase } from '../util/types';
-import StaffRepository from '../repositories/StaffRepository';
-//  Declarations
+import StaffService from '../services/StaffService';
+
+//  Controller class
 
 class StaffController extends BaseController<TStaffBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class StaffController extends BaseController<TStaffBase & TSchemaBase> {
     columns: Extract<keyof (TStaffBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new StaffRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new StaffService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

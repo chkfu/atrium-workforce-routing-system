@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TCandidateBase, TSchemaBase } from '../util/types';
-import CandidateRepository from '../repositories/CandidateRepository';
-//  Declarations
+import CandidateService from '../services/CandidateService';
+
+//  Controller class
 
 class CandidateController extends BaseController<TCandidateBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class CandidateController extends BaseController<TCandidateBase & TSchemaBase> {
     columns: Extract<keyof (TCandidateBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new CandidateRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new CandidateService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

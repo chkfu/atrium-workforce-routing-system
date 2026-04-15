@@ -1,8 +1,8 @@
 import BaseController from './BaseController';
 import { TPbtScoreBase, TSchemaBase } from '../util/types';
-import PbtScoreRepository from '../repositories/PbtScoreRepository';
+import PbtScoreService from '../services/PbtScoreService';
 
-//  Declarations
+//  Controller class
 
 class PbtScoreController extends BaseController<TPbtScoreBase & TSchemaBase> {
   //  Constructor
@@ -11,8 +11,8 @@ class PbtScoreController extends BaseController<TPbtScoreBase & TSchemaBase> {
     columns: Extract<keyof (TPbtScoreBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new PbtScoreRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new PbtScoreService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

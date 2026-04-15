@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
 import { TCddTestBase, TSchemaBase } from '../util/types';
-import CddTestRepository from '../repositories/CddTestRepository';
-//  Declarations
+import CddTestService from '../services/CddTestService';
+
+//  Controller class
 
 class CddTestController extends BaseController<TCddTestBase & TSchemaBase> {
   //  Constructor
@@ -10,8 +11,8 @@ class CddTestController extends BaseController<TCddTestBase & TSchemaBase> {
     columns: Extract<keyof (TCddTestBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
-    const repository = new CddTestRepository(table, columns, primary_key);
-    super(table, columns, primary_key, repository);
+    const service = new CddTestService(table, columns, primary_key);
+    super(table, columns, primary_key, service);
   }
 }
 

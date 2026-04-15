@@ -147,6 +147,15 @@ abstract class BaseRepository<T> {
     const id_placeholder: string = id_arr
       .map((_, index: number) => `$${key_arr.length + 1 + index}`)
       .join(', ');
+    //  validation: whitelist columns
+    key_arr.forEach((key: string) => {
+      if (!this.columns.includes(key as Extract<keyof T, string>)) {
+        throw new KeyError(
+          400,
+          `[${this.table.toUpperCase()}] error: the provided column ${key} is not found.`,
+        );
+      }
+    });
     //  querying
     const result = await pool.query(
       `

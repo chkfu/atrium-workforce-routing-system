@@ -52,7 +52,6 @@ pg_pool.connect((err, client, release) => {
 });
 
 //  Setup redis database conenction
-
 redis
   .connect()
   .then(() => {

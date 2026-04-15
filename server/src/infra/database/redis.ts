@@ -3,6 +3,8 @@
 
   REDIS use for fast in-memory storage, reducing cost of frequent and repeated 
   database queries with cache hits.
+
+  Redis adopts adopts LRU / LFU, depends on the speicfic needs of the system.
 */
 
 import path from 'path';
@@ -29,16 +31,10 @@ const redis: RedisClientType = createClient({
 
 //  Chain methods
 redis.on('error', (err) => {
-  const err_message: string = `[DATABASE] error: redis connection not found in environment variables. ${err}`;
-  logger.critical_logger.error(err_message);
+  logger.critical_logger.error(err);
+  throw err;
 });
-
-const validate_connection = async () => {
-  if (!redis.isOpen) await redis.connect();
-  return redis;
-};
 
 //  Export
 
-export { redis, validate_connection };
 export default redis;

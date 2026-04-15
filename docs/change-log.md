@@ -32,8 +32,7 @@ This file records the major version changes of the projects.
 - restructured the project into domain-driven design architecture to improve project maintenance
 - improved `BaseController.ts` and `BaseRepository.ts` with abstraction, preventing mistakenly use base classes
 - disabled direct password-access methods at `SysUserController`, preventing inappropriate disclosure of confidential information
-
-### Fixed
+- extracted service class at `CacheService.ts` for centralising cache management of the server side
 
 ### Delete
 

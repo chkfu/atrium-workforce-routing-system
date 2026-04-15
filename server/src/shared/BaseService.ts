@@ -1,8 +1,7 @@
 import BaseRepository from './BaseRepository';
 import ValueError from '../util/errors/ValueError';
 import { TSchemaBase } from '../util/types';
-import { RedisClientType } from 'redis';
-import redis from '../infra/database/redis';
+import CacheService from './CacheService';
 
 //  Service class
 
@@ -12,7 +11,7 @@ abstract class BaseService<T> {
   protected columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
   protected primary_key: string;
   protected repository: BaseRepository<T>;
-  protected redis: RedisClientType;
+  protected cache_service = new CacheService();
 
   //  Constructor
   constructor(
@@ -25,41 +24,9 @@ abstract class BaseService<T> {
     this.columns = columns;
     this.primary_key = primary_key;
     this.repository = repository;
-    this.redis = redis;
   }
 
   //  Methods
-
-  //  0. Redis reusable cache methods
-
-  public async set_cache(
-    cached_key: string,
-    cached_val: any,
-    nx: boolean = false,
-  ) {
-    //  error handling
-    if (
-      cached_key === undefined ||
-      cached_val === undefined ||
-      cached_val == null
-    ) {
-      throw new ValueError(
-        400,
-        `[BaseService] unable to process cache with missing cached key or cached value.`,
-      );
-    }
-    //  set cache
-    const stringified: string = JSON.stringify(cached_val);
-    const result = await this.redis.set(cached_key, stringified, {
-      EX: 3600,
-      NX: nx, // remarks: if true, prevent duplicate action for resource competition
-    });
-    return result;
-  }
-
-  public async del_cache(cached_key: string) {
-    await this.redis.del(cached_key);
-  }
 
   //  1.  GET methods
 
@@ -69,10 +36,10 @@ abstract class BaseService<T> {
   //  remarks: redis action - update value, if items not found
   public async get_record_batch() {
     //  cache calling details
-    const cached_key: string = `${this.table}:all`;
-    const cached_val: any = await this.redis.get(cached_key);
-    if (cached_val != null) {
-      return JSON.parse(cached_val);
+    const cached_key: string = this.cache_service.create_key(this.table, 'all');
+    const cached_val: any = await this.cache_service.get_cache(cached_key);
+    if (cached_val) {
+      return cached_val;
     }
     //  error handling
     const result = await this.repository.get_record_batch(null, null);
@@ -82,7 +49,7 @@ abstract class BaseService<T> {
         `[${this.table.toUpperCase()}] error: no record is found.`,
       );
     //  update cache
-    await this.set_cache(cached_key, result);
+    await this.cache_service.set_cache(cached_key, result);
     return result;
   }
 
@@ -95,10 +62,10 @@ abstract class BaseService<T> {
     //  leanrt: express `params` always return string, but not affect in schema types
 
     //  cache calling details
-    const cached_key: string = `${this.table}:${id}`;
-    const cached_val: any = await this.redis.get(cached_key);
+    const cached_key: string = this.cache_service.create_key(this.table, id);
+    const cached_val: any = await this.cache_service.get_cache(cached_key);
     if (cached_val) {
-      return JSON.parse(cached_val);
+      return cached_val;
     }
     //  error handling
     const result = await this.repository.get_record_by_id(id);
@@ -108,7 +75,7 @@ abstract class BaseService<T> {
         `[${this.table.toUpperCase()}] error: no record is found.`,
       );
     //  update cache
-    await this.set_cache(cached_key, result);
+    await this.cache_service.set_cache(cached_key, result);
     return result;
   };
 
@@ -128,7 +95,7 @@ abstract class BaseService<T> {
         const new_item = Object.fromEntries(
           this.columns.map((key) => [key, el[key]]),
         ) as unknown as Omit<T, keyof TSchemaBase>;
-        // reamrks: put the new string into service function to proceed
+        // reamrks: put the new string into service f女unction to proceed
         return this.repository.create_record_single(new_item);
       }),
     );
@@ -140,9 +107,16 @@ abstract class BaseService<T> {
       );
     }
     //  remove cache
-    await this.del_cache(`${this.table}:all`);
+    await this.cache_service.del_cache(
+      this.cache_service.create_key(this.table, 'all'),
+    );
     const ids = result.map((item) => item[this.primary_key]);
-    await Promise.all(ids.map((id) => this.del_cache(`${this.table}:${id}`)));
+    await Promise.all(
+      ids.map((id) => {
+        const key: string = this.cache_service.create_key(this.table, id);
+        return this.cache_service.del_cache(key);
+      }),
+    );
     return result;
   };
 
@@ -181,9 +155,13 @@ abstract class BaseService<T> {
       );
     }
     //  removed cache
-    await this.del_cache(`${this.table}:all`);
+    const cache_key: string = this.cache_service.create_key(this.table);
+    await this.cache_service.del_cache(cache_key);
     await Promise.all(
-      id_arr.map((id) => this.del_cache(`${this.table}:${id}`)),
+      id_arr.map((id) => {
+        const key: string = this.cache_service.create_key(this.table, id);
+        return this.cache_service.del_cache(key);
+      }),
     );
 
     return result;
@@ -220,9 +198,15 @@ abstract class BaseService<T> {
       );
     }
     //  removed cache
-    await this.del_cache(`${this.table}:all`);
+
     await Promise.all(
-      Array.from(id_set).map((id) => this.del_cache(`${this.table}:${id}`)),
+      Array.from(id_set).map((id) => {
+        const cached_key: string = this.cache_service.create_key(
+          this.table,
+          id,
+        );
+        return this.cache_service.del_cache(cached_key);
+      }),
     );
     return result;
   };
@@ -237,9 +221,15 @@ abstract class BaseService<T> {
     //  declarations
     const id_set: Set<string> = new Set(id_arr);
     //  remove cache
-    await this.del_cache(`${this.table}:all`);
+    await this.cache_service.del_cache(
+      this.cache_service.create_key(this.table),
+    );
     await Promise.all(
-      id_arr.map((id) => this.del_cache(`${this.table}:${id}`)),
+      id_arr.map((id) =>
+        this.cache_service.del_cache(
+          this.cache_service.create_key(this.table, id),
+        ),
+      ),
     );
     //  error handling
     const result = await this.repository.remove_record_batch(
@@ -260,16 +250,11 @@ abstract class BaseService<T> {
   //  remarks: redis action - remove outdated records
   public empty_record_all = async () => {
     //  remove cache
-    const cached_key: string = `${this.table}:all`;
-    await this.del_cache(cached_key);
+    await this.cache_service.del_cache(
+      this.cache_service.create_key(this.table),
+    );
     //  error handling
-    const result = await this.repository.empty_record_all();
-    if (result === null || result === undefined || result.length < 1) {
-      throw new ValueError(
-        404,
-        `[${this.table.toUpperCase()}] error: no record is found.`,
-      );
-    }
+    return await this.repository.empty_record_all();
   };
 }
 //  Export

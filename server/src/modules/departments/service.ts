@@ -1,0 +1,20 @@
+import BaseService from '../../shared/BaseService';
+import DepartmentRepository from './repository';
+import { TDepartmentBase, TSchemaBase } from '../../util/types';
+
+//  Service class
+
+class DepartmentService extends BaseService<TDepartmentBase & TSchemaBase> {
+  //  Constructor
+  constructor(
+    table: string,
+    columns: Extract<keyof (TDepartmentBase & TSchemaBase), string>[],
+    primary_key: string,
+  ) {
+    const repository = new DepartmentRepository(table, columns, primary_key);
+    super(table, columns, primary_key, repository);
+  }
+}
+
+//  Export
+export default DepartmentService;

@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import PbtScoreRepository from './repository';
 import { TPbtScoreBase, TSchemaBase } from '../../util/types';
 

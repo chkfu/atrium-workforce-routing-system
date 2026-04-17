@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import SltCriteriaRepository from './repository';
 import { TSltCriteriaBase, TSchemaBase } from '../../util/types';
 

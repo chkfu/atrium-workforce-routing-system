@@ -1,4 +1,4 @@
-import BaseController from '../../shared/BaseController';
+import BaseController from '../../core/BaseController';
 import { THireScoreBase, TSchemaBase } from '../../util/types';
 import HireScoreService from './service';
 

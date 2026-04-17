@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import HireCriteriaRepository from './repository';
 import { THireCriteriaBase, TSchemaBase } from '../../util/types';
 

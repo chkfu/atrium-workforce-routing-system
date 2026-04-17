@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import PbtIntakeRepository from './repository';
 import { TPbtIntakeBase, TSchemaBase } from '../../util/types';
 

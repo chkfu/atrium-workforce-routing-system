@@ -1,4 +1,4 @@
-import BaseController from '../../shared/BaseController';
+import BaseController from '../../core/BaseController';
 import { TPbtScoreBase, TSchemaBase } from '../../util/types';
 import PbtScoreService from './service';
 

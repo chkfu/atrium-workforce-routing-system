@@ -1,4 +1,4 @@
-import BaseController from '../../shared/BaseController';
+import BaseController from '../../core/BaseController';
 import { TCddEduBase, TSchemaBase } from '../../util/types';
 import CddEduService from './service';
 

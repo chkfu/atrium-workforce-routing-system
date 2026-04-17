@@ -21,7 +21,7 @@
 import BaseRepository from './BaseRepository';
 import ValueError from '../util/errors/ValueError';
 import { TSchemaBase } from '../util/types';
-import CacheService from './CacheService';
+import CacheService from '../infra/cache/CacheService';
 
 //  Service class
 

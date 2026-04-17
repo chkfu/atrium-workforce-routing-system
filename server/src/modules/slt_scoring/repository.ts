@@ -1,4 +1,4 @@
-import BaseRepository from '../../shared/BaseRepository';
+import BaseRepository from '../../core/BaseRepository';
 import { TSltScoreBase, TSchemaBase } from '../../util/types';
 
 //  Repository class

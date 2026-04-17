@@ -1,6 +1,6 @@
 import { RedisClientType } from 'redis';
-import redis from '../infra/database/redis';
-import ValueError from '../util/errors/ValueError';
+import redis from '../database/redis';
+import ValueError from '../../util/errors/ValueError';
 
 //  Cache service class
 

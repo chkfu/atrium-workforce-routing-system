@@ -1,26 +1,60 @@
-import rate_limit from 'express-rate-limit';
+/* 
+    [REMARKS]
+
+    - issue: found that redis store cause crash, fail to proceed when redis 
+             client is closed
+    - attempted: confirmed issue at RedisStore, causing err 'the client is closed'
+                 Async-await connection also failed for race condition while init
+                 (failed)
+    - final solution:  implemented lazy initialisation
+
+    - explanation:
+        1. after redis connected, then init_rate_limiter will be triggered.
+        2. limiter stores the rate-limit criteria as proposed (with redis store)
+           this ensures redis store will only be set in later steps.
+        3. reading express middlewares - routers, rate_restriction has been called
+        4. refers to (a) and (b), let limiter to handle, or next if missing client
+        
+*/
+
+import { Request, Response, NextFunction } from 'express';
+import rate_limit, { RateLimitRequestHandler } from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import redis from '../database/redis';
+import AppError from '../../util/errors/AppError';
+import loggers from '../loggers';
 
-//  Express Limiter
+//  remarks: limiter to manage pending stage
+let limiter: RateLimitRequestHandler | null = null;
+const err_msg: string = '[SERVER] error: failed to support rate-limit.';
 
-export const rate_restriction = rate_limit({
-  max: 100,
-  windowMs: 60 * 60 * 1000, // remarks: restrict 100 visits each hour
-  statusCode: 429, // learnt: code 429 for overloading requests
-  message: {
-    status: 'failed',
-    message:
-      '[SERVER] error: client requests overloading, please try it later.',
-  },
-  store: new RedisStore({
-    //  learnt: sendCommand forwards redis commands (e.g. expiry info) to redis server
-    //  learnt: node-redis has packaged the commands in ver 4
-    sendCommand: (command: string, ...args: string[]) =>
-      redis.sendCommand([command, ...args]),
-    //  leanrt: prefix as the namespace to isolate data in sesion from cache keys
-    prefix: 'app_v1:session:',
-  }),
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export const rate_restriction = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  //  (a) tell express keep going if limiter is missing
+  //      prevent hanging connection, as redis keep reconnecting
+  if (!limiter) {
+    loggers.critical_logger.error(err_msg);
+    return next(new AppError(503, err_msg)); // remarks: 503 for service temp not working
+  }
+  //  (b) return the limiter as response
+  return limiter(req, res, next);
+  // learnt: rate_limit is also a middleware function, require req, res, next
+};
+
+//  remarks: already trigger after redis is connected, at server.ts
+export const init_rate_limiter = () => {
+  limiter = rate_limit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    statusCode: 429, // remarks: 429 for too many requests
+    message: { status: 'failed', message: err_msg },
+    store: new RedisStore({
+      sendCommand: (...args: string[]) => redis.sendCommand(args),
+    }),
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+};

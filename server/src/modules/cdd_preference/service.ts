@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import CddPrefRepository from './repository';
 import { TCddPrefBase, TSchemaBase } from '../../util/types';
 

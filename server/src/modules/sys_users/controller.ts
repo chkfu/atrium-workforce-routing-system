@@ -1,4 +1,4 @@
-import BaseController from '../../shared/BaseController';
+import BaseController from '../../core/BaseController';
 import { TSysUserBase, TSchemaBase } from '../../util/types';
 import SysUserService from './service';
 import AppError from '../../util/errors/AppError';

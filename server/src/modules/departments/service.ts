@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import DepartmentRepository from './repository';
 import { TDepartmentBase, TSchemaBase } from '../../util/types';
 

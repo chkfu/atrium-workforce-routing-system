@@ -30,9 +30,9 @@ const redis: RedisClientType = createClient({
 });
 
 //  Chain methods
-redis.on('error', (err) => {
-  logger.critical_logger.error(err);
-  throw err;
+redis.on('error', (err: any) => {
+  const err_msg: string = `[REDIS] errors: cache server connection failed.\n${err}`;
+  logger.app_logger.warn(err_msg);
 });
 
 //  Export

@@ -1,4 +1,4 @@
-import BaseService from '../../shared/BaseService';
+import BaseService from '../../core/BaseService';
 import StaffRepository from './repository';
 import { TStaffBase, TSchemaBase } from '../../util/types';
 

@@ -5,8 +5,10 @@ import pg_pool from './infra/database/postgres';
 import redis from './infra/database/redis';
 import https from 'https';
 import logger from './infra/loggers';
-import { downtime } from './infra/utils/downtime';
+import { downtime } from './infra/server/downtime';
+import { init_rate_limiter } from './infra/middlewares/rate_limiter';
 import exp_app from './app';
+import AppError from './util/errors/AppError';
 
 //  Setup dotenv env
 dotenv.config({ path: path.resolve(__dirname, '../process.env.example') });
@@ -41,45 +43,48 @@ const https_server: https.Server = https.createServer(
   exp_app,
 );
 
-//  Setup postgres database connection
-pg_pool.connect((err, client, release) => {
-  if (err) {
-    logger.critical_logger.error(`[DATABASE] error: ${err.message}`);
-    throw err;
+(async function start_server() {
+  //  Setup postgres database connection
+
+  await pg_pool
+    .connect()
+    .then((client) => {
+      client.release();
+      logger.app_logger.info('[DATABASE] success: connected to postgres.');
+    })
+    .catch((err: any) => {
+      const err_msg: string = `[POSTGRES] error: ${err.message}`;
+      logger.critical_logger.error(err_msg);
+      throw new AppError(500, err_msg);
+    });
+
+  //  Setup redis database conenction
+  await redis
+    .connect()
+    .then(() => {
+      logger.app_logger.info('[DATABASE] success: connected to redis.');
+      init_rate_limiter();
+    })
+    .catch((err: any) => {
+      const err_msg: string = `[REDIS] error: failed to conenct to redis dataabse.\n${err.message}`;
+      logger.critical_logger.error(err_msg);
+      throw new AppError(500, err_msg);
+    });
+
+  //  Listen to server
+  const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
+  try {
+    https_server.listen(exp_server_port, () => {
+      logger.app_logger.info(
+        `[SERVER] success: listening to https://localhost:${exp_server_port}`,
+      );
+    });
+  } catch (err) {
+    const err_msg: string = `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`;
+    logger.critical_logger.error(err_msg);
+    throw new AppError(500, err_msg);
   }
-  release();
-  logger.app_logger.info('[DATABASE] success: connected to database.');
-});
-
-//  Setup redis database conenction
-redis
-  .connect()
-  .then(() => {
-    logger.app_logger.info('[DATABASE] success: connected to redis.');
-  })
-  .catch((err: Error) => {
-    logger.critical_logger.error(
-      `[REDIS] error: failed to conenct to redis dataabse.\n${err.message}`,
-    );
-    throw err;
-  });
-
-//  Listen to server
-const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
-try {
-  https_server.listen(exp_server_port, () => {
-    logger.app_logger.info(
-      `[SERVER] success: listening to https://localhost:${exp_server_port}`,
-    );
-  });
-} catch (err) {
-  logger.critical_logger.error(
-    `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`,
-  );
-  throw Error(
-    `[SERVER] error: failed to listen to server port ${exp_server_port}\n${err}`,
-  );
-}
+})();
 
 //  AFTER RUNNING: handle unhandle rejections
 //  learnt: soft downtime, as the server is supposed to be running

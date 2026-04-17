@@ -1,4 +1,4 @@
-import BaseController from '../../shared/BaseController';
+import BaseController from '../../core/BaseController';
 import DepartmentService from './service';
 import { TDepartmentBase, TSchemaBase } from '../../util/types';
 

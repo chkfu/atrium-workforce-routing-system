@@ -203,14 +203,14 @@ CREATE TABLE IF NOT EXISTS select_criteria (
 CREATE TABLE IF NOT EXISTS select_scoring(
   _id  SERIAL  PRIMARY KEY,
   candidate_id  INTEGER,
-  select_weighting_id  INTEGER,
-  base_score_qual  NUMERIC(5,2)  DEFAULT 20,
+  weight_id  INTEGER,
+  base_score_edu  NUMERIC(5,2)  DEFAULT 20,
   base_score_exp  NUMERIC(5,2)  DEFAULT 20,
   base_score_tests  NUMERIC(5,2)  DEFAULT 20,
   score_foundation  NUMERIC(5,2)  DEFAULT 0,
   score_preference  NUMERIC(5,2)  DEFAULT 0,
   CONSTRAINT fk_weighting_scores_select
-    FOREIGN KEY (select_weighting_id)
+    FOREIGN KEY (weight_id)
     REFERENCES select_weighting(_id)
     ON DELETE RESTRICT,
   CONSTRAINT fk_candidate_scores_select

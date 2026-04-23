@@ -146,7 +146,7 @@ const db_structure = {
     table: 'select_scoring',
     columns: [
       'candidate_id',
-      'select_weighting_id',
+      'weight_id',
       'base_score_qual',
       'base_score_exp',
       'base_score_tests',

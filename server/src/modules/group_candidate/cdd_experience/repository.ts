@@ -1,5 +1,6 @@
 import BaseRepository from '../../../core/BaseRepository';
 import { TCddExpBase, TSchemaBase } from '../../../util/types';
+import pool from '../../../infra/database/postgres';
 
 //  Repository class
 
@@ -12,6 +13,18 @@ class CddExpRepository extends BaseRepository<TCddExpBase & TSchemaBase> {
   ) {
     super(table, columns, primary_key);
   }
+
+  //  Methods
+
+  //  remarks: GET specific record(s) by single candidate id
+  //  INPUT: array of stringified id
+  public get_recent_by_candidate = async (candidate_id: string) => {
+    //  form query stirng
+    let query_str: string = `SELECT * FROM "${this.table}" WHERE "candidate_id" = $1;`;
+    //  querying
+    const result = await pool.query(query_str, [candidate_id]);
+    return result.rows[0];
+  };
 }
 
 //  Export

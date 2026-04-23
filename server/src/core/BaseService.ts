@@ -25,12 +25,12 @@ import CacheService from '../infra/cache/CacheService';
 
 //  Service class
 
-abstract class BaseService<T> {
+abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  Attributes
   protected table: string;
   protected columns: Extract<keyof T, string>[]; // remarks: customised for spec types from tables
   protected primary_key: string;
-  protected repository: BaseRepository<T>;
+  protected repository: R;
   protected cache_service = new CacheService();
 
   //  Constructor
@@ -38,7 +38,7 @@ abstract class BaseService<T> {
     table: string,
     columns: Extract<keyof T, string>[],
     primary_key: string,
-    repository: BaseRepository<T>,
+    repository: R,
   ) {
     this.table = table;
     this.columns = columns;

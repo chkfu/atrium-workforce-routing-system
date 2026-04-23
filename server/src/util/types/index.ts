@@ -6,7 +6,12 @@
   better maintenance.
 */
 
-import { enum_gender, enum_user_role, enum_prob_status, enum_hire_decision } from '../enums';
+import {
+  enum_gender,
+  enum_user_role,
+  enum_prob_status,
+  enum_hire_decision,
+} from '../enums';
 
 //  1.  Core tables
 
@@ -130,7 +135,7 @@ export type TSltCriteriaBase = {
 //  tags: select_scoring
 export type TSltScoreBase = {
   candidate_id: number;
-  select_weighting_id: number;
+  weight_id: number;
   base_score_qual: number;
   base_score_exp: number;
   base_score_tests: number;
@@ -209,7 +214,6 @@ export type THireDecisionBase = {
   final_decision: enum_hire_decision;
   is_active: boolean;
 };
-
 
 //  tags: hire_intakes
 export type THireIntakeBase = {

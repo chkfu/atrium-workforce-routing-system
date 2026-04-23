@@ -27,9 +27,9 @@ import { TSchemaBase } from '../util/types';
 
 abstract class BaseRepository<T> {
   //  1.  Attributes
-  private table: string;
-  private columns: Extract<keyof (T & TSchemaBase), string>[];
-  private primary_key: string;
+  protected table: string;
+  protected columns: Extract<keyof (T & TSchemaBase), string>[];
+  protected primary_key: string;
 
   //  2.  Constructor
   constructor(

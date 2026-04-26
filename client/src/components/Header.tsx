@@ -49,7 +49,7 @@ export default function Header() {
             {list_nav_items.map((item: TNavItem) => (
               <li
                 key={item.label}
-                className='flex items-center px-8 py-4 text-xl text-slate-300 font-serif font-bold cursor-pointer hover:border-b-6 hover:border-teal-700 transition duration-900'
+                className='flex items-center px-8 py-4 text-xl text-slate-300 font-serif font-bold cursor-pointer hover:border-b-6 hover:border-teal-600 transition duration-900'
               >
                 <a
                   href={item.href}

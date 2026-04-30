@@ -1,4 +1,4 @@
-# Atrium - Data Integration Toolkit
+# Atrium - Workforce Routing System
 
 <br/>
 
@@ -27,7 +27,7 @@ It enables the institution to quickly identify the fault points and adjust their
 
 ## Features
 
-### A. Weighted Score & Evaluation Mechanism
+### A. Weighted Score and Evaluation Mechanism
 
 Calculating candidate scores with configurable factors (e.g. background, interview performance, and training results). Adjustable weightings support flexible and consistent evaluation with comparisons.
 
@@ -66,7 +66,7 @@ RESTful API modules has been grouped into five key categories:
 These core modules will support the two-tiered workflows for candidate selection as shown in below:
 
 <p>
-  <img src="docs/chart_domain_logic.png" width="75%">
+  <img src="docs/charts/chart_domain_logic.png" width="75%">
 </p>
 
 ### C. Layered Architecture
@@ -100,7 +100,7 @@ For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to pr
 
 Please clone the project at the <a href='https://github.com/chkfu/atrium-workforce-routing-system.git'>Github repository</a>.
 
-### 1. Server side setup (development environment)
+### A. Server side setup (development environment)
 
 Beginning with a new terminal, and run the CLI with the commands below:
 
@@ -110,9 +110,9 @@ $ npm install
 $ npm run dev
 ```
 
-The client will be available at `http://localhost:8080`
+The server will be available at `https://localhost:8080` (or specified).
 
-### 2. Client side setup (development environment)
+### B. Client side setup (development environment)
 
 For browser display, please start the second terminal and run the below commands:
 
@@ -122,7 +122,7 @@ $ npm install
 $ npm run dev
 ```
 
-The the server will be available at `http://localhost:5173`.
+The client will be available at `http://localhost:5173` (or specified).
 
 <br/>
 
@@ -130,7 +130,25 @@ The the server will be available at `http://localhost:5173`.
 
 ### A. Design Trade-off
 
+#### (1) Managing Complex Modular Structure
+
+- Solution: Converted to layered structure with model, controller, service and repository modules, decoupling functionalities and logics for better maintenance.
+- Tradeoff: New features requires to updates in more layers with additional efforts on managing module coordination and ensuring their completeness.
+
+#### (2) Prevent Database Overloading
+
+- Solution: Implemented Redis caching and rate limiting to reduce loads on the database, with important benefits to prevent race competition with locks.
+- Tradeoff: Requires additional redis handlers for the querying methods with more complex modular relations, plus extra costs for setup and maintain the redis server.
+
 ### B. Limitations
+
+#### (1) Long-term Data Dependency
+
+-
+
+#### (2) Tightly Coupled Layered Architecture
+
+-
 
 <br/>
 
@@ -138,13 +156,15 @@ The the server will be available at `http://localhost:5173`.
 
 | Scope  | Category  | Package            | Version |
 | ------ | --------- | ------------------ | ------- |
+| Client | Framework | react              | ^18.3.1 |
+| Client | Styling   | tailwindcss        | ^4.2.4  |
 | Server | Framework | express            | ^5.2.1  |
 | Server | Security  | express-rate-limit | ^8.3.1  |
 | Server | Database  | pg                 | ^8.20.0 |
 | Server | Cache     | redis              | ^5.12.1 |
 | Server | Logging   | winston            | ^3.19.0 |
 
-See `package.json` for the full package list.
+See `client/package.json` and `server/package.json` for the full package list.
 
 <br/>
 

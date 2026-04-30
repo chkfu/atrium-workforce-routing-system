@@ -66,7 +66,7 @@ RESTful API modules has been grouped into five key categories:
 These core modules will support the two-tiered workflows for candidate selection as shown in below:
 
 <p>
-  <img src="docs/charts/chart_domain_logic.png" width="85%">
+  <img src="docs/charts/chart_domain_logic.png" width="100%">
 </p>
 
 ### C. Layered Architecture
@@ -137,18 +137,14 @@ The client will be available at `http://localhost:5173` (or specified).
 
 #### (2) Prevent Database Overloading
 
-- Solution: Implemented Redis caching and rate limiting to reduce loads on the database, with important benefits to prevent race competition with locks.
+- Solution: Implemented Redis caching, rate limiting and lock, as the database-level shelter reducing loads and against race competition.
 - Tradeoff: Requires additional redis handlers for the querying methods with more complex modular relations, plus extra costs for setup and maintain the redis server.
 
 ### B. Limitations
 
 #### (1) Long-term Data Dependency
 
--
-
-#### (2) Tightly Coupled Layered Architecture
-
--
+- The design has limitation handling frequent strategy changes, as each recruitment batch presented as vaiable factors. Lack of data consistency could harm the reliability and failed to match the fair test requirements.
 
 <br/>
 

@@ -18,12 +18,7 @@ const card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
     description: 'Manage and review candidate applications',
-    path: '/#',
-  },
-  {
-    title: 'Pending Tasks',
-    description: 'View and manage pending tasks and assignments',
-    path: '/#',
+    path: '/manage-candidates',
   },
 ];
 
@@ -36,31 +31,36 @@ export default function AssistantDashboard(): JSX.Element {
       id='assistant-dashboard-section'
       className='px-12 py-6 flex flex-col gap-6'
     >
-      {/* personal section */}
-      {card_list_personal.map((el: TCardItem) => {
-        return (
-          <Accordion title='Personal'>
+      <Accordion title='Task Pending'>
+        {/* =============== TO BE IMPLEMENTED  ============= */}
+        <p className='py-4 text-base text-gray-500'>
+          No upcoming tasks assigned.
+        </p>
+      </Accordion>
+      <Accordion title='Personal'>
+        {/* personal section */}
+        {card_list_personal.map((el: TCardItem) => {
+          return (
             <DashboardCard
               title={el.title}
               description={el.description}
               url={el.path}
             />
-          </Accordion>
-        );
-      })}
+          );
+        })}
+      </Accordion>{' '}
       {/*  work panel */}
-
-      {card_list_task_panel.map((el: TCardItem) => {
-        return (
-          <Accordion title='Personal'>
+      <Accordion title='Teams'>
+        {card_list_task_panel.map((el: TCardItem) => {
+          return (
             <DashboardCard
               title={el.title}
               description={el.description}
               url={el.path}
             />
-          </Accordion>
-        );
-      })}
+          );
+        })}
+      </Accordion>
     </section>
   );
 }

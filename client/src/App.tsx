@@ -3,12 +3,14 @@ import Home from './pages/Home';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Error from './pages/Error';
-import ManageCandidates from './pages/CandidateProfile';
+import ManageCandidates from './pages/ManageCandidates';
 import ManageDepartments from './pages/ManageDepartments';
 import CandidateProfile from './pages/CandidateProfile';
 import CandidateDashboard from './pages/CandidateDashboard';
 import AssistantDashboard from './pages/AssistantDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 const routes: RouteObject[] = [
   {
@@ -22,6 +24,14 @@ const routes: RouteObject[] = [
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/about',
+        element: <About />,
+      },
+      {
+        path: '/contact',
+        element: <Contact />,
       },
       //  Group List, by permissions
       {

@@ -5,10 +5,9 @@ type TNavItem = { label: string; href: string };
 
 export default function Header() {
   const list_nav_items: TNavItem[] = [
-    { label: 'Services', href: '/services' },
-    { label: 'Project', href: '/project' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'User Guide', href: '/user-guide' },
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   return (

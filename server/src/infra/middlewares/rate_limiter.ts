@@ -47,7 +47,7 @@ export const rate_restriction = (
 //  remarks: already trigger after redis is connected, at server.ts
 export const init_rate_limiter = () => {
   limiter = rate_limit({
-    max: 100,
+    max: 1000,
     windowMs: 60 * 60 * 1000,
     statusCode: 429, // remarks: 429 for too many requests
     message: { status: 'failed', message: err_msg },

@@ -28,11 +28,6 @@ const card_list_task_panel: TCardItem[] = [
     description: 'Organize and manage department information',
     path: '/manage-departments',
   },
-  {
-    title: 'Assign Tasks',
-    description: 'Create and assign tasks to team members',
-    path: '/#',
-  },
 ];
 
 //  Function
@@ -44,31 +39,37 @@ export default function ManagerDashboard(): JSX.Element {
       id='manager-dashboard-section'
       className='px-12 py-6 flex flex-col gap-6'
     >
+      <Accordion title='Task Pending'>
+        {/* =============== TO BE IMPLEMENTED  ============= */}
+        <p className='py-4 text-base text-gray-500'>
+          No upcoming tasks assigned.
+        </p>
+      </Accordion>
       {/* personal section */}
-      {card_list_personal.map((el: TCardItem) => {
-        return (
-          <Accordion title='Personal'>
+      <Accordion title='Personal'>
+        {card_list_personal.map((el: TCardItem) => {
+          return (
             <DashboardCard
               title={el.title}
               description={el.description}
               url={el.path}
             />
-          </Accordion>
-        );
-      })}
+          );
+        })}
+      </Accordion>
 
       {/*  work panel */}
-      {card_list_task_panel.map((el: TCardItem) => {
-        return (
-          <Accordion title='Task Panel'>
+      <Accordion title='Teams'>
+        {card_list_task_panel.map((el: TCardItem) => {
+          return (
             <DashboardCard
               title={el.title}
               description={el.description}
               url={el.path}
             />
-          </Accordion>
-        );
-      })}
+          );
+        })}
+      </Accordion>
     </section>
   );
 }

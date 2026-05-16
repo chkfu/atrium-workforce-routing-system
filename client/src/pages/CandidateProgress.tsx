@@ -1,3 +1,3 @@
-export default function CandidateProgress() {
-  return <div></div>;
+export default function CandidateProgress(): JSX.Element {
+  return <div>CandidateProgress</div>;
 }

@@ -36,7 +36,10 @@ export default function ManageCandidates(): JSX.Element {
   }
   //  display
   return (
-    <div id='manage-candidates-container'>
+    <div
+      id='manage-candidates-container'
+      className='w-full'
+    >
       <Accordion title='Candidate List'>
         <Formik
           initialValues={{ selectedCandidates: [] }}
@@ -78,7 +81,7 @@ function PanelFromContainer({
   const { submitForm } = useFormikContext<any>();
   //  display
   return (
-    <Form>
+    <Form className='w-full'>
       {/*  control panel */}
       <div className='py-4'>
         <FormSearchBox
@@ -88,10 +91,7 @@ function PanelFromContainer({
         <FormButtonBox submitForm={submitForm} />
       </div>
       {/*  table panel */}
-      <div
-        className='w-full py-4'
-        style={{ overflow: 'scroll', overflowY: 'hidden' }}
-      >
+      <div className='py-4'>
         <p
           className={`mb-4 text-sm text-gray-500 transition-opacity duration-500 ease-in-out
             ${selectedCandidate.length === 0 ? 'invisible' : 'visible'}
@@ -100,27 +100,22 @@ function PanelFromContainer({
           Selection: {selectedCandidate.length}{' '}
           {selectedCandidate.length === 1 ? 'candidate' : 'candidates'} selected
         </p>
-        <table
-          className='table-auto'
-          style={{
-            width: '1200px',
-            borderCollapse: 'collapse',
-            tableLayout: 'auto',
-          }}
-        >
-          {/*  Table head */}
-          <TableHeaderBox
-            candidates={candidates}
-            selectedCandidates={selectedCandidate}
-            setSelectedCandidates={setSelectedCandidate}
-          />
-          {/*  table body  */}
-          <TableBodyBox
-            candidates={candidates}
-            selectedCandidates={selectedCandidate}
-            setSelectedCandidates={setSelectedCandidate}
-          />
-        </table>
+        <div className='w-full overflow-x-auto'>
+          <table className='min-w-300 border-collapse table-auto'>
+            {/*  Table head */}
+            <TableHeaderBox
+              candidates={candidates}
+              selectedCandidates={selectedCandidate}
+              setSelectedCandidates={setSelectedCandidate}
+            />
+            {/*  table body  */}
+            <TableBodyBox
+              candidates={candidates}
+              selectedCandidates={selectedCandidate}
+              setSelectedCandidates={setSelectedCandidate}
+            />
+          </table>
+        </div>
       </div>
     </Form>
   );
@@ -160,7 +155,6 @@ function FormSearchBox({
           color: '#ffffff',
         }}
       />
-      s
     </div>
   );
 }
@@ -285,7 +279,6 @@ function TableBodyBox({
       key: 'name',
       className: 'p-3 font-bold cursor-pointer',
       style: {
-        overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
       },
@@ -295,7 +288,6 @@ function TableBodyBox({
       key: 'email',
       className: 'p-3 min-w-40',
       style: {
-        overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
       },

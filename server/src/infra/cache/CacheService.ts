@@ -47,7 +47,7 @@ class CacheService {
   //  remarks: release after te existing job completed, subsequent query could exercise
   public async release_lock(cached_key: string) {
     const lock_key: string = `lock:${cached_key}`;
-    this.del_cache(lock_key);
+    await this.del_cache(lock_key);
   }
 
   public async handle_lock(

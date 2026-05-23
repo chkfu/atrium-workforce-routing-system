@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react';
+import { COLORS } from '../styles/color';
 
 interface ButtonConfirmProps {
   label: string;
@@ -14,9 +15,9 @@ export default function ButtonConfirm({
   return (
     <button
       type='button'
-      className='px-6 py-2 rounded-xl font-semibold text-lg cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-lg'
+      className='px-4 py-2 rounded-xl font-semibold text-base cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-lg'
       onClick={onClick}
-      style={{ backgroundColor: '#eab308', ...style }}
+      style={{ backgroundColor: COLORS.button_yellow, ...style }}
     >
       {label}
     </button>

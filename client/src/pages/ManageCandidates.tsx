@@ -1,32 +1,43 @@
 import { useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 import { Formik, Form, useFormikContext } from 'formik';
 import Accordion from '../elements/Accordion';
 import ButtonConfirm from '../elements/ButtonConfirm';
+import LoadSpinner from '../elements/LoadSpinner';
+import { COLORS } from '../styles/color';
+import { API } from '../config/api';
 
 export default function ManageCandidates(): JSX.Element {
   //  hooks
-  const [candidates, setCandidates] = useState<any[]>([]);
+  //  1. general states
   const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
   const [searchText, setSearchText] = useState<string>('');
+  //  2. get candidates states
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  //  3. convert status states
+  const [tiggerConvert, setTriggerConvert] = useState<boolean>(false);
+  const [convertStatus, setConvertStatus] = useState<boolean>(false);
 
   useEffect(() => {
     axios
-      .get('https://localhost:8080/api/v1/candidates')
+      .get(API.CANDIDATES)
       .then((response) => {
-        const cadidateEls = response.data.data.result.map((el: any) => ({
-          ...el,
-          key: uuid(),
-        }));
+        const cadidateEls = response.data.data.result;
         setCandidates(cadidateEls);
+        setIsLoading(false);
       })
       .catch((err: any) => {
         console.error('Error fetching candidates:', err);
         setError(err.message || 'Failed to load candidates');
+        setIsLoading(false);
       });
   }, []);
+  //  loading state
+  if (isLoading) {
+    return <LoadSpinner />;
+  }
   //  error handling
   if (error) {
     return <div className='p-4 text-red-600'>Error: {error}</div>;
@@ -50,10 +61,15 @@ export default function ManageCandidates(): JSX.Element {
           {() => (
             <PanelFromContainer
               candidates={candidates}
+              setCandidates={setCandidates}
               selectedCandidate={selectedCandidates}
               setSelectedCandidate={setSelectedCandidates}
               searchText={searchText}
               setSearchText={setSearchText}
+              convertStatus={convertStatus}
+              setConvertStatus={setConvertStatus}
+              tiggerConvert={tiggerConvert}
+              setTriggerConvert={setTriggerConvert}
             />
           )}
         </Formik>
@@ -62,20 +78,30 @@ export default function ManageCandidates(): JSX.Element {
   );
 }
 
-//  Core Containers
+//  ==========    Core Containers    ==========
 
 function PanelFromContainer({
   candidates,
+  setCandidates,
   selectedCandidate,
   setSelectedCandidate,
   searchText,
   setSearchText,
+  convertStatus,
+  setConvertStatus,
+  tiggerConvert,
+  setTriggerConvert,
 }: {
   candidates: any[];
+  setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
   selectedCandidate: number[];
   setSelectedCandidate: React.Dispatch<React.SetStateAction<number[]>>;
   searchText: string;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  convertStatus: boolean;
+  setConvertStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  tiggerConvert: boolean;
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   //  hooks
   const { submitForm } = useFormikContext<any>();
@@ -88,7 +114,17 @@ function PanelFromContainer({
           searchText={searchText}
           setSearchText={setSearchText}
         />
-        <FormButtonBox submitForm={submitForm} />
+        <FormButtonBox
+          submitForm={submitForm}
+          candidates={candidates}
+          setCandidates={setCandidates}
+          selectedCandidate={selectedCandidate}
+          setSelectedCandidate={setSelectedCandidate}
+          convertStatus={convertStatus}
+          setConvertStatus={setConvertStatus}
+          tiggerConvert={tiggerConvert}
+          setTriggerConvert={setTriggerConvert}
+        />
       </div>
       {/*  table panel */}
       <div className='py-4'>
@@ -121,7 +157,7 @@ function PanelFromContainer({
   );
 }
 
-//  Boxes
+//  ==========    Boxes    ==========
 
 function FormSearchBox({
   searchText,
@@ -132,7 +168,8 @@ function FormSearchBox({
 }): JSX.Element {
   return (
     <div className='mb-4 flex gap-2'>
-      <select className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600'>
+      <select className='px-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600'>
+        <option value='all'>All</option>
         <option value='id'>ID</option>
         <option value='name'>Name</option>
         <option value='email'>Email</option>
@@ -141,7 +178,7 @@ function FormSearchBox({
       <input
         type='text'
         placeholder='Search candidates...'
-        className='w-3/9 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600'
+        className='w-3/9 px-4 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600'
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
       />
@@ -151,8 +188,8 @@ function FormSearchBox({
           console.log(searchText);
         }}
         style={{
-          backgroundColor: '#0f766e',
-          color: '#ffffff',
+          backgroundColor: COLORS.dark_teal,
+          color: COLORS.light_gray,
         }}
       />
     </div>
@@ -161,8 +198,24 @@ function FormSearchBox({
 
 function FormButtonBox({
   submitForm,
+  candidates,
+  setCandidates,
+  selectedCandidate,
+  setSelectedCandidate,
+  convertStatus,
+  setConvertStatus,
+  tiggerConvert,
+  setTriggerConvert,
 }: {
   submitForm: () => void;
+  candidates: any[];
+  setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
+  selectedCandidate: number[];
+  setSelectedCandidate: React.Dispatch<React.SetStateAction<number[]>>;
+  convertStatus: boolean;
+  setConvertStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  tiggerConvert: boolean;
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   return (
     <div className='flex flex-wrap gap-2'>
@@ -172,8 +225,8 @@ function FormButtonBox({
           console.log('Refresh');
         }}
         style={{
-          backgroundColor: '#0f766e',
-          color: '#ffffff',
+          backgroundColor: COLORS.dark_teal,
+          color: COLORS.light_gray,
         }}
       />
       <ButtonConfirm
@@ -181,7 +234,7 @@ function FormButtonBox({
         onClick={() => {
           console.log('Batch Create');
         }}
-        style={{ backgroundColor: '#eeeeee', color: '#0f766e' }}
+        style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
       <ButtonConfirm
         label='Update'
@@ -189,15 +242,17 @@ function FormButtonBox({
           submitForm();
           console.log('Batch Update');
         }}
-        style={{ backgroundColor: '#eeeeee', color: '#0f766e' }}
+        style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
-      <ButtonConfirm
-        label='Inactivate'
-        onClick={() => {
-          submitForm();
-          console.log('Batch Inactivate');
-        }}
-        style={{ backgroundColor: '#eeeeee', color: '#0f766e' }}
+      <ButtonConvertStatus
+        candidates={candidates}
+        setCandidates={setCandidates}
+        selectedCandidate={selectedCandidate}
+        setSelectedCandidate={setSelectedCandidate}
+        convertStatus={convertStatus}
+        setConvertStatus={setConvertStatus}
+        tiggerConvert={tiggerConvert}
+        setTriggerConvert={setTriggerConvert}
       />
     </div>
   );
@@ -226,9 +281,9 @@ function TableHeaderBox({
   //  display
   return (
     <thead>
-      <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
+      <tr style={{ borderBottom: `2px solid ${COLORS.light_gray}` }}>
         {/*  checkbox column  */}
-        <th className='w-16 p-3 text-center align-middle'>
+        <th className='w-16 p-2 text-center align-middle'>
           <input
             type='checkbox'
             className='w-4 h-4 cursor-pointer'
@@ -240,8 +295,9 @@ function TableHeaderBox({
               )
             }
             checked={
-              selectedCandidates.length === candidates.length &&
-              candidates.length > 0
+              candidates &&
+              candidates.length > 0 &&
+              selectedCandidates.length === candidates.length
             }
           />
         </th>
@@ -249,7 +305,7 @@ function TableHeaderBox({
         {table_headers.map((header) => (
           <th
             key={header.key}
-            className={`p-3 text-left font-bold ${header.className} whitespace-nowrap`}
+            className={`p-2 text-sm text-left font-bold ${header.className} whitespace-nowrap`}
           >
             {header.label}
           </th>
@@ -272,12 +328,12 @@ function TableBodyBox({
   const table_cols = [
     {
       key: 'id',
-      className: 'p-3 text-gray-500',
+      className: 'p-2 text-sm text-gray-500',
       element: (el: any) => `#${el._id}`,
     },
     {
       key: 'name',
-      className: 'p-3 font-bold cursor-pointer',
+      className: 'p-2 text-sm font-bold cursor-pointer',
       style: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -286,7 +342,7 @@ function TableBodyBox({
     },
     {
       key: 'email',
-      className: 'p-3 min-w-40',
+      className: 'p-2 text-sm min-w-40',
       style: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -295,7 +351,7 @@ function TableBodyBox({
     },
     {
       key: 'gender',
-      className: 'p-3',
+      className: 'p-2 text-sm',
       element: (el: any) =>
         el.gender === 'male' || el.gender === 'female'
           ? el.gender.charAt(0).toUpperCase() + el.gender.slice(1)
@@ -303,44 +359,47 @@ function TableBodyBox({
     },
     {
       key: 'status',
-      className: 'p-3 font-bold',
+      className: 'p-2 text-sm font-bold',
       element: (el: any) =>
         el.prob_status.charAt(0).toUpperCase() + el.prob_status.slice(1),
     },
     {
       key: 'active',
-      className: 'p-3 font-bold',
+      className: 'p-2 text-sm font-bold',
       element: (el: any) => (el.is_active ? 'Active' : 'Inactive'),
       getStyle: (el: any) => ({
-        color: el.is_active ? '#0d9488' : '#991b1b',
+        color: el.is_active ? COLORS.success_teal : COLORS.error_red,
       }),
     },
     {
       key: 'created',
-      className: 'p-3 text-gray-500 whitespace-nowrap',
+      className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
       element: (el: any) => new Date(el.created_at).toISOString().split('T')[0],
     },
     {
       key: 'updated',
-      className: 'p-3 text-gray-500 whitespace-nowrap',
+      className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
       element: (el: any) => new Date(el.updated_at).toISOString().split('T')[0],
     },
   ];
   // display
+  if (!candidates || candidates.length === 0) {
+    return <tbody></tbody>;
+  }
   return (
     <tbody>
       {candidates.map((el: any) => (
         <tr
-          key={el.key}
+          key={el._id}
           style={{
-            borderBottom: '1px solid #f3f4f6',
+            borderBottom: `1px solid ${COLORS.light_gray}`,
           }}
           className={`
                   ${el.is_active === false ? 'bg-gray-100 opacity-60' : ''}
                   ${selectedCandidates.includes(el._id) ? 'bg-teal-100 opacity-100' : ''}`}
         >
           {/*  checkbox column  */}
-          <td className='p-3 text-center align-middle'>
+          <td className='p-2 text-center align-middle'>
             <input
               type='checkbox'
               className='w-4 h-4 cursor-pointer'
@@ -366,7 +425,143 @@ function TableBodyBox({
   );
 }
 
-//  Supporting Functions
+//  ==========    Buttons    ==========
+
+const ButtonConvertStatus = ({
+  candidates,
+  setCandidates,
+  selectedCandidate,
+  setSelectedCandidate,
+  convertStatus,
+  setConvertStatus,
+  tiggerConvert,
+  setTriggerConvert,
+}: {
+  candidates: any[];
+  setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
+  selectedCandidate: number[];
+  setSelectedCandidate: React.Dispatch<React.SetStateAction<number[]>>;
+  convertStatus: boolean;
+  setConvertStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  tiggerConvert: boolean;
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  return (
+    <>
+      {/*  button part */}
+      <ButtonConfirm
+        label='Convert Status'
+        onClick={async () => {
+          //  remarks: case of no selection
+          if (selectedCandidate.length === 0) {
+            alert('[Error] Please select any candidate.');
+            return;
+          }
+          try {
+            //  1. popup window, action works on popup window
+            setTriggerConvert(true);
+          } catch (err: any) {
+            //  remarks: error handling
+            console.error('Toggle Status Error:', {
+              error: err,
+              message: err.message,
+            });
+            alert(
+              `Error: ${err.response?.data?.message || err.message || 'Failed to update candidate status'}`,
+            );
+          }
+        }}
+        style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
+      />
+      {/*  window part */}
+      {tiggerConvert && (
+        <div className='fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50'>
+          <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4'>
+            <h2 className='text-xl font-bold mb-4 text-gray-800'>
+              Convert Status
+            </h2>
+            <p className='text-gray-600 mb-6'>
+              Select a new status for the selected candidates.
+            </p>
+            <div className='mb-6 space-y-3'>
+              <label className='flex items-center gap-3 cursor-pointer'>
+                <input
+                  type='radio'
+                  name='status'
+                  value='active'
+                  checked={convertStatus === true}
+                  onChange={() => setConvertStatus(true)}
+                  className='w-4 h-4 cursor-pointer'
+                />
+                <span className='text-gray-700 font-medium'>Active</span>
+              </label>
+              <label className='flex items-center gap-3 cursor-pointer'>
+                <input
+                  type='radio'
+                  name='status'
+                  value='inactive'
+                  checked={convertStatus === false}
+                  onChange={() => setConvertStatus(false)}
+                  className='w-4 h-4 cursor-pointer'
+                />
+                <span className='text-gray-700 font-medium'>Inactive</span>
+              </label>
+            </div>
+            <div className='flex gap-3'>
+              <button
+                type='button'
+                onClick={() => {
+                  setTriggerConvert(false);
+                }}
+                className='flex-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors'
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    //  remarks:  no selected candidates
+                    if (!candidates || candidates.length === 0) {
+                      alert('Please select any candidate.');
+                      return;
+                    }
+                    // remarks: update status with assignated status
+                    await axios.patch(API.CANDIDATES_ACTIVATE, {
+                      _ids: selectedCandidate.map((id) => String(id)),
+                      is_active: convertStatus,
+                    });
+                    // remarks: refresh with updated data
+                    const res = await axios.get(API.CANDIDATES);
+                    const result = res?.data?.data?.result || [];
+
+                    setCandidates(result);
+                    // remarks: return local states
+                    setSelectedCandidate([]);
+                    setTriggerConvert(false);
+                    alert('Status updated successfully!');
+                  } catch (err: any) {
+                    // remarks: error handling
+                    console.error('Error updating status:', err);
+                    const errorMsg =
+                      err.response?.data?.message ||
+                      err.message ||
+                      'Failed to update candidate status';
+                    alert(`Error: ${errorMsg}`);
+                  }
+                }}
+                className='flex-1 px-4 py-2 rounded-lg bg-teal-600 text-white font-medium hover:bg-teal-700 transition-colors'
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+//  ==========    Supporting Functions    ==========
 
 const handle_checkbox_status = (
   id: number,
@@ -375,11 +570,9 @@ const handle_checkbox_status = (
   setSelectedCandidates((checklist) => {
     const selected = checklist.includes(id);
     if (selected) {
-      const updated = checklist.filter((item) => item !== id);
-      return updated;
+      return checklist.filter((item) => item !== id);
     } else {
-      const updated = [...checklist, id];
-      return updated;
+      return [...checklist, id];
     }
   });
 };
@@ -390,8 +583,8 @@ const handle_checkbox_select_all = (
   setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
 ) => {
   const isChecked = event.target.checked;
-  if (isChecked) {
-    const id_list = candidates.map((candidate) => candidate._id);
+  if (isChecked && candidates && candidates.length > 0) {
+    const id_list = candidates.map((candidate) => candidate._id as number);
     setSelectedCandidates(id_list);
   } else {
     setSelectedCandidates([]);

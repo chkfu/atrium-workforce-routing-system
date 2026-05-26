@@ -16,7 +16,7 @@ export default function Header() {
         {/* Absolute -  Login Button */}
         <a
           href='/login'
-          className='absolute right-8 top-8 transform px-4 w-32 h-10 rounded-3xl bg-slate-300 flex items-center justify-left cursor-pointer hover:bg-slate-100 hover:text-teal-800 transition duration-500 active:scale-95'
+          className='absolute right-8 top-8 transform px-4 h-10 rounded-3xl bg-slate-300 flex items-center justify-left cursor-pointer hover:bg-slate-100 hover:text-teal-800 transition duration-500 active:scale-95'
         >
           <img
             src={logo_login}
@@ -25,7 +25,7 @@ export default function Header() {
             height='24'
             className='text-teal-800'
           />
-          <span className='px-4 text-lg text-teal-800'>Login</span>
+          <span className='px-2 text-sm text-teal-800'>Login</span>
         </a>
         {/*  Relative - Main Navigation */}
         <div className='flex items-center justify-center'>

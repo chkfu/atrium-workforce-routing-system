@@ -5,6 +5,7 @@ import LoadSpinner from '../../elements/LoadSpinner';
 import { API } from '../../config/api';
 import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
+import { handle_update_submit } from './utils/handlers';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {

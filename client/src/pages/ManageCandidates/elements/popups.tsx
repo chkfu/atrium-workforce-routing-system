@@ -1,5 +1,6 @@
 import { useCandidateContext } from '../utils/context';
-import { ButtonConvertConfirm, ButtonConvertCancel } from './buttons';
+import { ButtonConvertSubmit, ButtonConvertCancel } from './buttons';
+import FormUpdate from './forms';
 
 //  Update candidate details
 
@@ -23,15 +24,7 @@ export const PopupUpdate = (): JSX.Element => {
           </p>
           {/* form elements */}
           <div className='space-y-4'>
-            <div className='group'>
-              <label className='block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-teal-700 transition-all duration-900'>
-                First Name
-              </label>
-              <input
-                type='text'
-                className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 transition-colors duration-900'
-              />
-            </div>
+            <FormUpdate />
           </div>
         </div>
       )}
@@ -87,7 +80,7 @@ export const PopupConvertActive = (): JSX.Element => {
             </label>
           </div>
           <div className='flex gap-4 justify-end'>
-            <ButtonConvertConfirm />
+            <ButtonConvertSubmit />
             <ButtonConvertCancel />
           </div>
         </div>

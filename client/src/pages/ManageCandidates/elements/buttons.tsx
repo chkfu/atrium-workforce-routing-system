@@ -1,9 +1,14 @@
-import axios from 'axios';
 import { useCandidateContext } from '../utils/context';
-import { API } from '../../../config/api';
 import { COLORS } from '../../../styles/color';
 import { PopupUpdate, PopupConvertActive } from './popups';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
+import {
+  handle_convert_submit,
+  handle_convert_popup,
+  handle_convert_cancel,
+  handle_update_popup,
+  handle_update_cancel,
+} from '../utils/handlers';
 
 //  remarks: button for batch update
 export const ButtonUpdate = (): JSX.Element => {
@@ -12,26 +17,9 @@ export const ButtonUpdate = (): JSX.Element => {
     <>
       <ButtonConfirm
         label='Update'
-        onClick={() => {
-          //  remarks: case of no selection
-          if (selectedCandidates.length === 0) {
-            alert('Please select any candidate.');
-            return;
-          }
-          //  remarks: case of selection
-          try {
-            setTriggerUpdate(true);
-          } catch (err: any) {
-            // remarks: error handling
-            console.error('Batch Update Error:', {
-              error: err,
-              message: err.message,
-            });
-            alert(
-              `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidates'}`,
-            );
-          }
-        }}
+        onClick={() =>
+          handle_update_popup(selectedCandidates, setTriggerUpdate)
+        }
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
       {/* remarks: pop up content */}
@@ -47,26 +35,9 @@ export const ButtonConvertActive = (): JSX.Element => {
     <>
       <ButtonConfirm
         label='Convert Active'
-        onClick={async () => {
-          //  remarks: case of no selection
-          if (selectedCandidates.length === 0) {
-            alert('Please select any candidate.');
-            return;
-          }
-          try {
-            //  1. popup window, action works on popup window
-            setTriggerConvert(true);
-          } catch (err: any) {
-            //  remarks: error handling
-            console.error('[ManageCandidates] error: convert status:', {
-              error: err,
-              message: err.message,
-            });
-            alert(
-              `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidate status'}`,
-            );
-          }
-        }}
+        onClick={() =>
+          handle_convert_popup(selectedCandidates, setTriggerConvert)
+        }
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
       {/* remarks: pop up content */}
@@ -82,11 +53,9 @@ export const ButtonConvertCancel = (): JSX.Element => {
   return (
     <ButtonConfirm
       label='Cancel'
-      onClick={() => {
-        if (isConverting) return;
-        setTriggerConvert(false);
-        setConvertStatus(null);
-      }}
+      onClick={() =>
+        handle_convert_cancel(isConverting, setTriggerConvert, setConvertStatus)
+      }
       style={{
         transition: 'all 1s ease',
         backgroundColor: COLORS.light_gray,
@@ -97,57 +66,33 @@ export const ButtonConvertCancel = (): JSX.Element => {
   );
 };
 
-//  remarks: confirm button inside convert active popup
-export const ButtonConvertConfirm = (): JSX.Element => {
+//  remarks: submit button inside convert active popup
+export const ButtonConvertSubmit = (): JSX.Element => {
   const {
-    setCandidates,
     selectedCandidates,
-    setSelectedCandidates,
     convertStatus,
-    setConvertStatus,
-    setTriggerConvert,
     isConverting,
     setIsConverting,
+    setCandidates,
+    setSelectedCandidates,
+    setConvertStatus,
+    setTriggerConvert,
   } = useCandidateContext();
   return (
     <ButtonConfirm
       label={isConverting ? 'Loading...' : 'Confirm'}
-      onClick={async () => {
-        if (isConverting) return;
-        try {
-          //  remarks:  no selected candidates
-          if (!selectedCandidates || selectedCandidates.length === 0) {
-            alert('Please select any candidate.');
-            return;
-          }
-          setIsConverting(true);
-          // remarks: update status with assignated status
-          await axios.patch(API.CANDIDATES_ACTIVATE, {
-            _ids: selectedCandidates.map((id) => String(id)),
-            is_active: convertStatus,
-          });
-          // remarks: refresh with updated data
-          const res = await axios.get(API.CANDIDATES);
-          const data = res?.data?.data?.result || [];
-          setCandidates(data);
-          setSelectedCandidates([]);
-          setConvertStatus(null);
-          setTriggerConvert(false);
-        } catch (err: any) {
-          // remarks: error handling
-          console.error(
-            '[ManageCandidates] error: Error updating status:',
-            err,
-          );
-          const errorMsg =
-            err.response?.data?.message ||
-            err.message ||
-            '[ManageCandidates] error: Failed to update candidate status';
-          alert(`Error: ${errorMsg}`);
-        } finally {
-          setIsConverting(false);
-        }
-      }}
+      onClick={() =>
+        handle_convert_submit(
+          selectedCandidates,
+          convertStatus,
+          isConverting,
+          setIsConverting,
+          setCandidates,
+          setSelectedCandidates,
+          setConvertStatus,
+          setTriggerConvert,
+        )
+      }
       style={{
         transition: 'all 0.5s ease',
         backgroundColor: COLORS.dark_teal,
@@ -156,6 +101,45 @@ export const ButtonConvertConfirm = (): JSX.Element => {
         cursor: isConverting ? 'none' : 'pointer',
       }}
       disabled={convertStatus === null || isConverting}
+    />
+  );
+};
+
+//  remarks: cancel button for update candidate popup
+export const ButtonUpdateCancel = (): JSX.Element => {
+  const { isUpdating, setTriggerUpdate } = useCandidateContext();
+  return (
+    <ButtonConfirm
+      label='Cancel'
+      onClick={() => handle_update_cancel(isUpdating, setTriggerUpdate)}
+      style={{
+        transition: 'all 0.5s ease',
+        backgroundColor: COLORS.light_gray,
+        color: COLORS.dark_teal,
+        cursor: isUpdating ? 'none' : 'pointer',
+      }}
+    />
+  );
+};
+
+//  remarks: submit button for update candidate popup
+export const ButtonUpdateSubmit = ({
+  onClick,
+}: {
+  onClick: () => void;
+}): JSX.Element => {
+  const { isUpdating } = useCandidateContext();
+  return (
+    <ButtonConfirm
+      label={isUpdating ? 'Loading...' : 'Update'}
+      onClick={onClick}
+      style={{
+        transition: 'all 0.5s ease',
+        backgroundColor: '#4a90a4',
+        color: '#f5f5f5',
+        cursor: isUpdating ? 'none' : 'pointer',
+      }}
+      disabled={isUpdating}
     />
   );
 };

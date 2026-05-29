@@ -1,50 +1,94 @@
 import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
-import {
-  handle_checkbox_select_all,
-  handle_checkbox_status,
-} from '../utils/button-handlers';
+import { handle_checkbox_status } from '../utils/handlers';
 
 //  ==========     MAIN DISPLAY     ==========
+
+// remarks: constant - table header (main display)
+const table_headers = [
+  { label: 'ID', className: 'w-8', key: 'id' },
+  { label: 'Name', className: 'min-w-20', key: 'name' },
+  { label: 'Email', className: 'min-w-40', key: 'email' },
+  { label: 'Gender', className: 'min-w-20', key: 'gender' },
+  { label: 'Status', className: 'min-w-20', key: 'status' },
+  { label: 'Active', className: 'min-w-20', key: 'active' },
+  { label: 'Created', className: 'min-w-20', key: 'created' },
+  { label: 'Updated', className: 'min-w-20', key: 'updated' },
+];
+
+//  remarks: constant - table column (main display)
+const table_cols = [
+  {
+    key: 'id',
+    className: 'p-2 text-sm text-gray-500',
+    element: (el: any) => `#${el._id}`,
+  },
+  {
+    key: 'name',
+    className: 'p-2 text-sm font-bold cursor-pointer',
+    style: {
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+    element: (el: any) => `${el.first_name} ${el.last_name}`,
+  },
+  {
+    key: 'email',
+    className: 'p-2 text-sm min-w-40',
+    style: {
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+    element: (el: any) => el.email,
+  },
+  {
+    key: 'gender',
+    className: 'p-2 text-sm',
+    element: (el: any) =>
+      el.gender === 'male' || el.gender === 'female'
+        ? el.gender.charAt(0).toUpperCase() + el.gender.slice(1)
+        : '',
+  },
+  {
+    key: 'status',
+    className: 'p-2 text-sm font-bold',
+    element: (el: any) =>
+      el.prob_status.charAt(0).toUpperCase() + el.prob_status.slice(1),
+  },
+  {
+    key: 'active',
+    className: 'p-2 text-sm font-bold',
+    element: (el: any) => (el.is_active ? 'Active' : 'Inactive'),
+    getStyle: (el: any) => ({
+      color: el.is_active ? COLORS.success_teal : COLORS.error_red,
+    }),
+  },
+  {
+    key: 'created',
+    className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
+    element: (el: any) => new Date(el.created_at).toISOString().split('T')[0],
+  },
+  {
+    key: 'updated',
+    className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
+    element: (el: any) => new Date(el.updated_at).toISOString().split('T')[0],
+  },
+];
 
 //  remarks: table head for candidates data
 export function TableHeaderBox(): JSX.Element {
   const { candidates, selectedCandidates, setSelectedCandidates } =
     useCandidateContext();
-  //  declaration
-  const table_headers = [
-    { label: 'ID', className: 'w-8', key: 'id' },
-    { label: 'Name', className: 'min-w-20', key: 'name' },
-    { label: 'Email', className: 'min-w-40', key: 'email' },
-    { label: 'Gender', className: 'min-w-20', key: 'gender' },
-    { label: 'Status', className: 'min-w-20', key: 'status' },
-    { label: 'Active', className: 'min-w-20', key: 'active' },
-    { label: 'Created', className: 'min-w-20', key: 'created' },
-    { label: 'Updated', className: 'min-w-20', key: 'updated' },
-  ];
   //  display
   return (
     <thead>
       <tr style={{ borderBottom: `2px solid ${COLORS.light_gray}` }}>
         {/*  checkbox column  */}
-        <th className='w-16 p-2 text-center align-middle'>
-          <input
-            type='checkbox'
-            className='w-4 h-4 cursor-pointer'
-            onChange={(event) =>
-              handle_checkbox_select_all(
-                event,
-                candidates,
-                setSelectedCandidates,
-              )
-            }
-            checked={
-              candidates &&
-              candidates.length > 0 &&
-              selectedCandidates.length === candidates.length
-            }
-          />
-        </th>
+        <TableHeadCheckbox
+          unit={candidates}
+          selected={selectedCandidates}
+          onSelectChange={setSelectedCandidates}
+        />
         {/*  data columns  */}
         {table_headers.map((header) => (
           <th
@@ -63,64 +107,6 @@ export function TableHeaderBox(): JSX.Element {
 export function TableBodyBox(): JSX.Element {
   const { candidates, selectedCandidates, setSelectedCandidates } =
     useCandidateContext();
-  //  declaration
-  const table_cols = [
-    {
-      key: 'id',
-      className: 'p-2 text-sm text-gray-500',
-      element: (el: any) => `#${el._id}`,
-    },
-    {
-      key: 'name',
-      className: 'p-2 text-sm font-bold cursor-pointer',
-      style: {
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      },
-      element: (el: any) => `${el.first_name} ${el.last_name}`,
-    },
-    {
-      key: 'email',
-      className: 'p-2 text-sm min-w-40',
-      style: {
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      },
-      element: (el: any) => el.email,
-    },
-    {
-      key: 'gender',
-      className: 'p-2 text-sm',
-      element: (el: any) =>
-        el.gender === 'male' || el.gender === 'female'
-          ? el.gender.charAt(0).toUpperCase() + el.gender.slice(1)
-          : '',
-    },
-    {
-      key: 'status',
-      className: 'p-2 text-sm font-bold',
-      element: (el: any) =>
-        el.prob_status.charAt(0).toUpperCase() + el.prob_status.slice(1),
-    },
-    {
-      key: 'active',
-      className: 'p-2 text-sm font-bold',
-      element: (el: any) => (el.is_active ? 'Active' : 'Inactive'),
-      getStyle: (el: any) => ({
-        color: el.is_active ? COLORS.success_teal : COLORS.error_red,
-      }),
-    },
-    {
-      key: 'created',
-      className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
-      element: (el: any) => new Date(el.created_at).toISOString().split('T')[0],
-    },
-    {
-      key: 'updated',
-      className: 'p-2 text-sm text-gray-500 whitespace-nowrap',
-      element: (el: any) => new Date(el.updated_at).toISOString().split('T')[0],
-    },
-  ];
   // display
   if (!candidates || candidates.length === 0) {
     return <tbody></tbody>;
@@ -161,5 +147,40 @@ export function TableBodyBox(): JSX.Element {
         </tr>
       ))}
     </tbody>
+  );
+}
+
+//  remarks: checkbox of table display
+interface TableHeadCheckboxProps {
+  unit: any[];
+  selected: number[];
+  onSelectChange: (selectedIds: number[]) => void;
+}
+
+export function TableHeadCheckbox({
+  unit,
+  selected,
+  onSelectChange,
+}: TableHeadCheckboxProps): JSX.Element {
+  const isAllSelected =
+    unit && unit.length > 0 && selected.length === unit.length;
+
+  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      onSelectChange(unit.map((item) => item._id));
+    } else {
+      onSelectChange([]);
+    }
+  };
+
+  return (
+    <th className='w-16 p-2 text-center align-middle'>
+      <input
+        type='checkbox'
+        className='w-4 h-4 cursor-pointer'
+        onChange={handleSelectAll}
+        checked={isAllSelected}
+      />
+    </th>
   );
 }

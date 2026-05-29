@@ -18,18 +18,20 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.4] - Apr 30, 2026 - In Progress
+## [1.0.4] - May 26, 2026 - In Progress
 
-<i>Objective: integrated client and server structure into basic MVP with basic CRUD structure.</i>
+<i>Objective: integrated client and server structure into basic CRUD structure.</i>
 
 ### Added
 
 - initialised `client/` for the frontend building, empowered by tailwind-CSS and React.
 - created data flow and UML diagram to outline the project and database structure.
+- created user interfaces and basic functionalities for manage candidates page
 
 ### Edited
 
 - re-organised `modules/` folder with categorised groups, improve better project structure for maintenance.
+- split codebase of manage candidates page into modules, as future file management practice for huge webpages.
 - updated `README.md` with core content of project objective, features, installation, architecture and dependencies.
 
 <br/>

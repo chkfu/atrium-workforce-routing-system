@@ -118,10 +118,11 @@ export function TableBodyBox(): JSX.Element {
           key={el._id}
           style={{
             borderBottom: `1px solid ${COLORS.light_gray}`,
+            opacity: el.is_active === false ? 0.6 : 1,
           }}
           className={`
-                  ${el.is_active === false ? 'bg-gray-100 opacity-60' : ''}
-                  ${selectedCandidates.includes(el._id) ? 'bg-teal-100 opacity-100' : ''}`}
+                  ${el.is_active === false ? 'bg-gray-100' : ''}
+                  ${selectedCandidates.includes(el._id) ? 'bg-teal-100' : ''}`}
         >
           {/*  checkbox column  */}
           <td className='p-2 text-center align-middle'>

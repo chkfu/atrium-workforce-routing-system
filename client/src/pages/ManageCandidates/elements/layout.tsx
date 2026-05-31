@@ -1,6 +1,6 @@
 import { useCandidateContext } from '../utils/context';
 import { TableHeaderBox, TableBodyBox } from './tables';
-import { ButtonUpdate, ButtonConvertActive } from './buttons';
+import { ButtonCreate, ButtonUpdate, ButtonConvertActive } from './buttons';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
 import { COLORS } from '../../../styles/color';
 
@@ -74,13 +74,7 @@ export function FormSearchBox(): JSX.Element {
 function FormButtonBox(): JSX.Element {
   return (
     <div className='flex flex-wrap gap-2'>
-      <ButtonConfirm
-        label='Create'
-        onClick={() => {
-          console.log('Batch Create');
-        }}
-        style={{ backgroundColor: COLORS.dark_teal, color: 'white' }}
-      />
+      <ButtonCreate />
       <ButtonUpdate />
       <ButtonConvertActive />
     </div>

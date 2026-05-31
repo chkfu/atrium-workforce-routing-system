@@ -1,8 +1,37 @@
 import { useCandidateContext } from '../utils/context';
 import { ButtonConvertSubmit, ButtonConvertCancel } from './buttons';
-import FormUpdate from './forms';
+import { FormUpdate, FormCreate } from './forms';
 
-//  Update candidate details
+//  remarks: popups for create new candidates record
+export const PopupCreate = (): JSX.Element => {
+  const { triggerCreate } = useCandidateContext();
+  return (
+    <div
+      className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300 pointer-events-none ${
+        triggerCreate
+          ? 'bg-opacity-20 opacity-100 pointer-events-auto'
+          : 'bg-opacity-0 opacity-0'
+      }`}
+    >
+      {triggerCreate && (
+        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 pointer-events-auto'>
+          <h2 className='text-xl font-bold mb-4 text-gray-800'>
+            Create New Candidates
+          </h2>
+          <p className='text-gray-600 mb-6'>
+            Fill in the details to create new candidates.
+          </p>
+          {/* form elements */}
+          <div className='space-y-4'>
+            <FormCreate />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+//  remarks: popups for update candidates details
 
 export const PopupUpdate = (): JSX.Element => {
   const { triggerUpdate } = useCandidateContext();
@@ -17,7 +46,7 @@ export const PopupUpdate = (): JSX.Element => {
       {triggerUpdate && (
         <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 pointer-events-auto'>
           <h2 className='text-xl font-bold mb-4 text-gray-800'>
-            Update Candidates
+            Update Candidates Details
           </h2>
           <p className='text-gray-600 mb-6'>
             Fill in the details to update the selected candidates.
@@ -32,7 +61,7 @@ export const PopupUpdate = (): JSX.Element => {
   );
 };
 
-//   update candidate active status
+//  remarks: popups for update candidates active status
 
 export const PopupConvertActive = (): JSX.Element => {
   const { convertStatus, setConvertStatus, triggerConvert } =

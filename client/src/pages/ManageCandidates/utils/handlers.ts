@@ -34,85 +34,67 @@ export const handle_checkbox_select_all = (
   }
 };
 
-//  ==========  convert active status  ==========
+//  ==========  create candidates  ==========
 
-//  remarks: manage convert active popup (convert active)
-export const handle_convert_popup = (
-  selectedCandidates: number[],
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
+export const handle_create_popup = (
+  setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-  //  remarks: case of no selection
-  if (selectedCandidates.length === 0) {
-    alert('Please select any candidate.');
-    return;
-  }
   try {
-    //  remarks: popup window, action works on popup window
-    setTriggerConvert(true);
+    setTriggerCreate(true);
   } catch (err: any) {
-    //  remarks: error handling
-    console.error('[ManageCandidates] error: convert status:', {
+    // remarks: error handling
+    console.error('Batch Create Error:', {
       error: err,
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidate status'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to create candidates'}`,
     );
   }
 };
 
-//  remarks: cancel button inside convert active popup
-export const handle_convert_cancel = (
-  isConverting: boolean,
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
-  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
-) => {
-  if (isConverting) return;
-  setTriggerConvert(false);
-  setConvertStatus(null);
-};
-
-//  remarks: manage form submission (convert active)
-export const handle_convert_submit = async (
-  selectedCandidates: number[],
-  convertStatus: boolean | null,
-  isConverting: boolean,
-  setIsConverting: React.Dispatch<React.SetStateAction<boolean>>,
+//  remarks: manage form submission (create candidates)
+export const handle_create_submit = async (
+  data: yup.InferType<typeof CreateCandidateSchema>,
+  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>,
   setCandidates: React.Dispatch<React.SetStateAction<any[]>>,
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
-  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
+  setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>,
+  CreateCandidateSchema: any,
 ) => {
-  if (isConverting) return;
   try {
-    //  remarks:  no selected candidates
-    if (!selectedCandidates || selectedCandidates.length === 0) {
-      alert('Please select any candidate.');
-      return;
+    //  learnt: remove empty string values for enum fields
+    const new_data: Record<string, any> = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== '') {
+        new_data[key] = value;
+        new_data['is_active'] = true;
+      }
     }
-    setIsConverting(true);
-    // remarks: update status with assignated status
-    await axios.patch(API.CANDIDATES_ACTIVATE, {
-      _ids: selectedCandidates.map((id) => String(id)),
-      is_active: convertStatus,
+
+    //  remarks: valid case for create
+    //  remarks: sub-table records are listed separately (not nested);
+    //           must be added manually after candidate creation
+    setIsCreating(true);
+    await axios.post(API.CANDIDATES, {
+      candidates: [new_data],
     });
-    // remarks: refresh with updated data
+    alert(`[ManageCandidates] succeed: new candidate record has been created.`);
     const res = await axios.get(API.CANDIDATES);
-    const data = res?.data?.data?.result || [];
-    setCandidates(data);
-    setSelectedCandidates([]);
-    setConvertStatus(null);
-    setTriggerConvert(false);
+    const createdCandidates = res?.data?.data?.result || [];
+
+    //  remarks: refresh candidates list
+    setCandidates(createdCandidates);
+    setTriggerCreate(false);
   } catch (err: any) {
-    // remarks: error handling
-    console.error('[ManageCandidates] error: Error updating status:', err);
-    const errorMsg =
-      err.response?.data?.message ||
-      err.message ||
-      '[ManageCandidates] error: Failed to update candidate status';
-    alert(`Error: ${errorMsg}`);
+    console.error('[ManageCandidates] error: create candidates:', {
+      error: err,
+      message: err.message,
+    });
+    alert(
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to create candidate. Please try again later.'}`,
+    );
   } finally {
-    setIsConverting(false);
+    setIsCreating(false);
   }
 };
 
@@ -199,5 +181,87 @@ export const handle_update_submit = async (
     );
   } finally {
     setIsUpdating(false);
+  }
+};
+
+//  ==========  convert active status  ==========
+
+//  remarks: manage convert active popup (convert active)
+export const handle_convert_popup = (
+  selectedCandidates: number[],
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  //  remarks: case of no selection
+  if (selectedCandidates.length === 0) {
+    alert('Please select any candidate.');
+    return;
+  }
+  try {
+    //  remarks: popup window, action works on popup window
+    setTriggerConvert(true);
+  } catch (err: any) {
+    //  remarks: error handling
+    console.error('[ManageCandidates] error: convert status:', {
+      error: err,
+      message: err.message,
+    });
+    alert(
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidate status'}`,
+    );
+  }
+};
+
+//  remarks: cancel button inside convert active popup
+export const handle_convert_cancel = (
+  isConverting: boolean,
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
+  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
+) => {
+  if (isConverting) return;
+  setTriggerConvert(false);
+  setConvertStatus(null);
+};
+
+//  remarks: manage form submission (convert active)
+export const handle_convert_submit = async (
+  selectedCandidates: number[],
+  convertStatus: boolean | null,
+  isConverting: boolean,
+  setIsConverting: React.Dispatch<React.SetStateAction<boolean>>,
+  setCandidates: React.Dispatch<React.SetStateAction<any[]>>,
+  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
+  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
+  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  if (isConverting) return;
+  try {
+    //  remarks:  no selected candidates
+    if (!selectedCandidates || selectedCandidates.length === 0) {
+      alert('Please select any candidate.');
+      return;
+    }
+    setIsConverting(true);
+    // remarks: update status with assignated status
+    await axios.patch(API.CANDIDATES_ACTIVATE, {
+      _ids: selectedCandidates.map((id) => String(id)),
+      is_active: convertStatus,
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.CANDIDATES);
+    const data = res?.data?.data?.result || [];
+    setCandidates(data);
+    setSelectedCandidates([]);
+    setConvertStatus(null);
+    setTriggerConvert(false);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageCandidates] error: Error updating status:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageCandidates] error: Failed to update candidate status';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsConverting(false);
   }
 };

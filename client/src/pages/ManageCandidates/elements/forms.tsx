@@ -1,66 +1,67 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCandidateContext } from '../utils/context';
-import { ButtonUpdateCancel, ButtonUpdateSubmit } from './buttons';
+import {
+  ButtonUpdateCancel,
+  ButtonUpdateSubmit,
+  ButtonCreateCancel,
+  ButtonCreateSubmit,
+} from './buttons';
 import FormTextField from '../../../elements/FormTextField';
 import FormSelectInput from '../../../elements/FormSelectInput';
-import { UpdateCandidateSchema } from '../utils/schema';
-import { handle_update_submit } from '../utils/handlers';
+import { CreateCandidateSchema, UpdateCandidateSchema } from '../utils/schema';
+import { handle_create_submit, handle_update_submit } from '../utils/handlers';
 
-//  remarks: react state management with use-context
-export default function FormUpdateState() {
-  const {
-    selectedCandidates,
-    setCandidates,
-    setSelectedCandidates,
-    setIsUpdating,
-    setTriggerUpdate,
-  } = useCandidateContext();
+//  CREATE
 
-  //  remarks: calling built-in methods from react-hook-form
+export function FormCreate() {
+  //  declaration
+  const { setCandidates, setIsCreating, setTriggerCreate } =
+    useCandidateContext();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(UpdateCandidateSchema),
+    resolver: yupResolver(CreateCandidateSchema),
   });
-
-  //  remarks: calling handlers, as parameters required
-  function recall_submission(data: any) {
-    handle_update_submit(
+  function recalling(data: any) {
+    handle_create_submit(
       data,
-      selectedCandidates,
-      setIsUpdating,
+      setIsCreating,
       setCandidates,
-      setSelectedCandidates,
-      setTriggerUpdate,
-      UpdateCandidateSchema,
+      setTriggerCreate,
+      CreateCandidateSchema,
     );
   }
+  //  display
   return (
-    <form>
+    <form onSubmit={handleSubmit(recalling)}>
       {/*  section: field inputs  */}
       <FormTextField
         label='First Name'
-        register={register('firstName')}
-        error={errors.firstName}
+        register={register('first_name')}
+        error={errors.first_name}
+        required={true}
       />
       <FormTextField
         label='Last Name'
-        register={register('lastName')}
-        error={errors.lastName}
+        register={register('last_name')}
+        error={errors.last_name}
+        required={true}
       />
       <FormTextField
         label='Email'
         type='email'
         register={register('email')}
         error={errors.email}
+        required={true}
       />
       <FormSelectInput
         label='Gender'
         register={register('gender')}
         error={errors.gender}
+        required={true}
         options={[
           { value: 'male', label: 'Male' },
           { value: 'female', label: 'Female' },
@@ -71,6 +72,7 @@ export default function FormUpdateState() {
         label='Probation Status'
         register={register('prob_status')}
         error={errors.prob_status}
+        required={true}
         options={[
           { value: 'selecting', label: 'Selecting' },
           { value: 'training', label: 'Training' },
@@ -84,8 +86,93 @@ export default function FormUpdateState() {
 
       {/*  section: buttons  */}
       <div className='flex gap-4 justify-end mt-6'>
+        <ButtonCreateCancel />
+        <ButtonCreateSubmit />
+      </div>
+    </form>
+  );
+}
+
+//  UPDATE
+
+export function FormUpdate() {
+  //  declaration
+  const {
+    selectedCandidates,
+    setCandidates,
+    setSelectedCandidates,
+    setIsUpdating,
+    setTriggerUpdate,
+  } = useCandidateContext();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(UpdateCandidateSchema),
+  });
+  function recalling(data: any) {
+    handle_update_submit(
+      data,
+      selectedCandidates,
+      setIsUpdating,
+      setCandidates,
+      setSelectedCandidates,
+      setTriggerUpdate,
+      UpdateCandidateSchema,
+    );
+  }
+  //  display
+  return (
+    <form onSubmit={handleSubmit(recalling)}>
+      {/*  section: field inputs  */}
+      <FormTextField
+        label='First Name'
+        register={register('first_name')}
+        error={errors.first_name}
+      />
+      <FormTextField
+        label='Last Name'
+        register={register('last_name')}
+        error={errors.last_name}
+      />
+      <FormTextField
+        label='Email'
+        type='email'
+        register={register('email')}
+        error={errors.email}
+      />
+      <FormSelectInput
+        label='Gender'
+        register={register('gender')}
+        error={errors.gender}
+        options={[
+          { value: '', label: 'Select Gender' },
+          { value: 'male', label: 'Male' },
+          { value: 'female', label: 'Female' },
+          { value: 'other', label: 'Other' },
+        ]}
+      />
+      <FormSelectInput
+        label='Probation Status'
+        register={register('prob_status')}
+        error={errors.prob_status}
+        options={[
+          { value: '', label: 'Select Status' },
+          { value: 'selecting', label: 'Selecting' },
+          { value: 'training', label: 'Training' },
+          { value: 'completed', label: 'Completed' },
+          { value: 'postponed', label: 'Postponed' },
+          { value: 'withdrawn', label: 'Withdrawn' },
+          { value: 'failed', label: 'Failed' },
+        ]}
+        className='mb-6'
+      />
+
+      {/*  section: buttons  */}
+      <div className='flex gap-4 justify-end mt-6'>
         <ButtonUpdateCancel />
-        <ButtonUpdateSubmit onClick={handleSubmit(recall_submission)} />
+        <ButtonUpdateSubmit onClick={handleSubmit(recalling)} />
       </div>
     </form>
   );

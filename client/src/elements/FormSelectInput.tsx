@@ -29,7 +29,7 @@ export default function FormSelectInput({
       {/*  section: label field */}
       <label className='block text-sm font-semibold text-gray-700 mb-1 group-focus-within:text-teal-600 transition-colors duration-600'>
         {label}
-        {required && <span className='text-red-500 ml-1'></span>}
+        {required && <span className='text-red-500 ml-1'>*</span>}
       </label>
       {/*  section: selection dropdown */}
       <select

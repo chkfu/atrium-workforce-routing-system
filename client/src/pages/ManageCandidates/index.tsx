@@ -5,7 +5,6 @@ import LoadSpinner from '../../elements/LoadSpinner';
 import { API } from '../../config/api';
 import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
-import { handle_update_submit } from './utils/handlers';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {
@@ -15,14 +14,17 @@ export default function ManageCandidates(): JSX.Element {
   const [searchText, setSearchText] = useState<string>('');
   const [isGetting, setIsGetting] = useState<boolean>(true);
   const [getError, setGetError] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isConverting, setIsConverting] = useState<boolean>(false);
   //  2. get: all
   const [candidates, setCandidates] = useState<any[]>([]);
-  //  3. update: all
+  //  3. create: all
+  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
+  //  4. update: all
   const [triggerUpdate, setTriggerUpdate] = useState<boolean>(false);
   const [updateDetails, setUpdateDetails] = useState<any>(null);
-  //  4. update: convert
+  //  5. update: convert
   const [triggerConvert, setTriggerConvert] = useState<boolean>(false);
   const [convertStatus, setConvertStatus] = useState<boolean | null>(null);
 
@@ -62,10 +64,17 @@ export default function ManageCandidates(): JSX.Element {
       <Accordion title='Candidate List'>
         <CandidateContext.Provider
           value={{
+            //  get state
             candidates,
             setCandidates,
             selectedCandidates,
             setSelectedCandidates,
+            // create state
+            isCreating,
+            setIsCreating,
+            triggerCreate,
+            setTriggerCreate,
+            // update state
             updateDetails,
             setUpdateDetails,
             isUpdating,

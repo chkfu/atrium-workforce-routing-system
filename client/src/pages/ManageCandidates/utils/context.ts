@@ -6,6 +6,9 @@ interface CandidateContextType {
   setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
   selectedCandidates: number[];
   setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>;
+  //  POST
+  triggerCreate: boolean;
+  setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>;
   //  PATCH
   triggerUpdate: boolean;
   setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +21,8 @@ interface CandidateContextType {
   //  OTHERS
   isGetting: boolean;
   setIsGetting: React.Dispatch<React.SetStateAction<boolean>>;
+  isCreating: boolean;
+  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdating: boolean;
   setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   isConverting: boolean;

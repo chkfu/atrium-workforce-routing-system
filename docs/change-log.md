@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.4] - May 26, 2026 - In Progress
+## [1.0.4] - May 31, 2026 - In Progress
 
 <i>Objective: integrated client and server structure into basic CRUD structure.</i>
 
@@ -26,7 +26,7 @@ This file records the major version changes of the projects.
 
 - initialised `client/` for the frontend building, empowered by tailwind-CSS and React.
 - created data flow and UML diagram to outline the project and database structure.
-- created user interfaces and basic functionalities for manage candidates page
+- created user interfaces and basic CRUD functionalities for manage candidates page
 
 ### Edited
 

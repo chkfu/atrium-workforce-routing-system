@@ -1,14 +1,25 @@
+import { useCandidateContext } from './context';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../config/api';
+import { CreateCandidateSchema, UpdateCandidateSchema } from './schema';
 
 //  ==========  checkbox status  ==========
 
+//  remarks
+
+export const handle_selected = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { candidates, setSelectedCandidates } = useCandidateContext();
+  if (event.target.checked) {
+    setSelectedCandidates(candidates.map((item: any) => item._id));
+  } else {
+    setSelectedCandidates([]);
+  }
+};
+
 //  remarks: manage record checkbox status (main table)
-export const handle_checkbox_status = (
-  id: number,
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
-) => {
+export const handle_checkbox_status = (id: number) => {
+  const { setSelectedCandidates } = useCandidateContext();
   setSelectedCandidates((checklist) => {
     const selected = checklist.includes(id);
     if (selected) {
@@ -22,9 +33,8 @@ export const handle_checkbox_status = (
 //  remarks: manage overall select all (main table)
 export const handle_checkbox_select_all = (
   event: React.ChangeEvent<HTMLInputElement>,
-  candidates: any[],
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
 ) => {
+  const { candidates, setSelectedCandidates } = useCandidateContext();
   const checked = event.target.checked;
   if (checked && candidates && candidates.length > 0) {
     const id_list = candidates.map((candidate) => candidate._id as number);
@@ -36,9 +46,8 @@ export const handle_checkbox_select_all = (
 
 //  ==========  create candidates  ==========
 
-export const handle_create_popup = (
-  setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const handle_create_popup = () => {
+  const { setTriggerCreate } = useCandidateContext();
   try {
     setTriggerCreate(true);
   } catch (err: any) {
@@ -56,20 +65,18 @@ export const handle_create_popup = (
 //  remarks: manage form submission (create candidates)
 export const handle_create_submit = async (
   data: yup.InferType<typeof CreateCandidateSchema>,
-  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>,
-  setCandidates: React.Dispatch<React.SetStateAction<any[]>>,
-  setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>,
-  CreateCandidateSchema: any,
 ) => {
+  const { setIsCreating, setCandidates, setTriggerCreate } =
+    useCandidateContext();
   try {
     //  learnt: remove empty string values for enum fields
     const new_data: Record<string, any> = {};
     for (const [key, value] of Object.entries(data)) {
       if (value !== '') {
         new_data[key] = value;
-        new_data['is_active'] = true;
       }
     }
+    new_data['is_active'] = true;
 
     //  remarks: valid case for create
     //  remarks: sub-table records are listed separately (not nested);
@@ -101,10 +108,8 @@ export const handle_create_submit = async (
 //  ==========  update candidates  ==========
 
 //  remarks: manage update popup (update candidates)
-export const handle_update_popup = (
-  selectedCandidates: number[],
-  setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const handle_update_popup = () => {
+  const { selectedCandidates, setTriggerUpdate } = useCandidateContext();
   //  remarks: case of no selection
   if (selectedCandidates.length === 0) {
     alert('Please select any candidate.');
@@ -126,10 +131,8 @@ export const handle_update_popup = (
 };
 
 //  remarks: cancel button inside update popup (update candidates)
-export const handle_update_cancel = (
-  isUpdating: boolean,
-  setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const handle_update_cancel = () => {
+  const { isUpdating, setTriggerUpdate } = useCandidateContext();
   if (isUpdating) return;
   setTriggerUpdate(false);
 };
@@ -137,13 +140,9 @@ export const handle_update_cancel = (
 //  remarks: manage form submission (update candidates)
 export const handle_update_submit = async (
   data: yup.InferType<typeof UpdateCandidateSchema>, // learnt: compile data from yup format
-  selectedCandidates: number[],
-  setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>,
-  setCandidates: React.Dispatch<React.SetStateAction<any[]>>,
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
-  setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>,
-  UpdateCandidateSchema: any,
 ) => {
+  const { selectedCandidates, setIsUpdating, setCandidates, setSelectedCandidates, setTriggerUpdate } =
+    useCandidateContext();
   try {
     //  remarks: invalid case with no selection
     if (selectedCandidates.length === 0) {
@@ -187,10 +186,8 @@ export const handle_update_submit = async (
 //  ==========  convert active status  ==========
 
 //  remarks: manage convert active popup (convert active)
-export const handle_convert_popup = (
-  selectedCandidates: number[],
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const handle_convert_popup = () => {
+  const { selectedCandidates, setTriggerConvert } = useCandidateContext();
   //  remarks: case of no selection
   if (selectedCandidates.length === 0) {
     alert('Please select any candidate.');
@@ -212,27 +209,25 @@ export const handle_convert_popup = (
 };
 
 //  remarks: cancel button inside convert active popup
-export const handle_convert_cancel = (
-  isConverting: boolean,
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
-  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
-) => {
+export const handle_convert_cancel = () => {
+  const { isConverting, setTriggerConvert, setConvertStatus } =
+    useCandidateContext();
   if (isConverting) return;
   setTriggerConvert(false);
   setConvertStatus(null);
 };
 
 //  remarks: manage form submission (convert active)
-export const handle_convert_submit = async (
-  selectedCandidates: number[],
-  convertStatus: boolean | null,
-  isConverting: boolean,
-  setIsConverting: React.Dispatch<React.SetStateAction<boolean>>,
-  setCandidates: React.Dispatch<React.SetStateAction<any[]>>,
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>,
-  setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>,
-  setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const handle_convert_submit = async (convertStatus: boolean | null) => {
+  const {
+    selectedCandidates,
+    isConverting,
+    setIsConverting,
+    setCandidates,
+    setSelectedCandidates,
+    setConvertStatus,
+    setTriggerConvert,
+  } = useCandidateContext();
   if (isConverting) return;
   try {
     //  remarks:  no selected candidates

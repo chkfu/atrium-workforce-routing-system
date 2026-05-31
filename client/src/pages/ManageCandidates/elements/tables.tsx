@@ -1,6 +1,6 @@
 import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
-import { handle_checkbox_status } from '../utils/handlers';
+import { handle_checkbox_status, handle_selected } from '../utils/handlers';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -8,7 +8,7 @@ import { handle_checkbox_status } from '../utils/handlers';
 const table_headers = [
   { label: 'ID', className: 'w-8', key: 'id' },
   { label: 'Name', className: 'min-w-20', key: 'name' },
-  { label: 'Email', className: 'min-w-40', key: 'email' },
+  { label: 'Email', className: 'min-w-30', key: 'email' },
   { label: 'Gender', className: 'min-w-20', key: 'gender' },
   { label: 'Status', className: 'min-w-20', key: 'status' },
   { label: 'Active', className: 'min-w-20', key: 'active' },
@@ -81,7 +81,7 @@ export function TableHeaderBox(): JSX.Element {
     useCandidateContext();
   //  display
   return (
-    <thead>
+    <thead className='sticky top-0 z-10 bg-white'>
       <tr style={{ borderBottom: `2px solid ${COLORS.light_gray}` }}>
         {/*  checkbox column  */}
         <TableHeadCheckbox
@@ -105,12 +105,11 @@ export function TableHeaderBox(): JSX.Element {
 
 //  remarks: table body forcandidates data
 export function TableBodyBox(): JSX.Element {
-  const { candidates, selectedCandidates, setSelectedCandidates } =
-    useCandidateContext();
-  // display
+  const { candidates, selectedCandidates } = useCandidateContext();
   if (!candidates || candidates.length === 0) {
     return <tbody></tbody>;
   }
+  // display
   return (
     <tbody>
       {candidates.map((el: any) => (
@@ -130,9 +129,7 @@ export function TableBodyBox(): JSX.Element {
               type='checkbox'
               className='w-4 h-4 cursor-pointer'
               checked={selectedCandidates.includes(el._id)}
-              onChange={() =>
-                handle_checkbox_status(el._id, setSelectedCandidates)
-              }
+              onChange={() => handle_checkbox_status(el._id)}
             />
           </td>
           {/*  data columns  */}
@@ -152,35 +149,25 @@ export function TableBodyBox(): JSX.Element {
 }
 
 //  remarks: checkbox of table display
-interface TableHeadCheckboxProps {
-  unit: any[];
-  selected: number[];
-  onSelectChange: (selectedIds: number[]) => void;
-}
-
 export function TableHeadCheckbox({
   unit,
   selected,
-  onSelectChange,
-}: TableHeadCheckboxProps): JSX.Element {
-  const isAllSelected =
+}: {
+  unit: any[];
+  selected: number[];
+  onSelectChange: (selectedIds: number[]) => void;
+}): JSX.Element {
+  //  remarks: declaration
+  const check_selected: boolean =
     unit && unit.length > 0 && selected.length === unit.length;
-
-  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      onSelectChange(unit.map((item) => item._id));
-    } else {
-      onSelectChange([]);
-    }
-  };
-
+  //  display
   return (
-    <th className='w-16 p-2 text-center align-middle'>
+    <th className='p-2 text-center align-middle'>
       <input
         type='checkbox'
         className='w-4 h-4 cursor-pointer'
-        onChange={handleSelectAll}
-        checked={isAllSelected}
+        onChange={handle_selected}
+        checked={check_selected}
       />
     </th>
   );

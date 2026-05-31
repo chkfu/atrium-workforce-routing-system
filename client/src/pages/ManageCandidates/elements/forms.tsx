@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useCandidateContext } from '../utils/context';
 import {
   ButtonUpdateCancel,
   ButtonUpdateSubmit,
@@ -16,8 +15,6 @@ import { handle_create_submit, handle_update_submit } from '../utils/handlers';
 
 export function FormCreate() {
   //  declaration
-  const { setCandidates, setIsCreating, setTriggerCreate } =
-    useCandidateContext();
   const {
     register,
     handleSubmit,
@@ -26,13 +23,7 @@ export function FormCreate() {
     resolver: yupResolver(CreateCandidateSchema),
   });
   function recalling(data: any) {
-    handle_create_submit(
-      data,
-      setIsCreating,
-      setCandidates,
-      setTriggerCreate,
-      CreateCandidateSchema,
-    );
+    handle_create_submit(data);
   }
   //  display
   return (
@@ -98,13 +89,6 @@ export function FormCreate() {
 export function FormUpdate() {
   //  declaration
   const {
-    selectedCandidates,
-    setCandidates,
-    setSelectedCandidates,
-    setIsUpdating,
-    setTriggerUpdate,
-  } = useCandidateContext();
-  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -112,15 +96,7 @@ export function FormUpdate() {
     resolver: yupResolver(UpdateCandidateSchema),
   });
   function recalling(data: any) {
-    handle_update_submit(
-      data,
-      selectedCandidates,
-      setIsUpdating,
-      setCandidates,
-      setSelectedCandidates,
-      setTriggerUpdate,
-      UpdateCandidateSchema,
-    );
+    handle_update_submit(data);
   }
   //  display
   return (
@@ -147,7 +123,6 @@ export function FormUpdate() {
         register={register('gender')}
         error={errors.gender}
         options={[
-          { value: '', label: 'Select Gender' },
           { value: 'male', label: 'Male' },
           { value: 'female', label: 'Female' },
           { value: 'other', label: 'Other' },
@@ -158,7 +133,6 @@ export function FormUpdate() {
         register={register('prob_status')}
         error={errors.prob_status}
         options={[
-          { value: '', label: 'Select Status' },
           { value: 'selecting', label: 'Selecting' },
           { value: 'training', label: 'Training' },
           { value: 'completed', label: 'Completed' },

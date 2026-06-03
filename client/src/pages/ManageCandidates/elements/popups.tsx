@@ -37,7 +37,7 @@ export const PopupUpdate = (): JSX.Element => {
   const { triggerUpdate } = useCandidateContext();
   return (
     <div
-      className={`fixed inset-0 bg-gray-500 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300 pointer-events-none ${
+      className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300 pointer-events-none ${
         triggerUpdate
           ? 'bg-opacity-20 opacity-100 pointer-events-auto'
           : 'bg-opacity-0 opacity-0'
@@ -62,7 +62,6 @@ export const PopupUpdate = (): JSX.Element => {
 };
 
 //  remarks: popups for update candidates active status
-
 export const PopupConvertActive = (): JSX.Element => {
   const { convertStatus, setConvertStatus, triggerConvert } =
     useCandidateContext();
@@ -84,19 +83,19 @@ export const PopupConvertActive = (): JSX.Element => {
           </p>
           {/* form elements */}
           <div className='mb-6 flex gap-12'>
-            <label className='flex items-center gap-3 cursor-pointer'>
+            <label className='p-2 flex items-center gap-3 cursor-pointer'>
               <input
                 type='radio'
                 name='status'
                 value='active'
                 checked={convertStatus === true}
                 onChange={() => setConvertStatus(true)}
-                className='w-4 h-4 cursor-pointer'
+                className='p-2 w-4 h-4 cursor-pointer'
               />
               <span className='text-gray-700 font-medium'>Active</span>
             </label>
 
-            <label className='flex items-center gap-3 cursor-pointer'>
+            <label className='p-2 flex items-center gap-3 cursor-pointer'>
               <input
                 type='radio'
                 name='status'

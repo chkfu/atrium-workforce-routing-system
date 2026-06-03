@@ -1,15 +1,34 @@
+import { useEffect } from 'react';
 import { useCandidateContext } from '../utils/context';
 import { TableHeaderBox, TableBodyBox } from './tables';
-import { ButtonCreate, ButtonUpdate, ButtonConvertActive } from './buttons';
+import {
+  ButtonCreate,
+  ButtonUpdate,
+  ButtonConvertActive,
+  ButtonSort,
+} from './buttons';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
 import { COLORS } from '../../../styles/color';
+import filter from '../../../assets/svg/filter_icon.svg';
+import { FormSorting } from './forms';
 
 //  ==========    MAIN    ==========
 
 //  remarks: main container
 export function PanelFromContainer(): JSX.Element {
+  const { isInitialised, setIsInitialised } = useCandidateContext();
+  useEffect(() => {
+    setIsInitialised(true);
+  }, []);
+
   return (
-    <div className='w-full'>
+    <div
+      className={`w-full duration-1000 ease-linear transition-opacity delay-200 ${
+        isInitialised
+          ? 'opacity-100 translate-x-0'
+          : 'opacity-0 -translate-x-20'
+      }`}
+    >
       <ControlPanelSection />
       <TableSection />
     </div>
@@ -22,7 +41,10 @@ export function PanelFromContainer(): JSX.Element {
 export function ControlPanelSection(): JSX.Element {
   return (
     <div className='py-4'>
-      <FormSearchBox />
+      <div className='flex flex-wrap justify-between'>
+        <FormSearchBox />
+        <FilterSortBox />
+      </div>
       <FormButtonBox />
     </div>
   );
@@ -71,7 +93,7 @@ export function FormSearchBox(): JSX.Element {
       <input
         type='text'
         placeholder='Search items...'
-        className='md:w-60 xl:w-2/5 px-4 py-1 border text-sm border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 transition-all ease-in-out duration-600'
+        className='w-32 px-2 py-1 border text-sm border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 transition-all ease-in-out duration-600'
         value={searchText}
         onChange={(el) => setSearchText(el.target.value)}
       />
@@ -85,6 +107,35 @@ export function FormSearchBox(): JSX.Element {
           color: COLORS.light_gray,
         }}
       />
+    </div>
+  );
+}
+
+//  remarks: sub-container for filter and sorting
+function FilterSortBox(): JSX.Element {
+  return (
+    <div className='flex gap-2'>
+      {/*  section: filtering */}
+      <div>
+        <button
+          type='button'
+          className='w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-200'
+        >
+          <img
+            src={filter}
+            alt='filter_active'
+            width='24'
+            height='24'
+            className='text-teal-800'
+          />
+          s
+        </button>
+      </div>
+      {/*  section: sorting  */}
+      <div className='relative'>
+        <ButtonSort />
+        <FormSorting />
+      </div>
     </div>
   );
 }

@@ -2,12 +2,11 @@ import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
 import { PopupCreate, PopupUpdate, PopupConvertActive } from './popups';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
+import sort_asc from '../../../assets/svg/sort-asc.svg';
 import {
   handle_convert_submit,
   handle_convert_popup,
   handle_convert_cancel,
-  handle_update_popup,
-  handle_update_cancel,
 } from '../utils/handlers';
 
 //  POST: candidates
@@ -72,11 +71,19 @@ export const ButtonCreateSubmit = ({
 
 //  remarks: button for batch update
 export const ButtonUpdate = (): JSX.Element => {
+  const { selectedCandidates, setTriggerUpdate } = useCandidateContext();
+  const handleClick = () => {
+    if (selectedCandidates.length === 0) {
+      alert('Please select any candidate.');
+      return;
+    }
+    setTriggerUpdate(true);
+  };
   return (
     <>
       <ButtonConfirm
         label='Update'
-        onClick={() => handle_update_popup()}
+        onClick={handleClick}
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
       {/* remarks: pop up content */}
@@ -87,11 +94,13 @@ export const ButtonUpdate = (): JSX.Element => {
 
 //  remarks: cancel button for update candidate popup
 export const ButtonUpdateCancel = (): JSX.Element => {
-  const { isUpdating } = useCandidateContext();
+  const { isUpdating, setTriggerUpdate } = useCandidateContext();
   return (
     <ButtonConfirm
       label='Cancel'
-      onClick={() => handle_update_cancel()}
+      onClick={() => {
+        if (!isUpdating) setTriggerUpdate(false);
+      }}
       style={{
         transition: 'all 0.5s ease',
         backgroundColor: COLORS.light_gray,
@@ -128,11 +137,14 @@ export const ButtonUpdateSubmit = ({
 
 //  remarks:  button for batch update active status
 export const ButtonConvertActive = (): JSX.Element => {
+  const { selectedCandidates, setTriggerConvert } = useCandidateContext();
   return (
     <>
       <ButtonConfirm
         label='Convert Active'
-        onClick={() => handle_convert_popup()}
+        onClick={() =>
+          handle_convert_popup(selectedCandidates, setTriggerConvert)
+        }
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
       {/* remarks: pop up content */}
@@ -143,11 +155,14 @@ export const ButtonConvertActive = (): JSX.Element => {
 
 //  remarks: buttons inside convert active popup
 export const ButtonConvertCancel = (): JSX.Element => {
-  const { isConverting } = useCandidateContext();
+  const { isConverting, setTriggerConvert, setConvertStatus } =
+    useCandidateContext();
   return (
     <ButtonConfirm
       label='Cancel'
-      onClick={() => handle_convert_cancel()}
+      onClick={() =>
+        handle_convert_cancel(isConverting, setTriggerConvert, setConvertStatus)
+      }
       style={{
         transition: 'all 1s ease',
         backgroundColor: COLORS.light_gray,
@@ -160,11 +175,31 @@ export const ButtonConvertCancel = (): JSX.Element => {
 
 //  remarks: submit button inside convert active popup
 export const ButtonConvertSubmit = (): JSX.Element => {
-  const { convertStatus, isConverting } = useCandidateContext();
+  const {
+    convertStatus,
+    isConverting,
+    selectedCandidates,
+    setIsConverting,
+    setCandidates,
+    setSelectedCandidates,
+    setConvertStatus,
+    setTriggerConvert,
+  } = useCandidateContext();
   return (
     <ButtonConfirm
       label={isConverting ? 'Loading...' : 'Confirm'}
-      onClick={() => handle_convert_submit(convertStatus)}
+      onClick={() =>
+        handle_convert_submit(
+          convertStatus,
+          selectedCandidates,
+          isConverting,
+          setIsConverting,
+          setCandidates,
+          setSelectedCandidates,
+          setConvertStatus,
+          setTriggerConvert,
+        )
+      }
       style={{
         transition: 'all 0.5s ease',
         backgroundColor: COLORS.dark_teal,
@@ -174,5 +209,27 @@ export const ButtonConvertSubmit = (): JSX.Element => {
       }}
       disabled={convertStatus === null || isConverting}
     />
+  );
+};
+
+//  SORTING
+
+export const ButtonSort = (): JSX.Element => {
+  const { triggerSort, setTriggerSort } = useCandidateContext();
+  //  display
+  return (
+    <button
+      onClick={() => setTriggerSort((prev) => !prev)}
+      type='button'
+      className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerSort ? 'bg-teal-100' : ''}`}
+    >
+      <img
+        src={sort_asc}
+        alt='sort ascendingly'
+        width='24'
+        height='24'
+        className='text-teal-800'
+      />
+    </button>
   );
 };

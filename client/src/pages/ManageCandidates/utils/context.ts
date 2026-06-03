@@ -18,7 +18,21 @@ interface CandidateContextType {
   setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>;
   triggerConvert: boolean;
   setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>;
-  //  OTHERS
+  //  SEARCH, FILTER and PAGINATION
+  searchText: string;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  filtered: boolean;
+  setFiltered: React.Dispatch<React.SetStateAction<boolean>>;
+  //  SORTING
+  sortTarget: string;
+  setSortTarget: React.Dispatch<React.SetStateAction<string>>;
+  sortAsc: boolean;
+  setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
+  triggerSort: boolean;
+  setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
+  //  LOADING
+  isInitialised: boolean;
+  setIsInitialised: React.Dispatch<React.SetStateAction<boolean>>;
   isGetting: boolean;
   setIsGetting: React.Dispatch<React.SetStateAction<boolean>>;
   isCreating: boolean;
@@ -27,8 +41,6 @@ interface CandidateContextType {
   setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   isConverting: boolean;
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
-  searchText: string;
-  setSearchText: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const CandidateContext = createContext<CandidateContextType | undefined>(

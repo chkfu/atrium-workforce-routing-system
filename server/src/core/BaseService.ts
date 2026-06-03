@@ -51,22 +51,32 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  1.  GET methods
 
   //  GET /api/v1/{table_name}
-  //  INPUT: null
+  //  INPUT: sortTarget (column name), is_ascending (boolean)
   //  remarks: exception for empty checks, as empty is also the info for clients
   //  remarks: redis action - update value, if items not found
-  public async get_record_batch() {
+  public async get_record_batch(
+    sort_target: string | null = null,
+    is_ascending: boolean = true,
+  ) {
     return await this.cache_service.handle_lock(this.table, 'all', async () => {
       //  cache calling details
+      //  learnt: cache_suffix use for customised for different query criteria
+      const cache_suffix = sort_target
+        ? `${sort_target}_${is_ascending}`
+        : 'all';
       const cached_key: string = this.cache_service.create_key(
         this.table,
-        'all',
+        cache_suffix,
       );
       const cached_val: any = await this.cache_service.get_cache(cached_key);
       if (cached_val) {
         return cached_val;
       }
       //  error handling
-      const result = await this.repository.get_record_batch(null, null);
+      const result = await this.repository.get_record_batch(
+        sort_target,
+        is_ascending,
+      );
       if (result === null || result === undefined)
         throw new ValueError(
           404,

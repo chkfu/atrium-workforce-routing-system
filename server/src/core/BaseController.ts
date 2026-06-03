@@ -40,10 +40,15 @@ abstract class BaseController<T> {
   //  1.  GET methods
 
   //  GET /api/v1/{table_name}
-  //  INPUT: null
+  //  INPUT: query params - sort target and sort order
   public get_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      const result = await this.service.get_record_batch();
+      const sort_target = (req.query.sortTarget as string) || null;
+      const sort_order = req.query.sortAsc === 'true';
+      const result = await this.service.get_record_batch(
+        sort_target,
+        sort_order,
+      );
       //  normal response
       res.status(200).json({
         status: 'success',

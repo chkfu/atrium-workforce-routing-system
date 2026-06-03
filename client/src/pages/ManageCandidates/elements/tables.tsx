@@ -1,6 +1,5 @@
 import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
-import { handle_checkbox_status, handle_selected } from '../utils/handlers';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -105,13 +104,18 @@ export function TableHeaderBox(): JSX.Element {
 
 //  remarks: table body forcandidates data
 export function TableBodyBox(): JSX.Element {
-  const { candidates, selectedCandidates } = useCandidateContext();
+  const { candidates, selectedCandidates, setSelectedCandidates } =
+    useCandidateContext();
   if (!candidates || candidates.length === 0) {
-    return <tbody></tbody>;
+    return (
+      <p className='py-4 text-gray-500 transition-all ease-in-out duration-600'>
+        No candidates found.
+      </p>
+    );
   }
   // display
   return (
-    <tbody>
+    <tbody className='transition-all ease-in-out duration-600'>
       {candidates.map((el: any) => (
         <tr
           key={el._id}
@@ -129,7 +133,15 @@ export function TableBodyBox(): JSX.Element {
               type='checkbox'
               className='w-4 h-4 cursor-pointer'
               checked={selectedCandidates.includes(el._id)}
-              onChange={() => handle_checkbox_status(el._id)}
+              onChange={() => {
+                setSelectedCandidates((checklist) => {
+                  if (checklist.includes(el._id)) {
+                    return checklist.filter((item) => item !== el._id);
+                  } else {
+                    return [...checklist, el._id];
+                  }
+                });
+              }}
             />
           </td>
           {/*  data columns  */}
@@ -152,6 +164,7 @@ export function TableBodyBox(): JSX.Element {
 export function TableHeadCheckbox({
   unit,
   selected,
+  onSelectChange,
 }: {
   unit: any[];
   selected: number[];
@@ -166,7 +179,13 @@ export function TableHeadCheckbox({
       <input
         type='checkbox'
         className='w-4 h-4 cursor-pointer'
-        onChange={handle_selected}
+        onChange={(e) => {
+          if (e.target.checked) {
+            onSelectChange(unit.map((item: any) => item._id));
+          } else {
+            onSelectChange([]);
+          }
+        }}
         checked={check_selected}
       />
     </th>

@@ -9,14 +9,20 @@ import { PanelFromContainer } from './elements/layout';
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {
   //  hooks
-  //  1. interface handling
-  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
-  const [searchText, setSearchText] = useState<string>('');
+  //  1. loading
+  const [isInitialised, setIsInitialised] = useState<boolean>(false);
   const [isGetting, setIsGetting] = useState<boolean>(true);
   const [getError, setGetError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isConverting, setIsConverting] = useState<boolean>(false);
+  //  2. checkbox, search, filter, sort and pagination
+  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
+  const [searchText, setSearchText] = useState<string>('');
+  const [filtered, setFiltered] = useState<boolean>(false);
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [sortTarget, setSortTarget] = useState<string>('_id');
+  const [triggerSort, setTriggerSort] = useState<boolean>(false);
   //  2. get: all
   const [candidates, setCandidates] = useState<any[]>([]);
   //  3. create: all
@@ -30,7 +36,12 @@ export default function ManageCandidates(): JSX.Element {
 
   useEffect(() => {
     axios
-      .get(API.CANDIDATES)
+      .get(API.CANDIDATES, {
+        params: {
+          sortTarget,
+          sortAsc,
+        },
+      })
       .then((response) => {
         const cadidateEls = response.data.data.result;
         setCandidates(cadidateEls);
@@ -43,7 +54,7 @@ export default function ManageCandidates(): JSX.Element {
         );
         setIsGetting(false);
       });
-  }, []);
+  }, [sortTarget, sortAsc]);
   //  loading state
   if (isGetting) {
     return <LoadSpinner />;
@@ -85,6 +96,19 @@ export default function ManageCandidates(): JSX.Element {
             setConvertStatus,
             triggerConvert,
             setTriggerConvert,
+            //  sorting
+            sortTarget,
+            setSortTarget,
+            sortAsc,
+            setSortAsc,
+            triggerSort,
+            setTriggerSort,
+            //  filtering
+            filtered,
+            setFiltered,
+            //  loading state
+            isInitialised,
+            setIsInitialised,
             isGetting,
             setIsGetting,
             isConverting,

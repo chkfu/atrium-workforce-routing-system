@@ -78,8 +78,8 @@ class CacheService {
   //  * GET
   public async get_cache(key: string) {
     this.validate_key(key);
-    const val = await this.redis.get(key);
-    return val ? JSON.parse(val) : null;
+    const val = await this.redis.get(key); // learnt: return JSON format
+    return val ? JSON.parse(val) : null; // leanrt: parse into JS object to proceed
   }
 
   //  * SET

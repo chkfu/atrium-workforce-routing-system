@@ -26,7 +26,8 @@ This file records the major version changes of the projects.
 
 - initialised `client/` for the frontend building, empowered by tailwind-CSS and React.
 - created data flow and UML diagram to outline the project and database structure.
-- created user interfaces and basic CRUD functionalities for manage candidates page
+- created user interfaces and basic CRUD functionalities for manage candidates page.
+- created sorting methods and user interface for manage candidate pages.
 
 ### Edited
 

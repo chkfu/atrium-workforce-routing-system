@@ -46,7 +46,7 @@ abstract class BaseRepository<T> {
 
   //  3a.  GET methods
 
-  //  remarks: GET batch records, potentially sorting
+  //  remarks: GET batch records with sorting (first by is_active DESC, then by sort_col)
   //  INPUT: stringified for sort column, boolean for sort order
   public async get_record_batch(
     sort_col: string | null,
@@ -54,9 +54,14 @@ abstract class BaseRepository<T> {
   ) {
     //  error handling
     //  learnt: required to convert into recognise type for column name string
+    //          _id can only being recognised as this.primary_key
+    //          system columns (created_at, updated_at, is_active) are allowed by default
+    const system_columns = ['created_at', 'updated_at', 'is_active'];
     if (
       sort_col !== null &&
-      !this.columns.includes(sort_col as Extract<keyof T, string>)
+      sort_col !== this.primary_key &&
+      !this.columns.includes(sort_col as Extract<keyof T, string>) &&
+      !system_columns.includes(sort_col)
     ) {
       throw new ValueError(
         400,
@@ -71,9 +76,11 @@ abstract class BaseRepository<T> {
     }
     //  form query string
     let query_str = `SELECT * FROM "${this.table}"`;
+    let rank_order: string = is_ascending ? 'ASC' : 'DESC';
     if (sort_col) {
-      let rank_order: string = is_ascending ? 'ASC' : 'DESC';
-      query_str += ` ORDER BY "${sort_col}" ${rank_order}`;
+      query_str += ` ORDER BY "is_active" DESC, "${sort_col}" ${rank_order}, "_id" ${rank_order}`;
+    } else {
+      query_str += ` ORDER BY "is_active" DESC, "_id" ${rank_order}`;
     }
     query_str += ';';
     //  querying

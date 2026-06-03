@@ -65,9 +65,10 @@ export const handle_create_popup = () => {
 //  remarks: manage form submission (create candidates)
 export const handle_create_submit = async (
   data: yup.InferType<typeof CreateCandidateSchema>,
+  setIsCreating: (val: boolean) => void,
+  setCandidates: (val: any[]) => void,
+  setTriggerCreate: (val: boolean) => void,
 ) => {
-  const { setIsCreating, setCandidates, setTriggerCreate } =
-    useCandidateContext();
   try {
     //  learnt: remove empty string values for enum fields
     const new_data: Record<string, any> = {};
@@ -139,10 +140,13 @@ export const handle_update_cancel = () => {
 
 //  remarks: manage form submission (update candidates)
 export const handle_update_submit = async (
-  data: yup.InferType<typeof UpdateCandidateSchema>, // learnt: compile data from yup format
+  data: yup.InferType<typeof UpdateCandidateSchema>,
+  selectedCandidates: number[],
+  setIsUpdating: (val: boolean) => void,
+  setCandidates: (val: any[]) => void,
+  setSelectedCandidates: (val: any) => void,
+  setTriggerUpdate: (val: boolean) => void,
 ) => {
-  const { selectedCandidates, setIsUpdating, setCandidates, setSelectedCandidates, setTriggerUpdate } =
-    useCandidateContext();
   try {
     //  remarks: invalid case with no selection
     if (selectedCandidates.length === 0) {
@@ -186,8 +190,10 @@ export const handle_update_submit = async (
 //  ==========  convert active status  ==========
 
 //  remarks: manage convert active popup (convert active)
-export const handle_convert_popup = () => {
-  const { selectedCandidates, setTriggerConvert } = useCandidateContext();
+export const handle_convert_popup = (
+  selectedCandidates: number[],
+  setTriggerConvert: (val: boolean) => void,
+) => {
   //  remarks: case of no selection
   if (selectedCandidates.length === 0) {
     alert('Please select any candidate.');
@@ -209,25 +215,27 @@ export const handle_convert_popup = () => {
 };
 
 //  remarks: cancel button inside convert active popup
-export const handle_convert_cancel = () => {
-  const { isConverting, setTriggerConvert, setConvertStatus } =
-    useCandidateContext();
+export const handle_convert_cancel = (
+  isConverting: boolean,
+  setTriggerConvert: (val: boolean) => void,
+  setConvertStatus: (val: null) => void,
+) => {
   if (isConverting) return;
   setTriggerConvert(false);
   setConvertStatus(null);
 };
 
 //  remarks: manage form submission (convert active)
-export const handle_convert_submit = async (convertStatus: boolean | null) => {
-  const {
-    selectedCandidates,
-    isConverting,
-    setIsConverting,
-    setCandidates,
-    setSelectedCandidates,
-    setConvertStatus,
-    setTriggerConvert,
-  } = useCandidateContext();
+export const handle_convert_submit = async (
+  convertStatus: boolean | null,
+  selectedCandidates: number[],
+  isConverting: boolean,
+  setIsConverting: (val: boolean) => void,
+  setCandidates: (val: any[]) => void,
+  setSelectedCandidates: (val: any) => void,
+  setConvertStatus: (val: null) => void,
+  setTriggerConvert: (val: boolean) => void,
+) => {
   if (isConverting) return;
   try {
     //  remarks:  no selected candidates

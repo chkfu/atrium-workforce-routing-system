@@ -43,18 +43,36 @@ abstract class BaseController<T> {
   //  INPUT: query params - sort target and sort order
   public get_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      const sort_target = (req.query.sortTarget as string) || null;
+      let sort_target = (req.query.sortTarget as string) || null;
       const sort_order = req.query.sortAsc === 'true';
+      let target_page = req.query.page ? Number(req.query.page) : 1;
+      let target_limit = req.query.limit ? Number(req.query.limit) : 20;
+
+      // Validate sort_target to prevent invalid column references
+      if (
+        sort_target &&
+        (sort_target === 'nan' ||
+          sort_target === 'NaN' ||
+          sort_target === 'undefined')
+      ) {
+        sort_target = null;
+      }
+
       const result = await this.service.get_record_batch(
         sort_target,
         sort_order,
+        target_page,
+        target_limit,
       );
       //  normal response
       res.status(200).json({
         status: 'success',
-        count: result.length,
+        count: result.data.length,
+        record_count: result.total_count,
         data: {
-          result,
+          total_pages: result.total_pages,
+          current_page: result.current_page,
+          result: result.data,
         },
       });
     });

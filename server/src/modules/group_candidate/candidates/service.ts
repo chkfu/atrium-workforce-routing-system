@@ -16,8 +16,13 @@ class CandidateService extends BaseService<TCandidateBase & TSchemaBase> {
   }
 
   //  override default sorting: is_active DESC (active candidates first)
-  public async get_record_batch(sort_col: string | null = 'is_active', is_ascending: boolean | null = false) {
-    return super.get_record_batch(sort_col, is_ascending);
+  public async get_record_batch(
+    sort_col: string | null = 'is_active',
+    is_ascending: boolean = false,
+    page: number = 1,
+    limit: number = 20,
+  ) {
+    return super.get_record_batch(sort_col, is_ascending, page, limit);
   }
 }
 

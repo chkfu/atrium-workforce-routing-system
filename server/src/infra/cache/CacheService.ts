@@ -111,6 +111,14 @@ class CacheService {
     cached_key = this.validate_key(cached_key);
     await this.redis.del(cached_key);
   }
+
+  //  * DELETE by pattern (e.g., 'candidates:*' to clear all pagination caches for that table)
+  public async del_cache_by_pattern(pattern: string) {
+    const keys = await this.redis.keys(pattern);
+    if (keys.length > 0) {
+      await this.redis.del(keys);
+    }
+  }
 }
 
 //  Export

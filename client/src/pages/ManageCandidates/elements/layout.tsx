@@ -11,6 +11,7 @@ import ButtonConfirm from '../../../elements/ButtonConfirm';
 import { COLORS } from '../../../styles/color';
 import filter from '../../../assets/svg/filter_icon.svg';
 import { FormSorting } from './forms';
+import { useSearchParams } from 'react-router-dom';
 
 //  ==========    MAIN    ==========
 
@@ -30,12 +31,78 @@ export function PanelFromContainer(): JSX.Element {
       }`}
     >
       <ControlPanelSection />
+      <PaginationSection />
       <TableSection />
     </div>
   );
 }
 
 //  ==========    LAYER 1    ==========
+
+//  remarks: pagination display
+export function PaginationSection(): JSX.Element {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { totalPage } = useCandidateContext();
+  const currentPage = parseInt(searchParams.get('page') || '1');
+
+  //  display
+  return (
+    <div className='flex justify-end items-end gap-8'>
+      {/* option: limit */}
+      <div className='group flex items-center gap-2'>
+        <select
+          name='limit'
+          value={searchParams.get('limit') || '20'}
+          onChange={(el) => {
+            setSearchParams((prev) => {
+              prev.set('limit', el.target.value);
+              prev.set('page', '1');
+              console.log('[DEBUG] Updated searchParams:', prev.toString());
+              return prev;
+            });
+          }}
+          className='px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
+        >
+          <option value='10'>10</option>
+          <option value='15'>15</option>
+          <option value='20'>20</option>
+          <option value='50'>50</option>
+        </select>
+        <span className='text-sm text-gray-600 group-focus-within:text-teal-600 duration-900'>
+          per page
+        </span>
+      </div>
+
+      {/* option: pages */}
+      <div className='group flex items-center gap-2'>
+        <select
+          name='page'
+          value={currentPage}
+          onChange={(el) =>
+            setSearchParams((prev) => {
+              prev.set('page', el.target.value);
+              return prev;
+            })
+          }
+          className='px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
+        >
+          {totalPage > 0 &&
+            Array.from({ length: totalPage }, (_, index) => (
+              <option
+                key={index + 1}
+                value={index + 1}
+              >
+                {index + 1}
+              </option>
+            ))}
+        </select>
+        <span className='text-sm text-gray-600  group-focus-within:text-teal-600 duration-900'>
+          of {totalPage} pages
+        </span>
+      </div>
+    </div>
+  );
+}
 
 //  remarks: control panel
 export function ControlPanelSection(): JSX.Element {
@@ -128,7 +195,6 @@ function FilterSortBox(): JSX.Element {
             height='24'
             className='text-teal-800'
           />
-          s
         </button>
       </div>
       {/*  section: sorting  */}

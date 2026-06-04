@@ -5,10 +5,15 @@ import LoadSpinner from '../../elements/LoadSpinner';
 import { API } from '../../config/api';
 import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
+import { useSearchParams } from 'react-router-dom';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {
+  //  search params
+  const [searchParams, setSearchParams] = useSearchParams();
   //  hooks
+  //  0. pagination
+  const [totalPage, setTotalPage] = useState<number>(1);
   //  1. loading
   const [isInitialised, setIsInitialised] = useState<boolean>(false);
   const [isGetting, setIsGetting] = useState<boolean>(true);
@@ -35,16 +40,51 @@ export default function ManageCandidates(): JSX.Element {
   const [convertStatus, setConvertStatus] = useState<boolean | null>(null);
 
   useEffect(() => {
+    console.log('[DEBUG] Initial mount - current searchParams:', searchParams.toString());
+    setSearchParams((prev) => {
+      if (!prev.get('page')) {
+        prev.set('page', '1');
+      }
+      if (!prev.get('limit')) {
+        prev.set('limit', '20');
+      }
+      console.log('[DEBUG] After init set:', prev.toString());
+      return prev;
+    });
+  }, []);
+
+  useEffect(() => {
+    //  remarks: use for trigger re-rendering
+    setIsGetting(true);
+    setGetError(null);
+    //  remarks: get data
+    const page = searchParams.get('page') || '1';
+    const limit = searchParams.get('limit') || '20';
+    console.log('[DEBUG] Sending request:', {
+      page,
+      limit,
+      sortTarget,
+      sortAsc,
+    });
     axios
       .get(API.CANDIDATES, {
         params: {
+          page,
+          limit,
           sortTarget,
           sortAsc,
         },
       })
-      .then((response) => {
-        const cadidateEls = response.data.data.result;
+      .then((res) => {
+        const cadidateEls = res.data.data.result;
+        const totalPages = res.data.data.total_pages;
+        console.log('[DEBUG] Response:', {
+          count: cadidateEls.length,
+          totalPages,
+          data: res.data,
+        });
         setCandidates(cadidateEls);
+        setTotalPage(totalPages);
         setIsGetting(false);
       })
       .catch((err: any) => {
@@ -54,7 +94,7 @@ export default function ManageCandidates(): JSX.Element {
         );
         setIsGetting(false);
       });
-  }, [sortTarget, sortAsc]);
+  }, [searchParams.toString(), sortTarget, sortAsc]);
   //  loading state
   if (isGetting) {
     return <LoadSpinner />;
@@ -106,6 +146,9 @@ export default function ManageCandidates(): JSX.Element {
             //  filtering
             filtered,
             setFiltered,
+            //  pagination
+            totalPage,
+            setTotalPage,
             //  loading state
             isInitialised,
             setIsInitialised,

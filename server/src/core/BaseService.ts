@@ -11,7 +11,7 @@
 
   [DESIGN: REDIS]
 
-  - Global locks (':all') for structural changes, esp batch create, update, delete
+  - Global locks (':candidates') for structural changes, esp batch create, update, delete
   - Specific locks (':id') for securing single action without conflicts
   - Concurrency: if locked, throw errors to block action; 
                  elif long loading, forcefully release the lock when timeout reached;
@@ -57,35 +57,23 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public async get_record_batch(
     sort_target: string | null = null,
     is_ascending: boolean = true,
+    page: number = 1,
+    limit: number = 20,
   ) {
-    return await this.cache_service.handle_lock(this.table, 'all', async () => {
-      //  cache calling details
-      //  learnt: cache_suffix use for customised for different query criteria
-      const cache_suffix = sort_target
-        ? `${sort_target}_${is_ascending}`
-        : 'all';
-      const cached_key: string = this.cache_service.create_key(
-        this.table,
-        cache_suffix,
+    //  remarks: pagination results are frequently changing, skip caching to avoid stale data
+    const result = await this.repository.get_record_batch(
+      sort_target,
+      is_ascending,
+      page,
+      limit,
+    );
+    //  error handling
+    if (result === null || result === undefined || result.data.length < 1)
+      throw new ValueError(
+        404,
+        `[${this.table.toUpperCase()}] error: no record is found.`,
       );
-      const cached_val: any = await this.cache_service.get_cache(cached_key);
-      if (cached_val) {
-        return cached_val;
-      }
-      //  error handling
-      const result = await this.repository.get_record_batch(
-        sort_target,
-        is_ascending,
-      );
-      if (result === null || result === undefined)
-        throw new ValueError(
-          404,
-          `[${this.table.toUpperCase()}] error: no record is found.`,
-        );
-      //  update cache
-      await this.cache_service.set_cache(cached_key, result);
-      return result;
-    });
+    return result;
   }
 
   //  GET /api/v1/{table_name}/:id
@@ -126,7 +114,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     //  learnt: postgre `CREATE` runs in sequence, required Promise for handling batch items
     return await this.cache_service.handle_lock(
       this.table,
-      'all',
+      'candidates',
       //  remarks: the function to be processed
       async () => {
         const result = await Promise.all(
@@ -146,9 +134,9 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
             `[${this.table.toUpperCase()}] error: no record is found.`,
           );
         }
-        //  remove cache
-        await this.cache_service.del_cache(
-          this.cache_service.create_key(this.table),
+        //  remove cache: clear all pagination variants and individual record caches
+        await this.cache_service.del_cache_by_pattern(
+          this.cache_service.create_key(this.table, '*'),
         );
         const ids = result.map((item) => item[this.primary_key]);
         await Promise.all(
@@ -170,45 +158,50 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public update_record_details_batch = async (
     req_body: Record<string, any>,
   ) => {
-    return await this.cache_service.handle_lock(this.table, 'all', async () => {
-      //  remarks: deduplicate ids into an array
-      const id_arr: string[] = Array.from(
-        new Set(
-          req_body._ids.map((id: string | string[]) =>
-            typeof id === 'string' ? id : id[0],
+    return await this.cache_service.handle_lock(
+      this.table,
+      'candidates',
+      async () => {
+        //  remarks: deduplicate ids into an array
+        const id_arr: string[] = Array.from(
+          new Set(
+            req_body._ids.map((id: string | string[]) =>
+              typeof id === 'string' ? id : id[0],
+            ),
           ),
-        ),
-      );
-      //  learnt: get the update values; null means keep existing value
-      const update_data = Object.fromEntries(
-        //  remarks: enable leaving empty or null for unchanged, with sql `COALESCE`
-        this.columns.map((key) => [key, req_body[key] ?? null]),
-      );
-
-      const result = await this.repository.update_record_details_batch(
-        id_arr,
-        update_data,
-      );
-
-      //  error handling
-      if (result === null || result === undefined || result.length < 1) {
-        throw new ValueError(
-          404,
-          `[${this.table.toUpperCase()}] error: no record is found.`,
         );
-      }
-      //  removed cache
-      const cache_key: string = this.cache_service.create_key(this.table);
-      await this.cache_service.del_cache(cache_key);
-      await Promise.all(
-        id_arr.map((id) => {
-          const key: string = this.cache_service.create_key(this.table, id);
-          return this.cache_service.del_cache(key);
-        }),
-      );
+        //  learnt: get the update values; null means keep existing value
+        const update_data = Object.fromEntries(
+          //  remarks: enable leaving empty or null for unchanged, with sql `COALESCE`
+          this.columns.map((key) => [key, req_body[key] ?? null]),
+        );
 
-      return result;
-    });
+        const result = await this.repository.update_record_details_batch(
+          id_arr,
+          update_data,
+        );
+
+        //  error handling
+        if (result === null || result === undefined || result.length < 1) {
+          throw new ValueError(
+            404,
+            `[${this.table.toUpperCase()}] error: no record is found.`,
+          );
+        }
+        //  removed cache: clear all pagination variants and individual record caches
+        await this.cache_service.del_cache_by_pattern(
+          this.cache_service.create_key(this.table, '*'),
+        );
+        await Promise.all(
+          id_arr.map((id) => {
+            const key: string = this.cache_service.create_key(this.table, id);
+            return this.cache_service.del_cache(key);
+          }),
+        );
+
+        return result;
+      },
+    );
   };
 
   //  PATCH /api/v1/{table_name}/activation
@@ -216,46 +209,51 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  remarks: for recovery for inactive records for flexibility
   //  remarks: redis action - remove outdated records
   public update_record_active_batch = async (req_body: any) => {
-    return await this.cache_service.handle_lock(this.table, 'all', async () => {
-      //  declarations
-      const id_arr: string[] = req_body._ids.map((id: string | string[]) =>
-        typeof id === 'string' ? id : id[0],
-      );
-      const id_set: Set<string> = new Set(id_arr);
-      const is_active: boolean | null = req_body.is_active ?? null;
-      //  error handling
-      if (is_active == null) {
-        throw new ValueError(
-          400,
-          `[${this.table.toUpperCase()}] error: invalid value input of req.body.is_active.`,
+    return await this.cache_service.handle_lock(
+      this.table,
+      'candidates',
+      async () => {
+        //  declarations
+        const id_arr: string[] = req_body._ids.map((id: string | string[]) =>
+          typeof id === 'string' ? id : id[0],
         );
-      }
-      // remarks: update is_active as true
-      const result = await this.repository.update_record_active_batch(
-        Array.from(id_set),
-        is_active,
-      );
-      //  error handling
-      if (result === null || result === undefined || result.length < 1) {
-        throw new ValueError(
-          404,
-          `[${this.table.toUpperCase()}] error: no record is found.`,
-        );
-      }
-      //  removed cache
-      const cache_key: string = this.cache_service.create_key(this.table);
-      await this.cache_service.del_cache(cache_key);
-      await Promise.all(
-        Array.from(id_set).map((id) => {
-          const cached_key: string = this.cache_service.create_key(
-            this.table,
-            id,
+        const id_set: Set<string> = new Set(id_arr);
+        const is_active: boolean | null = req_body.is_active ?? null;
+        //  error handling
+        if (is_active == null) {
+          throw new ValueError(
+            400,
+            `[${this.table.toUpperCase()}] error: invalid value input of req.body.is_active.`,
           );
-          return this.cache_service.del_cache(cached_key);
-        }),
-      );
-      return result;
-    });
+        }
+        // remarks: update is_active as true
+        const result = await this.repository.update_record_active_batch(
+          Array.from(id_set),
+          is_active,
+        );
+        //  error handling
+        if (result === null || result === undefined || result.length < 1) {
+          throw new ValueError(
+            404,
+            `[${this.table.toUpperCase()}] error: no record is found.`,
+          );
+        }
+        //  removed cache: clear all pagination variants and individual record caches
+        await this.cache_service.del_cache_by_pattern(
+          this.cache_service.create_key(this.table, '*'),
+        );
+        await Promise.all(
+          Array.from(id_set).map((id) => {
+            const cached_key: string = this.cache_service.create_key(
+              this.table,
+              id,
+            );
+            return this.cache_service.del_cache(cached_key);
+          }),
+        );
+        return result;
+      },
+    );
   };
 
   //  4.  DELETE methods
@@ -265,32 +263,36 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  remarks: for forceful delete [for system admin only]
   //  remarks: redis action - remove outdated records
   public remove_record_batch = async (id_arr: string[]) => {
-    return await this.cache_service.handle_lock(this.table, 'all', async () => {
-      //  declarations
-      const id_set: Set<string> = new Set(id_arr);
-      //  remove cache
-      await this.cache_service.del_cache(
-        this.cache_service.create_key(this.table),
-      );
-      await Promise.all(
-        id_arr.map((id) =>
-          this.cache_service.del_cache(
-            this.cache_service.create_key(this.table, id),
-          ),
-        ),
-      );
-      //  error handling
-      const result = await this.repository.remove_record_batch(
-        Array.from(id_set),
-      );
-      if (result === null || result === undefined || result.length < 1) {
-        throw new ValueError(
-          404,
-          `[${this.table.toUpperCase()}] error: no record is found.`,
+    return await this.cache_service.handle_lock(
+      this.table,
+      'candidates',
+      async () => {
+        //  declarations
+        const id_set: Set<string> = new Set(id_arr);
+        //  remove cache: clear all pagination variants and individual record caches
+        await this.cache_service.del_cache_by_pattern(
+          this.cache_service.create_key(this.table, '*'),
         );
-      }
-      return result;
-    });
+        await Promise.all(
+          id_arr.map((id) =>
+            this.cache_service.del_cache(
+              this.cache_service.create_key(this.table, id),
+            ),
+          ),
+        );
+        //  error handling
+        const result = await this.repository.remove_record_batch(
+          Array.from(id_set),
+        );
+        if (result === null || result === undefined || result.length < 1) {
+          throw new ValueError(
+            404,
+            `[${this.table.toUpperCase()}] error: no record is found.`,
+          );
+        }
+        return result;
+      },
+    );
   };
 
   //  DELETE  /api/v1/{table_name}/empty
@@ -298,14 +300,18 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  remarks: return to empty table [for system admin only]
   //  remarks: redis action - remove outdated records
   public empty_record_all = async () => {
-    return await this.cache_service.handle_lock(this.table, 'all', async () => {
-      //  remove cache
-      await this.cache_service.del_cache(
-        this.cache_service.create_key(this.table),
-      );
-      //  error handling
-      return await this.repository.empty_record_all();
-    });
+    return await this.cache_service.handle_lock(
+      this.table,
+      'candidates',
+      async () => {
+        //  remove cache
+        await this.cache_service.del_cache(
+          this.cache_service.create_key(this.table),
+        );
+        //  error handling
+        return await this.repository.empty_record_all();
+      },
+    );
   };
 }
 //  Export

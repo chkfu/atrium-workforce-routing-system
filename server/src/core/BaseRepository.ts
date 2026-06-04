@@ -46,11 +46,20 @@ abstract class BaseRepository<T> {
 
   //  3a.  GET methods
 
+  //  remarks: GET count of records for pagination
+  //  INPUT: null
+  public async get_record_count(): Promise<number> {
+    const result = await pool.query(`SELECT COUNT (*) FROM "${this.table}";`);
+    return Number(result.rows[0].count);
+  }
+
   //  remarks: GET batch records with sorting (first by is_active DESC, then by sort_col)
   //  INPUT: stringified for sort column, boolean for sort order
   public async get_record_batch(
     sort_col: string | null,
     is_ascending: boolean | null,
+    page: number,
+    limit: number,
   ) {
     //  error handling
     //  learnt: required to convert into recognise type for column name string
@@ -74,18 +83,31 @@ abstract class BaseRepository<T> {
         `[${this.table.toUpperCase()}] error: sorted order is not provided.`,
       );
     }
+    //  get total count for pagination
+    const total_count = await this.get_record_count();
+    const total_pages = Math.ceil(total_count / limit);
     //  form query string
     let query_str = `SELECT * FROM "${this.table}"`;
+    //  1. sort order
     let rank_order: string = is_ascending ? 'ASC' : 'DESC';
     if (sort_col) {
       query_str += ` ORDER BY "is_active" DESC, "${sort_col}" ${rank_order}, "_id" ${rank_order}`;
     } else {
       query_str += ` ORDER BY "is_active" DESC, "_id" ${rank_order}`;
     }
+    //  2. page limit
+    //  remarks: default page and limit has been set at controller
+    let page_offset = (page - 1) * limit;
+    query_str += ` LIMIT ${limit} OFFSET ${page_offset}`;
     query_str += ';';
     //  querying
     const result = await pool.query(query_str);
-    return result.rows ?? [];
+    return {
+      total_count,
+      total_pages,
+      current_page: page,
+      data: result.rows ?? [],
+    };
   }
 
   //  remarks: GET specific record(s) by single / multiple id

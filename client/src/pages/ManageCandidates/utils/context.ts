@@ -30,6 +30,9 @@ interface CandidateContextType {
   setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
   triggerSort: boolean;
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
+  //  PAGINATION
+  totalPage: number;
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>;
   //  LOADING
   isInitialised: boolean;
   setIsInitialised: React.Dispatch<React.SetStateAction<boolean>>;

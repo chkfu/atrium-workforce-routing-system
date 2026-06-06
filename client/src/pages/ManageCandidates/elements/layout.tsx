@@ -9,9 +9,6 @@ import {
   ButtonFilter,
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
-import ButtonConfirm from '../../../elements/ButtonConfirm';
-import { COLORS } from '../../../styles/color';
-
 import { FormSorting, FormFiltering } from './forms';
 
 //  ==========    MAIN    ==========
@@ -43,7 +40,7 @@ export function PanelFromContainer(): JSX.Element {
 //  remarks: pagination display
 export function PaginationSection(): JSX.Element {
   return (
-    <div className='flex justify-end items-end gap-8'>
+    <div className='flex justify-start md:justify-end items-start md:items-end gap-8'>
       <PageLimitBox />
       <PageOptBox />
     </div>
@@ -54,11 +51,10 @@ export function PaginationSection(): JSX.Element {
 export function ControlPanelSection(): JSX.Element {
   return (
     <div className='py-4'>
-      <div className='flex flex-wrap justify-between'>
-        <FormSearchBox />
+      <div className='flex flex-wrap justify-between gap-4 md:flex-col md:flex-nowrap md:justify-end md:gap-16 lg:flex-row lg:flex-nowrap lg:justify-between'>
+        <FormButtonBox />
         <FilterSortBox />
       </div>
-      <FormButtonBox />
     </div>
   );
 }
@@ -76,53 +72,17 @@ export function TableSection(): JSX.Element {
         Selection: {selectedCandidates.length}{' '}
         {selectedCandidates.length === 1 ? 'candidate' : 'candidates'} selected
       </p>
-      <div className='max-h-90 overflow-y-auto w-full'>
-        <div className='overflow-x-auto'>
-          <table className='min-w-300 border-collapse table-auto w-full'>
-            <TableHeaderBox />
-            <TableBodyBox />
-          </table>
-        </div>
+      <div className='max-h-90 overflow-y-auto overflow-x-auto w-full'>
+        <table className='min-w-300 border-collapse table-auto w-full'>
+          <TableHeaderBox />
+          <TableBodyBox />
+        </table>
       </div>
     </div>
   );
 }
 
 //  ==========    LAYER 2    ==========
-
-//  remarks: sub-container for search input and button (control panel section)
-export function FormSearchBox(): JSX.Element {
-  const { searchText, setSearchText } = useCandidateContext();
-
-  return (
-    <div className='mb-4 flex gap-2 flex-wrap'>
-      <select className='px-2 py-1 border cursor-pointer border-gray-300 text-sm rounded-lg focus:outline-none focus:border-teal-600 shrink-0'>
-        <option value='all'>All</option>
-        <option value='id'>ID</option>
-        <option value='name'>Name</option>
-        <option value='email'>Email</option>
-        <option value='status'>Status</option>
-      </select>
-      <input
-        type='text'
-        placeholder='Search items...'
-        className='w-32 px-2 py-1 border text-sm border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 transition-all ease-in-out duration-600'
-        value={searchText}
-        onChange={(el) => setSearchText(el.target.value)}
-      />
-      <ButtonConfirm
-        label='Search'
-        onClick={() => {
-          console.log(searchText);
-        }}
-        style={{
-          backgroundColor: COLORS.dark_teal,
-          color: COLORS.light_gray,
-        }}
-      />
-    </div>
-  );
-}
 
 //  remarks: sub-container for filter and sorting
 function FilterSortBox(): JSX.Element {

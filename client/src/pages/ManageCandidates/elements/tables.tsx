@@ -92,7 +92,7 @@ export function TableHeaderBox(): JSX.Element {
         {table_headers.map((header) => (
           <th
             key={header.key}
-            className={`p-2 text-sm text-left font-bold ${header.className} whitespace-nowrap`}
+            className={`p-2 text-sm text-left font-bold sticky top-0 bg-white z-10 ${header.className} whitespace-nowrap`}
           >
             {header.label}
           </th>
@@ -175,7 +175,7 @@ export function TableHeadCheckbox({
     unit && unit.length > 0 && selected.length === unit.length;
   //  display
   return (
-    <th className='p-2 text-center align-middle'>
+    <th className='p-2 text-center align-middle sticky top-0 bg-white z-10'>
       <input
         type='checkbox'
         className='w-4 h-4 cursor-pointer'

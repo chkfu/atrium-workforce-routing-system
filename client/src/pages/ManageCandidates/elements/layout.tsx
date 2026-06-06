@@ -6,12 +6,13 @@ import {
   ButtonUpdate,
   ButtonConvertActive,
   ButtonSort,
+  ButtonFilter,
 } from './buttons';
+import { OptionPageLimit, OptionPageSelect } from './forms';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
 import { COLORS } from '../../../styles/color';
-import filter from '../../../assets/svg/filter_icon.svg';
-import { FormSorting } from './forms';
-import { useSearchParams } from 'react-router-dom';
+
+import { FormSorting, FormFiltering } from './forms';
 
 //  ==========    MAIN    ==========
 
@@ -41,65 +42,10 @@ export function PanelFromContainer(): JSX.Element {
 
 //  remarks: pagination display
 export function PaginationSection(): JSX.Element {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { totalPage } = useCandidateContext();
-  const currentPage = parseInt(searchParams.get('page') || '1');
-
-  //  display
   return (
     <div className='flex justify-end items-end gap-8'>
-      {/* option: limit */}
-      <div className='group flex items-center gap-2'>
-        <select
-          name='limit'
-          value={searchParams.get('limit') || '20'}
-          onChange={(el) => {
-            setSearchParams((prev) => {
-              prev.set('limit', el.target.value);
-              prev.set('page', '1');
-              console.log('[DEBUG] Updated searchParams:', prev.toString());
-              return prev;
-            });
-          }}
-          className='px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
-        >
-          <option value='10'>10</option>
-          <option value='15'>15</option>
-          <option value='20'>20</option>
-          <option value='50'>50</option>
-        </select>
-        <span className='text-sm text-gray-600 group-focus-within:text-teal-600 duration-900'>
-          per page
-        </span>
-      </div>
-
-      {/* option: pages */}
-      <div className='group flex items-center gap-2'>
-        <select
-          name='page'
-          value={currentPage}
-          onChange={(el) =>
-            setSearchParams((prev) => {
-              prev.set('page', el.target.value);
-              return prev;
-            })
-          }
-          className='px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
-        >
-          {totalPage > 0 &&
-            Array.from({ length: totalPage }, (_, index) => (
-              <option
-                key={index + 1}
-                value={index + 1}
-              >
-                {index + 1}
-              </option>
-            ))}
-        </select>
-        <span className='text-sm text-gray-600  group-focus-within:text-teal-600 duration-900'>
-          of {totalPage} pages
-        </span>
-      </div>
+      <PageLimitBox />
+      <PageOptBox />
     </div>
   );
 }
@@ -184,18 +130,8 @@ function FilterSortBox(): JSX.Element {
     <div className='flex gap-2'>
       {/*  section: filtering */}
       <div>
-        <button
-          type='button'
-          className='w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-200'
-        >
-          <img
-            src={filter}
-            alt='filter_active'
-            width='24'
-            height='24'
-            className='text-teal-800'
-          />
-        </button>
+        <ButtonFilter />
+        <FormFiltering />
       </div>
       {/*  section: sorting  */}
       <div className='relative'>
@@ -213,6 +149,32 @@ function FormButtonBox(): JSX.Element {
       <ButtonCreate />
       <ButtonUpdate />
       <ButtonConvertActive />
+    </div>
+  );
+}
+
+//  remarks: sub-container for page limit
+function PageLimitBox(): JSX.Element {
+  return (
+    <div className='group flex items-center gap-2'>
+      <OptionPageLimit />
+      <span className='text-sm text-gray-600 group-focus-within:text-teal-600 duration-900'>
+        per page
+      </span>
+    </div>
+  );
+}
+
+//  remarks: sub-container for page selection
+function PageOptBox(): JSX.Element {
+  const { totalPage } = useCandidateContext();
+  //  display
+  return (
+    <div className='group flex items-center gap-2'>
+      <OptionPageSelect />
+      <span className='text-sm text-gray-600  group-focus-within:text-teal-600 duration-900'>
+        of {totalPage} pages
+      </span>
     </div>
   );
 }

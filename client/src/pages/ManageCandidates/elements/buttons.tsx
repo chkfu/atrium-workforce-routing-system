@@ -8,6 +8,7 @@ import {
   handle_convert_popup,
   handle_convert_cancel,
 } from '../utils/handlers';
+import filter from '../../../assets/svg/filter_icon.svg';
 
 //  POST: candidates
 
@@ -226,6 +227,25 @@ export const ButtonSort = (): JSX.Element => {
       <img
         src={sort_asc}
         alt='sort ascendingly'
+        width='24'
+        height='24'
+        className='text-teal-800'
+      />
+    </button>
+  );
+};
+
+//  FILTERING
+
+export const ButtonFilter = (): JSX.Element => {
+  return (
+    <button
+      type='button'
+      className='w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-200'
+    >
+      <img
+        src={filter}
+        alt='filter_active'
         width='24'
         height='24'
         className='text-teal-800'

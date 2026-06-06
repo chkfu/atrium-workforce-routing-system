@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../config/api';
 import { CreateCandidateSchema, UpdateCandidateSchema } from './schema';
+import { SetURLSearchParams } from 'react-router-dom';
 
 //  ==========  checkbox status  ==========
 
@@ -273,25 +274,29 @@ export const handle_convert_submit = async (
 
 //  remarks: reset temp sort options by closing popup
 export const handle_temp_sort_reset = (
-  sortAsc: boolean,
-  sortTarget: string,
-  setTempSortAsc: (val: boolean) => void,
-  setTempSortTarget: (val: string) => void,
-  setTriggerSort: (val: (prev: boolean) => boolean) => void,
+  setSortAsc: (val: boolean) => void,
+  setSortTarget: (val: string) => void,
+  setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
+  searchParams: URLSearchParams,
 ) => {
-  setTempSortAsc(sortAsc);
-  setTempSortTarget(sortTarget);
-  setTriggerSort((prev) => !prev);
+  const sort_order = searchParams.get('sort_order') === 'true';
+  const sort_target = searchParams.get('sort_target') || '_id';
+  setSortAsc(sort_order);
+  setSortTarget(sort_target);
+  setTriggerSort(false);
 };
 
 export const handle_sort_submit = (
-  tempSortAsc: boolean,
-  tempSortTarget: string,
-  setSortAsc: (val: boolean) => void,
-  setSortTarget: (val: string) => void,
-  setTriggerSort: (val: boolean) => void,
+  sortAsc: boolean,
+  sortTarget: string,
+  setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
+  setSearchParams: SetURLSearchParams,
 ) => {
-  setSortAsc(tempSortAsc);
-  setSortTarget(tempSortTarget);
+  setSearchParams((prev: URLSearchParams) => {
+    const params = new URLSearchParams(prev);
+    params.set('sort_order', String(sortAsc));
+    params.set('sort_target', String(sortTarget));
+    return params;
+  });
   setTriggerSort(false);
 };

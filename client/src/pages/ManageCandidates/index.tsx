@@ -11,36 +11,41 @@ import { useSearchParams } from 'react-router-dom';
 export default function ManageCandidates(): JSX.Element {
   //  search params
   const [searchParams, setSearchParams] = useSearchParams();
+
   //  hooks
-  //  0. pagination
+
+  //  1. GET
+  //  1a. receive general data
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
+  //  1b. receive pagination data
   const [totalPage, setTotalPage] = useState<number>(1);
-  //  1. loading
+  //  1c. receive sorted data
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [sortTarget, setSortTarget] = useState<string>('_id');
+  const [triggerSort, setTriggerSort] = useState<boolean>(false);
+  //  1d. receive filtered data
+
+  //  2. POST
+  //  2a. create new records
+  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
+
+  //  3. PATCH
+  //  3a. update general details
+  const [updateDetails, setUpdateDetails] = useState<any>(null);
+  const [triggerUpdate, setTriggerUpdate] = useState<boolean>(false);
+
+  //  3b. update active status
+  const [convertStatus, setConvertStatus] = useState<boolean | null>(null);
+  const [triggerConvert, setTriggerConvert] = useState<boolean>(false);
+
+  //  4. TEMP STATE
   const [isInitialised, setIsInitialised] = useState<boolean>(false);
   const [isGetting, setIsGetting] = useState<boolean>(true);
   const [getError, setGetError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isConverting, setIsConverting] = useState<boolean>(false);
-  //  2. checkbox, search, filter, sort and pagination
-  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
-  const [searchText, setSearchText] = useState<string>('');
-  const [filtered, setFiltered] = useState<boolean>(false);
-  //  2a. sorting
-  const [sortAsc, setSortAsc] = useState<boolean>(true);
-  const [tempSortAsc, setTempSortAsc] = useState<boolean>(true);
-  const [sortTarget, setSortTarget] = useState<string>('_id');
-  const [tempSortTarget, setTempSortTarget] = useState<string>('_id');
-  const [triggerSort, setTriggerSort] = useState<boolean>(false);
-  //  2. get: all
-  const [candidates, setCandidates] = useState<any[]>([]);
-  //  3. create: all
-  const [triggerCreate, setTriggerCreate] = useState<boolean>(false);
-  //  4. update: all
-  const [triggerUpdate, setTriggerUpdate] = useState<boolean>(false);
-  const [updateDetails, setUpdateDetails] = useState<any>(null);
-  //  5. update: convert
-  const [triggerConvert, setTriggerConvert] = useState<boolean>(false);
-  const [convertStatus, setConvertStatus] = useState<boolean | null>(null);
 
   useEffect(() => {
     console.log(
@@ -48,13 +53,10 @@ export default function ManageCandidates(): JSX.Element {
       searchParams.toString(),
     );
     setSearchParams((prev) => {
-      if (!prev.get('page')) {
-        prev.set('page', '1');
-      }
-      if (!prev.get('limit')) {
-        prev.set('limit', '20');
-      }
-      console.log('[DEBUG] After init set:', prev.toString());
+      if (!prev.get('page')) prev.set('page', '1');
+      if (!prev.get('limit')) prev.set('limit', '20');
+      if (!prev.get('sort_target')) prev.set('sort_target', '_id');
+      if (!prev.get('sort_order')) prev.set('sort_order', 'true');
       return prev;
     });
   }, []);
@@ -66,19 +68,23 @@ export default function ManageCandidates(): JSX.Element {
     //  remarks: get data
     const page = searchParams.get('page') || '1';
     const limit = searchParams.get('limit') || '20';
+    const sort_target = searchParams.get('sort_target') || '_id';
+    const sort_order = searchParams.get('sort_order') === 'true';
     console.log('[DEBUG] Sending request:', {
       page,
       limit,
-      sortTarget,
-      sortAsc,
+      sort_target,
+      sort_order,
     });
+
+    //  remarks: getting data by querying database
     axios
       .get(API.CANDIDATES, {
         params: {
           page,
           limit,
-          sortTarget,
-          sortAsc,
+          sort_target,
+          sort_order,
         },
       })
       .then((res) => {
@@ -112,6 +118,7 @@ export default function ManageCandidates(): JSX.Element {
   if (candidates.length === 0) {
     return <div className='p-4 text-gray-500'>No candidates found</div>;
   }
+
   //  display
   return (
     <div
@@ -121,53 +128,53 @@ export default function ManageCandidates(): JSX.Element {
       <Accordion title='Candidate List'>
         <CandidateContext.Provider
           value={{
-            //  get state
+            //  1.  GET
+
+            //  1a. receive general data
             candidates,
             setCandidates,
             selectedCandidates,
             setSelectedCandidates,
-            // create state
-            isCreating,
-            setIsCreating,
+            //  1b. receive pagination data
+            totalPage,
+            setTotalPage,
+            //  1c. receive sorted data
+            sortTarget,
+            setSortTarget,
+            sortAsc,
+            setSortAsc,
+            triggerSort,
+            setTriggerSort,
+            //  1d. receive filted data
+
+            //  2. POST
+            //  2a. create new records
             triggerCreate,
             setTriggerCreate,
-            // update state
+
+            //  3. PATCH
+            //  3a. update general details
             updateDetails,
             setUpdateDetails,
-            isUpdating,
-            setIsUpdating,
             triggerUpdate,
             setTriggerUpdate,
+            //  3b. update active status
             convertStatus,
             setConvertStatus,
             triggerConvert,
             setTriggerConvert,
-            //  sorting
-            sortTarget,
-            tempSortTarget,
-            setSortTarget,
-            setTempSortTarget,
-            sortAsc,
-            tempSortAsc,
-            setSortAsc,
-            setTempSortAsc,
-            triggerSort,
-            setTriggerSort,
-            //  filtering
-            filtered,
-            setFiltered,
-            //  pagination
-            totalPage,
-            setTotalPage,
-            //  loading state
+
+            //  4. TEMP STATE
             isInitialised,
             setIsInitialised,
             isGetting,
             setIsGetting,
+            isCreating,
+            setIsCreating,
+            isUpdating,
+            setIsUpdating,
             isConverting,
             setIsConverting,
-            searchText,
-            setSearchText,
           }}
         >
           <PanelFromContainer />

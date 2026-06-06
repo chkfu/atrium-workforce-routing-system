@@ -43,12 +43,12 @@ abstract class BaseController<T> {
   //  INPUT: query params - sort target and sort order
   public get_record_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      let sort_target = (req.query.sortTarget as string) || null;
-      const sort_order = req.query.sortAsc === 'true';
+      let sort_target = (req.query.sort_target as string) || null;
+      const sort_order = req.query.sort_order === 'true';
       let target_page = req.query.page ? Number(req.query.page) : 1;
       let target_limit = req.query.limit ? Number(req.query.limit) : 20;
 
-      // Validate sort_target to prevent invalid column references
+      // remarks: validate sort_target to prevent invalid column references
       if (
         sort_target &&
         (sort_target === 'nan' ||

@@ -1,4 +1,5 @@
 import { useCandidateContext } from '../utils/context';
+import { useSearchParams } from 'react-router-dom';
 import { COLORS } from '../../../styles/color';
 import { PopupCreate, PopupUpdate, PopupConvertActive } from './popups';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
@@ -7,8 +8,8 @@ import {
   handle_convert_submit,
   handle_convert_popup,
   handle_convert_cancel,
-  handle_temp_sort_reset,
   handle_sort_submit,
+  handle_temp_sort_reset,
 } from '../utils/handlers';
 import filter from '../../../assets/svg/filter_icon.svg';
 
@@ -218,26 +219,11 @@ export const ButtonConvertSubmit = (): JSX.Element => {
 //  SORTING
 
 export const ButtonSort = (): JSX.Element => {
-  const {
-    triggerSort,
-    setTriggerSort,
-    sortAsc,
-    sortTarget,
-    setTempSortAsc,
-    setTempSortTarget,
-  } = useCandidateContext();
+  const { triggerSort, setTriggerSort } = useCandidateContext();
   //  display
   return (
     <button
-      onClick={() =>
-        handle_temp_sort_reset(
-          sortAsc,
-          sortTarget,
-          setTempSortAsc,
-          setTempSortTarget,
-          setTriggerSort,
-        )
-      }
+      onClick={() => setTriggerSort(!triggerSort)}
       type='button'
       className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerSort ? 'bg-teal-100' : ''}`}
     >
@@ -253,17 +239,15 @@ export const ButtonSort = (): JSX.Element => {
 };
 
 export const ButtonSortSubmit = (): JSX.Element => {
-  const {
-    tempSortAsc,
-    tempSortTarget,
-    setSortAsc,
-    setSortTarget,
-    setTriggerSort,
-  } = useCandidateContext();
+  const [_, setSearchParams] = useSearchParams();
+  const { sortAsc, sortTarget, setTriggerSort } = useCandidateContext();
+  //  display
   return (
     <ButtonConfirm
       label='Confirm'
-      onClick={() => handle_sort_submit(tempSortAsc, tempSortTarget, setSortAsc, setSortTarget, setTriggerSort)}
+      onClick={() =>
+        handle_sort_submit(sortAsc, sortTarget, setTriggerSort, setSearchParams)
+      }
       type='button'
       style={{
         backgroundColor: COLORS.dark_teal,
@@ -276,10 +260,15 @@ export const ButtonSortSubmit = (): JSX.Element => {
 //  FILTERING
 
 export const ButtonFilter = (): JSX.Element => {
+  const [searchParams] = useSearchParams();
+  const { setSortAsc, setSortTarget, setTriggerSort } = useCandidateContext();
   return (
     <button
       type='button'
       className='w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-200'
+      onClick={() =>
+        handle_temp_sort_reset(setSortAsc, setSortTarget, setTriggerSort, searchParams)
+      }
     >
       <img
         src={filter}

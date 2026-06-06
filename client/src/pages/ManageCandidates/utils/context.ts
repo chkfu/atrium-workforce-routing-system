@@ -1,43 +1,41 @@
 import { createContext, useContext } from 'react';
 
 interface CandidateContextType {
-  //  GET
+  //  1. GET
+  //  1a. receive general data
   candidates: any[];
   setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
   selectedCandidates: number[];
   setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>;
-  //  POST
+  //  1b. receive pagination data
+  totalPage: number;
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>;
+  //  1c. receive sorted data
+  sortTarget: string;
+  setSortTarget: React.Dispatch<React.SetStateAction<string>>;
+  sortAsc: boolean;
+  setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
+  triggerSort: boolean;
+  setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
+
+  //  2. POST
+  //  2a. create new records
   triggerCreate: boolean;
   setTriggerCreate: React.Dispatch<React.SetStateAction<boolean>>;
-  //  PATCH
-  triggerUpdate: boolean;
-  setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+
+  //  3. PATCH
+  //  3a. update general details
   updateDetails: any;
   setUpdateDetails: React.Dispatch<React.SetStateAction<any>>;
+  triggerUpdate: boolean;
+  setTriggerUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+  //  3b. update active status
   convertStatus: boolean | null;
   setConvertStatus: React.Dispatch<React.SetStateAction<boolean | null>>;
   triggerConvert: boolean;
   setTriggerConvert: React.Dispatch<React.SetStateAction<boolean>>;
-  //  SEARCH, FILTER and PAGINATION
-  searchText: string;
-  setSearchText: React.Dispatch<React.SetStateAction<string>>;
-  filtered: boolean;
-  setFiltered: React.Dispatch<React.SetStateAction<boolean>>;
-  //  SORTING
-  sortTarget: string;
-  tempSortTarget: string;
-  setSortTarget: React.Dispatch<React.SetStateAction<string>>;
-  setTempSortTarget: React.Dispatch<React.SetStateAction<string>>;
-  sortAsc: boolean;
-  tempSortAsc: boolean;
-  setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
-  setTempSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
-  triggerSort: boolean;
-  setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
-  //  PAGINATION
-  totalPage: number;
-  setTotalPage: React.Dispatch<React.SetStateAction<number>>;
-  //  LOADING
+
+  //  4. TEMP STATE
   isInitialised: boolean;
   setIsInitialised: React.Dispatch<React.SetStateAction<boolean>>;
   isGetting: boolean;

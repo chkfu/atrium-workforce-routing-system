@@ -6,14 +6,18 @@ import {
   ButtonUpdateSubmit,
   ButtonCreateCancel,
   ButtonCreateSubmit,
+  ButtonSortSubmit,
 } from './buttons';
 import FormTextField from '../../../elements/FormTextField';
 import FormSelectInput from '../../../elements/FormSelectInput';
+import ButtonClose from '../../../elements/ButtonClose';
 import { CreateCandidateSchema, UpdateCandidateSchema } from '../utils/schema';
-import { handle_create_submit, handle_update_submit } from '../utils/handlers';
+import {
+  handle_create_submit,
+  handle_temp_sort_reset,
+  handle_update_submit,
+} from '../utils/handlers';
 import { useCandidateContext } from '../utils/context';
-import { COLORS } from '../../../styles/color';
-import close from '../../../assets/svg/close_icon.svg';
 
 //  CREATE
 
@@ -184,43 +188,31 @@ export const FormFiltering = (): JSX.Element => {
 
 //  remarks: main form for sorting
 export const FormSorting = (): JSX.Element => {
-  const { triggerSort } = useCandidateContext();
+  const {
+    triggerSort,
+    setTriggerSort,
+    sortAsc,
+    sortTarget,
+    setTempSortAsc,
+    setTempSortTarget,
+  } = useCandidateContext();
   //  display
   return (
     <form
-      className={`absolute p-8 pb-5 top-full translate-y-[-12%] right-0 mt-3 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-300 ease-in-out ${triggerSort ? '-translate-y-8 opacity-100 visible' : 'translate-y-0 opacity-0 invisible'}`}
+      className={`fixed left-1/2 -translate-x-1/2 top-1/3 p-8 pb-5 lg:absolute lg:top-full lg:translate-y-[-4%] lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-300 ease-in-out ${triggerSort ? '-translate-y-8 opacity-100 visible' : 'translate-y-0 opacity-0 invisible'}`}
     >
-      <OptionSortTarget />
+      <ButtonClose fn={() => handle_temp_sort_reset(sortAsc, sortTarget, setTempSortAsc, setTempSortTarget, setTriggerSort)} />
       <OptionSortOrder />
+      <div className='flex justify-center mt-2'>
+        <ButtonSortSubmit />
+      </div>
     </form>
-  );
-};
-
-//  remarks: manage convert active popup (convert active)
-export const OptionSortTarget = (): JSX.Element => {
-  const { setTriggerSort } = useCandidateContext();
-  //  display
-  return (
-    <button
-      type='button'
-      className='px-2 absolute top-4 right-2 text-gray-500 hover:text-gray-700 active:scale-95'
-      onClick={() => setTriggerSort(false)}
-    >
-      <img
-        src={close}
-        alt='close'
-        width='20'
-        height='20'
-        className='cursor-pointer hover:brightness-50 transition-all duration-600'
-        style={{ color: COLORS.dark_teal }}
-      />
-    </button>
   );
 };
 
 //  remarks: popup for sorting options
 export const OptionSortOrder = (): JSX.Element => {
-  const { sortTarget, setSortTarget, sortAsc, setSortAsc } =
+  const { tempSortTarget, setTempSortTarget, tempSortAsc, setTempSortAsc } =
     useCandidateContext();
   //  display
   return (
@@ -237,8 +229,8 @@ export const OptionSortOrder = (): JSX.Element => {
         <label className='text-sm font-medium text-gray-700'>Target:</label>
         <select
           className='w-36 px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500'
-          value={sortTarget}
-          onChange={(el) => setSortTarget(el.target.value)}
+          value={tempSortTarget}
+          onChange={(el) => setTempSortTarget(el.target.value)}
         >
           <option value='_id'>ID</option>
           <option value='first_name'>Name</option>
@@ -261,8 +253,8 @@ export const OptionSortOrder = (): JSX.Element => {
                 type='radio'
                 name='sort_order'
                 value={order}
-                checked={order === 'asc' ? sortAsc : !sortAsc}
-                onChange={() => setSortAsc(order === 'asc')}
+                checked={order === 'asc' ? tempSortAsc : !tempSortAsc}
+                onChange={() => setTempSortAsc(order === 'asc')}
                 className='w-4 h-4'
               />
               <span className='text-sm text-gray-700'>
@@ -288,7 +280,6 @@ export const OptionPageLimit = (): JSX.Element => {
         setSearchParams((prev) => {
           prev.set('limit', el.target.value);
           prev.set('page', '1');
-          console.log('[DEBUG] Updated searchParams:', prev.toString());
           return prev;
         });
       }}

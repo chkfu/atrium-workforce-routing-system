@@ -25,9 +25,13 @@ interface CandidateContextType {
   setFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   //  SORTING
   sortTarget: string;
+  tempSortTarget: string;
   setSortTarget: React.Dispatch<React.SetStateAction<string>>;
+  setTempSortTarget: React.Dispatch<React.SetStateAction<string>>;
   sortAsc: boolean;
+  tempSortAsc: boolean;
   setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
+  setTempSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
   triggerSort: boolean;
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
   //  PAGINATION

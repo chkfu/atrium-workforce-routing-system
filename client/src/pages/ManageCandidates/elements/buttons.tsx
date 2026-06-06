@@ -7,6 +7,8 @@ import {
   handle_convert_submit,
   handle_convert_popup,
   handle_convert_cancel,
+  handle_temp_sort_reset,
+  handle_sort_submit,
 } from '../utils/handlers';
 import filter from '../../../assets/svg/filter_icon.svg';
 
@@ -216,11 +218,26 @@ export const ButtonConvertSubmit = (): JSX.Element => {
 //  SORTING
 
 export const ButtonSort = (): JSX.Element => {
-  const { triggerSort, setTriggerSort } = useCandidateContext();
+  const {
+    triggerSort,
+    setTriggerSort,
+    sortAsc,
+    sortTarget,
+    setTempSortAsc,
+    setTempSortTarget,
+  } = useCandidateContext();
   //  display
   return (
     <button
-      onClick={() => setTriggerSort((prev) => !prev)}
+      onClick={() =>
+        handle_temp_sort_reset(
+          sortAsc,
+          sortTarget,
+          setTempSortAsc,
+          setTempSortTarget,
+          setTriggerSort,
+        )
+      }
       type='button'
       className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerSort ? 'bg-teal-100' : ''}`}
     >
@@ -232,6 +249,27 @@ export const ButtonSort = (): JSX.Element => {
         className='text-teal-800'
       />
     </button>
+  );
+};
+
+export const ButtonSortSubmit = (): JSX.Element => {
+  const {
+    tempSortAsc,
+    tempSortTarget,
+    setSortAsc,
+    setSortTarget,
+    setTriggerSort,
+  } = useCandidateContext();
+  return (
+    <ButtonConfirm
+      label='Confirm'
+      onClick={() => handle_sort_submit(tempSortAsc, tempSortTarget, setSortAsc, setSortTarget, setTriggerSort)}
+      type='button'
+      style={{
+        backgroundColor: COLORS.dark_teal,
+        color: COLORS.light_gray,
+      }}
+    />
   );
 };
 

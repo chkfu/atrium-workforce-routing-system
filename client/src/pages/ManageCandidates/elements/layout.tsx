@@ -51,7 +51,7 @@ export function PaginationSection(): JSX.Element {
 export function ControlPanelSection(): JSX.Element {
   return (
     <div className='py-4'>
-      <div className='flex flex-wrap justify-between gap-4 md:flex-col md:flex-nowrap md:justify-end md:gap-16 lg:flex-row lg:flex-nowrap lg:justify-between'>
+      <div className='flex flex-col gap-4 md:justify-end md:gap-16 lg:flex-row lg:justify-between'>
         <FormButtonBox />
         <FilterSortBox />
       </div>

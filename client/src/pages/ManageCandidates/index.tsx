@@ -25,8 +25,11 @@ export default function ManageCandidates(): JSX.Element {
   const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [filtered, setFiltered] = useState<boolean>(false);
+  //  2a. sorting
   const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [tempSortAsc, setTempSortAsc] = useState<boolean>(true);
   const [sortTarget, setSortTarget] = useState<string>('_id');
+  const [tempSortTarget, setTempSortTarget] = useState<string>('_id');
   const [triggerSort, setTriggerSort] = useState<boolean>(false);
   //  2. get: all
   const [candidates, setCandidates] = useState<any[]>([]);
@@ -79,14 +82,14 @@ export default function ManageCandidates(): JSX.Element {
         },
       })
       .then((res) => {
-        const cadidateEls = res.data.data.result;
+        const candidateEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
         console.log('[DEBUG] Response:', {
-          count: cadidateEls.length,
+          count: candidateEls.length,
           totalPages,
           data: res.data,
         });
-        setCandidates(cadidateEls);
+        setCandidates(candidateEls);
         setTotalPage(totalPages);
         setIsGetting(false);
       })
@@ -141,9 +144,13 @@ export default function ManageCandidates(): JSX.Element {
             setTriggerConvert,
             //  sorting
             sortTarget,
+            tempSortTarget,
             setSortTarget,
+            setTempSortTarget,
             sortAsc,
+            tempSortAsc,
             setSortAsc,
+            setTempSortAsc,
             triggerSort,
             setTriggerSort,
             //  filtering

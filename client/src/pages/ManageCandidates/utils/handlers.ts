@@ -268,3 +268,30 @@ export const handle_convert_submit = async (
     setIsConverting(false);
   }
 };
+
+//  ==========    sorting    ==========
+
+//  remarks: reset temp sort options by closing popup
+export const handle_temp_sort_reset = (
+  sortAsc: boolean,
+  sortTarget: string,
+  setTempSortAsc: (val: boolean) => void,
+  setTempSortTarget: (val: string) => void,
+  setTriggerSort: (val: (prev: boolean) => boolean) => void,
+) => {
+  setTempSortAsc(sortAsc);
+  setTempSortTarget(sortTarget);
+  setTriggerSort((prev) => !prev);
+};
+
+export const handle_sort_submit = (
+  tempSortAsc: boolean,
+  tempSortTarget: string,
+  setSortAsc: (val: boolean) => void,
+  setSortTarget: (val: string) => void,
+  setTriggerSort: (val: boolean) => void,
+) => {
+  setSortAsc(tempSortAsc);
+  setSortTarget(tempSortTarget);
+  setTriggerSort(false);
+};

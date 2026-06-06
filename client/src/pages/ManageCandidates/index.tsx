@@ -40,7 +40,10 @@ export default function ManageCandidates(): JSX.Element {
   const [convertStatus, setConvertStatus] = useState<boolean | null>(null);
 
   useEffect(() => {
-    console.log('[DEBUG] Initial mount - current searchParams:', searchParams.toString());
+    console.log(
+      '[DEBUG] Initial mount - current searchParams:',
+      searchParams.toString(),
+    );
     setSearchParams((prev) => {
       if (!prev.get('page')) {
         prev.set('page', '1');
@@ -95,8 +98,8 @@ export default function ManageCandidates(): JSX.Element {
         setIsGetting(false);
       });
   }, [searchParams.toString(), sortTarget, sortAsc]);
-  //  loading state
-  if (isGetting) {
+  //  loading spinner for pending status
+  if (isGetting && !isInitialised) {
     return <LoadSpinner />;
   }
   //  error handling

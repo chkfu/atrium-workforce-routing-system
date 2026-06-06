@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   ButtonUpdateCancel,
@@ -173,6 +174,12 @@ export function FormUpdate() {
   );
 }
 
+//  FILTERING
+
+export const FormFiltering = (): JSX.Element => {
+  return <></>;
+};
+
 //  SORTING
 
 //  remarks: main form for sorting
@@ -266,5 +273,62 @@ export const OptionSortOrder = (): JSX.Element => {
         </div>
       </div>
     </div>
+  );
+};
+
+//  remarks: dropdown selection for target page ranges
+export const OptionPageLimit = (): JSX.Element => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  //  display
+  return (
+    <select
+      name='limit'
+      value={searchParams.get('limit') || '20'}
+      onChange={(el) => {
+        setSearchParams((prev) => {
+          prev.set('limit', el.target.value);
+          prev.set('page', '1');
+          console.log('[DEBUG] Updated searchParams:', prev.toString());
+          return prev;
+        });
+      }}
+      className='px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
+    >
+      <option value='10'>10</option>
+      <option value='15'>15</option>
+      <option value='20'>20</option>
+      <option value='50'>50</option>
+    </select>
+  );
+};
+
+//  remarks: dropdown selection for spec page
+export const OptionPageSelect = (): JSX.Element => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { totalPage } = useCandidateContext();
+  const currentPage = parseInt(searchParams.get('page') || '1');
+  //  display
+  return (
+    <select
+      name='page'
+      value={currentPage}
+      onChange={(el) =>
+        setSearchParams((prev) => {
+          prev.set('page', el.target.value);
+          return prev;
+        })
+      }
+      className='px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer'
+    >
+      {totalPage > 0 &&
+        Array.from({ length: totalPage }, (_, index) => (
+          <option
+            key={index + 1}
+            value={index + 1}
+          >
+            {index + 1}
+          </option>
+        ))}
+    </select>
   );
 };

@@ -9,10 +9,11 @@ interface FormSelectInputProps {
   label: string;
   options: SelectOption[];
   error?: FieldError;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   required?: boolean;
   placeholder?: string;
   className?: string;
+  customisedOnChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export default function FormSelectInput({
@@ -23,6 +24,7 @@ export default function FormSelectInput({
   required = false,
   placeholder = '--- Please Select ---',
   className = 'mb-4',
+  customisedOnChange,
 }: FormSelectInputProps) {
   return (
     <div className={`${className} group`}>
@@ -33,7 +35,7 @@ export default function FormSelectInput({
       </label>
       {/*  section: selection dropdown */}
       <select
-        {...register}
+        {...(register || { onChange: customisedOnChange })}
         className={`w-full px-3 py-2 border rounded-lg focus:outline-none text-sm focus:border-teal-800 cursor-pointer transition-all ease-in-out duration-600 ${
           error
             ? 'border-red-500 focus:ring-red-300 bg-red-50'

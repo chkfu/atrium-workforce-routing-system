@@ -300,3 +300,95 @@ export const handle_sort_submit = (
   });
   setTriggerSort(false);
 };
+
+//  ==========    filtering    ==========
+
+export const handle_temp_filter_clear = (
+  setFilterName: (val: string) => void,
+  setFilterEmail: (val: string) => void,
+  setFilterGender: (val: any) => void,
+  setFilterProbStatus: (val: any) => void,
+  setFilterIsActive: (val: any) => void,
+  setFilterCreatedAtStart: (val: string) => void,
+  setFilterCreatedAtEnd: (val: string) => void,
+  setSearchParams: SetURLSearchParams,
+) => {
+  setFilterName('');
+  setFilterEmail('');
+  setFilterGender(null);
+  setFilterProbStatus(null);
+  setFilterIsActive(null);
+  setFilterCreatedAtStart('');
+  setFilterCreatedAtEnd('');
+
+  setSearchParams((prev: URLSearchParams) => {
+    const params = new URLSearchParams(prev);
+    params.delete('filter_name');
+    params.delete('filter_email');
+    params.delete('filter_gender');
+    params.delete('filter_prob_status');
+    params.delete('filter_is_active');
+    params.delete('filter_created_at_start');
+    params.delete('filter_created_at_end');
+    return params;
+  });
+};
+
+export const handle_temp_filter_reset = (
+  setFilterName: (val: string) => void,
+  setFilterEmail: (val: string) => void,
+  setFilterGender: (val: any) => void,
+  setFilterProbStatus: (val: any) => void,
+  setFilterIsActive: (val: any) => void,
+  setFilterCreatedAtStart: (val: string) => void,
+  setFilterCreatedAtEnd: (val: string) => void,
+  setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
+  setSearchParams: SetURLSearchParams,
+) => {
+  handle_temp_filter_clear(
+    setFilterName,
+    setFilterEmail,
+    setFilterGender,
+    setFilterProbStatus,
+    setFilterIsActive,
+    setFilterCreatedAtStart,
+    setFilterCreatedAtEnd,
+    setSearchParams,
+  );
+  setTriggerFilter(false);
+};
+
+export const handle_filter_submit = (
+  filterName: string,
+  filterEmail: string,
+  filterGender: string | null,
+  filterProbStatus: string | null,
+  filterIsActive: boolean | null,
+  filterCreatedAtStart: string,
+  filterCreatedAtEnd: string,
+  setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
+  setSearchParams: SetURLSearchParams,
+) => {
+  setSearchParams((prev: URLSearchParams) => {
+    const params = new URLSearchParams(prev);
+    if (filterName) params.set('filter_name', filterName);
+    else params.delete('filter_name');
+    if (filterEmail) params.set('filter_email', filterEmail);
+    else params.delete('filter_email');
+    if (filterGender) params.set('filter_gender', filterGender);
+    else params.delete('filter_gender');
+    if (filterProbStatus) params.set('filter_prob_status', filterProbStatus);
+    else params.delete('filter_prob_status');
+    if (filterIsActive !== null)
+      params.set('filter_is_active', String(filterIsActive));
+    else params.delete('filter_is_active');
+    if (filterCreatedAtStart)
+      params.set('filter_created_at_start', filterCreatedAtStart);
+    else params.delete('filter_created_at_start');
+    if (filterCreatedAtEnd)
+      params.set('filter_created_at_end', filterCreatedAtEnd);
+    else params.delete('filter_created_at_end');
+    return params;
+  });
+  setTriggerFilter(false);
+};

@@ -9,7 +9,8 @@ import {
   handle_convert_popup,
   handle_convert_cancel,
   handle_sort_submit,
-  handle_temp_sort_reset,
+  handle_filter_submit,
+  handle_temp_filter_clear,
 } from '../utils/handlers';
 import filter from '../../../assets/svg/filter_icon.svg';
 
@@ -218,12 +219,17 @@ export const ButtonConvertSubmit = (): JSX.Element => {
 
 //  SORTING
 
+//  remarks: trigger of sorting form
 export const ButtonSort = (): JSX.Element => {
-  const { triggerSort, setTriggerSort } = useCandidateContext();
+  const { setTriggerFilter, triggerSort, setTriggerSort } =
+    useCandidateContext();
   //  display
   return (
     <button
-      onClick={() => setTriggerSort(!triggerSort)}
+      onClick={() => {
+        setTriggerFilter(false);
+        setTriggerSort(!triggerSort);
+      }}
       type='button'
       className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerSort ? 'bg-teal-100' : ''}`}
     >
@@ -238,6 +244,7 @@ export const ButtonSort = (): JSX.Element => {
   );
 };
 
+//  remarks: submit button inside sorting form
 export const ButtonSortSubmit = (): JSX.Element => {
   const [_, setSearchParams] = useSearchParams();
   const { sortAsc, sortTarget, setTriggerSort } = useCandidateContext();
@@ -259,16 +266,19 @@ export const ButtonSortSubmit = (): JSX.Element => {
 
 //  FILTERING
 
+//  remarks: trigger of filtering form
 export const ButtonFilter = (): JSX.Element => {
-  const [searchParams] = useSearchParams();
-  const { setSortAsc, setSortTarget, setTriggerSort } = useCandidateContext();
+  const { setTriggerSort, triggerFilter, setTriggerFilter } =
+    useCandidateContext();
   return (
     <button
       type='button'
-      className='w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-200'
-      onClick={() =>
-        handle_temp_sort_reset(setSortAsc, setSortTarget, setTriggerSort, searchParams)
-      }
+      className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerFilter ? 'bg-teal-100' : ''}`}
+      onClick={() => {
+        setTriggerSort(false);
+        setTriggerFilter(!triggerFilter);
+        setTriggerFilter(!triggerFilter);
+      }}
     >
       <img
         src={filter}
@@ -278,5 +288,78 @@ export const ButtonFilter = (): JSX.Element => {
         className='text-teal-800'
       />
     </button>
+  );
+};
+
+//  remarks: clear all filter values and params
+export const ButtonFilterClear = (): JSX.Element => {
+  const [_, setSearchParams] = useSearchParams();
+  const {
+    setFilterName,
+    setFilterEmail,
+    setFilterGender,
+    setFilterProbStatus,
+    setFilterIsActive,
+    setFilterCreatedAtStart,
+    setFilterCreatedAtEnd,
+  } = useCandidateContext();
+
+  return (
+    <ButtonConfirm
+      label='Clear'
+      onClick={() =>
+        handle_temp_filter_clear(
+          setFilterName,
+          setFilterEmail,
+          setFilterGender,
+          setFilterProbStatus,
+          setFilterIsActive,
+          setFilterCreatedAtStart,
+          setFilterCreatedAtEnd,
+          setSearchParams,
+        )
+      }
+      style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
+    />
+  );
+};
+
+//  remarks: submit button inside filtering form
+export const ButtonFilterSubmit = (): JSX.Element => {
+  const [_, setSearchParams] = useSearchParams();
+  const {
+    filterName,
+    filterEmail,
+    filterGender,
+    filterProbStatus,
+    filterIsActive,
+    filterCreatedAtStart,
+    filterCreatedAtEnd,
+    setTriggerFilter,
+    setTriggerSort,
+  } = useCandidateContext();
+  return (
+    <ButtonConfirm
+      label='Confirm'
+      onClick={() => {
+        handle_filter_submit(
+          filterName,
+          filterEmail,
+          filterGender,
+          filterProbStatus,
+          filterIsActive,
+          filterCreatedAtStart,
+          filterCreatedAtEnd,
+          setTriggerFilter,
+          setSearchParams,
+        );
+        setTriggerSort(false);
+      }}
+      type='button'
+      style={{
+        backgroundColor: COLORS.dark_teal,
+        color: COLORS.light_gray,
+      }}
+    />
   );
 };

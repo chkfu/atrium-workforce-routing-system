@@ -89,7 +89,7 @@ function FilterSortBox(): JSX.Element {
   return (
     <div className='flex gap-2'>
       {/*  section: filtering */}
-      <div>
+      <div className='relative'>
         <ButtonFilter />
         <FormFiltering />
       </div>

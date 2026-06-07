@@ -1,4 +1,3 @@
-import React from 'react';
 import close from '../assets/svg/close_icon.svg';
 import { COLORS } from '../styles/color';
 

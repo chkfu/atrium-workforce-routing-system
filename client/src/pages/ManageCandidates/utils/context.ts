@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { enum_gender, enum_prob_status } from './types';
 
 interface CandidateContextType {
   //  1. GET
@@ -17,7 +18,25 @@ interface CandidateContextType {
   setSortAsc: React.Dispatch<React.SetStateAction<boolean>>;
   triggerSort: boolean;
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>;
-
+  //  1d. receive filtered data
+  triggerFilter: boolean;
+  setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  filterName: string;
+  setFilterName: React.Dispatch<React.SetStateAction<string>>;
+  filterEmail: string;
+  setFilterEmail: React.Dispatch<React.SetStateAction<string>>;
+  filterGender: enum_gender | null;
+  setFilterGender: React.Dispatch<React.SetStateAction<enum_gender | null>>;
+  filterProbStatus: enum_prob_status | null;
+  setFilterProbStatus: React.Dispatch<
+    React.SetStateAction<enum_prob_status | null>
+  >;
+  filterIsActive: boolean | null;
+  setFilterIsActive: React.Dispatch<React.SetStateAction<boolean | null>>;
+  filterCreatedAtStart: string;
+  setFilterCreatedAtStart: React.Dispatch<React.SetStateAction<string>>;
+  filterCreatedAtEnd: string;
+  setFilterCreatedAtEnd: React.Dispatch<React.SetStateAction<string>>;
   //  2. POST
   //  2a. create new records
   triggerCreate: boolean;

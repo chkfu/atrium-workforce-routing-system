@@ -6,6 +6,7 @@ import { API } from '../../config/api';
 import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
+import { enum_gender, enum_prob_status } from './utils/types';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {
@@ -25,6 +26,15 @@ export default function ManageCandidates(): JSX.Element {
   const [sortTarget, setSortTarget] = useState<string>('_id');
   const [triggerSort, setTriggerSort] = useState<boolean>(false);
   //  1d. receive filtered data
+  const [triggerFilter, setTriggerFilter] = useState<boolean>(false);
+  const [filterName, setFilterName] = useState<string>('');
+  const [filterEmail, setFilterEmail] = useState<string>('');
+  const [filterGender, setFilterGender] = useState<enum_gender | null>(null);
+  const [filterProbStatus, setFilterProbStatus] =
+    useState<enum_prob_status | null>(null);
+  const [filterIsActive, setFilterIsActive] = useState<boolean | null>(null);
+  const [filterCreatedAtStart, setFilterCreatedAtStart] = useState<string>('');
+  const [filterCreatedAtEnd, setFilterCreatedAtEnd] = useState<string>('');
 
   //  2. POST
   //  2a. create new records
@@ -70,6 +80,11 @@ export default function ManageCandidates(): JSX.Element {
     const limit = searchParams.get('limit') || '20';
     const sort_target = searchParams.get('sort_target') || '_id';
     const sort_order = searchParams.get('sort_order') === 'true';
+    const filter_name = searchParams.get('filter_name') === '';
+    const filter_email = searchParams.get('filter_email') === '';
+    const filter_gender = searchParams.get('filter_gender') === '';
+    const filter_prob_status = searchParams.get('filter_prob_status') === '';
+    const filter_is_active = searchParams.get('filter_is_active') === '';
     console.log('[DEBUG] Sending request:', {
       page,
       limit,
@@ -106,7 +121,7 @@ export default function ManageCandidates(): JSX.Element {
         );
         setIsGetting(false);
       });
-  }, [searchParams.toString(), sortTarget, sortAsc]);
+  }, [searchParams.toString()]);
   //  loading spinner for pending status
   if (isGetting && !isInitialised) {
     return <LoadSpinner />;
@@ -146,6 +161,22 @@ export default function ManageCandidates(): JSX.Element {
             triggerSort,
             setTriggerSort,
             //  1d. receive filted data
+            triggerFilter,
+            setTriggerFilter,
+            filterName,
+            setFilterName,
+            filterEmail,
+            setFilterEmail,
+            filterGender,
+            setFilterGender,
+            filterProbStatus,
+            setFilterProbStatus,
+            filterIsActive,
+            setFilterIsActive,
+            filterCreatedAtStart,
+            setFilterCreatedAtStart,
+            filterCreatedAtEnd,
+            setFilterCreatedAtEnd,
 
             //  2. POST
             //  2a. create new records

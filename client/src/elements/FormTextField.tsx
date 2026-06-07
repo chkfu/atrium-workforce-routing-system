@@ -8,14 +8,16 @@ export default function FormTextField({
   register,
   required = false,
   className = 'mb-4',
+  customisedOnChange,
 }: {
   label: string;
   placeholder?: string;
   type?: 'text' | 'email' | 'password' | 'number';
   error?: FieldError;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   required?: boolean;
   className?: string;
+  customisedOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className={`${className} group`}>
@@ -28,7 +30,7 @@ export default function FormTextField({
       <input
         type={type}
         placeholder={placeholder || label}
-        {...register}
+        {...(register || { onChange: customisedOnChange })}
         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:text-teal-800 focus:border-teal-800 placeholder:text-sm transition-all duration-600 ${
           error
             ? 'border-red-500 focus:ring-red-300 bg-red-50'

@@ -45,8 +45,8 @@ abstract class BaseController<T> {
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       let sort_target = (req.query.sort_target as string) || null;
       const sort_order = req.query.sort_order === 'true';
-      let target_page = req.query.page ? Number(req.query.page) : 1;
-      let target_limit = req.query.limit ? Number(req.query.limit) : 20;
+      let page_current = req.query.page ? Number(req.query.page) : 1;
+      let page_limit = req.query.limit ? Number(req.query.limit) : 20;
 
       // remarks: validate sort_target to prevent invalid column references
       if (
@@ -57,20 +57,26 @@ abstract class BaseController<T> {
       ) {
         sort_target = null;
       }
+      const filter_params = Object.fromEntries(
+        Object.entries(req.query).filter(([key]) => key.startsWith('filter_')),
+      );
+
+      const page_opts = { page_current: page_current, page_limit: page_limit };
+      const sort_opts = { sort_target: sort_target, sort_order: sort_order };
+      const filter_opts = { filter_params };
 
       const result = await this.service.get_record_batch(
-        sort_target,
-        sort_order,
-        target_page,
-        target_limit,
+        page_opts,
+        sort_opts,
+        filter_opts,
       );
       //  normal response
       res.status(200).json({
         status: 'success',
-        count: result.data.length,
+        count: result?.data.length,
         record_count: result.total_count,
         data: {
-          total_pages: result.total_pages,
+          total_pages: result?.total_pages,
           current_page: result.current_page,
           result: result.data,
         },

@@ -9,6 +9,7 @@ export default function FormTextField({
   required = false,
   className = 'mb-4',
   customisedOnChange,
+  gridLayout = false,
 }: {
   label: string;
   placeholder?: string;
@@ -18,6 +19,7 @@ export default function FormTextField({
   required?: boolean;
   className?: string;
   customisedOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  gridLayout?: boolean;
 }) {
   return (
     <div className={`${className} group`}>

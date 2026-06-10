@@ -80,8 +80,8 @@ export function TableHeaderBox(): JSX.Element {
     useCandidateContext();
   //  display
   return (
-    <thead className='sticky top-0 z-10 bg-white'>
-      <tr style={{ borderBottom: `2px solid ${COLORS.light_gray}` }}>
+    <thead className='sticky top-0 z-10 bg-slate-200'>
+      <tr>
         {/*  checkbox column  */}
         <TableHeadCheckbox
           unit={candidates}
@@ -92,7 +92,7 @@ export function TableHeaderBox(): JSX.Element {
         {table_headers.map((header) => (
           <th
             key={header.key}
-            className={`p-2 text-sm text-left font-bold sticky top-0 bg-white z-10 ${header.className} whitespace-nowrap`}
+            className={`p-2 text-sm text-left font-bold sticky top-0 bg-slate-50 z-10 border-b-2 border-gray-300 ${header.className} whitespace-nowrap`}
           >
             {header.label}
           </th>
@@ -115,7 +115,7 @@ export function TableBodyBox(): JSX.Element {
   }
   // display
   return (
-    <tbody className='transition-all ease-in-out duration-600'>
+    <tbody className='relative transition-all ease-in-out duration-600'>
       {candidates.map((el: any) => (
         <tr
           key={el._id}
@@ -175,7 +175,7 @@ export function TableHeadCheckbox({
     unit && unit.length > 0 && selected.length === unit.length;
   //  display
   return (
-    <th className='p-2 text-center align-middle sticky top-0 bg-white z-10'>
+    <th className='p-2 text-center align-middle sticky top-0 bg-slate-50 z-10 shadow-2xl'>
       <input
         type='checkbox'
         className='w-4 h-4 cursor-pointer'

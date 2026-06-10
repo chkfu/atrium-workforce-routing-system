@@ -75,3 +75,11 @@ export const UpdateCandidateSchema = yup.object({
     ])
     .nullable(), // learnt: nullable enables to skipped
 });
+
+//  remarks: schema for filtering candidates (all fields optional)
+export const FilterCandidateSchema = yup.object({
+  filter_name: yup
+    .string()
+    .trim()
+    .max(20, 'Exceeded length of 20 characters.'),
+});

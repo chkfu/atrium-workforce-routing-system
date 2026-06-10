@@ -107,7 +107,7 @@ abstract class BaseRepository<T> {
         if (criteria.type === 'like') {
           const condition: string[] = criteria.column.map((col: string) => {
             parameters.push(`%${val}%`);
-            return `"${col}" LIKE $${parameter_count++}`;
+            return `"${col}" ILIKE $${parameter_count++}`;
           });
           query_str_list.push(`(${condition.join(' OR ')})`);
         }

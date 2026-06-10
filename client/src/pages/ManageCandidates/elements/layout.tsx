@@ -22,7 +22,7 @@ export function PanelFromContainer(): JSX.Element {
 
   return (
     <div
-      className={`w-full h-112  overflow-y-hidden duration-1000 ease-linear transition-opacity delay-200 ${
+      className={`w-full h-112 overflow-y-hidden duration-1000 ease-linear transition-opacity delay-200 ${
         isInitialised
           ? 'opacity-100 translate-x-0'
           : 'opacity-0 -translate-x-20'
@@ -84,7 +84,7 @@ export function TableSection(): JSX.Element {
         Selection: {selectedCandidates.length}{' '}
         {selectedCandidates.length === 1 ? 'candidate' : 'candidates'} selected
       </p>
-      <div className='min-h-screen w-full'>
+      <div className='overflow-x-auto overflow-y-auto max-h-100'>
         <table className='min-w-300 border-collapse table-auto w-full'>
           <TableHeaderBox />
           <TableBodyBox />

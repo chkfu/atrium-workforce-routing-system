@@ -1,5 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import FilterTextField from '../../../elements/FilterTextField';
+import FilterSelectInput from '../../../elements/FilterSelectInput';
+import FilterDateRangeInput from '../../../elements/FilterDateRangeInput';
 import {
   ButtonUpdateCancel,
   ButtonUpdateSubmit,
@@ -201,7 +204,7 @@ export const FormFiltering = (): JSX.Element => {
 
   return (
     <form
-      className={`fixed left-1/2 -translate-x-1/2 top-[48%] -translate-y-1/2 p-8 pb-5 lg:absolute lg:top-full lg:-translate-y-2 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-120 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-600 transition-all flex flex-col ${triggerFilter ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+      className={`fixed left-1/2 -translate-x-1/2 top-[48%] -translate-y-1/2 border-gray-300 p-8 pb-5 lg:absolute lg:top-full lg:-translate-y-2 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-108 bg-white border rounded-lg shadow-lg z-50 transform duration-600 transition-all flex flex-col ${triggerFilter ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
     >
       <ButtonClose
         fn={() =>
@@ -236,6 +239,7 @@ export const FormFiltering = (): JSX.Element => {
 
 //  remarks: popup for filtering options
 export const OptionFilterOrder = (): JSX.Element => {
+  //  declaration
   const {
     filterName,
     setFilterName,
@@ -258,170 +262,107 @@ export const OptionFilterOrder = (): JSX.Element => {
   } = useCandidateContext();
   //  display
   return (
-    <div className='p-2'>
+    <form className='p-2'>
       {/*  grid layout for filter items  */}
       <div
-        className='grid gap-3 mb-4'
+        className='grid gap-4 mb-4'
         style={{ gridTemplateColumns: 'auto 1fr' }}
       >
         {/*   section 1: name filtering  */}
-        <div className='group contents'>
-          <label
-            htmlFor='filter_name'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Name:
-          </label>
-          <input
-            id='filter_name'
-            type='text'
-            name='filter_name'
-            placeholder='Insert keywords...'
-            value={filterName}
-            onChange={(el) => setFilterName(el.target.value)}
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all'
-          />
-        </div>
+        <FilterTextField
+          id='filter_name'
+          type='text'
+          name='filter_name'
+          label='Name'
+          placeholder='Insert keywords...'
+          onChange={(el) => setFilterName(el.target.value)}
+          value={filterName}
+        />
         {/*  section 2: email filtering */}
-        <div className='group contents'>
-          <label
-            htmlFor='filter_email'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Email:
-          </label>
-          <input
-            id='filter_email'
-            type='text'
-            name='filter_email'
-            placeholder='Insert keywords...'
-            value={filterEmail}
-            onChange={(el) => setFilterEmail(el.target.value)}
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all'
-          />
-        </div>
+        <FilterTextField
+          id='filter_email'
+          type='text'
+          name='filter_email'
+          label='Email'
+          placeholder='Insert keywords...'
+          value={filterEmail}
+          onChange={(el) => setFilterEmail(el.target.value)}
+        />
         {/*  section 3:  Gender  */}
-        <div className='group contents'>
-          <label
-            htmlFor='filter_gender'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Gender:
-          </label>
-          <select
-            id='filter_gender'
-            value={filterGender || ''}
-            onChange={(el) =>
-              setFilterGender(
-                el.target.value === '' ? null : (el.target.value as any),
-              )
-            }
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all cursor-pointer'
-          >
-            <option value=''>--- Please Select ---</option>
-            <option value='male'>Male</option>
-            <option value='female'>Female</option>
-            <option value='other'>Other</option>
-          </select>
-        </div>
+        <FilterSelectInput
+          id='filter_gender'
+          name='filter_gender'
+          label='Gender'
+          value={filterGender}
+          onChange={(el) =>
+            setFilterGender(
+              el.target.value === '' ? null : (el.target.value as any),
+            )
+          }
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
         {/*  section 4:  Probation Status  */}
-        <div className='group contents'>
-          <label
-            htmlFor='filter_status'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Status:
-          </label>
-          <select
-            id='filter_status'
-            value={filterProbStatus || ''}
-            onChange={(el) =>
-              setFilterProbStatus(
-                el.target.value === '' ? null : (el.target.value as any),
-              )
-            }
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all cursor-pointer'
-          >
-            <option value=''>--- Please Select ---</option>
-            <option value='selecting'>Selecting</option>
-            <option value='training'>Training</option>
-            <option value='completed'>Completed</option>
-            <option value='postponed'>Postponed</option>
-            <option value='withdrawn'>Withdrawn</option>
-            <option value='failed'>Failed</option>
-          </select>
-        </div>
+        <FilterSelectInput
+          id='filter_status'
+          name='filter_status'
+          label='Status'
+          value={filterProbStatus}
+          onChange={(el) =>
+            setFilterProbStatus(
+              el.target.value === '' ? null : (el.target.value as any),
+            )
+          }
+          options={[
+            { value: 'selecting', label: 'Selecting' },
+            { value: 'training', label: 'Training' },
+            { value: 'completed', label: 'Completed' },
+            { value: 'postponed', label: 'Postponed' },
+            { value: 'withdrawn', label: 'Withdrawn' },
+            { value: 'failed', label: 'Failed' },
+          ]}
+        />
         {/*  section 5: Active Status  */}
-        <div className='group contents'>
-          <label
-            htmlFor='filter_active'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Active:
-          </label>
-          <select
-            id='filter_active'
-            value={filterIsActive === null ? '' : String(filterIsActive)}
-            onChange={(el) =>
-              setFilterIsActive(
-                el.target.value === '' ? null : el.target.value === 'true',
-              )
-            }
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all cursor-pointer'
-          >
-            <option value=''>--- Please Select ---</option>
-            <option value='true'>Active</option>
-            <option value='false'>Inactive</option>
-          </select>
-        </div>
+        <FilterSelectInput
+          id='filter_active'
+          name='filter_active'
+          label='Active'
+          value={filterIsActive === null ? null : String(filterIsActive)}
+          onChange={(el) =>
+            setFilterIsActive(
+              el.target.value === '' ? null : el.target.value === 'true',
+            )
+          }
+          options={[
+            { value: 'true', label: 'Active' },
+            { value: 'false', label: 'Inactive' },
+          ]}
+        />
         {/*  section 6: Created At  */}
-        <div className='group contents'>
-          <label className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
-            Created:
-          </label>
-          <div className='flex items-center gap-2'>
-            <input
-              id='filter_created_from'
-              type='date'
-              value={filterCreatedFrom}
-              onChange={(el) => setFilterCreatedFrom(el.target.value)}
-              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
-            />
-            <span className='text-sm text-gray-600'>～</span>
-            <input
-              id='filter_created_to'
-              type='date'
-              value={filterCreatedTo}
-              onChange={(el) => setFilterCreatedTo(el.target.value)}
-              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
-            />
-          </div>
-        </div>
+        <FilterDateRangeInput
+          label='Created'
+          fromId='filter_created_from'
+          toId='filter_created_to'
+          fromValue={filterCreatedFrom}
+          toValue={filterCreatedTo}
+          onFromChange={(el) => setFilterCreatedFrom(el.target.value)}
+          onToChange={(el) => setFilterCreatedTo(el.target.value)}
+        />
         {/*  section 7: Updated At  */}
-        <div className='group contents'>
-          <label className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
-            Updated:
-          </label>
-          <div className='flex items-center gap-2'>
-            <input
-              id='filter_updated_from'
-              type='date'
-              value={filterUpdatedFrom}
-              onChange={(el) => setFilterUpdatedFrom(el.target.value)}
-              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
-            />
-            <span className='text-sm text-gray-600'>～</span>
-            <input
-              id='filter_updated_to'
-              type='date'
-              value={filterUpdatedTo}
-              onChange={(el) => setFilterUpdatedTo(el.target.value)}
-              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
-            />
-          </div>
-        </div>
+        <FilterDateRangeInput
+          label='Updated'
+          fromId='filter_updated_from'
+          toId='filter_updated_to'
+          fromValue={filterUpdatedFrom}
+          toValue={filterUpdatedTo}
+          onFromChange={(el) => setFilterUpdatedFrom(el.target.value)}
+          onToChange={(el) => setFilterUpdatedTo(el.target.value)}
+        />
       </div>
-    </div>
+    </form>
   );
 };
 
@@ -435,7 +376,7 @@ export const FormSorting = (): JSX.Element => {
   //  display
   return (
     <form
-      className={`fixed left-1/2 -translate-x-1/2 top-[35%] -translate-y-1/2 p-8 pb-5 lg:absolute lg:top-full lg:translate-y-0 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-600 transition-all ${triggerSort ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+      className={`fixed left-1/2 -translate-x-1/2 top-[35%] -translate-y-1/2 p-8 pb-5 border-gray-300 lg:absolute lg:top-full lg:translate-y-0 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-72 bg-white border rounded-lg shadow-lg z-50 transform duration-600 transition-all ${triggerSort ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
     >
       <ButtonClose
         fn={() =>

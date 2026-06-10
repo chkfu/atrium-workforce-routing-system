@@ -277,7 +277,6 @@ export const ButtonFilter = (): JSX.Element => {
       onClick={() => {
         setTriggerSort(false);
         setTriggerFilter(!triggerFilter);
-        setTriggerFilter(!triggerFilter);
       }}
     >
       <img
@@ -300,8 +299,10 @@ export const ButtonFilterClear = (): JSX.Element => {
     setFilterGender,
     setFilterProbStatus,
     setFilterIsActive,
-    setFilterCreatedAtStart,
-    setFilterCreatedAtEnd,
+    setFilterCreatedFrom,
+    setFilterCreatedTo,
+    setFilterUpdatedFrom,
+    setFilterUpdatedTo,
   } = useCandidateContext();
 
   return (
@@ -314,8 +315,10 @@ export const ButtonFilterClear = (): JSX.Element => {
           setFilterGender,
           setFilterProbStatus,
           setFilterIsActive,
-          setFilterCreatedAtStart,
-          setFilterCreatedAtEnd,
+          setFilterCreatedFrom,
+          setFilterCreatedTo,
+          setFilterUpdatedFrom,
+          setFilterUpdatedTo,
           setSearchParams,
         )
       }
@@ -333,8 +336,10 @@ export const ButtonFilterSubmit = (): JSX.Element => {
     filterGender,
     filterProbStatus,
     filterIsActive,
-    filterCreatedAtStart,
-    filterCreatedAtEnd,
+    filterCreatedFrom,
+    filterCreatedTo,
+    filterUpdatedFrom,
+    filterUpdatedTo,
     setTriggerFilter,
     setTriggerSort,
   } = useCandidateContext();
@@ -348,8 +353,10 @@ export const ButtonFilterSubmit = (): JSX.Element => {
           filterGender,
           filterProbStatus,
           filterIsActive,
-          filterCreatedAtStart,
-          filterCreatedAtEnd,
+          filterCreatedFrom,
+          filterCreatedTo,
+          filterUpdatedFrom,
+          filterUpdatedTo,
           setTriggerFilter,
           setSearchParams,
         );

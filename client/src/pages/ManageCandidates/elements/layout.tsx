@@ -22,7 +22,7 @@ export function PanelFromContainer(): JSX.Element {
 
   return (
     <div
-      className={`w-full duration-1000 ease-linear transition-opacity delay-200 ${
+      className={`w-full h-112  overflow-y-hidden duration-1000 ease-linear transition-opacity delay-200 ${
         isInitialised
           ? 'opacity-100 translate-x-0'
           : 'opacity-0 -translate-x-20'
@@ -51,7 +51,11 @@ export function PaginationSection(): JSX.Element {
 export function ControlPanelSection(): JSX.Element {
   return (
     <div className='py-4'>
-      <div className='flex flex-col gap-4 md:justify-end md:gap-16 lg:flex-row lg:justify-between'>
+      <div
+        className='flex flex-col gap-4 md:flex-col md:gap-4 lg:flex-row lg:gap-4 lg:justify-between'
+        duration-400
+        transition-all
+      >
         <FormButtonBox />
         <FilterSortBox />
       </div>
@@ -61,9 +65,17 @@ export function ControlPanelSection(): JSX.Element {
 
 //  remarks: table display
 export function TableSection(): JSX.Element {
-  const { selectedCandidates } = useCandidateContext();
+  const { selectedCandidates, candidates } = useCandidateContext();
+
+  if (candidates.length === 0) {
+    return (
+      <div className='pt-2 w-full'>
+        <div className='p-4 text-gray-500'>No candidates found</div>
+      </div>
+    );
+  }
   return (
-    <div className='pt-2 w-full overflow-hidden'>
+    <div className='pt-2'>
       <p
         className={`mb-2 text-sm text-gray-500 transition-opacity duration-500 ease-in-out
           ${selectedCandidates.length === 0 ? 'invisible' : 'visible'}
@@ -72,7 +84,7 @@ export function TableSection(): JSX.Element {
         Selection: {selectedCandidates.length}{' '}
         {selectedCandidates.length === 1 ? 'candidate' : 'candidates'} selected
       </p>
-      <div className='max-h-90 overflow-y-auto overflow-x-auto w-full'>
+      <div className='min-h-screen w-full'>
         <table className='min-w-300 border-collapse table-auto w-full'>
           <TableHeaderBox />
           <TableBodyBox />

@@ -11,7 +11,7 @@
 
   [DESIGN: REDIS]
 
-  - Global locks (':candidates') for structural changes, esp batch create, update, delete
+  - Global locks (':{table_name}') for structural changes, esp batch create, update, delete
   - Specific locks (':id') for securing single action without conflicts
   - Concurrency: if locked, throw errors to block action; 
                  elif long loading, forcefully release the lock when timeout reached;
@@ -55,20 +55,55 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   //  remarks: exception for empty checks, as empty is also the info for clients
   //  remarks: redis action - update value, if items not found
   public async get_record_batch(
-    sort_target: string | null = null,
-    is_ascending: boolean = true,
-    page: number = 1,
-    limit: number = 20,
+    page_opts: Record<string, number> = { page_current: 1, page_limit: 20 },
+    sort_opts: Record<string, any> = { sort_target: null, sort_order: true },
+    filter_opts: Record<string, any> = {},
   ) {
+    //  remarks: handling data types
+    //  1. pagination-related
+    const MAX_PAGE_LIMIT = 100;
+    let page_current: number = Math.max(1, Number(page_opts.page_current) || 1);
+    let page_limit: number = Math.min(
+      MAX_PAGE_LIMIT,
+      Number(page_opts.page_limit) || 20,
+    );
+    const formatted_page_opts = {
+      page_current: page_current,
+      page_limit: page_limit,
+    };
+    //  2. sorting-related
+    let sort_target: string | null = null;
+    if (sort_opts.sort_target) {
+      const column_option = String(sort_opts.sort_target).trim();
+      sort_target = this.columns.includes(
+        column_option as Extract<keyof T, string>,
+      )
+        ? column_option
+        : null;
+    }
+    const sort_order = Boolean(sort_opts.sort_order) ?? true;
+    const formatted_sort_opts = {
+      sort_target: sort_target,
+      sort_order: sort_order,
+    };
+
+    //  3. filtering-related
+    const formatted_filter_opts: Record<string, any> = {
+      //  [INSERT HERE: to be overrode for specific tables]
+    };
+
     //  remarks: pagination results are frequently changing, skip caching to avoid stale data
+    const filter_criteria: Record<string, Record<string, string | string[]>> = {
+      //  [INSERT HERE: to be overrode for specific tables]
+    };
     const result = await this.repository.get_record_batch(
-      sort_target,
-      is_ascending,
-      page,
-      limit,
+      formatted_page_opts,
+      formatted_sort_opts,
+      formatted_filter_opts,
+      filter_criteria,
     );
     //  error handling
-    if (result === null || result === undefined || result.data.length < 1)
+    if (result === null || result === undefined)
       throw new ValueError(
         404,
         `[${this.table.toUpperCase()}] error: no record is found.`,
@@ -114,7 +149,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     //  learnt: postgre `CREATE` runs in sequence, required Promise for handling batch items
     return await this.cache_service.handle_lock(
       this.table,
-      'candidates',
+      this.table,
       //  remarks: the function to be processed
       async () => {
         const result = await Promise.all(
@@ -160,7 +195,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   ) => {
     return await this.cache_service.handle_lock(
       this.table,
-      'candidates',
+      this.table,
       async () => {
         //  remarks: deduplicate ids into an array
         const id_arr: string[] = Array.from(
@@ -211,7 +246,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public update_record_active_batch = async (req_body: any) => {
     return await this.cache_service.handle_lock(
       this.table,
-      'candidates',
+      this.table,
       async () => {
         //  declarations
         const id_arr: string[] = req_body._ids.map((id: string | string[]) =>
@@ -265,7 +300,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public remove_record_batch = async (id_arr: string[]) => {
     return await this.cache_service.handle_lock(
       this.table,
-      'candidates',
+      this.table,
       async () => {
         //  declarations
         const id_set: Set<string> = new Set(id_arr);
@@ -302,7 +337,7 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public empty_record_all = async () => {
     return await this.cache_service.handle_lock(
       this.table,
-      'candidates',
+      this.table,
       async () => {
         //  remove cache
         await this.cache_service.del_cache(

@@ -33,8 +33,10 @@ export default function ManageCandidates(): JSX.Element {
   const [filterProbStatus, setFilterProbStatus] =
     useState<enum_prob_status | null>(null);
   const [filterIsActive, setFilterIsActive] = useState<boolean | null>(null);
-  const [filterCreatedAtStart, setFilterCreatedAtStart] = useState<string>('');
-  const [filterCreatedAtEnd, setFilterCreatedAtEnd] = useState<string>('');
+  const [filterCreatedFrom, setFilterCreatedFrom] = useState<string>('');
+  const [filterCreatedTo, setFilterCreatedTo] = useState<string>('');
+  const [filterUpdatedFrom, setFilterUpdatedFrom] = useState<string>('');
+  const [filterUpdatedTo, setFilterUpdatedTo] = useState<string>('');
 
   //  2. POST
   //  2a. create new records
@@ -80,27 +82,39 @@ export default function ManageCandidates(): JSX.Element {
     const limit = searchParams.get('limit') || '20';
     const sort_target = searchParams.get('sort_target') || '_id';
     const sort_order = searchParams.get('sort_order') === 'true';
-    const filter_name = searchParams.get('filter_name') === '';
-    const filter_email = searchParams.get('filter_email') === '';
-    const filter_gender = searchParams.get('filter_gender') === '';
-    const filter_prob_status = searchParams.get('filter_prob_status') === '';
-    const filter_is_active = searchParams.get('filter_is_active') === '';
-    console.log('[DEBUG] Sending request:', {
+    const filter_name = searchParams.get('filter_name');
+    const filter_email = searchParams.get('filter_email');
+    const filter_gender = searchParams.get('filter_gender');
+    const filter_prob_status = searchParams.get('filter_prob_status');
+    const filter_is_active = searchParams.get('filter_is_active');
+    const filter_created_from = searchParams.get('filter_created_from');
+    const filter_created_to = searchParams.get('filter_created_to');
+    const filter_updated_from = searchParams.get('filter_updated_from');
+    const filter_updated_to = searchParams.get('filter_updated_to');
+
+    const params: Record<string, any> = {
       page,
       limit,
       sort_target,
       sort_order,
-    });
+    };
+
+    if (filter_name) params.filter_name = filter_name;
+    if (filter_email) params.filter_email = filter_email;
+    if (filter_gender) params.filter_gender = filter_gender;
+    if (filter_prob_status) params.filter_prob_status = filter_prob_status;
+    if (filter_is_active) params.filter_is_active = filter_is_active;
+    if (filter_created_from) params.filter_created_from = filter_created_from;
+    if (filter_created_to) params.filter_created_to = filter_created_to;
+    if (filter_updated_from) params.filter_updated_from = filter_updated_from;
+    if (filter_updated_to) params.filter_updated_to = filter_updated_to;
+
+    console.log('[DEBUG] Sending request:', params);
 
     //  remarks: getting data by querying database
     axios
       .get(API.CANDIDATES, {
-        params: {
-          page,
-          limit,
-          sort_target,
-          sort_order,
-        },
+        params,
       })
       .then((res) => {
         const candidateEls = res.data.data.result;
@@ -116,6 +130,8 @@ export default function ManageCandidates(): JSX.Element {
       })
       .catch((err: any) => {
         console.error('[ManageCandidates] error: fetching candidates:', err);
+        // learnt: state change for re-render, as throw error did not trigger
+        setCandidates([]);
         setGetError(
           err.message || '[ManageCandidates] error: Failed to load candidates',
         );
@@ -129,9 +145,6 @@ export default function ManageCandidates(): JSX.Element {
   //  error handling
   if (getError) {
     return <div className='p-4 text-red-600'>Error: {getError}</div>;
-  }
-  if (candidates.length === 0) {
-    return <div className='p-4 text-gray-500'>No candidates found</div>;
   }
 
   //  display
@@ -173,10 +186,14 @@ export default function ManageCandidates(): JSX.Element {
             setFilterProbStatus,
             filterIsActive,
             setFilterIsActive,
-            filterCreatedAtStart,
-            setFilterCreatedAtStart,
-            filterCreatedAtEnd,
-            setFilterCreatedAtEnd,
+            filterCreatedFrom,
+            setFilterCreatedFrom,
+            filterCreatedTo,
+            setFilterCreatedTo,
+            filterUpdatedFrom,
+            setFilterUpdatedFrom,
+            filterUpdatedTo,
+            setFilterUpdatedTo,
 
             //  2. POST
             //  2a. create new records

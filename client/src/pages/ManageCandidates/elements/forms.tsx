@@ -188,25 +188,20 @@ export const FormFiltering = (): JSX.Element => {
   const {
     triggerFilter,
     setTriggerFilter,
-    filterName,
     setFilterName,
-    filterEmail,
     setFilterEmail,
-    filterGender,
     setFilterGender,
-    filterProbStatus,
     setFilterProbStatus,
-    filterIsActive,
     setFilterIsActive,
-    filterCreatedAtStart,
-    setFilterCreatedAtStart,
-    filterCreatedAtEnd,
-    setFilterCreatedAtEnd,
+    setFilterCreatedFrom,
+    setFilterCreatedTo,
+    setFilterUpdatedFrom,
+    setFilterUpdatedTo,
   } = useCandidateContext();
 
   return (
     <form
-      className={`fixed left-1/2 -translate-x-1/2 top-[35%] -translate-y-1/2 p-8 pb-5 lg:absolute lg:top-full lg:-translate-y-2 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-92 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-600 transition-all ${triggerFilter ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+      className={`fixed left-1/2 -translate-x-1/2 top-[48%] -translate-y-1/2 p-8 pb-5 lg:absolute lg:top-full lg:-translate-y-2 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-120 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transform duration-600 transition-all flex flex-col ${triggerFilter ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
     >
       <ButtonClose
         fn={() =>
@@ -216,17 +211,24 @@ export const FormFiltering = (): JSX.Element => {
             setFilterGender,
             setFilterProbStatus,
             setFilterIsActive,
-            setFilterCreatedAtStart,
-            setFilterCreatedAtEnd,
+            setFilterCreatedFrom,
+            setFilterCreatedTo,
+            setFilterUpdatedFrom,
+            setFilterUpdatedTo,
             setTriggerFilter,
             setSearchParams,
           )
         }
       />
-      <OptionFilterOrder />
-      <div className='flex justify-center mt-2 gap-4'>
+      <h4 className='text-md font-bold text-teal-800 font-serif mb-3 shrink-0'>
+        Filtering Preferences
+      </h4>
+      <div className='overflow-y-auto max-h-60'>
+        <OptionFilterOrder />
+      </div>
+      <div className='flex justify-center mt-4 gap-4 shrink-0'>
         <ButtonFilterClear />
-        <ButtonSortSubmit />
+        <ButtonFilterSubmit />
       </div>
     </form>
   );
@@ -245,21 +247,21 @@ export const OptionFilterOrder = (): JSX.Element => {
     setFilterProbStatus,
     filterIsActive,
     setFilterIsActive,
-    filterCreatedAtStart,
-    setFilterCreatedAtStart,
-    filterCreatedAtEnd,
-    setFilterCreatedAtEnd,
+    filterCreatedFrom,
+    setFilterCreatedFrom,
+    filterCreatedTo,
+    setFilterCreatedTo,
+    filterUpdatedFrom,
+    setFilterUpdatedFrom,
+    filterUpdatedTo,
+    setFilterUpdatedTo,
   } = useCandidateContext();
   //  display
   return (
-    <div>
-      {/*  section: box title  */}
-      <h4 className='text-md font-bold text-teal-800 font-serif mb-4'>
-        Filtering Preferences
-      </h4>
+    <div className='p-2'>
       {/*  grid layout for filter items  */}
       <div
-        className='grid gap-3 p-2 overflow-y-auto mb-4'
+        className='grid gap-3 mb-4'
         style={{ gridTemplateColumns: 'auto 1fr' }}
       >
         {/*   section 1: name filtering  */}
@@ -372,37 +374,51 @@ export const OptionFilterOrder = (): JSX.Element => {
             <option value='false'>Inactive</option>
           </select>
         </div>
-        {/*  section 6a: Created From  */}
+        {/*  section 6: Created At  */}
         <div className='group contents'>
-          <label
-            htmlFor='filter_created_from'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Created From:
+          <label className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
+            Created:
           </label>
-          <input
-            id='filter_created_from'
-            type='date'
-            value={filterCreatedAtStart}
-            onChange={(el) => setFilterCreatedAtStart(el.target.value)}
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all'
-          />
+          <div className='flex items-center gap-2'>
+            <input
+              id='filter_created_from'
+              type='date'
+              value={filterCreatedFrom}
+              onChange={(el) => setFilterCreatedFrom(el.target.value)}
+              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
+            />
+            <span className='text-sm text-gray-600'>～</span>
+            <input
+              id='filter_created_to'
+              type='date'
+              value={filterCreatedTo}
+              onChange={(el) => setFilterCreatedTo(el.target.value)}
+              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
+            />
+          </div>
         </div>
-        {/*  section 6b: Created To  */}
+        {/*  section 7: Updated At  */}
         <div className='group contents'>
-          <label
-            htmlFor='filter_created_to'
-            className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'
-          >
-            Created To:
+          <label className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
+            Updated:
           </label>
-          <input
-            id='filter_created_to'
-            type='date'
-            value={filterCreatedAtEnd}
-            onChange={(el) => setFilterCreatedAtEnd(el.target.value)}
-            className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all'
-          />
+          <div className='flex items-center gap-2'>
+            <input
+              id='filter_updated_from'
+              type='date'
+              value={filterUpdatedFrom}
+              onChange={(el) => setFilterUpdatedFrom(el.target.value)}
+              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
+            />
+            <span className='text-sm text-gray-600'>～</span>
+            <input
+              id='filter_updated_to'
+              type='date'
+              value={filterUpdatedTo}
+              onChange={(el) => setFilterUpdatedTo(el.target.value)}
+              className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -56,10 +56,10 @@ abstract class BaseRepository<T> {
   //  remarks: GET batch records with sorting (first by is_active DESC, then by sort_col)
   //  INPUT: stringified for sort column, boolean for sort order
   public async get_record_batch(
-    sort_col: string | null,
-    is_ascending: boolean | null,
-    page: number,
-    limit: number,
+    page_opts: Record<string, number> = { page_current: 1, page_limit: 20 },
+    sort_opts: Record<string, any> = { sort_target: null, sort_order: true },
+    filter_opts: Record<string, any> = {},
+    filter_criteria: Record<string, Record<string, any>> = {},
   ) {
     //  error handling
     //  learnt: required to convert into recognise type for column name string
@@ -67,45 +67,107 @@ abstract class BaseRepository<T> {
     //          system columns (created_at, updated_at, is_active) are allowed by default
     const system_columns = ['created_at', 'updated_at', 'is_active'];
     if (
-      sort_col !== null &&
-      sort_col !== this.primary_key &&
-      !this.columns.includes(sort_col as Extract<keyof T, string>) &&
-      !system_columns.includes(sort_col)
+      sort_opts.sort_target !== null &&
+      sort_opts.sort_target !== this.primary_key &&
+      !this.columns.includes(
+        sort_opts.sort_target as Extract<keyof T, string>,
+      ) &&
+      !system_columns.includes(sort_opts.sort_target)
     ) {
       throw new ValueError(
         400,
-        `[${this.table.toUpperCase()}] error: the provided column ${sort_col} is not found.`,
+        `[${this.table.toUpperCase()}] error: the provided column ${sort_opts.sort_target} is not found.`,
       );
     }
-    if (sort_col != null && is_ascending == null) {
+    if (sort_opts.sort_target != null && sort_opts.sort_order == null) {
       throw new ValueError(
         400,
         `[${this.table.toUpperCase()}] error: sorted order is not provided.`,
       );
     }
-    //  get total count for pagination
-    const total_count = await this.get_record_count();
-    const total_pages = Math.ceil(total_count / limit);
-    //  form query string
+
+    //  remarks: declarations (shared)
     let query_str = `SELECT * FROM "${this.table}"`;
-    //  1. sort order
-    let rank_order: string = is_ascending ? 'ASC' : 'DESC';
-    if (sort_col) {
-      query_str += ` ORDER BY "is_active" DESC, "${sort_col}" ${rank_order}, "_id" ${rank_order}`;
+    let parameter_count: number = 1;
+    let query_str_list: string[] = [];
+    const parameters: (string | number | boolean)[] = [];
+
+    //  remarks: mapping with designated pagniation
+    const total_count = await this.get_record_count();
+    const total_pages = Math.ceil(total_count / page_opts.page_limit);
+
+    //  1. manage filtering
+    if (filter_opts !== null && Object.keys(filter_opts).length > 0) {
+      Object.entries(filter_opts).forEach(([key, val]) => {
+        //  learnt: reminded to ensure criteria matches with inserted filter_opts
+        const criteria = filter_criteria[key];
+        if (!criteria || val === null) return;
+
+        //  1. similarity check
+        if (criteria.type === 'like') {
+          const condition: string[] = criteria.column.map((col: string) => {
+            parameters.push(`%${val}%`);
+            return `"${col}" LIKE $${parameter_count++}`;
+          });
+          query_str_list.push(`(${condition.join(' OR ')})`);
+        }
+
+        //  2. matching check
+        else if (criteria.type === 'equal') {
+          const condition: string[] = (criteria.column as string[]).map(
+            (col: string) => {
+              parameters.push(val);
+              return `"${col}" = $${parameter_count++}`;
+            },
+          );
+          query_str_list.push(`(${condition.join(' OR ')})`);
+        }
+
+        //  3. range
+        else if (criteria.type === 'larger_than') {
+          const condition: string[] = (criteria.column as string[]).map(
+            (col: string) => {
+              parameters.push(val);
+              return `"${col}" >= $${parameter_count++}`;
+            },
+          );
+          query_str_list.push(`(${condition.join(' OR ')})`);
+        } else if (criteria.type === 'smaller_than') {
+          const condition: string[] = (criteria.column as string[]).map(
+            (col: string) => {
+              parameters.push(val);
+              return `"${col}" <= $${parameter_count++}`;
+            },
+          );
+          query_str_list.push(`(${condition.join(' OR ')})`);
+        }
+      });
+
+      if (query_str_list.length > 0) {
+        query_str += ` WHERE ${query_str_list.join(' AND ')}`;
+      }
+    }
+
+    //  2. manage sorting
+    let rank_order: string = sort_opts.sort_order ? 'ASC' : 'DESC';
+    if (sort_opts.sort_target) {
+      query_str += ` ORDER BY "is_active" DESC, "${sort_opts.sort_target}" ${rank_order}, "_id" ${rank_order}`;
     } else {
       query_str += ` ORDER BY "is_active" DESC, "_id" ${rank_order}`;
     }
-    //  2. page limit
+
+    //  3. manage pagination
     //  remarks: default page and limit has been set at controller
-    let page_offset = (page - 1) * limit;
-    query_str += ` LIMIT ${limit} OFFSET ${page_offset}`;
+    let page_offset = (page_opts.page_current - 1) * page_opts.page_limit;
+    query_str += ` LIMIT ${page_opts.page_limit} OFFSET ${page_offset}`;
     query_str += ';';
+
     //  querying
-    const result = await pool.query(query_str);
+    const result = await pool.query(query_str, parameters);
     return {
       total_count,
       total_pages,
-      current_page: page,
+      current_page: page_opts.page_current,
       data: result.rows ?? [],
     };
   }

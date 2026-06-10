@@ -33,10 +33,14 @@ interface CandidateContextType {
   >;
   filterIsActive: boolean | null;
   setFilterIsActive: React.Dispatch<React.SetStateAction<boolean | null>>;
-  filterCreatedAtStart: string;
-  setFilterCreatedAtStart: React.Dispatch<React.SetStateAction<string>>;
-  filterCreatedAtEnd: string;
-  setFilterCreatedAtEnd: React.Dispatch<React.SetStateAction<string>>;
+  filterCreatedFrom: string;
+  setFilterCreatedFrom: React.Dispatch<React.SetStateAction<string>>;
+  filterCreatedTo: string;
+  setFilterCreatedTo: React.Dispatch<React.SetStateAction<string>>;
+  filterUpdatedFrom: string;
+  setFilterUpdatedFrom: React.Dispatch<React.SetStateAction<string>>;
+  filterUpdatedTo: string;
+  setFilterUpdatedTo: React.Dispatch<React.SetStateAction<string>>;
   //  2. POST
   //  2a. create new records
   triggerCreate: boolean;

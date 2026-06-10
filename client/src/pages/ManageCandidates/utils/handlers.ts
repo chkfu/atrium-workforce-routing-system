@@ -309,8 +309,10 @@ export const handle_temp_filter_clear = (
   setFilterGender: (val: any) => void,
   setFilterProbStatus: (val: any) => void,
   setFilterIsActive: (val: any) => void,
-  setFilterCreatedAtStart: (val: string) => void,
-  setFilterCreatedAtEnd: (val: string) => void,
+  setFilterCreatedFrom: (val: string) => void,
+  setFilterCreatedTo: (val: string) => void,
+  setFilterUpdatedFrom: (val: string) => void,
+  setFilterUpdatedTo: (val: string) => void,
   setSearchParams: SetURLSearchParams,
 ) => {
   setFilterName('');
@@ -318,8 +320,10 @@ export const handle_temp_filter_clear = (
   setFilterGender(null);
   setFilterProbStatus(null);
   setFilterIsActive(null);
-  setFilterCreatedAtStart('');
-  setFilterCreatedAtEnd('');
+  setFilterCreatedFrom('');
+  setFilterCreatedTo('');
+  setFilterUpdatedFrom('');
+  setFilterUpdatedTo('');
 
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -328,8 +332,10 @@ export const handle_temp_filter_clear = (
     params.delete('filter_gender');
     params.delete('filter_prob_status');
     params.delete('filter_is_active');
-    params.delete('filter_created_at_start');
-    params.delete('filter_created_at_end');
+    params.delete('filter_created_from');
+    params.delete('filter_created_to');
+    params.delete('filter_updated_from');
+    params.delete('filter_updated_to');
     return params;
   });
 };
@@ -340,8 +346,10 @@ export const handle_temp_filter_reset = (
   setFilterGender: (val: any) => void,
   setFilterProbStatus: (val: any) => void,
   setFilterIsActive: (val: any) => void,
-  setFilterCreatedAtStart: (val: string) => void,
-  setFilterCreatedAtEnd: (val: string) => void,
+  setFilterCreatedFrom: (val: string) => void,
+  setFilterCreatedTo: (val: string) => void,
+  setFilterUpdatedFrom: (val: string) => void,
+  setFilterUpdatedTo: (val: string) => void,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
   setSearchParams: SetURLSearchParams,
 ) => {
@@ -351,8 +359,10 @@ export const handle_temp_filter_reset = (
     setFilterGender,
     setFilterProbStatus,
     setFilterIsActive,
-    setFilterCreatedAtStart,
-    setFilterCreatedAtEnd,
+    setFilterCreatedFrom,
+    setFilterCreatedTo,
+    setFilterUpdatedFrom,
+    setFilterUpdatedTo,
     setSearchParams,
   );
   setTriggerFilter(false);
@@ -364,8 +374,10 @@ export const handle_filter_submit = (
   filterGender: string | null,
   filterProbStatus: string | null,
   filterIsActive: boolean | null,
-  filterCreatedAtStart: string,
-  filterCreatedAtEnd: string,
+  filterCreatedFrom: string,
+  filterCreatedTo: string,
+  filterUpdatedFrom: string,
+  filterUpdatedTo: string,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
   setSearchParams: SetURLSearchParams,
 ) => {
@@ -382,12 +394,14 @@ export const handle_filter_submit = (
     if (filterIsActive !== null)
       params.set('filter_is_active', String(filterIsActive));
     else params.delete('filter_is_active');
-    if (filterCreatedAtStart)
-      params.set('filter_created_at_start', filterCreatedAtStart);
-    else params.delete('filter_created_at_start');
-    if (filterCreatedAtEnd)
-      params.set('filter_created_at_end', filterCreatedAtEnd);
-    else params.delete('filter_created_at_end');
+    if (filterCreatedFrom) params.set('filter_created_from', filterCreatedFrom);
+    else params.delete('filter_created_from');
+    if (filterCreatedTo) params.set('filter_created_to', filterCreatedTo);
+    else params.delete('filter_created_to');
+    if (filterUpdatedFrom) params.set('filter_updated_from', filterUpdatedFrom);
+    else params.delete('filter_updated_from');
+    if (filterUpdatedTo) params.set('filter_updated_to', filterUpdatedTo);
+    else params.delete('filter_updated_to');
     return params;
   });
   setTriggerFilter(false);

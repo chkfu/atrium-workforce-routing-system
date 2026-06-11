@@ -1,7 +1,15 @@
 import BaseService from '../../../core/BaseService';
 import CandidateRepository from './repository';
 import { TCandidateBase, TSchemaBase } from '../../../util/types';
+import { filter_criteria } from './filter/criteria';
 import { ValueError } from '../../../util/errors/ValueError';
+import {
+  format_boolean,
+  format_date,
+  format_email,
+  format_enum,
+  format_text,
+} from './filter/formatter';
 
 //  Service class
 
@@ -61,39 +69,6 @@ class CandidateService extends BaseService<TCandidateBase & TSchemaBase> {
     //  3. filtering-related
     const filter_params = filter_opts.filter_params || {};
 
-    const format_text = (str: any): string | null => {
-      if (!str) return null;
-      return String(str).trim().replace(/\s+/g, ' ').toLowerCase();
-    };
-
-    const format_email = (str: any): string | null => {
-      if (!str) return null;
-      return String(str).trim().toLowerCase().replace(/\s/g, '');
-    };
-
-    const format_enum = (str: any, valid_enums: string[]): string | null => {
-      if (!str) return null;
-      const formatted = String(str).trim().toLowerCase();
-      return valid_enums.includes(formatted) ? formatted : null;
-    };
-
-    const format_boolean = (str: any): boolean | null => {
-      if (!str) return null;
-      const formatted = String(str).trim().toLowerCase();
-      if (formatted === 'true') return true;
-      if (formatted === 'false') return false;
-      return null;
-    };
-
-    const format_date = (str: any): string | null => {
-      if (!str) return null;
-      const trimmed = String(str).trim();
-      const date_regex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!date_regex.test(trimmed)) return null;
-      const date = new Date(trimmed);
-      return isNaN(date.getTime()) ? null : trimmed;
-    };
-
     const gender_enums = ['male', 'female', 'other'];
     const prob_status_enums = [
       'selecting',
@@ -136,19 +111,6 @@ class CandidateService extends BaseService<TCandidateBase & TSchemaBase> {
         data: [],
       };
     }
-
-    //  remarks: pagination results are frequently changing, skip caching to avoid stale data
-    const filter_criteria: Record<string, Record<string, string | string[]>> = {
-      name: { type: 'like', column: ['first_name', 'last_name'] },
-      email: { type: 'like', column: ['email'] },
-      gender: { type: 'equal', column: ['gender'] },
-      prob_status: { type: 'equal', column: ['prob_status'] },
-      is_active: { type: 'equal', column: ['is_active'] },
-      created_from: { type: 'larger_than', column: ['created_at'] },
-      created_to: { type: 'smaller_than', column: ['created_at'] },
-      updated_from: { type: 'larger_than', column: ['updated_at'] },
-      updated_to: { type: 'smaller_than', column: ['updated_at'] },
-    };
 
     const result = await this.repository.get_record_batch(
       formatted_page_opts,

@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Error from './pages/Error';
 import ManageCandidates from './pages/ManageCandidates';
-import ManageDepartments from './pages/ManageDepartments';
+import ManageStaff from './pages/ManageStaff';
 import CandidateProfile from './pages/CandidateProfile';
 import CandidateDashboard from './pages/CandidateDashboard';
 import AssistantDashboard from './pages/AssistantDashboard';
@@ -39,8 +39,8 @@ const routes: RouteObject[] = [
         element: <ManageCandidates />,
       },
       {
-        path: '/manage-departments',
-        element: <ManageDepartments />,
+        path: '/manage-staff',
+        element: <ManageStaff />,
       },
       //  Dashboards, by role positions
       {

@@ -6,7 +6,7 @@ export default function FilterSelectInput({
   onChange,
   options,
 }: {
-  id: string;
+  id?: string;
   name: string;
   label: string;
   value: string | null;
@@ -30,7 +30,10 @@ export default function FilterSelectInput({
       >
         <option value=''>--- Please Select ---</option>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+          >
             {option.label}
           </option>
         ))}

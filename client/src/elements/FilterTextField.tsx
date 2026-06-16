@@ -7,7 +7,7 @@ export default function FilterTextField({
   value,
   onChange,
 }: {
-  id: string;
+  id?: string;
   type: string;
   name: string;
   label: string;

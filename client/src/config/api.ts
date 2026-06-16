@@ -7,5 +7,6 @@ export const API = {
   CANDIDATES_EXP: `${BASE_URL}/candidate_experience`,
   CANDIDATES_TEST: `${BASE_URL}/candidate_tests`,
   CANDIDATES_PREF: `${BASE_URL}/candidate_preference`,
-  DEPARTMENTS: `${BASE_URL}/departments`,
+  STAFF: `${BASE_URL}/staff`,
+  STAFF_ACTIVATE: `${BASE_URL}/staff/activation`,
 };

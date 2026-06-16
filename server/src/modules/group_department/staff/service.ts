@@ -1,6 +1,16 @@
 import BaseService from '../../../core/BaseService';
 import StaffRepository from './repository';
 import { TStaffBase, TSchemaBase } from '../../../util/types';
+import { filter_criteria } from './filter/criteria';
+import { ValueError } from '../../../util/errors/ValueError';
+import {
+  format_boolean,
+  format_date,
+  format_email,
+  format_enum,
+  format_text,
+} from './filter/formatter';
+import { enum_gender_obj, enum_prob_status } from '../../../util/enums';
 
 //  Service class
 
@@ -10,9 +20,101 @@ class StaffService extends BaseService<TStaffBase & TSchemaBase> {
     table: string,
     columns: Extract<keyof (TStaffBase & TSchemaBase), string>[],
     primary_key: string,
+    repository?: StaffRepository,
   ) {
-    const repository = new StaffRepository(table, columns, primary_key);
+    repository = new StaffRepository(table, columns, primary_key);
     super(table, columns, primary_key, repository);
+  }
+
+  //  1.  GET methods
+
+  //  GET /api/v1/{table_name}
+  //  INPUT: sortTarget (column name), is_ascending (boolean)
+  //  remarks: exception for empty checks, as empty is also the info for clients
+  //  remarks: redis action - update value, if items not found
+  public async get_record_batch(
+    page_opts: Record<string, number> = { page_current: 1, page_limit: 20 },
+    sort_opts: Record<string, any> = { sort_target: null, sort_order: true },
+    filter_opts: Record<string, any> = {},
+  ) {
+    //  remarks: handling data types
+    //  1. pagination-related
+    const MAX_PAGE_LIMIT = 100;
+    let page_current: number = Math.max(1, Number(page_opts.page_current) || 1);
+    let page_limit: number = Math.min(
+      MAX_PAGE_LIMIT,
+      Number(page_opts.page_limit) || 20,
+    );
+    const formatted_page_opts = {
+      page_current: page_current,
+      page_limit: page_limit,
+    };
+    //  2. sorting-related
+    let sort_target: string | null = null;
+    if (sort_opts.sort_target) {
+      const column_option = String(sort_opts.sort_target).trim();
+      sort_target = (this.columns as string[]).includes(column_option)
+        ? column_option
+        : null;
+    }
+    const sort_order = Boolean(sort_opts.sort_order) ?? true;
+    const formatted_sort_opts = {
+      sort_target: sort_target,
+      sort_order: sort_order,
+    };
+
+    //  3. filtering-related
+    const filter_params = filter_opts.filter_params || {};
+    let formatted_filter_opts: Record<string, any> = {
+      name: format_text(filter_params.filter_name),
+      email: format_email(filter_params.filter_email),
+      gender: format_enum(filter_params.filter_gender, enum_gender_obj),
+      department: format_text(filter_params.filter_department),
+      position: format_text(filter_params.filter_position),
+      grade: format_text(filter_params.filter_grade),
+      extension: format_text(filter_params.filter_extension),
+      date_hired_from: format_date(filter_params.filter_date_hired_from),
+      date_hired_to: format_date(filter_params.filter_date_hired_to),
+      date_quit_from: format_date(filter_params.filter_date_quit_from),
+      date_quit_to: format_date(filter_params.filter_date_quit_to),
+      is_active: format_boolean(filter_params.filter_is_active),
+      created_from: format_date(filter_params.filter_created_from),
+      created_to: format_date(filter_params.filter_created_to),
+      updated_from: format_date(filter_params.filter_updated_from),
+      updated_to: format_date(filter_params.filter_updated_to),
+    };
+
+    //  error handling: return empty result if invalid date range
+    if (
+      (formatted_filter_opts.created_from &&
+        formatted_filter_opts.created_to &&
+        formatted_filter_opts.created_from >
+          formatted_filter_opts.created_to) ||
+      (formatted_filter_opts.updated_from &&
+        formatted_filter_opts.updated_to &&
+        formatted_filter_opts.updated_from > formatted_filter_opts.updated_to)
+    ) {
+      return {
+        total_count: 0,
+        total_pages: 0,
+        current_page: formatted_page_opts.page_current,
+        data: [],
+      };
+    }
+
+    const result = await this.repository.get_record_batch(
+      formatted_page_opts,
+      formatted_sort_opts,
+      formatted_filter_opts,
+      filter_criteria,
+    );
+    //  error handling - only throw if result itself is invalid, not when data is empty
+    if (result === null || result === undefined)
+      throw new ValueError(
+        404,
+        `[${this.table.toUpperCase()}] error: no record is found.`,
+      );
+    return result;
   }
 }
 

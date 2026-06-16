@@ -9,11 +9,10 @@ export default function FormTextField({
   required = false,
   className = 'mb-4',
   customisedOnChange,
-  gridLayout = false,
 }: {
   label: string;
   placeholder?: string;
-  type?: 'text' | 'email' | 'password' | 'number';
+  type?: 'text' | 'email' | 'password' | 'number' | 'date';
   error?: FieldError;
   register?: UseFormRegisterReturn;
   required?: boolean;

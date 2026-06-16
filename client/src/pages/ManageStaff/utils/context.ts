@@ -1,13 +1,12 @@
 import { createContext, useContext } from 'react';
-import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
 
-interface CandidateContextType {
+interface StaffContextType {
   //  1. GET
   //  1a. receive general data
-  candidates: any[];
-  setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
-  selectedCandidates: number[];
-  setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>;
+  staff: any[];
+  setStaff: React.Dispatch<React.SetStateAction<any[]>>;
+  selectedStaff: number[];
+  setSelectedStaff: React.Dispatch<React.SetStateAction<number[]>>;
   //  1b. receive pagination data
   totalPage: number;
   setTotalPage: React.Dispatch<React.SetStateAction<number>>;
@@ -23,14 +22,28 @@ interface CandidateContextType {
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>;
   filterName: string;
   setFilterName: React.Dispatch<React.SetStateAction<string>>;
+  filterGender: string;
+  setFilterGender: React.Dispatch<React.SetStateAction<string>>;
+  filterDepartment: string;
+  setFilterDepartment: React.Dispatch<React.SetStateAction<string>>;
+  filterPosition: string;
+  setFilterPosition: React.Dispatch<React.SetStateAction<string>>;
+  filterGrade: string;
+  setFilterGrade: React.Dispatch<React.SetStateAction<string>>;
   filterEmail: string;
   setFilterEmail: React.Dispatch<React.SetStateAction<string>>;
-  filterGender: enum_gender | null;
-  setFilterGender: React.Dispatch<React.SetStateAction<enum_gender | null>>;
-  filterProbStatus: enum_prob_status | null;
-  setFilterProbStatus: React.Dispatch<
-    React.SetStateAction<enum_prob_status | null>
-  >;
+  filterExtension: string;
+  setFilterExtension: React.Dispatch<React.SetStateAction<string>>;
+  filterDeptId: string | null;
+  setFilterDeptId: React.Dispatch<React.SetStateAction<string | null>>;
+  filterDateHiredFrom: string;
+  setFilterDateHiredFrom: React.Dispatch<React.SetStateAction<string>>;
+  filterDateHiredTo: string;
+  setFilterDateHiredTo: React.Dispatch<React.SetStateAction<string>>;
+  filterDateQuitFrom: string;
+  setFilterDateQuitFrom: React.Dispatch<React.SetStateAction<string>>;
+  filterDateQuitTo: string;
+  setFilterDateQuitTo: React.Dispatch<React.SetStateAction<string>>;
   filterIsActive: boolean | null;
   setFilterIsActive: React.Dispatch<React.SetStateAction<boolean | null>>;
   filterCreatedFrom: string;
@@ -71,15 +84,15 @@ interface CandidateContextType {
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CandidateContext = createContext<CandidateContextType | undefined>(
+export const StaffContext = createContext<StaffContextType | undefined>(
   undefined,
 );
 
-export const useCandidateContext = () => {
-  const context = useContext(CandidateContext);
+export const useStaffContext = () => {
+  const context = useContext(StaffContext);
   if (!context) {
     throw new Error(
-      '[ManageCandidates] error: missing useContext at context provider.',
+      '[ManageStaff] error: missing useContext at context provider.',
     );
   }
   return context;

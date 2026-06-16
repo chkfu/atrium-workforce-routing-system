@@ -10,6 +10,7 @@ import {
   format_enum,
   format_text,
 } from './filter/formatter';
+import { enum_gender_obj, enum_prob_status_obj } from '../../../util/enums';
 
 //  Service class
 
@@ -52,6 +53,7 @@ class CandidateService extends BaseService<TCandidateBase & TSchemaBase> {
       page_current: page_current,
       page_limit: page_limit,
     };
+
     //  2. sorting-related
     let sort_target: string | null = null;
     if (sort_opts.sort_target) {
@@ -68,24 +70,13 @@ class CandidateService extends BaseService<TCandidateBase & TSchemaBase> {
 
     //  3. filtering-related
     const filter_params = filter_opts.filter_params || {};
-
-    const gender_enums = ['male', 'female', 'other'];
-    const prob_status_enums = [
-      'selecting',
-      'training',
-      'completed',
-      'postponed',
-      'withdrawn',
-      'failed',
-    ];
-
     let formatted_filter_opts: Record<string, any> = {
       name: format_text(filter_params.filter_name),
       email: format_email(filter_params.filter_email),
-      gender: format_enum(filter_params.filter_gender, gender_enums),
+      gender: format_enum(filter_params.filter_gender, enum_gender_obj),
       prob_status: format_enum(
         filter_params.filter_prob_status,
-        prob_status_enums,
+        enum_prob_status_obj,
       ),
       is_active: format_boolean(filter_params.filter_is_active),
       created_from: format_date(filter_params.filter_created_from),

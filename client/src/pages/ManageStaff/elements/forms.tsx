@@ -42,93 +42,91 @@ export function FormCreate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)}>
-      {/*  section: field inputs  */}
-      <FormTextField
-        label='First Name'
-        register={register('first_name')}
-        error={errors.first_name}
-        required={true}
-      />
-      <FormTextField
-        label='Last Name'
-        register={register('last_name')}
-        error={errors.last_name}
-        required={true}
-      />
-      <FormSelectInput
-        label='Gender'
-        register={register('gender')}
-        error={errors.gender}
-        required={true}
-        options={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-          { value: 'other', label: 'Other' },
-        ]}
-      />
-      <FormTextField
-        label='Email'
-        register={register('work_email')}
-        error={errors.work_email}
-        required={true}
-      />
-      <FormTextField
-        label='Work Position'
-        register={register('work_position')}
-        error={errors.work_position}
-        required={true}
-      />
-      <FormSelectInput
-        label='Work Grade'
-        register={register('work_grade')}
-        error={errors.work_grade}
-        options={[
-          { value: 'pending', label: 'Pending' },
-          { value: 'grade_1_assistant', label: 'Grade 1 Assistant' },
-          { value: 'grade_2_manager', label: 'Grade 2 Manager' },
-          { value: 'grade_3_executive', label: 'Grade 3 Executive' },
-        ]}
-        className='mb-6'
-      />
-      <FormTextField
-        label='Work Extension'
-        register={register('work_extension')}
-        error={errors.work_extension}
-        required={true}
-      />
-      <FormSelectInput
-        label='Department'
-        register={register('dept_id')}
-        error={errors.dept_id}
-        options={[
-          { value: '1', label: 'Business Analytics' },
-          { value: '2', label: 'Cloud Infrastructure' },
-          { value: '3', label: 'Data Engineering' },
-          { value: '4', label: 'Application Development' },
-          { value: '5', label: 'Project Management Office' },
-          { value: '6', label: 'Solutions Architecture' },
-          { value: '7', label: 'Cyber Security' },
-        ]}
-        className='mb-6'
-      />
-      <FormTextField
-        label='Date Hired'
-        type='date'
-        register={register('date_hired')}
-        error={errors.date_hired}
-        required={true}
-      />
-      <FormTextField
-        label='Date Quit'
-        type='date'
-        register={register('date_quit')}
-        error={errors.date_quit}
-        required={true}
-      />
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+        Create Staff
+      </h3>
 
-      {/*  section: buttons  */}
-      <div className='flex gap-4 justify-end mt-6'>
+      {/*  section: field inputs - scrollable  */}
+      <div className='overflow-y-auto flex-1'>
+        <FormTextField
+          label='First Name'
+          register={register('first_name')}
+          error={errors.first_name}
+          required={true}
+        />
+        <FormTextField
+          label='Last Name'
+          register={register('last_name')}
+          error={errors.last_name}
+          required={true}
+        />
+        <FormSelectInput
+          label='Gender'
+          register={register('gender')}
+          error={errors.gender}
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+        <FormTextField
+          label='Email'
+          register={register('work_email')}
+          error={errors.work_email}
+        />
+        <FormTextField
+          label='Work Position'
+          register={register('work_position')}
+          error={errors.work_position}
+        />
+        <FormSelectInput
+          label='Work Grade'
+          register={register('work_grade')}
+          error={errors.work_grade}
+          options={[
+            { value: 'pending', label: 'Pending' },
+            { value: 'grade_1_assistant', label: 'Grade 1 Assistant' },
+            { value: 'grade_2_manager', label: 'Grade 2 Manager' },
+            { value: 'grade_3_executive', label: 'Grade 3 Executive' },
+          ]}
+        />
+        <FormTextField
+          label='Work Extension'
+          register={register('work_extension')}
+          error={errors.work_extension}
+        />
+        <FormSelectInput
+          label='Department'
+          register={register('dept_id')}
+          error={errors.dept_id}
+          options={[
+            { value: '1', label: 'Business Analytics' },
+            { value: '2', label: 'Cloud Infrastructure' },
+            { value: '3', label: 'Data Engineering' },
+            { value: '4', label: 'Application Development' },
+            { value: '5', label: 'Project Management Office' },
+            { value: '6', label: 'Solutions Architecture' },
+            { value: '7', label: 'Cyber Security' },
+          ]}
+        />
+        <FormTextField
+          label='Date Hired'
+          type='date'
+          register={register('date_hired', { required: false })}
+          error={errors.date_hired}
+        />
+        <FormTextField
+          label='Date Quit'
+          type='date'
+          register={register('date_quit', { required: false })}
+          error={errors.date_quit}
+        />
+      </div>
+
+      {/*  section: buttons - fixed at bottom  */}
+      <div className='flex gap-4 justify-end mt-4 shrink-0'>
         <ButtonCreateCancel />
         <ButtonCreateSubmit />
       </div>
@@ -167,37 +165,89 @@ export function FormUpdate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)}>
-      {/*  section: field inputs  */}
-      <FormTextField
-        label='First Name'
-        register={register('first_name')}
-        error={errors.first_name}
-      />
-      <FormTextField
-        label='Last Name'
-        register={register('last_name')}
-        error={errors.last_name}
-      />
-      <FormTextField
-        label='Email'
-        type='email'
-        register={register('work_email')}
-        error={errors.work_email}
-      />
-      <FormSelectInput
-        label='Gender'
-        register={register('gender')}
-        error={errors.gender}
-        options={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-          { value: 'other', label: 'Other' },
-        ]}
-      />
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+        Update Staff
+      </h3>
 
-      {/*  section: buttons  */}
-      <div className='flex gap-4 justify-end mt-6'>
+      {/*  section: field inputs - scrollable  */}
+      <div className='overflow-y-auto flex-1'>
+        <FormTextField
+          label='First Name'
+          register={register('first_name')}
+          error={errors.first_name}
+        />
+        <FormTextField
+          label='Last Name'
+          register={register('last_name')}
+          error={errors.last_name}
+        />
+        <FormSelectInput
+          label='Gender'
+          register={register('gender')}
+          error={errors.gender}
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+        <FormTextField
+          label='Email'
+          register={register('work_email')}
+          error={errors.work_email}
+        />
+        <FormTextField
+          label='Work Position'
+          register={register('work_position')}
+          error={errors.work_position}
+        />
+        <FormSelectInput
+          label='Work Grade'
+          register={register('work_grade')}
+          error={errors.work_grade}
+          options={[
+            { value: 'pending', label: 'Pending' },
+            { value: 'grade_1_assistant', label: 'Grade 1 Assistant' },
+            { value: 'grade_2_manager', label: 'Grade 2 Manager' },
+            { value: 'grade_3_executive', label: 'Grade 3 Executive' },
+          ]}
+        />
+        <FormTextField
+          label='Work Extension'
+          register={register('work_extension')}
+          error={errors.work_extension}
+        />
+        <FormSelectInput
+          label='Department'
+          register={register('dept_id')}
+          error={errors.dept_id}
+          options={[
+            { value: '1', label: 'Business Analytics' },
+            { value: '2', label: 'Cloud Infrastructure' },
+            { value: '3', label: 'Data Engineering' },
+            { value: '4', label: 'Application Development' },
+            { value: '5', label: 'Project Management Office' },
+            { value: '6', label: 'Solutions Architecture' },
+            { value: '7', label: 'Cyber Security' },
+          ]}
+        />
+        <FormTextField
+          label='Date Hired'
+          type='date'
+          register={register('date_hired', { required: false })}
+          error={errors.date_hired}
+        />
+        <FormTextField
+          label='Date Quit'
+          type='date'
+          register={register('date_quit', { required: false })}
+          error={errors.date_quit}
+        />
+      </div>
+
+      {/*  section: buttons - fixed at bottom  */}
+      <div className='flex gap-4 justify-end mt-4 shrink-0'>
         <ButtonUpdateCancel />
         <ButtonUpdateSubmit onClick={handleSubmit(recalling)} />
       </div>
@@ -375,6 +425,26 @@ export const OptionFilterOrder = (): JSX.Element => {
           placeholder='Insert keywords...'
           value={filterExtension || ''}
           onChange={(el) => setFilterExtension(el.target.value)}
+        />
+        {/*  section 6.5:  Department  */}
+        <FilterSelectInput
+          name='filter_department'
+          label='Department'
+          value={filterDepartment}
+          onChange={(el) =>
+            setFilterDepartment(
+              el.target.value === '' ? null : (el.target.value as any),
+            )
+          }
+          options={[
+            { value: '1', label: 'Business Analytics' },
+            { value: '2', label: 'Cloud Infrastructure' },
+            { value: '3', label: 'Data Engineering' },
+            { value: '4', label: 'Application Development' },
+            { value: '5', label: 'Project Management Office' },
+            { value: '6', label: 'Solutions Architecture' },
+            { value: '7', label: 'Cyber Security' },
+          ]}
         />
 
         {/*  section 7:  Date Hired  */}

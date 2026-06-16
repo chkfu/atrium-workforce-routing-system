@@ -8,8 +8,9 @@ const table_headers = [
   { label: 'ID', className: 'w-8', key: 'id' },
   { label: 'Name', className: 'min-w-20', key: 'name' },
   { label: 'Email', className: 'min-w-30', key: 'email' },
-  { label: 'Gender', className: 'min-w-20', key: 'gender' },
-  { label: 'Status', className: 'min-w-20', key: 'status' },
+  { label: 'Position', className: 'min-w-20', key: 'position' },
+  { label: 'Grade', className: 'min-w-20', key: 'grade' },
+  { label: 'Department', className: 'min-w-20', key: 'department' },
   { label: 'Active', className: 'min-w-20', key: 'active' },
   { label: 'Created', className: 'min-w-20', key: 'created' },
   { label: 'Updated', className: 'min-w-20', key: 'updated' },
@@ -41,17 +42,30 @@ const table_cols = [
     element: (el: any) => el.work_email,
   },
   {
-    key: 'gender',
+    key: 'position',
     className: 'p-2 text-sm',
-    element: (el: any) =>
-      el.gender === 'male' || el.gender === 'female'
-        ? el.gender.charAt(0).toUpperCase() + el.gender.slice(1)
-        : '',
+    element: (el: any) => el.work_position || 'N/A',
   },
   {
-    key: 'status',
-    className: 'p-2 text-sm font-bold',
-    element: (el: any) => el.work_position || 'N/A',
+    key: 'grade',
+    className: 'p-2 text-sm',
+    element: (el: any) => el.work_grade || 'N/A',
+  },
+  {
+    key: 'department',
+    className: 'p-2 text-sm',
+    element: (el: any) => {
+      const deptMap: { [key: string]: string } = {
+        '1': 'Business Analytics',
+        '2': 'Cloud Infrastructure',
+        '3': 'Data Engineering',
+        '4': 'Application Development',
+        '5': 'Project Management Office',
+        '6': 'Solutions Architecture',
+        '7': 'Cyber Security',
+      };
+      return deptMap[el.dept_id] || 'N/A';
+    },
   },
   {
     key: 'active',

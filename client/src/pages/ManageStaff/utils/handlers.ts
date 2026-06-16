@@ -85,7 +85,7 @@ export const handle_create_submit = async (
     //           must be added manually after Staff creation
     setIsCreating(true);
     await axios.post(API.STAFF, {
-      Staff: [new_data],
+      staff: [new_data],
     });
     alert(`[ManageStaff] succeed: new Staff record has been created.`);
     const res = await axios.get(API.STAFF);

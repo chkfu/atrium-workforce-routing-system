@@ -129,8 +129,8 @@ export const ButtonUpdateSubmit = ({
       onClick={onClick}
       style={{
         transition: 'all 0.5s ease',
-        backgroundColor: '#4a90a4',
-        color: '#f5f5f5',
+        backgroundColor: COLORS.dark_teal,
+        color: COLORS.light_gray,
         cursor: isUpdating ? 'none' : 'pointer',
       }}
       disabled={isUpdating}

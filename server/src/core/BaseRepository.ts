@@ -257,7 +257,8 @@ abstract class BaseRepository<T> {
               (key: string, index: number) =>
                 `"${key}" = COALESCE($${index + 1}, "${key}")`,
             )
-            .join(', ')}
+            .join(', ')},
+          "updated_at" = CURRENT_TIMESTAMP
         WHERE ${this.primary_key} IN (${id_placeholder})
         RETURNING *;
       `,

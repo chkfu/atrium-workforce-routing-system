@@ -18,9 +18,23 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.4] - May 31, 2026 - In Progress
+## [1.0.5] - May 31, 2026 - In Progress
 
-<i>Objective: integrated client and server structure into basic CRUD structure.</i>
+<i>Objective: Migrate candidate page setting to staff and department pages </i>
+
+### Added
+
+- migrated the basic setting to staff page, with specific columns, params and state management.
+
+### Fixed
+
+- fixed form create and form updates size with scrollable setting.
+
+<br/>
+
+## [1.0.4] - May 31, 2026
+
+<i>Objective: Built candidate page, as the template of CRUD management for core tables.</i>
 
 ### Added
 
@@ -35,6 +49,7 @@ This file records the major version changes of the projects.
 - re-organised `modules/` folder with categorised groups, improve better project structure for maintenance.
 - split codebase of manage candidates page into modules, as future file management practice for huge webpages.
 - updated `README.md` with core content of project objective, features, installation, architecture and dependencies.
+- modularised the manage candidates page with extracted configuration and reusable element.
 
 <br/>
 

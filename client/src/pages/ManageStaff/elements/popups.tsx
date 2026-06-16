@@ -14,17 +14,8 @@ export const PopupCreate = (): JSX.Element => {
       }`}
     >
       {triggerCreate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 pointer-events-auto'>
-          <h2 className='text-xl font-bold mb-4 text-gray-800'>
-            Create New Staff
-          </h2>
-          <p className='text-gray-600 mb-6'>
-            Fill in the details to create new Staff.
-          </p>
-          {/* form elements */}
-          <div className='space-y-4'>
-            <FormCreate />
-          </div>
+        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+          <FormCreate />
         </div>
       )}
     </div>
@@ -44,17 +35,8 @@ export const PopupUpdate = (): JSX.Element => {
       }`}
     >
       {triggerUpdate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 pointer-events-auto'>
-          <h2 className='text-xl font-bold mb-4 text-gray-800'>
-            Update Staff Details
-          </h2>
-          <p className='text-gray-600 mb-6'>
-            Fill in the details to update the selected Staff.
-          </p>
-          {/* form elements */}
-          <div className='space-y-4'>
-            <FormUpdate />
-          </div>
+        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+          <FormUpdate />
         </div>
       )}
     </div>

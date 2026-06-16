@@ -147,6 +147,12 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     //  remarks: for batch insert, customised inserted values with new string
     //  learnt: prevent sql injection without inserting req.body directly.
     //  learnt: postgre `CREATE` runs in sequence, required Promise for handling batch items
+    if (!Array.isArray(obj_arr)) {
+      throw new ValueError(
+        400,
+        `[${this.table.toUpperCase()}] error: invalid input - expected array.`,
+      );
+    }
     return await this.cache_service.handle_lock(
       this.table,
       this.table,

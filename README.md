@@ -148,6 +148,10 @@ The client will be available at `http://localhost:5173` (or specified).
 
 - The design has limitation handling frequent strategy changes, as each recruitment batch presented as vaiable factors. Lack of data consistency could harm the reliability and failed to match the fair test requirements.
 
+#### (2) Limited refactorisation for Page Interface
+
+- The client-side only adopted minor reusable components, but still yet to established modular structure causing by the complexity from table's specific columns and state management. Future improvements required.
+
 <br/>
 
 ## Dependencies

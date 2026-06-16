@@ -44,56 +44,61 @@ export function FormCreate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)}>
-      {/*  section: field inputs  */}
-      <FormTextField
-        label='First Name'
-        register={register('first_name')}
-        error={errors.first_name}
-        required={true}
-      />
-      <FormTextField
-        label='Last Name'
-        register={register('last_name')}
-        error={errors.last_name}
-        required={true}
-      />
-      <FormTextField
-        label='Email'
-        type='email'
-        register={register('email')}
-        error={errors.email}
-        required={true}
-      />
-      <FormSelectInput
-        label='Gender'
-        register={register('gender')}
-        error={errors.gender}
-        required={true}
-        options={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-          { value: 'other', label: 'Other' },
-        ]}
-      />
-      <FormSelectInput
-        label='Probation Status'
-        register={register('prob_status')}
-        error={errors.prob_status}
-        required={true}
-        options={[
-          { value: 'selecting', label: 'Selecting' },
-          { value: 'training', label: 'Training' },
-          { value: 'completed', label: 'Completed' },
-          { value: 'postponed', label: 'Postponed' },
-          { value: 'withdrawn', label: 'Withdrawn' },
-          { value: 'failed', label: 'Failed' },
-        ]}
-        className='mb-6'
-      />
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+        Create Candidate
+      </h3>
 
-      {/*  section: buttons  */}
-      <div className='flex gap-4 justify-end mt-6'>
+      {/*  section: field inputs - scrollable  */}
+      <div className='overflow-y-auto flex-1'>
+        <FormTextField
+          label='First Name'
+          register={register('first_name')}
+          error={errors.first_name}
+          required={true}
+        />
+        <FormTextField
+          label='Last Name'
+          register={register('last_name')}
+          error={errors.last_name}
+          required={true}
+        />
+        <FormTextField
+          label='Email'
+          type='email'
+          register={register('email')}
+          error={errors.email}
+          required={true}
+        />
+        <FormSelectInput
+          label='Gender'
+          register={register('gender')}
+          error={errors.gender}
+          required={true}
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+        <FormSelectInput
+          label='Probation Status'
+          register={register('prob_status')}
+          error={errors.prob_status}
+          required={true}
+          options={[
+            { value: 'selecting', label: 'Selecting' },
+            { value: 'training', label: 'Training' },
+            { value: 'completed', label: 'Completed' },
+            { value: 'postponed', label: 'Postponed' },
+            { value: 'withdrawn', label: 'Withdrawn' },
+            { value: 'failed', label: 'Failed' },
+          ]}
+        />
+      </div>
+
+      {/*  section: buttons - fixed at bottom  */}
+      <div className='flex gap-4 justify-end mt-4 shrink-0'>
         <ButtonCreateCancel />
         <ButtonCreateSubmit />
       </div>
@@ -132,51 +137,56 @@ export function FormUpdate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)}>
-      {/*  section: field inputs  */}
-      <FormTextField
-        label='First Name'
-        register={register('first_name')}
-        error={errors.first_name}
-      />
-      <FormTextField
-        label='Last Name'
-        register={register('last_name')}
-        error={errors.last_name}
-      />
-      <FormTextField
-        label='Email'
-        type='email'
-        register={register('email')}
-        error={errors.email}
-      />
-      <FormSelectInput
-        label='Gender'
-        register={register('gender')}
-        error={errors.gender}
-        options={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-          { value: 'other', label: 'Other' },
-        ]}
-      />
-      <FormSelectInput
-        label='Probation Status'
-        register={register('prob_status')}
-        error={errors.prob_status}
-        options={[
-          { value: 'selecting', label: 'Selecting' },
-          { value: 'training', label: 'Training' },
-          { value: 'completed', label: 'Completed' },
-          { value: 'postponed', label: 'Postponed' },
-          { value: 'withdrawn', label: 'Withdrawn' },
-          { value: 'failed', label: 'Failed' },
-        ]}
-        className='mb-6'
-      />
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+        Update Candidate
+      </h3>
 
-      {/*  section: buttons  */}
-      <div className='flex gap-4 justify-end mt-6'>
+      {/*  section: field inputs - scrollable  */}
+      <div className='overflow-y-auto flex-1'>
+        <FormTextField
+          label='First Name'
+          register={register('first_name')}
+          error={errors.first_name}
+        />
+        <FormTextField
+          label='Last Name'
+          register={register('last_name')}
+          error={errors.last_name}
+        />
+        <FormTextField
+          label='Email'
+          type='email'
+          register={register('email')}
+          error={errors.email}
+        />
+        <FormSelectInput
+          label='Gender'
+          register={register('gender')}
+          error={errors.gender}
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+        <FormSelectInput
+          label='Probation Status'
+          register={register('prob_status')}
+          error={errors.prob_status}
+          options={[
+            { value: 'selecting', label: 'Selecting' },
+            { value: 'training', label: 'Training' },
+            { value: 'completed', label: 'Completed' },
+            { value: 'postponed', label: 'Postponed' },
+            { value: 'withdrawn', label: 'Withdrawn' },
+            { value: 'failed', label: 'Failed' },
+          ]}
+        />
+      </div>
+
+      {/*  section: buttons - fixed at bottom  */}
+      <div className='flex gap-4 justify-end mt-4 shrink-0'>
         <ButtonUpdateCancel />
         <ButtonUpdateSubmit onClick={handleSubmit(recalling)} />
       </div>

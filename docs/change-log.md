@@ -26,6 +26,10 @@ This file records the major version changes of the projects.
 
 - migrated the basic setting to staff page, with specific columns, params and state management.
 
+### Edited
+
+- adjusted the height of header for layout styling.
+
 ### Fixed
 
 - fixed form create and form updates size with scrollable setting.

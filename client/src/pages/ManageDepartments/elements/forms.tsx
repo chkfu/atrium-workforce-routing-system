@@ -13,18 +13,17 @@ import {
   ButtonFilterSubmit,
 } from './buttons';
 import FormTextField from '../../../elements/FormTextField';
-import FormSelectInput from '../../../elements/FormSelectInput';
 import ButtonClose from '../../../elements/ButtonClose';
-import { CreateCandidateSchema, UpdateCandidateSchema } from '../utils/schema';
 import {
   handle_create_submit,
   handle_temp_sort_reset,
   handle_update_submit,
   handle_temp_filter_reset,
 } from '../utils/handlers';
-import { useCandidateContext } from '../utils/context';
+import { useDepartmentContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
-
+import { CreateDepartmentSchema, UpdateDepartmentSchema } from '../utils/schema';
+import FilterRangeInput from '../../../elements/FilterRangeInput';
 //  CREATE
 
 export function FormCreate() {
@@ -34,67 +33,40 @@ export function FormCreate() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(CreateCandidateSchema),
+    resolver: yupResolver(CreateDepartmentSchema),
   });
-  const { setIsCreating, setCandidates, setTriggerCreate } =
-    useCandidateContext();
+  const { setIsCreating, setDepartments, setTriggerCreate } = useDepartmentContext();
 
   function recalling(data: any) {
-    handle_create_submit(data, setIsCreating, setCandidates, setTriggerCreate);
+    handle_create_submit(data, setIsCreating, setDepartments, setTriggerCreate);
   }
   //  display
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
       <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
-        Create Candidate
+        Create Department
       </h3>
 
       {/*  section: field inputs - scrollable  */}
       <div className='overflow-y-auto flex-1'>
         <FormTextField
-          label='First Name'
-          register={register('first_name')}
-          error={errors.first_name}
+          label='Department'
+          register={register('dept_name')}
+          error={errors.dept_name}
           required={true}
         />
         <FormTextField
-          label='Last Name'
-          register={register('last_name')}
-          error={errors.last_name}
-          required={true}
+          type='number'
+          label='Capacity'
+          register={register('dept_capacity', { valueAsNumber: true, value: 0 })}
+          error={errors.dept_capacity}
         />
         <FormTextField
-          label='Email'
-          type='email'
-          register={register('email')}
-          error={errors.email}
-          required={true}
-        />
-        <FormSelectInput
-          label='Gender'
-          register={register('gender')}
-          error={errors.gender}
-          required={true}
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-            { value: 'other', label: 'Other' },
-          ]}
-        />
-        <FormSelectInput
-          label='Probation Status'
-          register={register('prob_status')}
-          error={errors.prob_status}
-          required={true}
-          options={[
-            { value: 'selecting', label: 'Selecting' },
-            { value: 'training', label: 'Training' },
-            { value: 'completed', label: 'Completed' },
-            { value: 'postponed', label: 'Postponed' },
-            { value: 'withdrawn', label: 'Withdrawn' },
-            { value: 'failed', label: 'Failed' },
-          ]}
-        />
+          type='number'
+          label='Weight'
+          register={register('importance_weight', { valueAsNumber: true, value: 0 })}
+          error={errors.importance_weight}
+        />   
       </div>
 
       {/*  section: buttons - fixed at bottom  */}
@@ -115,23 +87,23 @@ export function FormUpdate() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(UpdateCandidateSchema),
+    resolver: yupResolver(UpdateDepartmentSchema),
   });
   const {
-    selectedCandidates,
+    selectedDepartments,
     setIsUpdating,
-    setCandidates,
-    setSelectedCandidates,
+    setDepartments,
+    setSelectedDepartments,
     setTriggerUpdate,
-  } = useCandidateContext();
+  } = useDepartmentContext();
 
   function recalling(data: any) {
     handle_update_submit(
       data,
-      selectedCandidates,
+      selectedDepartments,
       setIsUpdating,
-      setCandidates,
-      setSelectedCandidates,
+      setDepartments,
+      setSelectedDepartments,
       setTriggerUpdate,
     );
   }
@@ -139,52 +111,29 @@ export function FormUpdate() {
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
       <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
-        Update Candidate
+        Update Department
       </h3>
 
       {/*  section: field inputs - scrollable  */}
       <div className='overflow-y-auto flex-1'>
         <FormTextField
-          label='First Name'
-          register={register('first_name')}
-          error={errors.first_name}
+          label='Department'
+          register={register('dept_name')}
+          error={errors.dept_name}
         />
         <FormTextField
-          label='Last Name'
-          register={register('last_name')}
-          error={errors.last_name}
+          type='number'
+          label='Capacity'
+          register={register('dept_capacity', { valueAsNumber: true })}
+          error={errors.dept_capacity}
         />
         <FormTextField
-          label='Email'
-          type='email'
-          register={register('email')}
-          error={errors.email}
-        />
-        <FormSelectInput
-          label='Gender'
-          register={register('gender')}
-          error={errors.gender}
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-            { value: 'other', label: 'Other' },
-          ]}
-        />
-        <FormSelectInput
-          label='Probation Status'
-          register={register('prob_status')}
-          error={errors.prob_status}
-          options={[
-            { value: 'selecting', label: 'Selecting' },
-            { value: 'training', label: 'Training' },
-            { value: 'completed', label: 'Completed' },
-            { value: 'postponed', label: 'Postponed' },
-            { value: 'withdrawn', label: 'Withdrawn' },
-            { value: 'failed', label: 'Failed' },
-          ]}
+          type='number'
+          label='Weight'
+          register={register('importance_weight', { valueAsNumber: true })}
+          error={errors.importance_weight}
         />
       </div>
-
       {/*  section: buttons - fixed at bottom  */}
       <div className='flex gap-4 justify-end mt-4 shrink-0'>
         <ButtonUpdateCancel />
@@ -202,15 +151,16 @@ export const FormFiltering = (): JSX.Element => {
     triggerFilter,
     setTriggerFilter,
     setFilterName,
-    setFilterEmail,
-    setFilterGender,
-    setFilterProbStatus,
+    setFilterCapacityFrom,
+    setFilterCapacityTo,
+    setFilterWeightFrom,
+    setFilterWeightTo,
     setFilterIsActive,
     setFilterCreatedFrom,
     setFilterCreatedTo,
     setFilterUpdatedFrom,
     setFilterUpdatedTo,
-  } = useCandidateContext();
+  } = useDepartmentContext();
 
   return (
     <form
@@ -220,9 +170,10 @@ export const FormFiltering = (): JSX.Element => {
         fn={() =>
           handle_temp_filter_reset(
             setFilterName,
-            setFilterEmail,
-            setFilterGender,
-            setFilterProbStatus,
+            setFilterCapacityFrom,
+            setFilterCapacityTo,
+            setFilterWeightFrom,
+            setFilterWeightTo,
             setFilterIsActive,
             setFilterCreatedFrom,
             setFilterCreatedTo,
@@ -253,12 +204,14 @@ export const OptionFilterOrder = (): JSX.Element => {
   const {
     filterName,
     setFilterName,
-    filterEmail,
-    setFilterEmail,
-    filterGender,
-    setFilterGender,
-    filterProbStatus,
-    setFilterProbStatus,
+    filterCapacityFrom,
+    setFilterCapacityFrom,
+    filterCapacityTo,
+    setFilterCapacityTo,
+    filterWeightFrom,
+    setFilterWeightFrom,
+    filterWeightTo,
+    setFilterWeightTo,
     filterIsActive,
     setFilterIsActive,
     filterCreatedFrom,
@@ -269,10 +222,10 @@ export const OptionFilterOrder = (): JSX.Element => {
     setFilterUpdatedFrom,
     filterUpdatedTo,
     setFilterUpdatedTo,
-  } = useCandidateContext();
+  } = useDepartmentContext();
   //  display
   return (
-    <form className='p-2'>
+    <div className='p-2'>
       {/*  grid layout for filter items  */}
       <div
         className='grid gap-4 mb-4'
@@ -280,64 +233,36 @@ export const OptionFilterOrder = (): JSX.Element => {
       >
         {/*   section 1: name filtering  */}
         <FilterTextField
-          id='filter_name'
           type='text'
-          name='filter_name'
-          label='Name'
+          name='filter_department'
+          label='Department'
           placeholder='Insert keywords...'
           onChange={(el) => setFilterName(el.target.value)}
           value={filterName}
         />
-        {/*  section 2: email filtering */}
-        <FilterTextField
-          id='filter_email'
-          type='text'
-          name='filter_email'
-          label='Email'
-          placeholder='Insert keywords...'
-          value={filterEmail}
-          onChange={(el) => setFilterEmail(el.target.value)}
+        {/*  section 2: capacity */}
+         <FilterRangeInput
+            label='Capacity'
+            fromId='filter_capacity_from'
+            toId='filter_capacity_to'
+            fromValue={String(filterCapacityFrom)}
+            toValue={String(filterCapacityTo)}
+            type='number'
+            onFromChange={(el) => setFilterCapacityFrom(el.target.value)}
+            onToChange={(el) => setFilterCapacityTo(el.target.value)}
         />
-        {/*  section 3:  Gender  */}
-        <FilterSelectInput
-          id='filter_gender'
-          name='filter_gender'
-          label='Gender'
-          value={filterGender}
-          onChange={(el) =>
-            setFilterGender(
-              el.target.value === '' ? null : (el.target.value as any),
-            )
-          }
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-            { value: 'other', label: 'Other' },
-          ]}
+        <FilterRangeInput
+            label='Weighting'
+            fromId='filter_weight_from'
+            toId='filter_weight_to'
+            fromValue={String(filterWeightFrom)}
+            toValue={String(filterWeightTo)}
+            type='number'
+            onFromChange={(el) => setFilterWeightFrom(el.target.value)}
+            onToChange={(el) => setFilterWeightTo(el.target.value)}
         />
-        {/*  section 4:  Probation Status  */}
+        {/*  section 8: Active Status  */}
         <FilterSelectInput
-          id='filter_status'
-          name='filter_status'
-          label='Status'
-          value={filterProbStatus}
-          onChange={(el) =>
-            setFilterProbStatus(
-              el.target.value === '' ? null : (el.target.value as any),
-            )
-          }
-          options={[
-            { value: 'selecting', label: 'Selecting' },
-            { value: 'training', label: 'Training' },
-            { value: 'completed', label: 'Completed' },
-            { value: 'postponed', label: 'Postponed' },
-            { value: 'withdrawn', label: 'Withdrawn' },
-            { value: 'failed', label: 'Failed' },
-          ]}
-        />
-        {/*  section 5: Active Status  */}
-        <FilterSelectInput
-          id='filter_active'
           name='filter_active'
           label='Active'
           value={filterIsActive === null ? null : String(filterIsActive)}
@@ -372,7 +297,7 @@ export const OptionFilterOrder = (): JSX.Element => {
           onToChange={(el) => setFilterUpdatedTo(el.target.value)}
         />
       </div>
-    </form>
+    </div>
   );
 };
 
@@ -382,7 +307,7 @@ export const OptionFilterOrder = (): JSX.Element => {
 export const FormSorting = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const { setSortAsc, setSortTarget, triggerSort, setTriggerSort } =
-    useCandidateContext();
+    useDepartmentContext();
   //  display
   return (
     <form
@@ -409,8 +334,7 @@ export const FormSorting = (): JSX.Element => {
 
 //  remarks: popup for sorting options
 export const OptionSortOrder = (): JSX.Element => {
-  const { sortAsc, setSortAsc, sortTarget, setSortTarget } =
-    useCandidateContext();
+  const { sortAsc, setSortAsc, sortTarget, setSortTarget } = useDepartmentContext();
   //  display
   return (
     <div className='py-1'>
@@ -432,9 +356,9 @@ export const OptionSortOrder = (): JSX.Element => {
           onChange={(el) => setSortTarget(el.target.value)}
         >
           <option value='_id'>ID</option>
-          <option value='first_name'>Name</option>
-          <option value='email'>Email</option>
-          <option value='prob_status'>Status</option>
+          <option value='department_name'>Name</option>
+          <option value='department_capacity'>Capacity</option>
+          <option value='department_weight'>Weight</option>
           <option value='created_at'>Created date</option>
           <option value='updated_at'>Updated date</option>
         </select>
@@ -497,7 +421,7 @@ export const OptionPageLimit = (): JSX.Element => {
 //  remarks: dropdown selection for spec page
 export const OptionPageSelect = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { totalPage } = useCandidateContext();
+  const { totalPage } = useDepartmentContext();
   const currentPage = parseInt(searchParams.get('page') || '1');
   //  display
   return (

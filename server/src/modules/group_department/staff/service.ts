@@ -10,7 +10,7 @@ import {
   format_enum,
   format_text,
 } from './filter/formatter';
-import { enum_gender_obj, enum_prob_status } from '../../../util/enums';
+import { enum_gender_obj } from '../../../util/enums';
 
 //  Service class
 

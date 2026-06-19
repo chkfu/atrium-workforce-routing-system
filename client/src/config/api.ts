@@ -9,4 +9,6 @@ export const API = {
   CANDIDATES_PREF: `${BASE_URL}/candidate_preference`,
   STAFF: `${BASE_URL}/staff`,
   STAFF_ACTIVATE: `${BASE_URL}/staff/activation`,
+  DEPARTMENTS: `${BASE_URL}/departments`,
+  DEPARTMENTS_ACTIVATE: `${BASE_URL}/departments/activation`,
 };

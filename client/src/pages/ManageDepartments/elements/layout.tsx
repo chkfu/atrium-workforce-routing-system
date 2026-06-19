@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useStaffContext } from '../utils/context';
+import { useDepartmentContext } from '../utils/context';
 import { TableHeaderBox, TableBodyBox } from './tables';
 import {
   ButtonCreate,
@@ -15,7 +15,7 @@ import { FormSorting, FormFiltering } from './forms';
 
 //  remarks: main container
 export function PanelFromContainer(): JSX.Element {
-  const { isInitialised, setIsInitialised } = useStaffContext();
+  const { isInitialised, setIsInitialised } = useDepartmentContext();
   useEffect(() => {
     setIsInitialised(true);
   }, []);
@@ -51,11 +51,7 @@ export function PaginationSection(): JSX.Element {
 export function ControlPanelSection(): JSX.Element {
   return (
     <div className='py-4'>
-      <div
-        className='flex flex-col gap-4 md:flex-col md:gap-4 lg:flex-row lg:gap-4 lg:justify-between'
-        duration-400
-        transition-all
-      >
+      <div className='flex flex-col gap-4 md:flex-col md:gap-4 lg:flex-row lg:gap-4 lg:justify-between duration-400 transition-all'>
         <FormButtonBox />
         <FilterSortBox />
       </div>
@@ -65,12 +61,12 @@ export function ControlPanelSection(): JSX.Element {
 
 //  remarks: table display
 export function TableSection(): JSX.Element {
-  const { selectedStaff, staff } = useStaffContext();
+  const { selectedDepartments, departments } = useDepartmentContext();
 
-  if (staff.length === 0) {
+  if (departments.length === 0) {
     return (
       <div className='pt-2 w-full'>
-        <div className='p-4 text-gray-500'>No staff found</div>
+        <div className='p-4 text-gray-500'>No departments found</div>
       </div>
     );
   }
@@ -78,13 +74,13 @@ export function TableSection(): JSX.Element {
     <div className='pt-2'>
       <p
         className={`mb-2 text-sm text-gray-500 transition-opacity duration-500 ease-in-out
-          ${selectedStaff.length === 0 ? 'invisible' : 'visible'}
-          ${selectedStaff.length === 0 ? 'opacity-0' : 'opacity-100'}`}
+          ${selectedDepartments.length === 0 ? 'invisible' : 'visible'}
+          ${selectedDepartments.length === 0 ? 'opacity-0' : 'opacity-100'}`}
       >
-        Selection: {selectedStaff.length}{' '}
-        {selectedStaff.length === 1 ? 'staff member' : 'staff members'} selected
+        Selection: {selectedDepartments.length}{' '}
+        {selectedDepartments.length === 1 ? 'department' : 'departments'} selected
       </p>
-      <div className='overflow-x-auto overflow-y-auto max-h-100'>
+            <div className='overflow-x-scroll overflow-y-scroll max-h-80 w-full'>
         <table className='min-w-300 border-collapse table-auto w-full'>
           <TableHeaderBox />
           <TableBodyBox />
@@ -139,7 +135,7 @@ function PageLimitBox(): JSX.Element {
 
 //  remarks: sub-container for page selection
 function PageOptBox(): JSX.Element {
-  const { totalPage } = useStaffContext();
+  const { totalPage } = useDepartmentContext();
   //  display
   return (
     <div className='group flex items-center gap-2'>

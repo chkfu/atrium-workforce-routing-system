@@ -18,27 +18,19 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - May 31, 2026 - In Progress
+## [1.0.5] - Jun 20, 2026  - In Progress
 
-<i>Objective: Migrate candidate page setting to staff and department pages </i>
+<i>Objective: implement id-specific sub-page of candidates, staff and department table </i>
 
 ### Added
 
-- migrated the basic setting to staff page, with specific columns, params and state management.
 
-### Edited
-
-- adjusted the height of header for layout styling.
-
-### Fixed
-
-- fixed form create and form updates size with scrollable setting.
 
 <br/>
 
-## [1.0.4] - May 31, 2026
+## [1.0.4] - Jun 19, 2026 
 
-<i>Objective: Built candidate page, as the template of CRUD management for core tables.</i>
+<i>Objective: implement CRUD management for core pages of manage candidate, manage staff and manage department.</i>
 
 ### Added
 
@@ -47,6 +39,7 @@ This file records the major version changes of the projects.
 - created user interfaces and basic CRUD functionalities for manage candidates page.
 - created sorting methods and user interface for manage candidates page.
 - created filtering methods and user interface for manage candidates page.
+- replicated the basic setting to staff and department pages, with specific columns, params and state management.
 
 ### Edited
 
@@ -54,6 +47,11 @@ This file records the major version changes of the projects.
 - split codebase of manage candidates page into modules, as future file management practice for huge webpages.
 - updated `README.md` with core content of project objective, features, installation, architecture and dependencies.
 - modularised the manage candidates page with extracted configuration and reusable element.
+- adjusted the height of header for layout styling.
+
+### Fixed
+
+- fixed form create and form updates size with scrollable setting.
 
 <br/>
 

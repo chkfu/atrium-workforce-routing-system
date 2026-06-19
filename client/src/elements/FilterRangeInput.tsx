@@ -1,9 +1,10 @@
-export default function FilterDateRangeInput({
+export default function FilterRangeInput({
   label,
   fromId,
   toId,
   fromValue,
   toValue,
+  type = 'date',
   onFromChange,
   onToChange,
 }: {
@@ -12,6 +13,7 @@ export default function FilterDateRangeInput({
   toId: string;
   fromValue: string;
   toValue: string;
+  type?: string;
   onFromChange: (el: any) => void;
   onToChange: (el: any) => void;
 }) {
@@ -24,7 +26,7 @@ export default function FilterDateRangeInput({
         {/*  section: from  */}
         <input
           id={fromId}
-          type='date'
+          type={type}
           value={fromValue}
           onChange={onFromChange}
           className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'
@@ -33,7 +35,7 @@ export default function FilterDateRangeInput({
         {/*  section: to  */}
         <input
           id={toId}
-          type='date'
+          type={type}
           value={toValue}
           onChange={onToChange}
           className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-28'

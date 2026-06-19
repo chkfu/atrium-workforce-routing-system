@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FilterTextField from '../../../elements/FilterTextField';
 import FilterSelectInput from '../../../elements/FilterSelectInput';
-import FilterDateRangeInput from '../../../elements/FilterDateRangeInput';
+import FilterRangeInput from '../../../elements/FilterRangeInput';
 import {
   ButtonUpdateCancel,
   ButtonUpdateSubmit,
@@ -448,22 +448,24 @@ export const OptionFilterOrder = (): JSX.Element => {
         />
 
         {/*  section 7:  Date Hired  */}
-        <FilterDateRangeInput
+        <FilterRangeInput
           label='Date Hired'
           fromId='filter_hired_from'
           toId='filter_hired_to'
           fromValue={filterDateHiredFrom}
           toValue={filterDateHiredTo}
+          type='date'
           onFromChange={(el) => setFilterDateHiredFrom(el.target.value)}
           onToChange={(el) => setFilterDateHiredTo(el.target.value)}
         />
         {/*  section 8:  Date Quit  */}
-        <FilterDateRangeInput
+        <FilterRangeInput
           label='Date Quit'
           fromId='filter_quit_from'
           toId='filter_quit_to'
           fromValue={filterDateQuitFrom}
           toValue={filterDateQuitTo}
+          type='date'
           onFromChange={(el) => setFilterDateQuitFrom(el.target.value)}
           onToChange={(el) => setFilterDateQuitTo(el.target.value)}
         />
@@ -483,22 +485,24 @@ export const OptionFilterOrder = (): JSX.Element => {
           ]}
         />
         {/*  section 6: Created At  */}
-        <FilterDateRangeInput
+        <FilterRangeInput
           label='Created'
           fromId='filter_created_from'
           toId='filter_created_to'
           fromValue={filterCreatedFrom}
           toValue={filterCreatedTo}
+          type='date'
           onFromChange={(el) => setFilterCreatedFrom(el.target.value)}
           onToChange={(el) => setFilterCreatedTo(el.target.value)}
         />
         {/*  section 7: Updated At  */}
-        <FilterDateRangeInput
+        <FilterRangeInput
           label='Updated'
           fromId='filter_updated_from'
           toId='filter_updated_to'
           fromValue={filterUpdatedFrom}
           toValue={filterUpdatedTo}
+          type='date'
           onFromChange={(el) => setFilterUpdatedFrom(el.target.value)}
           onToChange={(el) => setFilterUpdatedTo(el.target.value)}
         />

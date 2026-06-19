@@ -109,8 +109,6 @@ export default function ManageCandidates(): JSX.Element {
     if (filter_updated_from) params.filter_updated_from = filter_updated_from;
     if (filter_updated_to) params.filter_updated_to = filter_updated_to;
 
-    console.log('[DEBUG] Sending request:', params);
-
     //  remarks: getting data by querying database
     axios
       .get(API.CANDIDATES, {

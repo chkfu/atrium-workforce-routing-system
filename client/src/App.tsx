@@ -6,7 +6,7 @@ import Error from './pages/Error';
 import ManageCandidates from './pages/ManageCandidates';
 import ManageStaff from './pages/ManageStaff';
 import ManageDepartments from './pages/ManageDepartments';
-import CandidateProfile from './pages/CandidateProfile';
+import ProfileCandidates from './pages/ProfileCandidates';
 import CandidateDashboard from './pages/CandidateDashboard';
 import AssistantDashboard from './pages/AssistantDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
@@ -47,6 +47,11 @@ const routes: RouteObject[] = [
         path: '/manage-departments',
         element: <ManageDepartments />,
       },
+      //  Single page, sepecified by id
+      {
+        path: '/candidates-profile/:id',
+        element: <ProfileCandidates />,
+      },
       //  Dashboards, by role positions
       {
         path: '/candidate-dashboard',
@@ -59,11 +64,6 @@ const routes: RouteObject[] = [
       {
         path: '/manager-dashboard',
         element: <ManagerDashboard />,
-      },
-      //  Profiles, by role positions
-      {
-        path: '/me/candidate-profile',
-        element: <CandidateProfile />,
       },
     ],
   },

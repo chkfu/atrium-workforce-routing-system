@@ -167,7 +167,7 @@ export default function ManageStaff(): JSX.Element {
   //  display
   return (
     <div
-      id='manage-Staff-container'
+      id='manage-staff-container'
       className='w-full'
     >
       <Accordion title='Staff List'>

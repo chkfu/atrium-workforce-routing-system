@@ -140,7 +140,7 @@ export default function ManageDepartment(): JSX.Element {
   //  display
   return (
     <div
-      id='manage-Department-container'
+      id='manage-department-container'
       className='w-full'
     >
       <Accordion title='Department List'>

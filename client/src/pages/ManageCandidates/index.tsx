@@ -60,10 +60,6 @@ export default function ManageCandidates(): JSX.Element {
   const [isConverting, setIsConverting] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(
-      '[DEBUG] Initial mount - current searchParams:',
-      searchParams.toString(),
-    );
     setSearchParams((prev) => {
       if (!prev.get('page')) prev.set('page', '1');
       if (!prev.get('limit')) prev.set('limit', '20');
@@ -117,11 +113,6 @@ export default function ManageCandidates(): JSX.Element {
       .then((res) => {
         const candidateEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
-        console.log('[DEBUG] Response:', {
-          count: candidateEls.length,
-          totalPages,
-          data: res.data,
-        });
         setCandidates(candidateEls);
         setTotalPage(totalPages);
         setIsGetting(false);

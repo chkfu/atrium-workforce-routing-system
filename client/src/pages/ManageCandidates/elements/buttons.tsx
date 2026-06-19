@@ -1,5 +1,6 @@
 import { useCandidateContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { COLORS } from '../../../styles/color';
 import { PopupCreate, PopupUpdate, PopupConvertActive } from './popups';
 import ButtonConfirm from '../../../elements/ButtonConfirm';
@@ -180,12 +181,12 @@ export const ButtonConvertCancel = (): JSX.Element => {
 
 //  remarks: submit button inside convert active popup
 export const ButtonConvertSubmit = (): JSX.Element => {
+  const dispatch = useDispatch();
   const {
     convertStatus,
     isConverting,
     selectedCandidates,
     setIsConverting,
-    setCandidates,
     setSelectedCandidates,
     setConvertStatus,
     setTriggerConvert,
@@ -199,10 +200,10 @@ export const ButtonConvertSubmit = (): JSX.Element => {
           selectedCandidates,
           isConverting,
           setIsConverting,
-          setCandidates,
           setSelectedCandidates,
           setConvertStatus,
           setTriggerConvert,
+          dispatch,
         )
       }
       style={{

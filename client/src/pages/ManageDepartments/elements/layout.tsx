@@ -22,7 +22,7 @@ export function PanelFromContainer(): JSX.Element {
 
   return (
     <div
-      className={`w-full h-112 overflow-y-hidden duration-1000 ease-linear transition-opacity delay-200 ${
+      className={`w-full h-[650px] flex flex-col overflow-hidden duration-1000 ease-linear transition-opacity delay-200 ${
         isInitialised
           ? 'opacity-100 translate-x-0'
           : 'opacity-0 -translate-x-20'
@@ -71,7 +71,7 @@ export function TableSection(): JSX.Element {
     );
   }
   return (
-    <div className='pt-2'>
+    <div className='pt-2 flex flex-col flex-1 overflow-hidden'>
       <p
         className={`mb-2 text-sm text-gray-500 transition-opacity duration-500 ease-in-out
           ${selectedDepartments.length === 0 ? 'invisible' : 'visible'}
@@ -80,7 +80,7 @@ export function TableSection(): JSX.Element {
         Selection: {selectedDepartments.length}{' '}
         {selectedDepartments.length === 1 ? 'department' : 'departments'} selected
       </p>
-            <div className='overflow-x-scroll overflow-y-scroll max-h-80 w-full'>
+      <div className='flex-1 overflow-x-auto overflow-y-auto'>
         <table className='min-w-300 border-collapse table-auto w-full'>
           <TableHeaderBox />
           <TableBodyBox />

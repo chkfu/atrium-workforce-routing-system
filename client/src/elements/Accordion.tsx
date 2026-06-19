@@ -41,8 +41,8 @@ export default function Accordion({
       </div>
       {/*  content part */}
       <div
-        className={`flex flex-wrap gap-4 p-2 overflow-x-auto transition-all ${
-          AccordionOpen ? 'opacity-100 max-h-screen' : 'opacity-0 max-h-0'
+        className={`flex flex-col gap-4 p-2 overflow-hidden transition-all flex-1 ${
+          AccordionOpen ? 'opacity-100 h-auto' : 'opacity-0 h-0'
         }`}
         style={{ transitionDuration: '1500ms' }}
       >

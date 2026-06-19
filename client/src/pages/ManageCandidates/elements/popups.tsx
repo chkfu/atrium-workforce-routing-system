@@ -14,7 +14,7 @@ export const PopupCreate = (): JSX.Element => {
       }`}
     >
       {triggerCreate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[calc(100vh-48px)] pointer-events-auto overflow-y-auto'>
           <h2 className='text-xl font-bold mb-4 text-gray-800'>
             Create New Candidates
           </h2>
@@ -41,7 +41,7 @@ export const PopupUpdate = (): JSX.Element => {
       }`}
     >
       {triggerUpdate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[calc(100vh-48px)] pointer-events-auto overflow-y-auto'>
           <FormUpdate />
         </div>
       )}

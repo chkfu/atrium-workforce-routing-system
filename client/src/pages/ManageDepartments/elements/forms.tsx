@@ -24,6 +24,7 @@ import { useDepartmentContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
 import { CreateDepartmentSchema, UpdateDepartmentSchema } from '../utils/schema';
 import FilterRangeInput from '../../../elements/FilterRangeInput';
+
 //  CREATE
 
 export function FormCreate() {
@@ -233,6 +234,7 @@ export const OptionFilterOrder = (): JSX.Element => {
       >
         {/*   section 1: name filtering  */}
         <FilterTextField
+          id='filter_department'
           type='text'
           name='filter_department'
           label='Department'

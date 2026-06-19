@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
 import FilterTextField from '../../../elements/FilterTextField';
 import FilterSelectInput from '../../../elements/FilterSelectInput';
 import FilterDateRangeInput from '../../../elements/FilterRangeInput';
@@ -29,6 +30,7 @@ import { useSearchParams } from 'react-router-dom';
 
 export function FormCreate() {
   //  declaration
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -36,15 +38,15 @@ export function FormCreate() {
   } = useForm({
     resolver: yupResolver(CreateCandidateSchema),
   });
-  const { setIsCreating, setCandidates, setTriggerCreate } =
+  const { setIsCreating, setTriggerCreate } =
     useCandidateContext();
 
   function recalling(data: any) {
-    handle_create_submit(data, setIsCreating, setCandidates, setTriggerCreate);
+    handle_create_submit(data, setIsCreating, setTriggerCreate, dispatch);
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-screen mb-6' noValidate>
       <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
         Create Candidate
       </h3>
@@ -110,6 +112,7 @@ export function FormCreate() {
 
 export function FormUpdate() {
   //  declaration
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -120,7 +123,6 @@ export function FormUpdate() {
   const {
     selectedCandidates,
     setIsUpdating,
-    setCandidates,
     setSelectedCandidates,
     setTriggerUpdate,
   } = useCandidateContext();
@@ -130,14 +132,14 @@ export function FormUpdate() {
       data,
       selectedCandidates,
       setIsUpdating,
-      setCandidates,
       setSelectedCandidates,
       setTriggerUpdate,
+      dispatch,
     );
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-screen mb-6' noValidate>
       <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
         Update Candidate
       </h3>
@@ -236,7 +238,7 @@ export const FormFiltering = (): JSX.Element => {
       <h4 className='text-md font-bold text-teal-800 font-serif mb-3 shrink-0'>
         Filtering Preferences
       </h4>
-      <div className='overflow-y-auto max-h-60'>
+      <div className='overflow-y-auto max-h-96'>
         <OptionFilterOrder />
       </div>
       <div className='flex justify-center mt-4 gap-4 shrink-0'>
@@ -272,7 +274,7 @@ export const OptionFilterOrder = (): JSX.Element => {
   } = useCandidateContext();
   //  display
   return (
-    <form className='p-2'>
+    <div className='p-2'>
       {/*  grid layout for filter items  */}
       <div
         className='grid gap-4 mb-4'
@@ -372,7 +374,7 @@ export const OptionFilterOrder = (): JSX.Element => {
           onToChange={(el) => setFilterUpdatedTo(el.target.value)}
         />
       </div>
-    </form>
+    </div>
   );
 };
 

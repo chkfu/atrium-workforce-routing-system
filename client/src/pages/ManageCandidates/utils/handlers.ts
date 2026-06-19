@@ -1,4 +1,8 @@
 import { useCandidateContext } from './context';
+import { useSelector } from 'react-redux';
+import { setCandidates } from '../../../redux/slices/CandidateSlice';
+import { RootState } from '../../../redux/store';
+import type { Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../config/api';
@@ -10,9 +14,10 @@ import { SetURLSearchParams } from 'react-router-dom';
 //  remarks
 
 export const handle_selected = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { candidates, setSelectedCandidates } = useCandidateContext();
+  const { setSelectedCandidates } = useCandidateContext();
+  const candidates = useSelector((state: RootState) => state.candidates.value);
   if (event.target.checked) {
-    setSelectedCandidates(candidates.map((item: any) => item._id));
+    setSelectedCandidates(candidates.map((item: any) => item.id));
   } else {
     setSelectedCandidates([]);
   }
@@ -67,8 +72,8 @@ export const handle_create_popup = () => {
 export const handle_create_submit = async (
   data: yup.InferType<typeof CreateCandidateSchema>,
   setIsCreating: (val: boolean) => void,
-  setCandidates: (val: any[]) => void,
   setTriggerCreate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -92,7 +97,7 @@ export const handle_create_submit = async (
     const createdCandidates = res?.data?.data?.result || [];
 
     //  remarks: refresh candidates list
-    setCandidates(createdCandidates);
+    dispatch(setCandidates(createdCandidates));
     setTriggerCreate(false);
   } catch (err: any) {
     console.error('[ManageCandidates] error: create candidates:', {
@@ -144,9 +149,9 @@ export const handle_update_submit = async (
   data: yup.InferType<typeof UpdateCandidateSchema>,
   selectedCandidates: number[],
   setIsUpdating: (val: boolean) => void,
-  setCandidates: (val: any[]) => void,
   setSelectedCandidates: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -172,7 +177,7 @@ export const handle_update_submit = async (
     //  remarks: refresh candidates list
     const res = await axios.get(API.CANDIDATES);
     const updatedCandidates = res?.data?.data?.result || [];
-    setCandidates(updatedCandidates);
+    dispatch(setCandidates(updatedCandidates));
     setSelectedCandidates([]);
     setTriggerUpdate(false);
   } catch (err: any) {
@@ -232,10 +237,10 @@ export const handle_convert_submit = async (
   selectedCandidates: number[],
   isConverting: boolean,
   setIsConverting: (val: boolean) => void,
-  setCandidates: (val: any[]) => void,
   setSelectedCandidates: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   if (isConverting) return;
   try {
@@ -253,7 +258,7 @@ export const handle_convert_submit = async (
     // remarks: refresh with updated data
     const res = await axios.get(API.CANDIDATES);
     const data = res?.data?.data?.result || [];
-    setCandidates(data);
+    dispatch(setCandidates(data));
     setSelectedCandidates([]);
     setConvertStatus(null);
     setTriggerConvert(false);

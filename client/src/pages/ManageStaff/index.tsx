@@ -138,11 +138,6 @@ export default function ManageStaff(): JSX.Element {
       .then((res) => {
         const StaffEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
-        console.log('[DEBUG] Response:', {
-          count: StaffEls.length,
-          totalPages,
-          data: res.data,
-        });
         setStaff(StaffEls);
         setTotalPage(totalPages);
         setIsGetting(false);

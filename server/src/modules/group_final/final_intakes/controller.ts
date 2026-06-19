@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TFinalIntakeBase, TSchemaBase } from '../../../util/types';
+import { TFinalIntakeBase, TSchemaBase } from '../../../util/types/schema_types';
 import FinalIntakeService from './service';
 
 //  Controller class

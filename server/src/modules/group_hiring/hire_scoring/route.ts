@@ -1,6 +1,6 @@
 import express from 'express';
 import HireScoreController from './controller';
-import { THireScoreBase, TSchemaBase } from '../../../util/types';
+import { THireScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 
 //  Import router

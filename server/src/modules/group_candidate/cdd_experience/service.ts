@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import CddExpRepository from './repository';
-import { TCddExpBase, TSchemaBase } from '../../../util/types';
+import { TCddExpBase, TSchemaBase } from '../../../util/types/schema_types';
 import ValueError from '../../../util/errors/ValueError';
 
 //  Service class

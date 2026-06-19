@@ -1,6 +1,6 @@
 import pool from '../../../infra/database/postgres';
 import BaseRepository from '../../../core/BaseRepository';
-import { TCddEduBase, TSchemaBase } from '../../../util/types';
+import { TCddEduBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 

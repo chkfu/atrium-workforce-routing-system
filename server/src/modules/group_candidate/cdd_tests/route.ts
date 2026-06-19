@@ -1,6 +1,6 @@
 import express from 'express';
 import CddTestController from './controller';
-import { TCddTestBase, TSchemaBase } from '../../../util/types';
+import { TCddTestBase, TSchemaBase } from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 
 //  Import router

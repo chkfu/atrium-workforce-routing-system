@@ -1,14 +1,14 @@
 import BaseService from '../../../core/BaseService';
 import DepartmentRepository from './repository';
-import { TDepartmentBase, TSchemaBase } from '../../../util/types';
-import { filter_criteria } from './filter/criteria';
+import { TDepartmentBase, TSchemaBase } from '../../../util/types/schema_types';
+import { filter_criteria } from '../../../util/yup/validate_criteria';
 import { ValueError } from '../../../util/errors/ValueError';
 import {
   format_boolean,
   format_date,
   format_text,
   format_number
-} from './filter/formatter';
+} from '../../../util/types/type_formatter';
 import { enum_gender_obj } from '../../../util/enums';
 
 //  Service class

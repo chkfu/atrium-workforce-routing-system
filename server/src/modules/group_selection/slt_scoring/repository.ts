@@ -1,6 +1,6 @@
 import pool from '../../../infra/database/postgres';
 import BaseRepository from '../../../core/BaseRepository';
-import { TSltScoreBase, TSchemaBase } from '../../../util/types';
+import { TSltScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 import ValueError from '../../../util/errors/ValueError';
 
 //  Repository class

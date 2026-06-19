@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import HireScoreRepository from './repository';
-import { THireScoreBase, TSchemaBase } from '../../../util/types';
+import { THireScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

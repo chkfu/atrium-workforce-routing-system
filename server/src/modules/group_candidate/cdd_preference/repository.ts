@@ -1,5 +1,5 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { TCddPrefBase, TSchemaBase } from '../../../util/types';
+import { TCddPrefBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 

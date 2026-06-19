@@ -1,5 +1,5 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { TCddExpBase, TSchemaBase } from '../../../util/types';
+import { TCddExpBase, TSchemaBase } from '../../../util/types/schema_types';
 import pool from '../../../infra/database/postgres';
 
 //  Repository class

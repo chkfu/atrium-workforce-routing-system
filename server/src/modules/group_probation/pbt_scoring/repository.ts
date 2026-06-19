@@ -1,5 +1,5 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { TPbtScoreBase, TSchemaBase } from '../../../util/types';
+import { TPbtScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 

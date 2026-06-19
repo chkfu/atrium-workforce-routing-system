@@ -1,6 +1,6 @@
 import BaseController from '../../../core/BaseController';
 import DepartmentService from './service';
-import { TDepartmentBase, TSchemaBase } from '../../../util/types';
+import { TDepartmentBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Controller class
 

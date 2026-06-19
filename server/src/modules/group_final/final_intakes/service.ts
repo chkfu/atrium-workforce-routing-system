@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import FinalIntakeRepository from './repository';
-import { TFinalIntakeBase, TSchemaBase } from '../../../util/types';
+import { TFinalIntakeBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

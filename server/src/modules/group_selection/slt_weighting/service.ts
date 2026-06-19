@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import SltWeightRepository from './repository';
-import { TSltWeightBase, TSchemaBase } from '../../../util/types';
+import { TSltWeightBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

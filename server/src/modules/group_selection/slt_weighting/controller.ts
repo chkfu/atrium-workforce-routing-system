@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TSltWeightBase, TSchemaBase } from '../../../util/types';
+import { TSltWeightBase, TSchemaBase } from '../../../util/types/schema_types';
 import SltWeightService from './service';
 
 //  Controller class

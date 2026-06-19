@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TPbtScoreBase, TSchemaBase } from '../../../util/types';
+import { TPbtScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 import PbtScoreService from './service';
 
 //  Controller class

@@ -20,7 +20,7 @@
 
 import BaseRepository from './BaseRepository';
 import ValueError from '../util/errors/ValueError';
-import { TSchemaBase } from '../util/types';
+import { TSchemaBase } from '../util/types/schema_types';
 import CacheService from '../infra/cache/CacheService';
 
 //  Service class

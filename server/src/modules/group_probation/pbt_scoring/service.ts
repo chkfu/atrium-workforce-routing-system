@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import PbtScoreRepository from './repository';
-import { TPbtScoreBase, TSchemaBase } from '../../../util/types';
+import { TPbtScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

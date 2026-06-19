@@ -1,5 +1,5 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { THireWeightBase, TSchemaBase } from '../../../util/types';
+import { THireWeightBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 

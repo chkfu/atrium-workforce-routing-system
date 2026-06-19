@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TPbtIntakeBase, TSchemaBase } from '../../../util/types';
+import { TPbtIntakeBase, TSchemaBase } from '../../../util/types/schema_types';
 import PbtIntakeService from './service';
 
 //  Controller class

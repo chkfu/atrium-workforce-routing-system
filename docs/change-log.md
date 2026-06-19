@@ -24,6 +24,10 @@ This file records the major version changes of the projects.
 
 ### Added
 
+### Edited
+
+-  refactored duplicated methods and yup schema under `utils/` folder for reusability.
+
 
 
 <br/>

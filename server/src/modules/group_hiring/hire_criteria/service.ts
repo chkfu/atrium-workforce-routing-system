@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import HireCriteriaRepository from './repository';
-import { THireCriteriaBase, TSchemaBase } from '../../../util/types';
+import { THireCriteriaBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import PbtScoreController from './controller';
-import { TPbtScoreBase, TSchemaBase } from '../../../util/types';
+import { TPbtScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 
 //  Import router

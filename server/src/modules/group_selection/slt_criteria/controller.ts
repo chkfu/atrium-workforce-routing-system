@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TSltCriteriaBase, TSchemaBase } from '../../../util/types';
+import { TSltCriteriaBase, TSchemaBase } from '../../../util/types/schema_types';
 import SltCriteriaService from './service';
 
 //  Controller class

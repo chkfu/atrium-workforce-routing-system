@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import HireWeightRepository from './repository';
-import { THireWeightBase, TSchemaBase } from '../../../util/types';
+import { THireWeightBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

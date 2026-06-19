@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import SltCriteriaRepository from './repository';
-import { TSltCriteriaBase, TSchemaBase } from '../../../util/types';
+import { TSltCriteriaBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import HireWeightController from './controller';
-import { THireWeightBase, TSchemaBase } from '../../../util/types';
+import { THireWeightBase, TSchemaBase } from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 
 //  Import router

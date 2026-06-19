@@ -1,5 +1,5 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { TSysUserBase, TSchemaBase } from '../../../util/types';
+import { TSysUserBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 

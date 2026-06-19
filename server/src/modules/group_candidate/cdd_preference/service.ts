@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import CddPrefRepository from './repository';
-import { TCddPrefBase, TSchemaBase } from '../../../util/types';
+import { TCddPrefBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

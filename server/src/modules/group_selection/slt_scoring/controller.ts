@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TSltScoreBase, TSchemaBase } from '../../../util/types';
+import { TSltScoreBase, TSchemaBase } from '../../../util/types/schema_types';
 import SltScoreService from './service';
 
 //  Controller class

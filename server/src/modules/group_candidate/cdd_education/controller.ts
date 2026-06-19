@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import BaseController from '../../../core/BaseController';
-import { TCddEduBase, TSchemaBase, TSltScoreBase } from '../../../util/types';
+import { TCddEduBase, TSchemaBase, TSltScoreBase } from '../../../util/types/schema_types';
 import CddEduService from './service';
 import SltScoreService from '../../group_selection/slt_scoring/service';
 import { handle_async } from '../../../infra/middlewares/handle_async';

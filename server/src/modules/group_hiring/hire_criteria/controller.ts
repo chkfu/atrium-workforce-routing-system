@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { THireCriteriaBase, TSchemaBase } from '../../../util/types';
+import { THireCriteriaBase, TSchemaBase } from '../../../util/types/schema_types';
 import HireCriteriaService from './service';
 
 //  Controller class

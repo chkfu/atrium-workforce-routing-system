@@ -11,7 +11,7 @@
 import pool from '../infra/database/postgres';
 import KeyError from '../util/errors/KeyError';
 import ValueError from '../util/errors/ValueError';
-import { TSchemaBase } from '../util/types';
+import { TSchemaBase } from '../util/types/schema_types';
 
 /*
   learnt: 

@@ -1,6 +1,6 @@
 import BaseService from '../../../core/BaseService';
 import SysUserRepository from './repository';
-import { TSysUserBase, TSchemaBase } from '../../../util/types';
+import { TSysUserBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Service class
 

@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TCddTestBase, TSchemaBase } from '../../../util/types';
+import { TCddTestBase, TSchemaBase } from '../../../util/types/schema_types';
 import CddTestService from './service';
 
 //  Controller class

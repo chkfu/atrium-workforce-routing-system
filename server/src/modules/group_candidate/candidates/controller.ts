@@ -1,5 +1,5 @@
 import BaseController from '../../../core/BaseController';
-import { TCandidateBase, TSchemaBase } from '../../../util/types';
+import { TCandidateBase, TSchemaBase } from '../../../util/types/schema_types';
 import CandidateService from './service';
 
 //  Controller class

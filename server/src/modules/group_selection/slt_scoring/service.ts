@@ -9,7 +9,7 @@ import {
   TCddEduBase,
   TCddExpBase,
   TCddTestBase,
-} from '../../../util/types';
+} from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 import ValueError from '../../../util/errors/ValueError';
 

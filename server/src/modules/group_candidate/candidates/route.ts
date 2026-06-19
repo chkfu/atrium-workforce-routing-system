@@ -1,6 +1,6 @@
 import express from 'express';
 import CandidateController from './controller';
-import { TCandidateBase, TSchemaBase } from '../../../util/types';
+import { TCandidateBase, TSchemaBase } from '../../../util/types/schema_types';
 import db_structure from '../../../util/config/db_structure';
 
 //  Import router

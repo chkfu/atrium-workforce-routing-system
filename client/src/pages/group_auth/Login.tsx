@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ButtonConfirm from '../elements/ButtonConfirm';
+import ButtonConfirm from '../../elements/ButtonConfirm';
 
 export default function Login(): JSX.Element {
   const navigate = useNavigate();

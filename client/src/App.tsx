@@ -1,17 +1,18 @@
 import { useRoutes, RouteObject } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/group_navigation/Home';
+import About from './pages/group_navigation/About';
+import Contact from './pages/group_navigation/Contact';
 import Layout from './components/Layout';
-import Login from './pages/Login';
-import Error from './pages/Error';
-import ManageCandidates from './pages/ManageCandidates';
-import ManageStaff from './pages/ManageStaff';
-import ManageDepartments from './pages/ManageDepartments';
+import Login from './pages/group_auth/Login';
+import Error from './pages/group_navigation/Error';
+import DashboardCandidate from './pages/group_dashboard/DashboardCandidate';
+import DashboardAssistant from './pages/group_dashboard/DashboardAssistant';
+import DashboardManager from './pages/group_dashboard/DashboardManager';
+import ManageCandidates from './pages/group_manage_record/ManageCandidates'
+import ManageStaff from './pages/group_manage_record/ManageStaff';
+import ManageDepartments from './pages/group_manage_record/ManageDepartments';
 import ProfileCandidates from './pages/ProfileCandidates';
-import CandidateDashboard from './pages/CandidateDashboard';
-import AssistantDashboard from './pages/AssistantDashboard';
-import ManagerDashboard from './pages/ManagerDashboard';
-import About from './pages/About';
-import Contact from './pages/Contact';
+
 
 const routes: RouteObject[] = [
   {
@@ -55,15 +56,15 @@ const routes: RouteObject[] = [
       //  Dashboards, by role positions
       {
         path: '/candidate-dashboard',
-        element: <CandidateDashboard />,
+        element: <DashboardCandidate />,
       },
       {
         path: '/assistant-dashboard',
-        element: <AssistantDashboard />,
+        element: <DashboardAssistant />,
       },
       {
         path: '/manager-dashboard',
-        element: <ManagerDashboard />,
+        element: <DashboardManager />,
       },
     ],
   },

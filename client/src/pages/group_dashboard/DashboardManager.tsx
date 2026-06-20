@@ -1,8 +1,6 @@
-import DashboardCard from '../components/DashboardCard';
-import Accordion from '../elements/Accordion';
-import { TCardItem } from '../utils/types/element_types';
-
-//  Types
+import DashboardCard from '../../components/DashboardCard';
+import Accordion from '../../elements/Accordion';
+import { TCardItem } from '../../utils/types/element_types';
 
 //  Declaration
 
@@ -17,18 +15,28 @@ const card_list_personal: TCardItem[] = [
 const card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
-    description: 'Manage and review candidate applications',
+    description: 'Review and manage candidate applications and profiles',
     path: '/manage-candidates',
+  },
+  {
+    title: 'Manage Staff',
+    description: 'Manage staff members and their assignments',
+    path: '/manage-staff',
+  },
+  {
+    title: 'Manage Departments',
+    description: 'Organize and manage department information',
+    path: '/manage-departments',
   },
 ];
 
 //  Function
 
-export default function AssistantDashboard(): JSX.Element {
+export default function ManagerDashboard(): JSX.Element {
   //  visualise
   return (
     <section
-      id='assistant-dashboard-section'
+      id='manager-dashboard-section'
       className='px-12 py-6 flex flex-col gap-6'
     >
       <Accordion title='Task Pending'>
@@ -37,8 +45,8 @@ export default function AssistantDashboard(): JSX.Element {
           No upcoming tasks assigned.
         </p>
       </Accordion>
+      {/* personal section */}
       <Accordion title='Personal'>
-        {/* personal section */}
         {card_list_personal.map((el: TCardItem) => {
           return (
             <DashboardCard
@@ -48,7 +56,8 @@ export default function AssistantDashboard(): JSX.Element {
             />
           );
         })}
-      </Accordion>{' '}
+      </Accordion>
+
       {/*  work panel */}
       <Accordion title='Teams'>
         {card_list_task_panel.map((el: TCardItem) => {

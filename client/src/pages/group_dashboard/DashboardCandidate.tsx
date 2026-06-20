@@ -1,6 +1,6 @@
-import DashboardCard from '../components/DashboardCard';
-import Accordion from '../elements/Accordion';
-import { TCardItem } from '../utils/types/element_types';
+import DashboardCard from '../../components/DashboardCard';
+import Accordion from '../../elements/Accordion';
+import { TCardItem } from '../../utils/types/element_types';
 
 //  Declaration
 

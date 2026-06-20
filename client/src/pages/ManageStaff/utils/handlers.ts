@@ -1,16 +1,21 @@
 import { useStaffContext } from './context';
+import { setStaff } from '../../../redux/slices/StaffSlice';
+import type { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../config/api';
 import { CreateStaffSchema, UpdateStaffSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 //  ==========  checkbox status  ==========
 
 //  remarks
 
 export const handle_selected = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { staff, setSelectedStaff } = useStaffContext();
+  const { setSelectedStaff } = useStaffContext();
+  const staff = useSelector((state: RootState) => state.staff.value);
   if (event.target.checked) {
     setSelectedStaff(staff.map((item: any) => item._id));
   } else {
@@ -35,10 +40,11 @@ export const handle_checkbox_status = (id: number) => {
 export const handle_checkbox_select_all = (
   event: React.ChangeEvent<HTMLInputElement>,
 ) => {
-  const { staff, setSelectedStaff } = useStaffContext();
+  const { setSelectedStaff } = useStaffContext();
+  const staff = useSelector((state: RootState) => state.staff.value);
   const checked = event.target.checked;
   if (checked && staff && staff.length > 0) {
-    const id_list = staff.map((Staff) => Staff._id as number);
+    const id_list = staff.map((staff) => staff._id as number);
     setSelectedStaff(id_list);
   } else {
     setSelectedStaff([]);
@@ -67,8 +73,8 @@ export const handle_create_popup = () => {
 export const handle_create_submit = async (
   data: yup.InferType<typeof CreateStaffSchema>,
   setIsCreating: (val: boolean) => void,
-  setStaff: (val: any[]) => void,
   setTriggerCreate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -92,7 +98,7 @@ export const handle_create_submit = async (
     const createdStaff = res?.data?.data?.result || [];
 
     //  remarks: refresh Staff list
-    setStaff(createdStaff);
+    dispatch(setStaff(createdStaff));
     setTriggerCreate(false);
   } catch (err: any) {
     console.error('[ManageStaff] error: create Staff:', {
@@ -144,9 +150,9 @@ export const handle_update_submit = async (
   data: yup.InferType<typeof UpdateStaffSchema>,
   selectedStaff: number[],
   setIsUpdating: (val: boolean) => void,
-  setStaff: (val: any[]) => void,
   setSelectedStaff: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -172,7 +178,7 @@ export const handle_update_submit = async (
     //  remarks: refresh Staff list
     const res = await axios.get(API.STAFF);
     const updatedStaff = res?.data?.data?.result || [];
-    setStaff(updatedStaff);
+    dispatch(setStaff(updatedStaff));
     setSelectedStaff([]);
     setTriggerUpdate(false);
   } catch (err: any) {
@@ -232,10 +238,10 @@ export const handle_convert_submit = async (
   selectedStaff: number[],
   isConverting: boolean,
   setIsConverting: (val: boolean) => void,
-  setStaff: (val: any[]) => void,
   setSelectedStaff: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   if (isConverting) return;
   try {
@@ -253,7 +259,7 @@ export const handle_convert_submit = async (
     // remarks: refresh with updated data
     const res = await axios.get(API.STAFF);
     const data = res?.data?.data?.result || [];
-    setStaff(data);
+    dispatch(setStaff(data));
     setSelectedStaff([]);
     setConvertStatus(null);
     setTriggerConvert(false);

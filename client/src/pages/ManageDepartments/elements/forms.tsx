@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
 import FilterTextField from '../../../elements/FilterTextField';
 import FilterSelectInput from '../../../elements/FilterSelectInput';
 import FilterDateRangeInput from '../../../elements/FilterRangeInput';
@@ -36,15 +37,16 @@ export function FormCreate() {
   } = useForm({
     resolver: yupResolver(CreateDepartmentSchema),
   });
-  const { setIsCreating, setDepartments, setTriggerCreate } = useDepartmentContext();
+  const dispatch = useDispatch();
+  const { setIsCreating, setTriggerCreate } = useDepartmentContext();
 
   function recalling(data: any) {
-    handle_create_submit(data, setIsCreating, setDepartments, setTriggerCreate);
+    handle_create_submit(data, setIsCreating, setTriggerCreate, dispatch);
   }
   //  display
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Create Department
       </h3>
 
@@ -59,13 +61,13 @@ export function FormCreate() {
         <FormTextField
           type='number'
           label='Capacity'
-          register={register('dept_capacity', { valueAsNumber: true, value: 0 })}
+          register={register('dept_capacity', { valueAsNumber: true })}
           error={errors.dept_capacity}
         />
         <FormTextField
           type='number'
           label='Weight'
-          register={register('importance_weight', { valueAsNumber: true, value: 0 })}
+          register={register('importance_weight', { valueAsNumber: true })}
           error={errors.importance_weight}
         />   
       </div>
@@ -90,10 +92,10 @@ export function FormUpdate() {
   } = useForm({
     resolver: yupResolver(UpdateDepartmentSchema),
   });
+  const dispatch = useDispatch();
   const {
     selectedDepartments,
     setIsUpdating,
-    setDepartments,
     setSelectedDepartments,
     setTriggerUpdate,
   } = useDepartmentContext();
@@ -103,15 +105,15 @@ export function FormUpdate() {
       data,
       selectedDepartments,
       setIsUpdating,
-      setDepartments,
       setSelectedDepartments,
       setTriggerUpdate,
+      dispatch,
     );
   }
   //  display
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Update Department
       </h3>
 

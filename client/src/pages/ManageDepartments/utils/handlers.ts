@@ -1,4 +1,8 @@
 import { useDepartmentContext } from './context';
+import { useSelector } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../redux/store';
+import { setDepartment } from '../../../redux/slices/DepartmentSlice';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../config/api';
@@ -10,7 +14,8 @@ import { SetURLSearchParams } from 'react-router-dom';
 //  remarks
 
 export const handle_selected = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { departments, setSelectedDepartments } = useDepartmentContext();
+  const { setSelectedDepartments } = useDepartmentContext();
+  const departments = useSelector((state: RootState) => state.department.value);
   if (event.target.checked) {
     setSelectedDepartments(departments.map((item: any) => item._id));
   } else {
@@ -35,7 +40,8 @@ export const handle_checkbox_status = (id: number) => {
 export const handle_checkbox_select_all = (
   event: React.ChangeEvent<HTMLInputElement>,
 ) => {
-  const { departments, setSelectedDepartments } = useDepartmentContext();
+  const { setSelectedDepartments } = useDepartmentContext();
+  const departments = useSelector((state: RootState) => state.department.value);
   const checked = event.target.checked;
   if (checked && departments && departments.length > 0) {
     const id_list = departments.map((dept) => dept._id as number);
@@ -67,8 +73,8 @@ export const handle_create_popup = () => {
 export const handle_create_submit = async (
   data: yup.InferType<typeof CreateDepartmentSchema>,
   setIsCreating: (val: boolean) => void,
-  setDepartments: (val: any[]) => void,
   setTriggerCreate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -92,9 +98,8 @@ export const handle_create_submit = async (
     );
     const res = await axios.get(API.DEPARTMENTS);
     const createdDepartments = res?.data?.data?.result || [];
-
     //  remarks: refresh Departments list
-    setDepartments(createdDepartments);
+    dispatch(setDepartment(createdDepartments));
     setTriggerCreate(false);
   } catch (err: any) {
     //  remarks: error handling
@@ -147,9 +152,9 @@ export const handle_update_submit = async (
   data: yup.InferType<typeof UpdateDepartmentSchema>,
   selectedDepartments: number[],
   setIsUpdating: (val: boolean) => void,
-  setDepartments: (val: any[]) => void,
   setSelectedDepartments: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -177,7 +182,7 @@ export const handle_update_submit = async (
     //  remarks: refresh Departments list
     const res = await axios.get(API.DEPARTMENTS);
     const updatedDepartments = res?.data?.data?.result || [];
-    setDepartments(updatedDepartments);
+    dispatch(setDepartment(updatedDepartments));
     setSelectedDepartments([]);
     setTriggerUpdate(false);
   } catch (err: any) {
@@ -237,10 +242,10 @@ export const handle_convert_submit = async (
   selectedDepartments: number[],
   isConverting: boolean,
   setIsConverting: (val: boolean) => void,
-  setDepartments: (val: any[]) => void,
   setSelectedDepartments: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
+  dispatch: Dispatch,
 ) => {
   if (isConverting) return;
   try {
@@ -258,7 +263,7 @@ export const handle_convert_submit = async (
     // remarks: refresh with updated data
     const res = await axios.get(API.DEPARTMENTS);
     const data = res?.data?.data?.result || [];
-    setDepartments(data);
+    dispatch(setDepartment(data));
     setSelectedDepartments([]);
     setConvertStatus(null);
     setTriggerConvert(false);

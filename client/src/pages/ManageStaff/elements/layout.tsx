@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useStaffContext } from '../utils/context';
 import { TableHeaderBox, TableBodyBox } from './tables';
 import {
@@ -10,6 +11,7 @@ import {
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
 import { FormSorting, FormFiltering } from './forms';
+import { RootState } from '../../../redux/store';
 
 //  ==========    MAIN    ==========
 
@@ -22,7 +24,7 @@ export function PanelFromContainer(): JSX.Element {
 
   return (
     <div
-      className={`w-full h-[650px] flex flex-col overflow-hidden duration-1000 ease-linear transition-opacity delay-200 ${
+      className={`w-full flex flex-col overflow-hidden duration-1000 ease-linear transition-opacity delay-200 ${
         isInitialised
           ? 'opacity-100 translate-x-0'
           : 'opacity-0 -translate-x-20'
@@ -65,8 +67,8 @@ export function ControlPanelSection(): JSX.Element {
 
 //  remarks: table display
 export function TableSection(): JSX.Element {
-  const { selectedStaff, staff } = useStaffContext();
-
+  const { selectedStaff } = useStaffContext();
+  const staff = useSelector((state: RootState) => state.staff.value);
   if (staff.length === 0) {
     return (
       <div className='pt-2 w-full'>

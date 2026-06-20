@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { setCandidates } from '../../redux/slices/CandidateSlice';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import Accordion from '../../elements/Accordion';
 import LoadSpinner from '../../elements/LoadSpinner';
 import { API } from '../../config/api';
@@ -12,12 +14,12 @@ import { enum_gender, enum_prob_status } from '../../utils/types/page_enums';
 export default function ManageCandidates(): JSX.Element {
   //  search params
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
 
   //  hooks
 
   //  1. GET
   //  1a. receive general data
-  const [candidates, setCandidates] = useState<any[]>([]);
   const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
   //  1b. receive pagination data
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -113,14 +115,14 @@ export default function ManageCandidates(): JSX.Element {
       .then((res) => {
         const candidateEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
-        setCandidates(candidateEls);
+        dispatch(setCandidates(candidateEls));
         setTotalPage(totalPages);
         setIsGetting(false);
       })
       .catch((err: any) => {
         console.error('[ManageCandidates] error: fetching candidates:', err);
         // learnt: state change for re-render, as throw error did not trigger
-        setCandidates([]);
+        dispatch(setCandidates([]));
         setGetError(
           err.message || '[ManageCandidates] error: Failed to load candidates',
         );
@@ -148,8 +150,6 @@ export default function ManageCandidates(): JSX.Element {
             //  1.  GET
 
             //  1a. receive general data
-            candidates,
-            setCandidates,
             selectedCandidates,
             setSelectedCandidates,
             //  1b. receive pagination data

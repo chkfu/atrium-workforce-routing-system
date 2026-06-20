@@ -1,10 +1,11 @@
 import { useCandidateContext } from '../utils/context';
 import { ButtonConvertSubmit, ButtonConvertCancel } from './buttons';
 import { FormUpdate, FormCreate } from './forms';
+import ButtonClose from '../../../elements/ButtonClose';
 
 //  remarks: popups for create new candidates record
 export const PopupCreate = (): JSX.Element => {
-  const { triggerCreate } = useCandidateContext();
+  const { triggerCreate, setTriggerCreate } = useCandidateContext();
   return (
     <div
       className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300 pointer-events-none ${
@@ -14,13 +15,8 @@ export const PopupCreate = (): JSX.Element => {
       }`}
     >
       {triggerCreate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[calc(100vh-48px)] pointer-events-auto overflow-y-auto'>
-          <h2 className='text-xl font-bold mb-4 text-gray-800'>
-            Create New Candidates
-          </h2>
-          <p className='text-gray-600 mb-6'>
-            Fill in the details to create new candidates.
-          </p>
+        <div className='relative bg-white rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+          <ButtonClose fn={() => setTriggerCreate(false)} />
           <FormCreate />
         </div>
       )}
@@ -31,7 +27,7 @@ export const PopupCreate = (): JSX.Element => {
 //  remarks: popups for update candidates details
 
 export const PopupUpdate = (): JSX.Element => {
-  const { triggerUpdate } = useCandidateContext();
+  const { triggerUpdate, setTriggerUpdate } = useCandidateContext();
   return (
     <div
       className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300 pointer-events-none ${
@@ -41,7 +37,8 @@ export const PopupUpdate = (): JSX.Element => {
       }`}
     >
       {triggerUpdate && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 max-h-[calc(100vh-48px)] pointer-events-auto overflow-y-auto'>
+        <div className='relative bg-white rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 max-h-[90vh] pointer-events-auto overflow-y-auto'>
+          <ButtonClose fn={() => setTriggerUpdate(false)} />
           <FormUpdate />
         </div>
       )}
@@ -51,7 +48,7 @@ export const PopupUpdate = (): JSX.Element => {
 
 //  remarks: popups for update candidates active status
 export const PopupConvertActive = (): JSX.Element => {
-  const { convertStatus, setConvertStatus, triggerConvert } =
+  const { convertStatus, setConvertStatus, triggerConvert, setTriggerConvert } =
     useCandidateContext();
   return (
     <div
@@ -62,11 +59,12 @@ export const PopupConvertActive = (): JSX.Element => {
       }`}
     >
       {triggerConvert && (
-        <div className='bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 pointer-events-auto'>
-          <h2 className='text-xl font-bold mb-4 text-gray-800'>
+        <div className='relative bg-white rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 pointer-events-auto'>
+          <ButtonClose fn={() => setTriggerConvert(false)} />
+          <h2 className='text-xl font-bold mb-3 text-gray-800'>
             Convert Active
           </h2>
-          <p className='text-gray-600 mb-6'>
+          <p className='text-gray-600 mb-4'>
             Select a new status for the selected candidates.
           </p>
           {/* form elements */}

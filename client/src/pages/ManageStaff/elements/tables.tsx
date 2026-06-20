@@ -1,5 +1,7 @@
 import { useStaffContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
+import { RootState } from '../../../redux/store';
+import { useSelector } from 'react-redux';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -89,7 +91,8 @@ const table_cols = [
 
 //  remarks: table head for Staff data
 export function TableHeaderBox(): JSX.Element {
-  const { staff, selectedStaff, setSelectedStaff } = useStaffContext();
+  const { selectedStaff, setSelectedStaff } = useStaffContext();
+  const staff = useSelector((state: RootState) => state.staff.value);
   //  display
   return (
     <thead className='sticky top-0 z-10 bg-slate-200'>
@@ -116,7 +119,8 @@ export function TableHeaderBox(): JSX.Element {
 
 //  remarks: table body for staff data
 export function TableBodyBox(): JSX.Element {
-  const { staff, selectedStaff, setSelectedStaff } = useStaffContext();
+  const { selectedStaff, setSelectedStaff } = useStaffContext();
+  const staff = useSelector((state: RootState) => state.staff.value);
   if (!staff || staff.length === 0) {
     return (
       <p className='py-4 text-gray-500 transition-all ease-in-out duration-600'>

@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
 import FilterTextField from '../../../elements/FilterTextField';
 import FilterSelectInput from '../../../elements/FilterSelectInput';
 import FilterRangeInput from '../../../elements/FilterRangeInput';
@@ -35,15 +36,16 @@ export function FormCreate() {
   } = useForm({
     resolver: yupResolver(CreateStaffSchema),
   });
-  const { setIsCreating, setStaff, setTriggerCreate } = useStaffContext();
+  const dispatch = useDispatch();
+  const { setIsCreating, setTriggerCreate } = useStaffContext();
 
   function recalling(data: any) {
-    handle_create_submit(data, setIsCreating, setStaff, setTriggerCreate);
+    handle_create_submit(data, setIsCreating, setTriggerCreate, dispatch);
   }
   //  display
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Create Staff
       </h3>
 
@@ -145,10 +147,10 @@ export function FormUpdate() {
   } = useForm({
     resolver: yupResolver(UpdateStaffSchema),
   });
+  const dispatch = useDispatch();
   const {
     selectedStaff,
     setIsUpdating,
-    setStaff,
     setSelectedStaff,
     setTriggerUpdate,
   } = useStaffContext();
@@ -158,15 +160,15 @@ export function FormUpdate() {
       data,
       selectedStaff,
       setIsUpdating,
-      setStaff,
       setSelectedStaff,
       setTriggerUpdate,
+      dispatch,
     );
   }
   //  display
   return (
     <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Update Staff
       </h3>
 

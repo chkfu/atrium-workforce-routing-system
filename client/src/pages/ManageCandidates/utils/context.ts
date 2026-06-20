@@ -4,8 +4,6 @@ import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
 interface CandidateContextType {
   //  1. GET
   //  1a. receive general data
-  candidates: any[];
-  setCandidates: React.Dispatch<React.SetStateAction<any[]>>;
   selectedCandidates: number[];
   setSelectedCandidates: React.Dispatch<React.SetStateAction<number[]>>;
   //  1b. receive pagination data

@@ -12,3 +12,10 @@ export enum enum_prob_status {
   withdrawn = 'withdrawn',
   failed = 'failed',
 }
+
+export enum enum_staff_role {
+  pending = 'pending',
+  grade_1_assistant = 'grade_1_assistant',
+  grade_2_manager = 'grade_2_manager',
+  grade_3_executive = 'grade_3_executive',
+}

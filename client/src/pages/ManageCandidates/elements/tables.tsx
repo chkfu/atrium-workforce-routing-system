@@ -1,5 +1,7 @@
 import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -76,8 +78,9 @@ const table_cols = [
 
 //  remarks: table head for candidates data
 export function TableHeaderBox(): JSX.Element {
-  const { candidates, selectedCandidates, setSelectedCandidates } =
+  const { selectedCandidates, setSelectedCandidates } =
     useCandidateContext();
+  const candidates = useSelector((state: RootState) => state.candidates.value);
   //  display
   return (
     <thead className='sticky top-0 z-10 bg-slate-200'>
@@ -104,8 +107,9 @@ export function TableHeaderBox(): JSX.Element {
 
 //  remarks: table body forcandidates data
 export function TableBodyBox(): JSX.Element {
-  const { candidates, selectedCandidates, setSelectedCandidates } =
+  const { selectedCandidates, setSelectedCandidates } =
     useCandidateContext();
+  const candidates = useSelector((state: RootState) => state.candidates.value);
   if (!candidates || candidates.length === 0) {
     return (
       <p className='py-4 text-gray-500 transition-all ease-in-out duration-600'>

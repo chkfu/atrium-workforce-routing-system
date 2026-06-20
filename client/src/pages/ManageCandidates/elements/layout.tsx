@@ -10,6 +10,8 @@ import {
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
 import { FormSorting, FormFiltering } from './forms';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 //  ==========    MAIN    ==========
 
@@ -61,8 +63,8 @@ export function ControlPanelSection(): JSX.Element {
 
 //  remarks: table display
 export function TableSection(): JSX.Element {
-  const { selectedCandidates, candidates } = useCandidateContext();
-
+  const { selectedCandidates } = useCandidateContext();
+  const candidates = useSelector((state: RootState) => state.candidates.value);
   if (candidates.length === 0) {
     return (
       <div className='pt-2 w-full'>

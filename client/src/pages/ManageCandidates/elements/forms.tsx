@@ -46,8 +46,8 @@ export function FormCreate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-screen mb-6' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Create Candidate
       </h3>
 
@@ -139,8 +139,8 @@ export function FormUpdate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-screen mb-6' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-4 shrink-0'>
+    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
+      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
         Update Candidate
       </h3>
 

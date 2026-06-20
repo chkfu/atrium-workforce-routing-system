@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setStaff } from '../../redux/slices/StaffSlice';
 import Accordion from '../../elements/Accordion';
 import LoadSpinner from '../../elements/LoadSpinner';
 import { API } from '../../config/api';
@@ -13,10 +15,10 @@ export default function ManageStaff(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
 
   //  hooks
+  const dispatch = useDispatch()
 
   //  1. GET
   //  1a. receive general data
-  const [staff, setStaff] = useState<any[]>([]);
   const [selectedStaff, setSelectedStaff] = useState<number[]>([]);
   //  1b. receive pagination data
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -138,14 +140,14 @@ export default function ManageStaff(): JSX.Element {
       .then((res) => {
         const StaffEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
-        setStaff(StaffEls);
+        dispatch(setStaff(StaffEls));
         setTotalPage(totalPages);
         setIsGetting(false);
       })
       .catch((err: any) => {
         console.error('[ManageStaff] error: fetching Staff:', err);
         // learnt: state change for re-render, as throw error did not trigger
-        setStaff([]);
+        dispatch(setStaff([]));
         setGetError(err.message || '[ManageStaff] error: Failed to load Staff');
         setIsGetting(false);
       });
@@ -171,8 +173,6 @@ export default function ManageStaff(): JSX.Element {
             //  1.  GET
 
             //  1a. receive general data
-            staff,
-            setStaff,
             selectedStaff,
             setSelectedStaff,
             //  1b. receive pagination data

@@ -3,8 +3,6 @@ import { createContext, useContext } from 'react';
 interface DepartmentContextType {
   //  1. GET
   //  1a. receive general data
-  departments: any[];
-  setDepartments: React.Dispatch<React.SetStateAction<any[]>>;
   selectedDepartments: number[];
   setSelectedDepartments: React.Dispatch<React.SetStateAction<number[]>>;
   //  1b. receive pagination data

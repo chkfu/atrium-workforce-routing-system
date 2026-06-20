@@ -3,8 +3,6 @@ import { createContext, useContext } from 'react';
 interface StaffContextType {
   //  1. GET
   //  1a. receive general data
-  staff: any[];
-  setStaff: React.Dispatch<React.SetStateAction<any[]>>;
   selectedStaff: number[];
   setSelectedStaff: React.Dispatch<React.SetStateAction<number[]>>;
   //  1b. receive pagination data

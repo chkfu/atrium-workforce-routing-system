@@ -40,7 +40,8 @@ export const handle_checkbox_status = (id: number) => {
 export const handle_checkbox_select_all = (
   event: React.ChangeEvent<HTMLInputElement>,
 ) => {
-  const { candidates, setSelectedCandidates } = useCandidateContext();
+  const { setSelectedCandidates } = useCandidateContext();
+  const candidates = useSelector((state: RootState) => state.candidates.value);
   const checked = event.target.checked;
   if (checked && candidates && candidates.length > 0) {
     const id_list = candidates.map((candidate) => candidate._id as number);

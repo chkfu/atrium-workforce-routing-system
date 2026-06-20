@@ -1,5 +1,7 @@
 import { useDepartmentContext } from '../utils/context';
 import { COLORS } from '../../../styles/color';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -66,7 +68,8 @@ const table_cols = [
 
 //  remarks: table head for Department data
 export function TableHeaderBox(): JSX.Element {
-  const { departments, selectedDepartments, setSelectedDepartments } = useDepartmentContext();
+  const { selectedDepartments, setSelectedDepartments } = useDepartmentContext();
+  const departments = useSelector((state: RootState) => state.department.value)
   //  display
   return (
     <thead className='sticky top-0 z-10 bg-slate-200'>
@@ -93,7 +96,8 @@ export function TableHeaderBox(): JSX.Element {
 
 //  remarks: table body for staff data
 export function TableBodyBox(): JSX.Element {
-  const { departments, selectedDepartments, setSelectedDepartments } = useDepartmentContext();
+  const { selectedDepartments, setSelectedDepartments } = useDepartmentContext();
+  const departments = useSelector((state: RootState) => state.department.value)
   if (!departments || departments.length === 0) {
     return (
       <p className='py-4 text-gray-500 transition-all ease-in-out duration-600'>

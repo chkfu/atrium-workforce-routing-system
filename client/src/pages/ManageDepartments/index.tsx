@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setDepartment } from '../../redux/slices/DepartmentSlice';
+import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Accordion from '../../elements/Accordion';
 import LoadSpinner from '../../elements/LoadSpinner';
@@ -13,10 +16,10 @@ export default function ManageDepartment(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
 
   //  hooks
+  const dispatch: Dispatch = useDispatch();
 
   //  1. GET
   //  1a. receive general data
-  const [departments, setDepartments] = useState<any[]>([]);
   const [selectedDepartments, setSelectedDepartments] = useState<number[]>([]);
   //  1b. receive pagination data
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -114,14 +117,14 @@ export default function ManageDepartment(): JSX.Element {
       .then((res) => {
         const DepartmentEls = res.data.data.result;
         const totalPages = res.data.data.total_pages;
-        setDepartments(DepartmentEls);
+        dispatch(setDepartment(DepartmentEls));
         setTotalPage(totalPages);
         setIsGetting(false);
       })
       .catch((err: any) => {
         console.error('[ManageDepartment] error: fetching Department:', err);
         // learnt: state change for re-render, as throw error did not trigger
-        setDepartments([]);
+        dispatch(setDepartment([]));
         setGetError(
           err.message || '[ManageDepartment] error: Failed to load Department',
         );
@@ -149,8 +152,6 @@ export default function ManageDepartment(): JSX.Element {
             //  1.  GET
 
             //  1a. receive general data
-            departments,
-            setDepartments,
             selectedDepartments,
             setSelectedDepartments,
             //  1b. receive pagination data

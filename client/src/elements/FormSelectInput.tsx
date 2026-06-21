@@ -10,9 +10,11 @@ interface FormSelectInputProps {
   options: SelectOption[];
   error?: FieldError;
   register?: UseFormRegisterReturn;
+  isDisabled?: boolean;
   required?: boolean;
   placeholder?: string;
   className?: string;
+  value?: string;
   customisedOnChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
@@ -21,9 +23,11 @@ export default function FormSelectInput({
   options,
   error,
   register,
+  isDisabled = false,
   required = false,
   placeholder = '--- Please Select ---',
   className = 'mb-4',
+  value = '',
   customisedOnChange,
 }: FormSelectInputProps) {
   return (
@@ -35,12 +39,13 @@ export default function FormSelectInput({
       </label>
       {/*  section: selection dropdown */}
       <select
+        disabled={isDisabled}
         {...(register || { onChange: customisedOnChange })}
         className={`w-full px-3 py-2 border rounded-lg focus:outline-none text-sm focus:border-teal-800 cursor-pointer transition-all ease-in-out duration-600 ${
           error
             ? 'border-red-500 focus:ring-red-300 bg-red-50'
             : 'border-gray-300 focus:ring-teal-300'
-        }`}
+        } ${isDisabled ? 'bg-gray-200 text-gray-600' : ''}`}
       >
         {/*  section: option list by iteration */}
         <option value=''>{placeholder}</option>

@@ -5,6 +5,7 @@ export default function FilterTextField({
   label,
   placeholder = 'Insert keywords...',
   value,
+  isDisabled = false,
   onChange,
 }: {
   id?: string;
@@ -13,6 +14,7 @@ export default function FilterTextField({
   label: string;
   placeholder?: string;
   value: string;
+  isDisabled?: boolean;
   onChange: (el: any) => void;
 }) {
   return (
@@ -31,6 +33,7 @@ export default function FilterTextField({
         value={value}
         onChange={onChange}
         className='px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all w-56'
+        disabled={isDisabled}
       />
     </div>
   );

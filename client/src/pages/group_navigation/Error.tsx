@@ -1,6 +1,6 @@
 import ButtonConfirm from '../../elements/ButtonConfirm';
 import { useNavigate } from 'react-router-dom';
-import PageNotFound from '../assets/svg/page-not-found.svg';
+import PageNotFound from '../../assets/svg/page-not-found.svg';
 import { useEffect, useState } from 'react';
 
 export default function Error(): JSX.Element {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../../redux/store';
 import { useDepartmentContext } from '../utils/context';
 import { TableHeaderBox, TableBodyBox } from './tables';
 import {

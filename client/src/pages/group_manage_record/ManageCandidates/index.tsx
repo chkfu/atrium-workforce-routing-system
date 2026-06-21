@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { setCandidates } from '../../redux/slices/CandidateSlice';
+import { setCandidates } from '../../../redux/slices/CandidateSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import Accordion from '../../elements/Accordion';
-import LoadSpinner from '../../elements/LoadSpinner';
-import { API } from '../../config/api';
+import Accordion from '../../../elements/Accordion';
+import LoadSpinner from '../../../elements/LoadSpinner';
+import { API } from '../../../config/api';
 import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
-import { enum_gender, enum_prob_status } from '../../utils/types/page_enums';
+import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {

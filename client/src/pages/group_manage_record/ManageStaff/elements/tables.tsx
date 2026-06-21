@@ -1,6 +1,6 @@
 import { useStaffContext } from '../utils/context';
-import { COLORS } from '../../../styles/color';
-import { RootState } from '../../../redux/store';
+import { COLORS } from '../../../../styles/color';
+import { RootState } from '../../../../redux/store';
 import { useSelector } from 'react-redux';
 
 //  ==========     MAIN DISPLAY     ==========

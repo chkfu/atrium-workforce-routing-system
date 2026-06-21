@@ -51,8 +51,7 @@ for (const [key, value] of Object.entries(route_register)) {
 }
 
 //  Catch-all handler for 404: invalid routes
-//  learnt: '*' is not supported from express 5
-exp_app.all('/{*path}', (req: Request, res: Response, next: NextFunction) => {
+exp_app.use((req: Request, res: Response) => {
   res.status(404).json({
     status: 'failed',
     message: `[SERVER] error: can't find ${req.originalUrl} on this server.`,

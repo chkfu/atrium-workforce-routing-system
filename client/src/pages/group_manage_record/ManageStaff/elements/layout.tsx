@@ -11,7 +11,7 @@ import {
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
 import { FormSorting, FormFiltering } from './forms';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../../redux/store';
 
 //  ==========    MAIN    ==========
 

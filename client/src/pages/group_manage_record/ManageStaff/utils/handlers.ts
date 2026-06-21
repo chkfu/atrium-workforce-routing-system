@@ -1,13 +1,13 @@
 import { useStaffContext } from './context';
-import { setStaff } from '../../../redux/slices/StaffSlice';
+import { setStaff } from '../../../../redux/slices/StaffSlice';
 import type { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
-import { API } from '../../../config/api';
+import { API } from '../../../../config/api';
 import { CreateStaffSchema, UpdateStaffSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../../redux/store';
 
 //  ==========  checkbox status  ==========
 

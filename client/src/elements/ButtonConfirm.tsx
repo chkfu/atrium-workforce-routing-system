@@ -18,7 +18,7 @@ export default function ButtonConfirm({
   return (
     <button
       type={type}
-      className='px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-lg'
+      className='px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-md'
       onClick={onClick}
       style={{ backgroundColor: COLORS.button_yellow, ...style }}
     >

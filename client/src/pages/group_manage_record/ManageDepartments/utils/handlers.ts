@@ -1,11 +1,11 @@
 import { useDepartmentContext } from './context';
 import { useSelector } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../redux/store';
-import { setDepartment } from '../../../redux/slices/DepartmentSlice';
+import { RootState } from '../../../../redux/store';
+import { setDepartment } from '../../../../redux/slices/DepartmentSlice';
 import axios from 'axios';
 import * as yup from 'yup';
-import { API } from '../../../config/api';
+import { API } from '../../../../config/api';
 import { CreateDepartmentSchema, UpdateDepartmentSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
 

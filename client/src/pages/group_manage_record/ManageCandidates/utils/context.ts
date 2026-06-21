@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
+import { enum_gender, enum_prob_status } from '../../../../utils/types/page_enums';
 
 interface CandidateContextType {
   //  1. GET

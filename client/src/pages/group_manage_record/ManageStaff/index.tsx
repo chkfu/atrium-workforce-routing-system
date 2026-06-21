@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setStaff } from '../../redux/slices/StaffSlice';
-import Accordion from '../../elements/Accordion';
-import LoadSpinner from '../../elements/LoadSpinner';
-import { API } from '../../config/api';
+import { setStaff } from '../../../redux/slices/StaffSlice';
+import Accordion from '../../../elements/Accordion';
+import LoadSpinner from '../../../elements/LoadSpinner';
+import { API } from '../../../config/api';
 import { StaffContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';

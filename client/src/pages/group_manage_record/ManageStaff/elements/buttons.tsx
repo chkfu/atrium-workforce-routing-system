@@ -1,10 +1,10 @@
 import { useStaffContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { COLORS } from '../../../styles/color';
+import { COLORS } from '../../../../styles/color';
 import { PopupCreate, PopupUpdate, PopupConvertActive } from './popups';
-import ButtonConfirm from '../../../elements/ButtonConfirm';
-import sort_asc from '../../../assets/svg/sort-asc.svg';
+import ButtonConfirm from '../../../../elements/ButtonConfirm';
+import sort_asc from '../../../../assets/svg/sort-asc.svg';
 import {
   handle_convert_submit,
   handle_convert_popup,
@@ -13,7 +13,7 @@ import {
   handle_filter_submit,
   handle_temp_filter_clear,
 } from '../utils/handlers';
-import filter from '../../../assets/svg/filter_icon.svg';
+import filter from '../../../../assets/svg/filter_icon.svg';
 
 //  POST: Staff
 

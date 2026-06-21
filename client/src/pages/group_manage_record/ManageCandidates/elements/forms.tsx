@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
-import FilterTextField from '../../../elements/FilterTextField';
-import FilterSelectInput from '../../../elements/FilterSelectInput';
-import FilterDateRangeInput from '../../../elements/FilterRangeInput';
+import FilterTextField from '../../../../elements/FilterTextField';
+import FilterSelectInput from '../../../../elements/FilterSelectInput';
+import FilterDateRangeInput from '../../../../elements/FilterRangeInput';
 import {
   ButtonUpdateCancel,
   ButtonUpdateSubmit,
@@ -13,9 +13,9 @@ import {
   ButtonFilterClear,
   ButtonFilterSubmit,
 } from './buttons';
-import FormTextField from '../../../elements/FormTextField';
-import FormSelectInput from '../../../elements/FormSelectInput';
-import ButtonClose from '../../../elements/ButtonClose';
+import FormTextField from '../../../../elements/FormTextField';
+import FormSelectInput from '../../../../elements/FormSelectInput';
+import ButtonClose from '../../../../elements/ButtonClose';
 import { CreateCandidateSchema, UpdateCandidateSchema } from '../utils/schema';
 import {
   handle_create_submit,

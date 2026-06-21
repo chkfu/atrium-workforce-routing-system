@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setDepartment } from '../../redux/slices/DepartmentSlice';
+import { setDepartment } from '../../../redux/slices/DepartmentSlice';
 import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
-import Accordion from '../../elements/Accordion';
-import LoadSpinner from '../../elements/LoadSpinner';
-import { API } from '../../config/api';
+import Accordion from '../../../elements/Accordion';
+import LoadSpinner from '../../../elements/LoadSpinner';
+import { API } from '../../../config/api';
 import { DepartmentContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';

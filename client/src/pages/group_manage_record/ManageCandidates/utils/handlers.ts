@@ -1,11 +1,11 @@
 import { useCandidateContext } from './context';
 import { useSelector } from 'react-redux';
-import { setCandidates } from '../../../redux/slices/CandidateSlice';
-import { RootState } from '../../../redux/store';
+import { setCandidates } from '../../../../redux/slices/CandidateSlice';
+import { RootState } from '../../../../redux/store';
 import type { Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios';
 import * as yup from 'yup';
-import { API } from '../../../config/api';
+import { API } from '../../../../config/api';
 import { CreateCandidateSchema, UpdateCandidateSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
 

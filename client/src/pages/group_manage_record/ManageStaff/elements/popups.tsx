@@ -1,7 +1,7 @@
 import { useStaffContext } from '../utils/context';
 import { ButtonConvertSubmit, ButtonConvertCancel } from './buttons';
 import { FormUpdate, FormCreate } from './forms';
-import ButtonClose from '../../../elements/ButtonClose';
+import ButtonClose from '../../../../elements/ButtonClose';
 
 //  remarks: popups for create new staff record
 export const PopupCreate = (): JSX.Element => {

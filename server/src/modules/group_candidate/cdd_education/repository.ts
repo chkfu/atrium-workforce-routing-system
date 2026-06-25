@@ -23,7 +23,7 @@ class CddEduRepository extends BaseRepository<TCddEduBase & TSchemaBase> {
     let query_str: string = `SELECT * FROM "${this.table}" WHERE "candidate_id" = $1;`;
     //  querying
     const result = await pool.query(query_str, [candidate_id]);
-    return result.rows[0];
+    return result.rows;
   };
 }
 

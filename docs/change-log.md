@@ -25,11 +25,16 @@ This file records the major version changes of the projects.
 ### Added
 
 - implemented redux for the shared state management among the webpages.
+- implemented candidate details and education section at profile candidate page.
 
 ### Edited
 
 - refactored duplicated methods and yup schema under `utils/` folder for reusability.
 - improved file structure of the `pages/` folder with reasonable page categorisation.
+
+### Fixed
+
+- fixed bug on creating candidate education record by eliminating score-related code.
 
 <br/>
 

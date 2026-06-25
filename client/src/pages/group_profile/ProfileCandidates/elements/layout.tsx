@@ -2,10 +2,9 @@ import Accordion from '../../../../elements/Accordion';
 import { FormCandidateDetails, FormCandidateEducation } from './forms';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useContext } from 'react';
-import { ICandidate, ICandidateEdu } from '../../../../utils/types/redux_types';
-import ButtonConfirm from '../../../../elements/ButtonConfirm';
+import { ICandidate } from '../../../../utils/types/redux_types';
 import { CandidateEduContext } from '../utils/context';
-import { COLORS } from '../../../../styles/color';
+import { ButtonCandidateTrigger } from './buttons';
 
 
 //  ==========    section: candidate details   ==========
@@ -57,12 +56,11 @@ function BoxCreateCandidateEdu(): JSX.Element {
   const [triggerCreateForm, setTriggerCreateForm] = useState<boolean>(false);
   const context = useContext(CandidateEduContext);
   return (
-    <div className='flex flex-col gap-4'>
-      <div className='flex justify-end'>
-        <ButtonConfirm
-          label={triggerCreateForm ? 'Cancel' : 'Add'}
-          onClick={() => setTriggerCreateForm(prev => !prev)}
-          style={triggerCreateForm ? { background: COLORS.light_gray, color: COLORS.dark_teal } : {background: COLORS.button_yellow }}
+    <div className='flex flex-col'>
+      <div className='flex justify-end mt-4'>
+        <ButtonCandidateTrigger
+          triggerCreateForm={triggerCreateForm}
+          setTriggerCreateForm={setTriggerCreateForm}
         />
       </div>
       {triggerCreateForm && <FormCandidateEducation targetCandidateEdu={context?.targetCandidateEdu || null} />}

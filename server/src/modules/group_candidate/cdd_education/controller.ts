@@ -40,16 +40,16 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
       const obj_arr: any = req.body[this.table];
       const records = await this.service.create_record_batch(obj_arr);
       //  remarks: trigger immediate creation of scoring record with calculation
-      const candidate_ids = Array.from(
-        new Set(records.map((record: any) => record.candidate_id)),
-      );
-      await Promise.all(
-        candidate_ids.map((candidate_id: any) =>
-          this.slt_score_service.update_score_edu_by_candidate(
-            String(candidate_id),
-          ),
-        ),
-      );
+      // const candidate_ids = Array.from(
+      //   new Set(records.map((record: any) => record.candidate_id)),
+      // );
+      // await Promise.all(
+      //   candidate_ids.map((candidate_id: any) =>
+      //     this.slt_score_service.update_score_edu_by_candidate(
+      //       String(candidate_id),
+      //     ),
+      //   ),
+      // );
       //  normal response
       res.status(201).json({
         status: 'success',
@@ -67,17 +67,17 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
   public update_record_details_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       const records = await this.service.update_record_details_batch(req.body);
-      //  remarks: trigger immediate creation of scoring record with calculation
-      const candidate_ids = Array.from(
-        new Set(records.map((record: any) => record.candidate_id)),
-      );
-      await Promise.all(
-        candidate_ids.map((candidate_id: any) =>
-          this.slt_score_service.update_score_edu_by_candidate(
-            String(candidate_id),
-          ),
-        ),
-      );
+      // //  remarks: trigger immediate creation of scoring record with calculation
+      // const candidate_ids = Array.from(
+      //   new Set(records.map((record: any) => record.candidate_id)),
+      // );
+      // await Promise.all(
+      //   candidate_ids.map((candidate_id: any) =>
+      //     this.slt_score_service.update_score_edu_by_candidate(
+      //       String(candidate_id),
+      //     ),
+      //   ),
+      // );
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -94,17 +94,17 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       // remarks: update is_active as true
       const records = await this.service.update_record_active_batch(req.body);
-      //  remarks: trigger immediate creation of scoring record with calculation
-      const candidate_ids = Array.from(
-        new Set(records.map((record: any) => record.candidate_id)),
-      );
-      await Promise.all(
-        candidate_ids.map((candidate_id: any) =>
-          this.slt_score_service.update_score_edu_by_candidate(
-            String(candidate_id),
-          ),
-        ),
-      );
+      // //  remarks: trigger immediate creation of scoring record with calculation
+      // const candidate_ids = Array.from(
+      //   new Set(records.map((record: any) => record.candidate_id)),
+      // );
+      // await Promise.all(
+      //   candidate_ids.map((candidate_id: any) =>
+      //     this.slt_score_service.update_score_edu_by_candidate(
+      //       String(candidate_id),
+      //     ),
+      //   ),
+      // );
       //  normal response
       res.status(200).json({
         status: 'success',
@@ -127,17 +127,17 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
       );
       //  delete records and get returned data
       const records = await this.service.remove_record_batch(id_arr);
-      //  remarks: trigger immediate recalculation of scoring record with new education data
-      const candidate_ids = Array.from(
-        new Set(records.map((record: any) => record.candidate_id)),
-      );
-      await Promise.all(
-        candidate_ids.map((candidate_id: any) =>
-          this.slt_score_service.update_score_edu_by_candidate(
-            String(candidate_id),
-          ),
-        ),
-      );
+      // //  remarks: trigger immediate recalculation of scoring record with new education data
+      // const candidate_ids = Array.from(
+      //   new Set(records.map((record: any) => record.candidate_id)),
+      // );
+      // await Promise.all(
+      //   candidate_ids.map((candidate_id: any) =>
+      //     this.slt_score_service.update_score_edu_by_candidate(
+      //       String(candidate_id),
+      //     ),
+      //   ),
+      // );
       return res.status(204).send();
     });
 

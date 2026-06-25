@@ -26,6 +26,26 @@ export function ButtonCandidateDetailsSubmit() {
 
 //  ==========  Section: Candidate Qualification  ==========
 
+export function ButtonCandidateTrigger({
+  triggerCreateForm,
+  setTriggerCreateForm,
+}: {
+  triggerCreateForm: boolean;
+  setTriggerCreateForm: (value: boolean) => void;
+}) {
+  return (
+    <ButtonConfirm
+      label={triggerCreateForm ? 'Cancel' : 'Add'}
+      onClick={() => setTriggerCreateForm(!triggerCreateForm)}
+      style={
+        triggerCreateForm
+          ? { background: COLORS.light_gray, color: COLORS.dark_teal }
+          : { background: COLORS.button_yellow }
+      }
+    />
+  );
+}
+
 export function ButtonCandidateEduReset({ reset }: { reset: () => void }) {
   return (
     <ButtonConfirm

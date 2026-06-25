@@ -1,4 +1,4 @@
-import { ICandidate } from '../../../../utils/types/redux_types';
+import { ICandidate, ICandidateEdu } from '../../../../utils/types/redux_types';
 import axios from 'axios';
 import { API } from '../../../../config/api';
 
@@ -30,16 +30,20 @@ export async function handle_candidate_details_submit(
 //  remarks: create candidate education record
 export async function handle_create_candidate_edu_submit(
   id: string,
-  data: ICandidate,
+  data: ICandidateEdu,
 ) {
   try {
-    const { _id, created_at, updated_at, ...payload } = data;
-    await axios.patch(`${API.CANDIDATES_EDU}/${id}`, {
-      _ids: [String(id)],
-      ...payload,
+    const { _id, created_at, updated_at, candidate_id, ...payload } = data;
+    await axios.post(`${API.CANDIDATES_EDU}`, {
+      candidate_education: [
+        {
+          candidate_id: Number(id),
+          ...payload,
+        },
+      ],
     });
     alert(
-      `[ProfileCandidate] succeed: the education record of candidate ${id} has been updated successfully.`,
+      `[ProfileCandidate] succeed: the education record of candidate ${id} has been created successfully.`,
     );
   } catch (err: any) {
     alert(

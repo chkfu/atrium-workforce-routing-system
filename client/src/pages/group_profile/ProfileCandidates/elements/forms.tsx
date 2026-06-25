@@ -1,6 +1,6 @@
 import FormTextField from '../../../../elements/FormTextField';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import FormSelectInput from '../../../../elements/FormSelectInput';
 import {
   enum_cert_degree,
@@ -158,9 +158,11 @@ export function FormCandidateDetails({
 // remarks: Input form for the section - candidate education
 
 export function FormCandidateEducation({
-  targetCandidateEdu
+  targetCandidateEdu,
+  setTriggerCreateForm,
 }: {
   targetCandidateEdu: ICandidateEdu | null;
+  setTriggerCreateForm: (value: boolean) => void;
 }): JSX.Element {
   //  remarks: get react hook form methods
   const {
@@ -183,14 +185,27 @@ export function FormCandidateEducation({
         is_active: String(targetCandidateEdu.is_active)
       });
     } else {
-      reset({});
+      reset({
+        cert_degree: '',
+        cert_institute: '',
+        cert_major: '',
+        year_issued: '',
+        is_verified: 'false',
+        is_active: 'true'
+      });
     }
   }, [targetCandidateEdu, reset]);
+
+  const onSubmit = async (data: any) => {
+    const success = await handle_create_candidate_edu_submit(id as string, data);
+    if (success) {
+      setTriggerCreateForm(false);
+    }
+  };
+
   //  remarks: display
   return (
-  <form className='mt-4 pb-4 border-b border-gray-400' onSubmit={handleSubmit((data) =>
-    handle_create_candidate_edu_submit(id as string, data),
-  )}>
+  <form className='mt-4 pb-4 border-b border-gray-400' onSubmit={handleSubmit(onSubmit)}>
 
     <div className='mb-4 py-1'>
       <h3 className='font-bold text-lg'>Create New Qualification</h3>
@@ -261,8 +276,8 @@ export function FormCandidateEducation({
         cert_institute: '',
         cert_major: '',
         year_issued: '',
-        is_verified: '',
-        is_active: ''
+        is_verified: 'false',
+        is_active: 'true'
       })} />
       <ButtonCandidateEduSubmit />
     </div>

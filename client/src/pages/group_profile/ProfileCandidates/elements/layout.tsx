@@ -63,7 +63,7 @@ function BoxCreateCandidateEdu(): JSX.Element {
           setTriggerCreateForm={setTriggerCreateForm}
         />
       </div>
-      {triggerCreateForm && <FormCandidateEducation targetCandidateEdu={context?.targetCandidateEdu || null} />}
+      {triggerCreateForm && <FormCandidateEducation targetCandidateEdu={context?.targetCandidateEdu || null} setTriggerCreateForm={setTriggerCreateForm} />}
     </div>
   );
 }

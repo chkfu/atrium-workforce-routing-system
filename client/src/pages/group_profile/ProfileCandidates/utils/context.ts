@@ -1,13 +1,8 @@
 import { createContext, useContext, Context, Dispatch, SetStateAction } from 'react';
-import { ICandidate, ICandidateEdu } from '../../../../utils/types/redux_types';
+import { ICandidateEdu } from '../../../../utils/types/redux_types';
 
 
 //  remarks: types
-
-interface CandidateDetailType {
-  targetCandidate: ICandidate | null;
-  setTargetCandidate: Dispatch<SetStateAction<ICandidate | null>>;
-}
 
 interface CandidateEduType {
   targetCandidateEdu: ICandidateEdu | null;

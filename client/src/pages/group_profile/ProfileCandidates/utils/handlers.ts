@@ -18,10 +18,12 @@ export async function handle_candidate_details_submit(
     alert(
       `[ProfileCandidate] succeed: candidate ${id} has been updated successfully.`,
     );
+    return true;
   } catch (err: any) {
     alert(
       `[ProfileCandidate] error: ${err.response?.data?.message || err.message}`,
     );
+    return false;
   }
 }
 
@@ -45,9 +47,11 @@ export async function handle_create_candidate_edu_submit(
     alert(
       `[ProfileCandidate] succeed: the education record of candidate ${id} has been created successfully.`,
     );
+    return true;
   } catch (err: any) {
     alert(
       `[ProfileCandidate] error: ${err.response?.data?.message || err.message}`,
     );
+    return false;
   }
 }

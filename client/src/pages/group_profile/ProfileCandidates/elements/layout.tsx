@@ -1,10 +1,16 @@
 import Accordion from '../../../../elements/Accordion';
-import { FormCandidateDetails } from './forms';
+import { FormCandidateDetails, FormCandidateEducation } from './forms';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
-import { ICandidate } from '../../../../utils/types/redux_types';
+import { useEffect, useState, useContext } from 'react';
+import { ICandidate, ICandidateEdu } from '../../../../utils/types/redux_types';
+import ButtonConfirm from '../../../../elements/ButtonConfirm';
+import { CandidateEduContext } from '../utils/context';
+import { COLORS } from '../../../../styles/color';
 
-// remarks: candidate detials
+
+//  ==========    section: candidate details   ==========
+
+//  remarks: the section container of candidate details
 export function SectionDetails({
   targetCandidate,
 }: {
@@ -13,7 +19,6 @@ export function SectionDetails({
   const { reset } = useForm<ICandidate>({
     defaultValues: targetCandidate || {},
   });
-
   //  learnt: `reset` is used for sync the existing data
   //  remarks: set to reset data based on curr targetCandidate, if it has been updated
   useEffect(() => {
@@ -32,19 +37,42 @@ export function SectionDetails({
   );
 }
 
-// remarks: Education
+//  ==========    section: candidate qualification    ==========
+
+//  remarks: the section container of candidate qualification
 export function SectionEducation(): JSX.Element {
+  //  remarks: display
   return (
     <Accordion
       title='(2) Section Qualification'
       titleSize='text-xl'
     >
-      Qualification
+      <BoxCreateCandidateEdu />
     </Accordion>
   );
 }
 
-// remarks: experience
+
+function BoxCreateCandidateEdu(): JSX.Element {
+  const [triggerCreateForm, setTriggerCreateForm] = useState<boolean>(false);
+  const context = useContext(CandidateEduContext);
+  return (
+    <div className='flex flex-col gap-4'>
+      <div className='flex justify-end'>
+        <ButtonConfirm
+          label={triggerCreateForm ? 'Cancel' : 'Add'}
+          onClick={() => setTriggerCreateForm(prev => !prev)}
+          style={triggerCreateForm ? { background: COLORS.light_gray, color: COLORS.dark_teal } : {background: COLORS.button_yellow }}
+        />
+      </div>
+      {triggerCreateForm && <FormCandidateEducation targetCandidateEdu={context?.targetCandidateEdu || null} />}
+    </div>
+  );
+}
+
+
+//  ==========    section: candidate experience    ==========
+
 export function SectionExperience(): JSX.Element {
   return (
     <Accordion

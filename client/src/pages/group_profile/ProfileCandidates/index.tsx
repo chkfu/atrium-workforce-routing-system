@@ -9,7 +9,13 @@ import {
 import Accordion from '../../../elements/Accordion';
 import axios from 'axios';
 import { API } from '../../../config/api';
-import { ICandidate } from '../../../utils/types/redux_types';
+import { ICandidate, ICandidateEdu } from '../../../utils/types/redux_types';
+import {
+  CandidateEduContext,
+  CandidateExpContext,
+  CandidateTestContext,
+  CandidatePrefContext,
+} from './utils/context';
 
 export default function ProfileCandidateP(): JSX.Element {
   //  remarks: identify the specific candidate profile to be viewed
@@ -19,6 +25,12 @@ export default function ProfileCandidateP(): JSX.Element {
   const [targetCandidate, setTargetCandidate] = useState<ICandidate | null>(
     null,
   );
+  const [targetCandidateEdu, setTargetCandidateEdu] = useState<ICandidateEdu | null>(
+    null,
+  );
+  const [targetCandidateExp, setTargetCandidateExp] = useState<any>(null);
+  const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
+  const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
   const [getError, setGetError] = useState<any | null>(null);
 
   //  remarks: querying data from SQL
@@ -44,13 +56,21 @@ export default function ProfileCandidateP(): JSX.Element {
   }, [id]);
 
   return (
-    <div id='candidate-profile-container'>
-      <Accordion title='Candidate Profile'>
-        <SectionDetails targetCandidate={targetCandidate} />
-        <SectionEducation />
-        <SectionExperience />
-        <SectionTestScore />
-      </Accordion>
-    </div>
+    <CandidateEduContext.Provider value={{ targetCandidateEdu, setTargetCandidateEdu }}>
+      <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>
+        <CandidateTestContext.Provider value={{ targetCandidateTest, setTargetCandidateTest }}>
+          <CandidatePrefContext.Provider value={{ targetCandidatePref, setTargetCandidatePref }}>
+            <div id='candidate-profile-container'>
+              <Accordion title='Candidate Profile'>
+                <SectionDetails targetCandidate={targetCandidate} />
+                <SectionEducation />
+                <SectionExperience />
+                <SectionTestScore />
+              </Accordion>
+            </div>
+          </CandidatePrefContext.Provider>
+        </CandidateTestContext.Provider>
+      </CandidateExpContext.Provider>
+    </CandidateEduContext.Provider>
   );
 }

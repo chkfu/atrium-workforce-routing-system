@@ -14,7 +14,7 @@ export default function FormTextField({
   label: string;
   placeholder?: string;
   type?: 'text' | 'email' | 'password' | 'number' | 'date';
-  error?: FieldError;
+  error?: FieldError | any;
   register?: UseFormRegisterReturn;
   isDisabled?: boolean;
   required?: boolean;

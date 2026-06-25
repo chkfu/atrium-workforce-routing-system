@@ -1,4 +1,4 @@
-import { enum_gender, enum_prob_status, enum_staff_role } from './page_enums'
+import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_gender, enum_prob_status, enum_staff_role } from './page_enums'
 
 //  candidates
 
@@ -16,6 +16,23 @@ export interface ICandidate {
 
 export interface ICandidateList {
   value: ICandidate[]
+}
+
+export interface ICandidateEdu {
+  _id: number
+  candidate_id: number
+  cert_degree: enum_cert_degree
+  cert_institute: enum_cert_institute
+  cert_major: enum_cert_major
+  year_issued: number
+  is_verified: boolean
+  created_at: string
+  updated_at: string
+  is_active: boolean
+}
+
+export interface ICandidateEduList {
+  value: ICandidateEdu[]
 }
 
 

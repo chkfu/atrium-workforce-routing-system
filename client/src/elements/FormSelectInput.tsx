@@ -8,7 +8,7 @@ interface SelectOption {
 interface FormSelectInputProps {
   label: string;
   options: SelectOption[];
-  error?: FieldError;
+  error?: FieldError | any;
   register?: UseFormRegisterReturn;
   isDisabled?: boolean;
   required?: boolean;

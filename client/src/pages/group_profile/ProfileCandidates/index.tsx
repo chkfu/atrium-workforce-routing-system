@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setDepartment } from '../../../redux/slices/DepartmentSlice';
 import {
   SectionDetails,
   SectionEducation,
   SectionExperience,
+  SectionPreference,
   SectionTestScore,
 } from './elements/layout';
 import Accordion from '../../../elements/Accordion';
@@ -21,6 +24,9 @@ export default function ProfileCandidateP(): JSX.Element {
   //  remarks: identify the specific candidate profile to be viewed
   const { id } = useParams<{ id: string }>();
 
+  //  remarks: dispatch for Redux
+  const dispatch = useDispatch();
+
   //  remarks: local state management
   const [targetCandidate, setTargetCandidate] = useState<ICandidate | null>(null);
   const [targetCandidateEdu, setTargetCandidateEdu] = useState<ICandidateEdu | null>(null);
@@ -28,6 +34,20 @@ export default function ProfileCandidateP(): JSX.Element {
   const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
   const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
   const [getError, setGetError] = useState<any | null>(null);
+
+  //  remarks: load departments on mount
+  useEffect(() => {
+    axios
+      .get(API.DEPARTMENTS)
+      .then((res) => {
+        const departments = res.data.data.result;
+        dispatch(setDepartment(departments));
+      })
+      .catch((err: any) => {
+        console.error('[ProfileCandidate] error: fetching departments:', err);
+        dispatch(setDepartment([]));
+      });
+  }, [dispatch]);
 
   //  remarks: querying data from SQL
   //  (1) section: candidate details
@@ -57,6 +77,7 @@ export default function ProfileCandidateP(): JSX.Element {
                 <SectionEducation />
                 <SectionExperience />
                 <SectionTestScore />
+                <SectionPreference />
               </Accordion>
             </div>
           </CandidatePrefContext.Provider>

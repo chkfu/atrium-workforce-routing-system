@@ -43,3 +43,19 @@ export async function handle_create_candidate_edu_submit(id: string, data: ICand
     return false;
   }
 }
+
+
+//  ==========    Section: Candidate Preferences    ==========
+
+export function init_select_dept_opts({ departments }: { departments: any[] }): Array<{ value: string; label: string }> {
+  if (!departments || departments.length === 0) {
+    return [];
+  }
+  const result = departments
+    .filter((dept) => dept.is_active !== false)
+    .map((dept) => ({
+      value: String(dept._id),
+      label: dept.dept_name,
+    }));
+  return result;
+}

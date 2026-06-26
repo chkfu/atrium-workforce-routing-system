@@ -24,6 +24,7 @@ import {
   ButtonCandidateEduReset,
   ButtonCandidateEduSubmit,
 } from './buttons';
+import { PLACEHOLDER_SELECT } from '../../../../utils/constants';
 
 // =========== Forms ==========
 
@@ -154,7 +155,7 @@ export function FormCandidateDetails({
               error={errors.prob_status as any}
               isDisabled={false}
               required={false}
-              placeholder="--- Please Select ---"
+              placeholder={PLACEHOLDER_SELECT}
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -171,7 +172,7 @@ export function FormCandidateDetails({
               error={errors.is_active}
               isDisabled={false}
               required={false}
-              placeholder="--- Please Select ---"
+              placeholder={PLACEHOLDER_SELECT}
             />
           </div>
         </div>
@@ -248,7 +249,14 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
     } else {
       const empty: any = {};
       Object.keys(form_structure).forEach((key) => {
-        empty[key] = form_structure[key].type === 'select' ? '' : '';
+        //  learnt: while updated yup schema, input field building also need to be specified
+        if (key === 'is_active') {
+          empty[key] = 'true';
+        } else if (key === 'is_verified') {
+          empty[key] = 'false';
+        } else {
+          empty[key] = '';
+        }
       });
       reset(empty);
     }

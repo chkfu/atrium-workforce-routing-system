@@ -118,8 +118,8 @@ CREATE TABLE IF NOT EXISTS candidate_experience(
   exp_nature  VARCHAR(50),
   exp_role  VARCHAR(50),
   exp_institute  VARCHAR(50),
-  year_start  INTEGER,
-  year_end  INTEGER,
+  date_start  DATE,
+  date_end  DATE,
   is_verified  BOOLEAN  DEFAULT FALSE,
   CONSTRAINT fk_candidate_exp
     FOREIGN KEY (candidate_id)

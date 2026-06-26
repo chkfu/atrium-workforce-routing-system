@@ -1,11 +1,12 @@
 import Accordion from '../../../../elements/Accordion';
 import { FormCandidateDetails, FormSectionCreateReuse } from './forms';
-import { CandidateEduStructrure } from '../utils/structures';
+import { CandidateEduStructrure, CandidateExpStructrure, CandidateTestStructrure, getCandidatePrefStructrure } from '../utils/structures';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useContext } from 'react';
 import { ICandidate } from '../../../../utils/types/redux_types';
-import { CandidateEduContext } from '../utils/context';
+import { CandidateEduContext, CandidateExpContext, CandidateTestContext, CandidatePrefContext } from '../utils/context';
 import { ButtonCandidateTrigger } from './buttons';
+import { useSelector } from 'react-redux';
 
 //  ==========    Section: Candidate Details   ==========
 
@@ -33,21 +34,83 @@ export function SectionDetails({
   );
 }
 
-//  ==========    section: candidate qualification    ==========
+//  ==========    Section: Candidate Qualification    ==========
 
 //  remarks: the section container of candidate qualification
 export function SectionEducation(): JSX.Element {
-  //  remarks: display
+  const context = useContext(CandidateEduContext);
   return (
     <Accordion title="(2) Section Qualification" titleSize="text-xl">
-      <BoxCreateCandidateEdu />
+      <BoxSubsectionCreateReuse
+        sect_state={context?.targetCandidateEdu || null}
+        sect_structure={CandidateEduStructrure}
+        form_title="Create New Qualification"
+        form_subtitle="Add new record to educational history."
+      />
     </Accordion>
   );
 }
 
-function BoxCreateCandidateEdu(): JSX.Element {
+
+//  ==========    Section: Candidate Experience    ==========
+
+export function SectionExperience(): JSX.Element {
+  const context = useContext(CandidateExpContext);
+  return (
+    <Accordion title="(3) Section Experience" titleSize="text-xl">
+      <BoxSubsectionCreateReuse
+        sect_state={context?.targetCandidateExp || null}
+        sect_structure={CandidateExpStructrure}
+        form_title="Create New Work Experience"
+        form_subtitle="Add new record to work history."
+      />
+    </Accordion>
+  );
+}
+
+//  ==========    Section: Candidate Test Score   ==========
+
+// remarks: test score
+export function SectionTestScore(): JSX.Element {
+  const context = useContext(CandidateTestContext);
+  return (
+    <Accordion title="(4) Section Test Score" titleSize="text-xl">
+      {/*  TODO: append update form  */}
+    </Accordion>
+  );
+}
+
+
+//  ==========    Section: Candidate Preference   ==========
+
+// remarks: preferences
+export function SectionPreference(): JSX.Element {
+  const context = useContext(CandidatePrefContext);
+  const departments = useSelector((state: any) => state.department.value);
+  return (
+    <Accordion title="(5) Section Preferences" titleSize="text-xl">
+      {/*  TODO: append update form  */}
+    </Accordion>
+  );
+}
+
+
+//  ==========    Section: Reuse Component   ==========
+ 
+function BoxSubsectionCreateReuse<T extends Record<string, any> = any>({
+  sect_state,
+  sect_structure,
+  form_title,
+  form_subtitle,
+  form_schema,
+}: {
+  sect_state: T | null;
+  sect_structure: Record<string, any>;
+  form_title: string;
+  form_subtitle: string;
+  form_schema?: any;
+}): JSX.Element {
   const [triggerCreateForm, setTriggerCreateForm] = useState<boolean>(false);
-  const context = useContext(CandidateEduContext);
   return (
     <div className="flex flex-col">
       <div className="flex justify-end mt-4">
@@ -58,47 +121,19 @@ function BoxCreateCandidateEdu(): JSX.Element {
       </div>
       {triggerCreateForm && (
         <FormSectionCreateReuse
-          sect_state={context?.targetCandidateEdu || null}
+          sect_state={sect_state}
           form_trigger={setTriggerCreateForm}
-          form_title="Create New Qualification"
-          form_subtitle="Add new record to your educational history."
-          form_structure={CandidateEduStructrure}
+          form_title={form_title}
+          form_subtitle={form_subtitle}
+          form_structure={sect_structure}
+          form_schema={form_schema}
         />
       )}
     </div>
   );
 }
 
-//  ==========    section: candidate experience    ==========
-
-export function SectionExperience(): JSX.Element {
-  return (
-    <Accordion title="(3) Section Experience" titleSize="text-xl">
-      Section Experience
-    </Accordion>
-  );
-}
 
 
-//  ==========    section: candidate test score   ==========
-
-// remarks: experience
-export function SectionTestScore(): JSX.Element {
-  return (
-    <Accordion title="(4) Section Test Score" titleSize="text-xl">
-      Test Scores
-    </Accordion>
-  );
-}
 
 
-//  ==========    section: candidate preference   ==========
-
-// remarks: experience
-export function SectionPreference(): JSX.Element {
-  return (
-    <Accordion title="(4) Section Preferences" titleSize="text-xl">
-      Test Scores
-    </Accordion>
-  );
-}

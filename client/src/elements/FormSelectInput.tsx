@@ -49,7 +49,7 @@ export default function FormSelectInput({
       >
         {/*  section: option list by iteration */}
         <option value="">{placeholder}</option>
-        {options.map((el) => (
+        {options && options.map((el) => (
           <option key={el.value} value={el.value}>
             {el.label}
           </option>

@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jun 20, 2026  - In Progress
+## [1.0.5] - Jun 26, 2026  - In Progress
 
 <i>Objective: implement id-specific sub-page of candidates, staff and department table </i>
 
@@ -31,6 +31,7 @@ This file records the major version changes of the projects.
 
 - refactored duplicated methods and yup schema under `utils/` folder for reusability.
 - improved file structure of the `pages/` folder with reasonable page categorisation.
+- refactored duplicated subsection section into reusable forms for record creation at profile candidate page.
 
 ### Fixed
 

@@ -1,12 +1,13 @@
 import Accordion from '../../../../elements/Accordion';
-import { FormCandidateDetails, FormSectionCreateReuse } from './forms';
-import { CandidateEduStructrure, CandidateExpStructrure, CandidateTestStructrure, getCandidatePrefStructrure } from '../utils/structures';
+import { FormSubsectionUpdateReuse } from './forms';
+import { CandidateDetailStructure, CandidateEduStructrure, CandidateExpStructrure } from '../utils/structures';
+import { BoxSubsectionCreateReuse } from '../../shared/BoxSubsectionCreateReuse';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { ICandidate } from '../../../../utils/types/redux_types';
-import { CandidateEduContext, CandidateExpContext, CandidateTestContext, CandidatePrefContext } from '../utils/context';
-import { ButtonCandidateTrigger } from './buttons';
-import { useSelector } from 'react-redux';
+import { CandidateEduContext, CandidateExpContext } from '../utils/context';
+import { UpdateCandidateSchema } from '../../../group_manage_record/ManageCandidates/utils/schema';
+import { handle_candidate_details_submit } from '../utils/handlers';
 
 //  ==========    Section: Candidate Details   ==========
 
@@ -27,9 +28,15 @@ export function SectionDetails({
     }
   }, [targetCandidate]);
 
+  const handleSubmit = (data: any) => {
+    if (targetCandidate?._id) {
+      handle_candidate_details_submit(String(targetCandidate._id), data);
+    }
+  };
+
   return (
     <Accordion title="(1) Patron Details" titleSize="text-xl">
-      <FormCandidateDetails targetCandidate={targetCandidate} />
+      <FormSubsectionUpdateReuse sect_state={targetCandidate} form_schema={UpdateCandidateSchema} submit_handler={handleSubmit} form_structure={CandidateDetailStructure} form_subtitle="" />
     </Accordion>
   );
 }
@@ -72,7 +79,6 @@ export function SectionExperience(): JSX.Element {
 
 // remarks: test score
 export function SectionTestScore(): JSX.Element {
-  const context = useContext(CandidateTestContext);
   return (
     <Accordion title="(4) Section Test Score" titleSize="text-xl">
       {/*  TODO: append update form  */}
@@ -85,54 +91,12 @@ export function SectionTestScore(): JSX.Element {
 
 // remarks: preferences
 export function SectionPreference(): JSX.Element {
-  const context = useContext(CandidatePrefContext);
-  const departments = useSelector((state: any) => state.department.value);
   return (
     <Accordion title="(5) Section Preferences" titleSize="text-xl">
       {/*  TODO: append update form  */}
     </Accordion>
   );
 }
-
-
-//  ==========    Section: Reuse Component   ==========
- 
-function BoxSubsectionCreateReuse<T extends Record<string, any> = any>({
-  sect_state,
-  sect_structure,
-  form_title,
-  form_subtitle,
-  form_schema,
-}: {
-  sect_state: T | null;
-  sect_structure: Record<string, any>;
-  form_title: string;
-  form_subtitle: string;
-  form_schema?: any;
-}): JSX.Element {
-  const [triggerCreateForm, setTriggerCreateForm] = useState<boolean>(false);
-  return (
-    <div className="flex flex-col">
-      <div className="flex justify-end mt-4">
-        <ButtonCandidateTrigger
-          triggerCreateForm={triggerCreateForm}
-          setTriggerCreateForm={setTriggerCreateForm}
-        />
-      </div>
-      {triggerCreateForm && (
-        <FormSectionCreateReuse
-          sect_state={sect_state}
-          form_trigger={setTriggerCreateForm}
-          form_title={form_title}
-          form_subtitle={form_subtitle}
-          form_structure={sect_structure}
-          form_schema={form_schema}
-        />
-      )}
-    </div>
-  );
-}
-
 
 
 

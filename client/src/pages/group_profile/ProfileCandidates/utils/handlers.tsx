@@ -8,7 +8,7 @@ import { API } from '../../../../config/api';
 export async function handle_candidate_details_submit(id: string, data: ICandidate) {
   try {
     const { _id, created_at, updated_at, ...payload } = data;
-    await axios.patch(`${API.CANDIDATES}/${id}`, {
+    await axios.patch(`${API.CANDIDATES}`, {
       _ids: [String(id)],
       ...payload,
     });

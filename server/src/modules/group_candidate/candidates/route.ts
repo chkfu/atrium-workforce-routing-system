@@ -30,7 +30,7 @@ router
   .patch(candidate_controller.update_record_active_batch());
 router.route('/empty').delete(candidate_controller.empty_record_all());
 
-router.route('/:id').get(candidate_controller.get_record_by_id());
+router.route('/:id').get(candidate_controller.get_record_by_id())
 
 //  Export
 

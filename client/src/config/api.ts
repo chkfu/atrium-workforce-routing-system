@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost:8080/api/v1';
+const BASE_URL = '/api/v1';
 
 export const API = {
   CANDIDATES: `${BASE_URL}/candidates`,

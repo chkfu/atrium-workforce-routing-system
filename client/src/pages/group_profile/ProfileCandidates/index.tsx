@@ -50,7 +50,6 @@ export default function ProfileCandidateP(): JSX.Element {
   }, [dispatch]);
 
   //  remarks: querying data from SQL
-  //  (1) section: candidate details
   useEffect(() => {
     axios
       .get(`${API.CANDIDATES}/${id}`)

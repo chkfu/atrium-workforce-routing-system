@@ -1,6 +1,60 @@
-import { enum_cert_degree, enum_cert_institute, enum_cert_major } from "../../../../utils/types/page_enums";
+import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_gender, enum_prob_status } from "../../../../utils/types/page_enums";
 import { init_select_dept_opts } from "./handlers";
 import { PLACEHOLDER_SELECT } from "../../../../utils/constants";
+
+
+
+//  remarks: table structure for building the forms (candidate details)
+export const CandidateDetailStructure = {
+  _id: {
+    type: 'text',
+    label: 'Identifier',
+    disabled: true,
+  },
+  first_name: {
+    type: 'text',
+    label: 'First Name',
+    placeholder: 'Insert name...',
+  },
+  last_name: {
+    type: 'text',
+    label: 'Last Name',
+    placeholder: 'Insert name...',
+  },
+  gender: {
+    type: 'select',
+    label: 'Gender',
+    options: Object.entries(enum_gender).map(([key, value]) => ({
+      value: key,
+      label: value,
+    })),
+    placeholder: PLACEHOLDER_SELECT,
+  },
+  email: {
+    type: 'email',
+    label: 'Email',
+    placeholder: 'Insert email...',
+  },
+  prob_status: {
+    type: 'select',
+    label: 'Candidate Stage',
+    options: Object.entries(enum_prob_status).map(([key, value]) => ({
+      value: key,
+      label: value,
+    })),
+    placeholder: PLACEHOLDER_SELECT,
+  },
+  is_active: {
+    type: 'select',
+    label: 'Active Status',
+    options: [
+      { value: 'true', label: 'True' },
+      { value: 'false', label: 'False' },
+    ],
+    placeholder: PLACEHOLDER_SELECT,
+  },
+}
+
 
 //  remarks: table structure for building the forms (candidate education)
 export const CandidateEduStructrure = {

@@ -45,35 +45,33 @@ export function FormCreate() {
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
-        Create Department
-      </h3>
+    <form onSubmit={handleSubmit(recalling)} className="flex flex-col h-96" noValidate>
+      <h3 className="text-lg font-semibold text-gray-800 mb-3 shrink-0">Create Department</h3>
 
       {/*  section: field inputs - scrollable  */}
-      <div className='overflow-y-auto flex-1'>
+      <div className="overflow-y-auto flex-1">
         <FormTextField
-          label='Department'
+          label="Department"
           register={register('dept_name')}
           error={errors.dept_name}
           required={true}
         />
         <FormTextField
-          type='number'
-          label='Capacity'
+          type="number"
+          label="Capacity"
           register={register('dept_capacity', { valueAsNumber: true })}
           error={errors.dept_capacity}
         />
         <FormTextField
-          type='number'
-          label='Weight'
+          type="number"
+          label="Weight"
           register={register('importance_weight', { valueAsNumber: true })}
           error={errors.importance_weight}
-        />   
+        />
       </div>
 
       {/*  section: buttons - fixed at bottom  */}
-      <div className='flex gap-4 justify-end mt-4 shrink-0'>
+      <div className="flex gap-4 justify-end mt-4 shrink-0">
         <ButtonCreateCancel />
         <ButtonCreateSubmit />
       </div>
@@ -93,12 +91,8 @@ export function FormUpdate() {
     resolver: yupResolver(UpdateDepartmentSchema),
   });
   const dispatch = useDispatch();
-  const {
-    selectedDepartments,
-    setIsUpdating,
-    setSelectedDepartments,
-    setTriggerUpdate,
-  } = useDepartmentContext();
+  const { selectedDepartments, setIsUpdating, setSelectedDepartments, setTriggerUpdate } =
+    useDepartmentContext();
 
   function recalling(data: any) {
     handle_update_submit(
@@ -107,38 +101,36 @@ export function FormUpdate() {
       setIsUpdating,
       setSelectedDepartments,
       setTriggerUpdate,
-      dispatch,
+      dispatch
     );
   }
   //  display
   return (
-    <form onSubmit={handleSubmit(recalling)} className='flex flex-col h-96' noValidate>
-      <h3 className='text-lg font-semibold text-gray-800 mb-3 shrink-0'>
-        Update Department
-      </h3>
+    <form onSubmit={handleSubmit(recalling)} className="flex flex-col h-96" noValidate>
+      <h3 className="text-lg font-semibold text-gray-800 mb-3 shrink-0">Update Department</h3>
 
       {/*  section: field inputs - scrollable  */}
-      <div className='overflow-y-auto flex-1'>
+      <div className="overflow-y-auto flex-1">
         <FormTextField
-          label='Department'
+          label="Department"
           register={register('dept_name')}
           error={errors.dept_name}
         />
         <FormTextField
-          type='number'
-          label='Capacity'
+          type="number"
+          label="Capacity"
           register={register('dept_capacity', { valueAsNumber: true })}
           error={errors.dept_capacity}
         />
         <FormTextField
-          type='number'
-          label='Weight'
+          type="number"
+          label="Weight"
           register={register('importance_weight', { valueAsNumber: true })}
           error={errors.importance_weight}
         />
       </div>
       {/*  section: buttons - fixed at bottom  */}
-      <div className='flex gap-4 justify-end mt-4 shrink-0'>
+      <div className="flex gap-4 justify-end mt-4 shrink-0">
         <ButtonUpdateCancel />
         <ButtonUpdateSubmit onClick={handleSubmit(recalling)} />
       </div>
@@ -183,17 +175,17 @@ export const FormFiltering = (): JSX.Element => {
             setFilterUpdatedFrom,
             setFilterUpdatedTo,
             setTriggerFilter,
-            setSearchParams,
+            setSearchParams
           )
         }
       />
-      <h4 className='text-md font-bold text-teal-800 font-serif mb-3 shrink-0'>
+      <h4 className="text-md font-bold text-teal-800 font-serif mb-3 shrink-0">
         Filtering Preferences
       </h4>
-      <div className='overflow-y-auto max-h-60'>
+      <div className="overflow-y-auto max-h-60">
         <OptionFilterOrder />
       </div>
-      <div className='flex justify-center mt-4 gap-4 shrink-0'>
+      <div className="flex justify-center mt-4 gap-4 shrink-0">
         <ButtonFilterClear />
         <ButtonFilterSubmit />
       </div>
@@ -228,52 +220,47 @@ export const OptionFilterOrder = (): JSX.Element => {
   } = useDepartmentContext();
   //  display
   return (
-    <div className='p-2'>
+    <div className="p-2">
       {/*  grid layout for filter items  */}
-      <div
-        className='grid gap-4 mb-4'
-        style={{ gridTemplateColumns: 'auto 1fr' }}
-      >
+      <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: 'auto 1fr' }}>
         {/*   section 1: name filtering  */}
         <FilterTextField
-          id='filter_department'
-          type='text'
-          name='filter_department'
-          label='Department'
-          placeholder='Insert keywords...'
+          id="filter_department"
+          type="text"
+          name="filter_department"
+          label="Department"
+          placeholder="Insert keywords..."
           onChange={(el) => setFilterName(el.target.value)}
           value={filterName}
         />
         {/*  section 2: capacity */}
-         <FilterRangeInput
-            label='Capacity'
-            fromId='filter_capacity_from'
-            toId='filter_capacity_to'
-            fromValue={String(filterCapacityFrom)}
-            toValue={String(filterCapacityTo)}
-            type='number'
-            onFromChange={(el) => setFilterCapacityFrom(el.target.value)}
-            onToChange={(el) => setFilterCapacityTo(el.target.value)}
+        <FilterRangeInput
+          label="Capacity"
+          fromId="filter_capacity_from"
+          toId="filter_capacity_to"
+          fromValue={String(filterCapacityFrom)}
+          toValue={String(filterCapacityTo)}
+          type="number"
+          onFromChange={(el) => setFilterCapacityFrom(el.target.value)}
+          onToChange={(el) => setFilterCapacityTo(el.target.value)}
         />
         <FilterRangeInput
-            label='Weighting'
-            fromId='filter_weight_from'
-            toId='filter_weight_to'
-            fromValue={String(filterWeightFrom)}
-            toValue={String(filterWeightTo)}
-            type='number'
-            onFromChange={(el) => setFilterWeightFrom(el.target.value)}
-            onToChange={(el) => setFilterWeightTo(el.target.value)}
+          label="Weighting"
+          fromId="filter_weight_from"
+          toId="filter_weight_to"
+          fromValue={String(filterWeightFrom)}
+          toValue={String(filterWeightTo)}
+          type="number"
+          onFromChange={(el) => setFilterWeightFrom(el.target.value)}
+          onToChange={(el) => setFilterWeightTo(el.target.value)}
         />
         {/*  section 8: Active Status  */}
         <FilterSelectInput
-          name='filter_active'
-          label='Active'
+          name="filter_active"
+          label="Active"
           value={filterIsActive === null ? null : String(filterIsActive)}
           onChange={(el) =>
-            setFilterIsActive(
-              el.target.value === '' ? null : el.target.value === 'true',
-            )
+            setFilterIsActive(el.target.value === '' ? null : el.target.value === 'true')
           }
           options={[
             { value: 'true', label: 'Active' },
@@ -282,9 +269,9 @@ export const OptionFilterOrder = (): JSX.Element => {
         />
         {/*  section 6: Created At  */}
         <FilterDateRangeInput
-          label='Created'
-          fromId='filter_created_from'
-          toId='filter_created_to'
+          label="Created"
+          fromId="filter_created_from"
+          toId="filter_created_to"
           fromValue={filterCreatedFrom}
           toValue={filterCreatedTo}
           onFromChange={(el) => setFilterCreatedFrom(el.target.value)}
@@ -292,9 +279,9 @@ export const OptionFilterOrder = (): JSX.Element => {
         />
         {/*  section 7: Updated At  */}
         <FilterDateRangeInput
-          label='Updated'
-          fromId='filter_updated_from'
-          toId='filter_updated_to'
+          label="Updated"
+          fromId="filter_updated_from"
+          toId="filter_updated_to"
           fromValue={filterUpdatedFrom}
           toValue={filterUpdatedTo}
           onFromChange={(el) => setFilterUpdatedFrom(el.target.value)}
@@ -310,25 +297,17 @@ export const OptionFilterOrder = (): JSX.Element => {
 //  remarks: main form for sorting
 export const FormSorting = (): JSX.Element => {
   const [searchParams] = useSearchParams();
-  const { setSortAsc, setSortTarget, triggerSort, setTriggerSort } =
-    useDepartmentContext();
+  const { setSortAsc, setSortTarget, triggerSort, setTriggerSort } = useDepartmentContext();
   //  display
   return (
     <form
       className={`fixed left-1/2 -translate-x-1/2 top-[35%] -translate-y-1/2 p-8 pb-5 border-gray-300 lg:absolute lg:top-full lg:translate-y-0 lg:right-0 lg:left-auto lg:translate-x-0 mt-3 w-72 bg-white border rounded-lg shadow-lg z-50 transform duration-600 transition-all ${triggerSort ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
     >
       <ButtonClose
-        fn={() =>
-          handle_temp_sort_reset(
-            setSortAsc,
-            setSortTarget,
-            setTriggerSort,
-            searchParams,
-          )
-        }
+        fn={() => handle_temp_sort_reset(setSortAsc, setSortTarget, setTriggerSort, searchParams)}
       />
       <OptionSortOrder />
-      <div className='flex justify-center mt-2'>
+      <div className="flex justify-center mt-2">
         <ButtonFilterClear />
         <ButtonSortSubmit />
       </div>
@@ -341,52 +320,47 @@ export const OptionSortOrder = (): JSX.Element => {
   const { sortAsc, setSortAsc, sortTarget, setSortTarget } = useDepartmentContext();
   //  display
   return (
-    <div className='py-1'>
+    <div className="py-1">
       {/*  section: box title  */}
       <div>
-        <h4 className='text-md font-bold text-teal-800 font-serif mb-2'>
-          Sorting Preferences
-        </h4>
+        <h4 className="text-md font-bold text-teal-800 font-serif mb-2">Sorting Preferences</h4>
       </div>
       {/*  section: sorting options */}
-      <div className='py-2 flex items-center justify-between group'>
+      <div className="py-2 flex items-center justify-between group">
         {/*  option 1: sort target  */}
-        <label className='text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
+        <label className="text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600">
           Target:
         </label>
         <select
-          className='w-36 px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all'
+          className="w-36 px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 duration-600 transition-all"
           value={sortTarget}
           onChange={(el) => setSortTarget(el.target.value)}
         >
-          <option value='_id'>ID</option>
-          <option value='department_name'>Name</option>
-          <option value='department_capacity'>Capacity</option>
-          <option value='department_weight'>Weight</option>
-          <option value='created_at'>Created date</option>
-          <option value='updated_at'>Updated date</option>
+          <option value="_id">ID</option>
+          <option value="department_name">Name</option>
+          <option value="department_capacity">Capacity</option>
+          <option value="department_weight">Weight</option>
+          <option value="created_at">Created date</option>
+          <option value="updated_at">Updated date</option>
         </select>
       </div>
       {/*  option 2: sort order  */}
-      <div className='py-1 flex items-center gap-3 group'>
-        <label className='pr-6 text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600'>
+      <div className="py-1 flex items-center gap-3 group">
+        <label className="pr-6 text-sm font-medium text-gray-700 group-focus-within:text-teal-600 transition-all duration-600">
           Order:
         </label>
-        <div className='flex gap-3'>
+        <div className="flex gap-3">
           {['asc', 'desc'].map((order) => (
-            <label
-              key={order}
-              className='flex items-center gap-2 cursor-pointer'
-            >
+            <label key={order} className="flex items-center gap-2 cursor-pointer">
               <input
-                type='radio'
-                name='sort_order'
+                type="radio"
+                name="sort_order"
                 value={order}
                 checked={order === 'asc' ? sortAsc : !sortAsc}
                 onChange={() => setSortAsc(order === 'asc')}
-                className='w-4 h-4'
+                className="w-4 h-4"
               />
-              <span className='text-sm text-gray-700'>
+              <span className="text-sm text-gray-700">
                 {order.charAt(0).toUpperCase() + order.slice(1)}
               </span>
             </label>
@@ -403,7 +377,7 @@ export const OptionPageLimit = (): JSX.Element => {
   //  display
   return (
     <select
-      name='limit'
+      name="limit"
       value={searchParams.get('limit') || '20'}
       onChange={(el) => {
         setSearchParams((prev) => {
@@ -412,12 +386,12 @@ export const OptionPageLimit = (): JSX.Element => {
           return prev;
         });
       }}
-      className='px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer duration-600 transition-all'
+      className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer duration-600 transition-all"
     >
-      <option value='10'>10</option>
-      <option value='15'>15</option>
-      <option value='20'>20</option>
-      <option value='50'>50</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
     </select>
   );
 };
@@ -430,7 +404,7 @@ export const OptionPageSelect = (): JSX.Element => {
   //  display
   return (
     <select
-      name='page'
+      name="page"
       value={currentPage}
       onChange={(el) =>
         setSearchParams((prev) => {
@@ -438,14 +412,11 @@ export const OptionPageSelect = (): JSX.Element => {
           return prev;
         })
       }
-      className='px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer duration-600 transition-all'
+      className="px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-600 cursor-pointer duration-600 transition-all"
     >
       {totalPage > 0 &&
         Array.from({ length: totalPage }, (_, index) => (
-          <option
-            key={index + 1}
-            value={index + 1}
-          >
+          <option key={index + 1} value={index + 1}>
             {index + 1}
           </option>
         ))}

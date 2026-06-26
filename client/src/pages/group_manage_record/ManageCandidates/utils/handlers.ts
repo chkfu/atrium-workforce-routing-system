@@ -2,7 +2,7 @@ import { useCandidateContext } from './context';
 import { useSelector } from 'react-redux';
 import { setCandidates } from '../../../../redux/slices/CandidateSlice';
 import { RootState } from '../../../../redux/store';
-import type { Dispatch } from '@reduxjs/toolkit'
+import type { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../../config/api';
@@ -37,9 +37,7 @@ export const handle_checkbox_status = (id: number) => {
 };
 
 //  remarks: manage overall select all (main table)
-export const handle_checkbox_select_all = (
-  event: React.ChangeEvent<HTMLInputElement>,
-) => {
+export const handle_checkbox_select_all = (event: React.ChangeEvent<HTMLInputElement>) => {
   const { setSelectedCandidates } = useCandidateContext();
   const candidates = useSelector((state: RootState) => state.candidates.value);
   const checked = event.target.checked;
@@ -64,7 +62,7 @@ export const handle_create_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to create candidates'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to create candidates'}`
     );
   }
 };
@@ -74,7 +72,7 @@ export const handle_create_submit = async (
   data: yup.InferType<typeof CreateCandidateSchema>,
   setIsCreating: (val: boolean) => void,
   setTriggerCreate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -106,7 +104,7 @@ export const handle_create_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to create candidate. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to create candidate. Please try again later.'}`
     );
   } finally {
     setIsCreating(false);
@@ -133,7 +131,7 @@ export const handle_update_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidates'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidates'}`
     );
   }
 };
@@ -152,7 +150,7 @@ export const handle_update_submit = async (
   setIsUpdating: (val: boolean) => void,
   setSelectedCandidates: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -187,7 +185,7 @@ export const handle_update_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to update candidate status. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to update candidate status. Please try again later.'}`
     );
   } finally {
     setIsUpdating(false);
@@ -199,7 +197,7 @@ export const handle_update_submit = async (
 //  remarks: manage convert active popup (convert active)
 export const handle_convert_popup = (
   selectedCandidates: number[],
-  setTriggerConvert: (val: boolean) => void,
+  setTriggerConvert: (val: boolean) => void
 ) => {
   //  remarks: case of no selection
   if (selectedCandidates.length === 0) {
@@ -216,7 +214,7 @@ export const handle_convert_popup = (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidate status'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidate status'}`
     );
   }
 };
@@ -225,7 +223,7 @@ export const handle_convert_popup = (
 export const handle_convert_cancel = (
   isConverting: boolean,
   setTriggerConvert: (val: boolean) => void,
-  setConvertStatus: (val: null) => void,
+  setConvertStatus: (val: null) => void
 ) => {
   if (isConverting) return;
   setTriggerConvert(false);
@@ -241,7 +239,7 @@ export const handle_convert_submit = async (
   setSelectedCandidates: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   if (isConverting) return;
   try {
@@ -283,7 +281,7 @@ export const handle_temp_sort_reset = (
   setSortAsc: (val: boolean) => void,
   setSortTarget: (val: string) => void,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams
 ) => {
   const sort_order = searchParams.get('sort_order') === 'true';
   const sort_target = searchParams.get('sort_target') || '_id';
@@ -296,7 +294,7 @@ export const handle_sort_submit = (
   sortAsc: boolean,
   sortTarget: string,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -319,7 +317,7 @@ export const handle_temp_filter_clear = (
   setFilterCreatedTo: (val: string) => void,
   setFilterUpdatedFrom: (val: string) => void,
   setFilterUpdatedTo: (val: string) => void,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setFilterName('');
   setFilterEmail('');
@@ -357,7 +355,7 @@ export const handle_temp_filter_reset = (
   setFilterUpdatedFrom: (val: string) => void,
   setFilterUpdatedTo: (val: string) => void,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   handle_temp_filter_clear(
     setFilterName,
@@ -369,7 +367,7 @@ export const handle_temp_filter_reset = (
     setFilterCreatedTo,
     setFilterUpdatedFrom,
     setFilterUpdatedTo,
-    setSearchParams,
+    setSearchParams
   );
   setTriggerFilter(false);
 };
@@ -385,7 +383,7 @@ export const handle_filter_submit = (
   filterUpdatedFrom: string,
   filterUpdatedTo: string,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -397,8 +395,7 @@ export const handle_filter_submit = (
     else params.delete('filter_gender');
     if (filterProbStatus) params.set('filter_prob_status', filterProbStatus);
     else params.delete('filter_prob_status');
-    if (filterIsActive !== null)
-      params.set('filter_is_active', String(filterIsActive));
+    if (filterIsActive !== null) params.set('filter_is_active', String(filterIsActive));
     else params.delete('filter_is_active');
     if (filterCreatedFrom) params.set('filter_created_from', filterCreatedFrom);
     else params.delete('filter_created_from');

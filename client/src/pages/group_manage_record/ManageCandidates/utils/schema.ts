@@ -28,15 +28,8 @@ export const CreateCandidateSchema = yup.object({
     .string()
     .required('Probation status is required')
     .oneOf(
-      [
-        'selecting',
-        'training',
-        'completed',
-        'postponed',
-        'withdrawn',
-        'failed',
-      ],
-      'Invalid option',
+      ['selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'],
+      'Invalid option'
     ),
 });
 
@@ -52,10 +45,7 @@ export const UpdateCandidateSchema = yup.object({
     .max(20, 'Exceed length of 20 characters.')
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim(),
-  gender: yup
-    .string()
-    .oneOf(['', 'male', 'female', 'other'], 'Invalid option')
-    .nullable(), // learnt: nullable enables to skipped
+  gender: yup.string().oneOf(['', 'male', 'female', 'other'], 'Invalid option').nullable(), // learnt: nullable enables to skipped
   email: yup
     .string()
     .transform((value) => value.replace(/\s/g, ''))
@@ -64,22 +54,11 @@ export const UpdateCandidateSchema = yup.object({
   prob_status: yup
     .string()
     .trim()
-    .oneOf([
-      '',
-      'selecting',
-      'training',
-      'completed',
-      'postponed',
-      'withdrawn',
-      'failed',
-    ])
+    .oneOf(['', 'selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'])
     .nullable(), // learnt: nullable enables to skipped
 });
 
 //  remarks: schema for filtering candidates (all fields optional)
 export const FilterCandidateSchema = yup.object({
-  filter_name: yup
-    .string()
-    .trim()
-    .max(20, 'Exceeded length of 20 characters.'),
+  filter_name: yup.string().trim().max(20, 'Exceeded length of 20 characters.'),
 });

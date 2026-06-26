@@ -40,19 +40,12 @@ const card_list_task_panel: TCardItem[] = [
 export default function DirectorDashboard(): JSX.Element {
   //  visualise
   return (
-    <section
-      id='director-dashboard-section'
-      className='px-12 py-6 flex flex-col gap-6'
-    >
+    <section id="director-dashboard-section" className="px-12 py-6 flex flex-col gap-6">
       {/* personal section */}
       {card_list_personal.map((el: TCardItem) => {
         return (
-          <Accordion title='Personal'>
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
+          <Accordion title="Personal">
+            <DashboardCard title={el.title} description={el.description} url={el.path} />
           </Accordion>
         );
       })}
@@ -60,12 +53,8 @@ export default function DirectorDashboard(): JSX.Element {
       {/*  work panel */}
       {card_list_task_panel.map((el: TCardItem) => {
         return (
-          <Accordion title='Task Panel'>
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
+          <Accordion title="Task Panel">
+            <DashboardCard title={el.title} description={el.description} url={el.path} />
           </Accordion>
         );
       })}

@@ -25,9 +25,7 @@ export function PanelFromContainer(): JSX.Element {
   return (
     <div
       className={`w-full h-[650px] flex flex-col overflow-hidden duration-1000 ease-linear transition-opacity delay-200 ${
-        isInitialised
-          ? 'opacity-100 translate-x-0'
-          : 'opacity-0 -translate-x-20'
+        isInitialised ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'
       }`}
     >
       <ControlPanelSection />
@@ -42,7 +40,7 @@ export function PanelFromContainer(): JSX.Element {
 //  remarks: pagination display
 export function PaginationSection(): JSX.Element {
   return (
-    <div className='flex justify-start md:justify-end items-start md:items-end gap-8'>
+    <div className="flex justify-start md:justify-end items-start md:items-end gap-8">
       <PageLimitBox />
       <PageOptBox />
     </div>
@@ -52,8 +50,8 @@ export function PaginationSection(): JSX.Element {
 //  remarks: control panel
 export function ControlPanelSection(): JSX.Element {
   return (
-    <div className='py-4'>
-      <div className='flex flex-col gap-4 md:flex-col md:gap-4 lg:flex-row lg:gap-4 lg:justify-between duration-400 transition-all'>
+    <div className="py-4">
+      <div className="flex flex-col gap-4 md:flex-col md:gap-4 lg:flex-row lg:gap-4 lg:justify-between duration-400 transition-all">
         <FormButtonBox />
         <FilterSortBox />
       </div>
@@ -67,13 +65,13 @@ export function TableSection(): JSX.Element {
   const candidates = useSelector((state: RootState) => state.candidates.value);
   if (candidates.length === 0) {
     return (
-      <div className='pt-2 w-full'>
-        <div className='p-4 text-gray-500'>No candidates found</div>
+      <div className="pt-2 w-full">
+        <div className="p-4 text-gray-500">No candidates found</div>
       </div>
     );
   }
   return (
-    <div className='pt-2 flex flex-col flex-1 overflow-hidden'>
+    <div className="pt-2 flex flex-col flex-1 overflow-hidden">
       <p
         className={`mb-2 text-sm text-gray-500 transition-opacity duration-500 ease-in-out
           ${selectedCandidates.length === 0 ? 'invisible' : 'visible'}
@@ -82,8 +80,8 @@ export function TableSection(): JSX.Element {
         Selection: {selectedCandidates.length}{' '}
         {selectedCandidates.length === 1 ? 'candidate' : 'candidates'} selected
       </p>
-      <div className='flex-1 overflow-x-auto overflow-y-auto'>
-        <table className='min-w-300 border-collapse table-auto w-full'>
+      <div className="flex-1 overflow-x-auto overflow-y-auto">
+        <table className="min-w-300 border-collapse table-auto w-full">
           <TableHeaderBox />
           <TableBodyBox />
         </table>
@@ -97,14 +95,14 @@ export function TableSection(): JSX.Element {
 //  remarks: sub-container for filter and sorting
 function FilterSortBox(): JSX.Element {
   return (
-    <div className='flex gap-2'>
+    <div className="flex gap-2">
       {/*  section: filtering */}
-      <div className='relative'>
+      <div className="relative">
         <ButtonFilter />
         <FormFiltering />
       </div>
       {/*  section: sorting  */}
-      <div className='relative'>
+      <div className="relative">
         <ButtonSort />
         <FormSorting />
       </div>
@@ -115,7 +113,7 @@ function FilterSortBox(): JSX.Element {
 //  remarks: sub-container for user behaviors (control panel section)
 function FormButtonBox(): JSX.Element {
   return (
-    <div className='flex flex-wrap gap-2'>
+    <div className="flex flex-wrap gap-2">
       <ButtonCreate />
       <ButtonUpdate />
       <ButtonConvertActive />
@@ -126,9 +124,9 @@ function FormButtonBox(): JSX.Element {
 //  remarks: sub-container for page limit
 function PageLimitBox(): JSX.Element {
   return (
-    <div className='group flex items-center gap-2'>
+    <div className="group flex items-center gap-2">
       <OptionPageLimit />
-      <span className='text-sm text-gray-600 group-focus-within:text-teal-600 duration-900'>
+      <span className="text-sm text-gray-600 group-focus-within:text-teal-600 duration-900">
         per page
       </span>
     </div>
@@ -140,9 +138,9 @@ function PageOptBox(): JSX.Element {
   const { totalPage } = useCandidateContext();
   //  display
   return (
-    <div className='group flex items-center gap-2'>
+    <div className="group flex items-center gap-2">
       <OptionPageSelect />
-      <span className='text-sm text-gray-600  group-focus-within:text-teal-600 duration-900'>
+      <span className="text-sm text-gray-600  group-focus-within:text-teal-600 duration-900">
         of {totalPage} pages
       </span>
     </div>

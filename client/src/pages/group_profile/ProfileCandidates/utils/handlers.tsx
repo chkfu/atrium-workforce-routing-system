@@ -5,24 +5,17 @@ import { API } from '../../../../config/api';
 //  ==========    Section: Candidate Details    ==========
 
 //  remarks: update candidate details record
-export async function handle_candidate_details_submit(
-  id: string,
-  data: ICandidate,
-) {
+export async function handle_candidate_details_submit(id: string, data: ICandidate) {
   try {
     const { _id, created_at, updated_at, ...payload } = data;
     await axios.patch(`${API.CANDIDATES}/${id}`, {
       _ids: [String(id)],
       ...payload,
     });
-    alert(
-      `[ProfileCandidate] succeed: candidate ${id} has been updated successfully.`,
-    );
+    alert(`[ProfileCandidate] succeed: candidate ${id} has been updated successfully.`);
     return true;
   } catch (err: any) {
-    alert(
-      `[ProfileCandidate] error: ${err.response?.data?.message || err.message}`,
-    );
+    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
     return false;
   }
 }
@@ -30,10 +23,7 @@ export async function handle_candidate_details_submit(
 //  ==========    Section: Candidate Education    ==========
 
 //  remarks: create candidate education record
-export async function handle_create_candidate_edu_submit(
-  id: string,
-  data: ICandidateEdu,
-) {
+export async function handle_create_candidate_edu_submit(id: string, data: ICandidateEdu) {
   try {
     const { _id, created_at, updated_at, candidate_id, ...payload } = data;
     await axios.post(`${API.CANDIDATES_EDU}`, {
@@ -45,13 +35,11 @@ export async function handle_create_candidate_edu_submit(
       ],
     });
     alert(
-      `[ProfileCandidate] succeed: the education record of candidate ${id} has been created successfully.`,
+      `[ProfileCandidate] succeed: the education record of candidate ${id} has been created successfully.`
     );
     return true;
   } catch (err: any) {
-    alert(
-      `[ProfileCandidate] error: ${err.response?.data?.message || err.message}`,
-    );
+    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
     return false;
   }
 }

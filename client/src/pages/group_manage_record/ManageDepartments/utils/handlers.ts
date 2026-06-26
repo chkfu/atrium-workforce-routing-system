@@ -37,9 +37,7 @@ export const handle_checkbox_status = (id: number) => {
 };
 
 //  remarks: manage overall select all (main table)
-export const handle_checkbox_select_all = (
-  event: React.ChangeEvent<HTMLInputElement>,
-) => {
+export const handle_checkbox_select_all = (event: React.ChangeEvent<HTMLInputElement>) => {
   const { setSelectedDepartments } = useDepartmentContext();
   const departments = useSelector((state: RootState) => state.department.value);
   const checked = event.target.checked;
@@ -64,7 +62,7 @@ export const handle_create_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to create Departments'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to create Departments'}`
     );
   }
 };
@@ -74,7 +72,7 @@ export const handle_create_submit = async (
   data: yup.InferType<typeof CreateDepartmentSchema>,
   setIsCreating: (val: boolean) => void,
   setTriggerCreate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -93,9 +91,7 @@ export const handle_create_submit = async (
     await axios.post(API.DEPARTMENTS, {
       departments: [new_data],
     });
-    alert(
-      `[ManageDepartments] succeed: new department record has been created.`,
-    );
+    alert(`[ManageDepartments] succeed: new department record has been created.`);
     const res = await axios.get(API.DEPARTMENTS);
     const createdDepartments = res?.data?.data?.result || [];
     //  remarks: refresh Departments list
@@ -108,7 +104,7 @@ export const handle_create_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] Failed to create departments. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] Failed to create departments. Please try again later.'}`
     );
   } finally {
     setIsCreating(false);
@@ -135,7 +131,7 @@ export const handle_update_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update departments'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update departments'}`
     );
   }
 };
@@ -154,7 +150,7 @@ export const handle_update_submit = async (
   setIsUpdating: (val: boolean) => void,
   setSelectedDepartments: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -175,9 +171,7 @@ export const handle_update_submit = async (
       _ids: selectedDepartments.map((id) => String(id)),
       ...updateData,
     });
-    alert(
-      `[ManageDepartments] succeed: new user information has been updated.`,
-    );
+    alert(`[ManageDepartments] succeed: new user information has been updated.`);
 
     //  remarks: refresh Departments list
     const res = await axios.get(API.DEPARTMENTS);
@@ -191,7 +185,7 @@ export const handle_update_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update Departments status. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update Departments status. Please try again later.'}`
     );
   } finally {
     setIsUpdating(false);
@@ -203,7 +197,7 @@ export const handle_update_submit = async (
 //  remarks: manage convert active popup (convert active)
 export const handle_convert_popup = (
   selectedDepartments: number[],
-  setTriggerConvert: (val: boolean) => void,
+  setTriggerConvert: (val: boolean) => void
 ) => {
   //  remarks: case of no selection
   if (selectedDepartments.length === 0) {
@@ -220,7 +214,7 @@ export const handle_convert_popup = (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update Departments status'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageDepartments] error: Failed to update Departments status'}`
     );
   }
 };
@@ -229,7 +223,7 @@ export const handle_convert_popup = (
 export const handle_convert_cancel = (
   isConverting: boolean,
   setTriggerConvert: (val: boolean) => void,
-  setConvertStatus: (val: null) => void,
+  setConvertStatus: (val: null) => void
 ) => {
   if (isConverting) return;
   setTriggerConvert(false);
@@ -245,7 +239,7 @@ export const handle_convert_submit = async (
   setSelectedDepartments: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   if (isConverting) return;
   try {
@@ -287,7 +281,7 @@ export const handle_temp_sort_reset = (
   setSortAsc: (val: boolean) => void,
   setSortTarget: (val: string) => void,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams
 ) => {
   const sort_order = searchParams.get('sort_order') === 'true';
   const sort_target = searchParams.get('sort_target') || '_id';
@@ -300,7 +294,7 @@ export const handle_sort_submit = (
   sortAsc: boolean,
   sortTarget: string,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -315,15 +309,15 @@ export const handle_sort_submit = (
 
 export const handle_temp_filter_clear = (
   setFilterName: (val: string) => void,
-  setFilterCapacityFrom:  (val: number) => void,
-  setFilterCapacityTo:  (val: number) => void,
-  setFilterWeightFrom:  (val: number) => void,
-  setFilterWeightTo:  (val: number) => void,
+  setFilterCapacityFrom: (val: number) => void,
+  setFilterCapacityTo: (val: number) => void,
+  setFilterWeightFrom: (val: number) => void,
+  setFilterWeightTo: (val: number) => void,
   setFilterIsActive: (val: null) => void,
   setFilterCreatedFrom: (val: string) => void,
   setFilterCreatedTo: (val: string) => void,
   setFilterUpdatedFrom: (val: string) => void,
-  setFilterUpdatedTo: (val: string) => void,
+  setFilterUpdatedTo: (val: string) => void
 ) => {
   setFilterName('');
   setFilterCapacityFrom(0);
@@ -349,7 +343,7 @@ export const handle_temp_filter_reset = (
   setFilterUpdatedFrom: (val: string) => void,
   setFilterUpdatedTo: (val: string) => void,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams?: (updater: (prev: URLSearchParams) => URLSearchParams) => void,
+  setSearchParams?: (updater: (prev: URLSearchParams) => URLSearchParams) => void
 ) => {
   handle_temp_filter_clear(
     setFilterName,
@@ -361,7 +355,7 @@ export const handle_temp_filter_reset = (
     setFilterCreatedFrom,
     setFilterCreatedTo,
     setFilterUpdatedFrom,
-    setFilterUpdatedTo,
+    setFilterUpdatedTo
   );
   // 清除 URL 中的所有 filter 参数
   if (setSearchParams) {
@@ -390,7 +384,7 @@ export const handle_filter_submit = (
   filterUpdatedFrom: string,
   filterUpdatedTo: string,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);

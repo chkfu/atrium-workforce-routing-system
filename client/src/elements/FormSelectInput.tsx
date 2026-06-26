@@ -33,9 +33,9 @@ export default function FormSelectInput({
   return (
     <div className={`${className} group`}>
       {/*  section: label field */}
-      <label className='block text-sm font-semibold text-gray-700 mb-1 group-focus-within:text-teal-600 transition-colors duration-600'>
+      <label className="block text-sm font-semibold text-gray-700 mb-1 group-focus-within:text-teal-600 transition-colors duration-600">
         {label}
-        {required && <span className='text-red-500 ml-1'>*</span>}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {/*  section: selection dropdown */}
       <select
@@ -48,20 +48,15 @@ export default function FormSelectInput({
         } ${isDisabled ? 'bg-gray-200 text-gray-600' : ''}`}
       >
         {/*  section: option list by iteration */}
-        <option value=''>{placeholder}</option>
+        <option value="">{placeholder}</option>
         {options.map((el) => (
-          <option
-            key={el.value}
-            value={el.value}
-          >
+          <option key={el.value} value={el.value}>
             {el.label}
           </option>
         ))}
         {/*  section: error message by requirement */}
       </select>
-      {error && (
-        <p className='mt-1 text-sm font-bold text-red-600'>{error.message}</p>
-      )}
+      {error && <p className="mt-1 text-sm font-bold text-red-600">{error.message}</p>}
     </div>
   );
 }

@@ -7,7 +7,7 @@ import ButtonConfirm from '../../../../elements/ButtonConfirm';
 export function ButtonCandidateDetailsReset({ reset }: { reset: () => void }) {
   return (
     <ButtonConfirm
-      label='Reset'
+      label="Reset"
       style={{ background: COLORS.light_gray, color: COLORS.dark_teal }}
       onClick={reset}
     />
@@ -17,9 +17,9 @@ export function ButtonCandidateDetailsReset({ reset }: { reset: () => void }) {
 export function ButtonCandidateDetailsSubmit() {
   return (
     <ButtonConfirm
-      label='Save'
+      label="Save"
       style={{ background: COLORS.dark_teal, color: COLORS.light_gray }}
-      type='submit'
+      type="submit"
     />
   );
 }
@@ -49,7 +49,7 @@ export function ButtonCandidateTrigger({
 export function ButtonCandidateEduReset({ reset }: { reset: () => void }) {
   return (
     <ButtonConfirm
-      label='Reset'
+      label="Reset"
       style={{ background: COLORS.light_gray, color: COLORS.dark_teal }}
       onClick={reset}
     />
@@ -59,9 +59,9 @@ export function ButtonCandidateEduReset({ reset }: { reset: () => void }) {
 export function ButtonCandidateEduSubmit() {
   return (
     <ButtonConfirm
-      label='Save'
+      label="Save"
       style={{ background: COLORS.dark_teal, color: COLORS.light_gray }}
-      type='submit'
+      type="submit"
     />
   );
 }

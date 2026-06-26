@@ -27,38 +27,21 @@ const card_list_task_panel: TCardItem[] = [
 export default function AssistantDashboard(): JSX.Element {
   //  visualise
   return (
-    <section
-      id='assistant-dashboard-section'
-      className='px-12 py-6 flex flex-col gap-6'
-    >
-      <Accordion title='Task Pending'>
+    <section id="assistant-dashboard-section" className="px-12 py-6 flex flex-col gap-6">
+      <Accordion title="Task Pending">
         {/* =============== TO BE IMPLEMENTED  ============= */}
-        <p className='py-4 text-base text-gray-500'>
-          No upcoming tasks assigned.
-        </p>
+        <p className="py-4 text-base text-gray-500">No upcoming tasks assigned.</p>
       </Accordion>
-      <Accordion title='Personal'>
+      <Accordion title="Personal">
         {/* personal section */}
         {card_list_personal.map((el: TCardItem) => {
-          return (
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
-          );
+          return <DashboardCard title={el.title} description={el.description} url={el.path} />;
         })}
       </Accordion>{' '}
       {/*  work panel */}
-      <Accordion title='Teams'>
+      <Accordion title="Teams">
         {card_list_task_panel.map((el: TCardItem) => {
-          return (
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
-          );
+          return <DashboardCard title={el.title} description={el.description} url={el.path} />;
         })}
       </Accordion>
     </section>

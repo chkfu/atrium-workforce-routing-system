@@ -25,19 +25,12 @@ const card_list_task_panel: TCardItem[] = [
 export default function CandidateDashboard(): JSX.Element {
   //  visualise
   return (
-    <section
-      id='candidate-dashboard-section'
-      className='px-12 py-6 flex flex-col gap-6'
-    >
+    <section id="candidate-dashboard-section" className="px-12 py-6 flex flex-col gap-6">
       {/* personal section */}
       {card_list_personal.map((el: TCardItem) => {
         return (
-          <Accordion title='Personal'>
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
+          <Accordion title="Personal">
+            <DashboardCard title={el.title} description={el.description} url={el.path} />
           </Accordion>
         );
       })}
@@ -45,12 +38,8 @@ export default function CandidateDashboard(): JSX.Element {
       {/*  work panel */}
       {card_list_task_panel.map((el: TCardItem) => {
         return (
-          <Accordion title='Task Panel'>
-            <DashboardCard
-              title={el.title}
-              description={el.description}
-              url={el.path}
-            />
+          <Accordion title="Task Panel">
+            <DashboardCard title={el.title} description={el.description} url={el.path} />
           </Accordion>
         );
       })}

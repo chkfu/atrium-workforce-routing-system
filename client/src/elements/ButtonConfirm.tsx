@@ -20,7 +20,7 @@ export default function ButtonConfirm({
     <button
       type={type}
       disabled={disabled}
-      className='px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-md disabled:cursor-not-allowed disabled:opacity-50'
+      className="px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer hover:brightness-105 active:scale-[0.95] transition-all duration-200 font-sans text-gray-800 shadow-md disabled:cursor-not-allowed disabled:opacity-50"
       onClick={onClick}
       style={{ backgroundColor: COLORS.button_yellow, ...style }}
     >

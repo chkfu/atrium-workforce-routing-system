@@ -41,10 +41,7 @@ export const UpdateStaffSchema = yup.object({
     .max(20, 'Exceed length of 20 characters.')
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim(),
-  gender: yup
-    .string()
-    .oneOf(['', 'male', 'female', 'other'], 'Invalid option')
-    .nullable(),
+  gender: yup.string().oneOf(['', 'male', 'female', 'other'], 'Invalid option').nullable(),
   dept_id: yup.string(),
   work_position: yup.string().trim(),
   work_grade: yup.string().trim(),

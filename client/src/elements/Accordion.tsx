@@ -24,14 +24,14 @@ export default function Accordion({
         isInitialised ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div className='flex items-center justify-between border-b border-teal-800 w-full p-2'>
+      <div className="flex items-center justify-between border-b border-teal-800 w-full p-2">
         {/*  title part  */}
         <h2 className={`text-teal-800 font-bold font-serif ${titleSize}`}>{title}</h2>
         <button
           onClick={() => setAccordionOpen(!AccordionOpen)}
-          className='text-teal-800 cursor-pointer hover:brightness-75 transition-transform ml-4 -mr-4 px-8 ease-in-out'
+          className="text-teal-800 cursor-pointer hover:brightness-75 transition-transform ml-4 -mr-4 px-8 ease-in-out"
           style={{ transitionDuration: '1500ms' }}
-          aria-label='Toggle accordion'
+          aria-label="Toggle accordion"
         >
           <div
             className={`inline-block text-4xl transform transition-transform ease-in-out ${AccordionOpen ? '-rotate-180' : ''}`}

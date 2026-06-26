@@ -15,7 +15,7 @@ export default function ManageStaff(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
 
   //  hooks
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   //  1. GET
   //  1a. receive general data
@@ -119,12 +119,9 @@ export default function ManageStaff(): JSX.Element {
     if (filter_email) params.filter_email = filter_email;
     if (filter_extension) params.filter_ext = filter_extension;
     if (filter_dept_id) params.filter_dept_id = filter_dept_id;
-    if (filter_date_hired_from)
-      params.filter_date_hired_from = filter_date_hired_from;
-    if (filter_date_hired_to)
-      params.filter_date_hired_to = filter_date_hired_to;
-    if (filter_date_quit_from)
-      params.filter_date_quit_from = filter_date_quit_from;
+    if (filter_date_hired_from) params.filter_date_hired_from = filter_date_hired_from;
+    if (filter_date_hired_to) params.filter_date_hired_to = filter_date_hired_to;
+    if (filter_date_quit_from) params.filter_date_quit_from = filter_date_quit_from;
     if (filter_date_quit_to) params.filter_date_quit_to = filter_date_quit_to;
     if (filter_is_active) params.filter_is_active = filter_is_active;
     if (filter_created_from) params.filter_created_from = filter_created_from;
@@ -158,16 +155,13 @@ export default function ManageStaff(): JSX.Element {
   }
   //  error handling
   if (getError) {
-    return <div className='p-4 text-red-600'>Error: {getError}</div>;
+    return <div className="p-4 text-red-600">Error: {getError}</div>;
   }
 
   //  display
   return (
-    <div
-      id='manage-staff-container'
-      className='w-full'
-    >
-      <Accordion title='Staff List'>
+    <div id="manage-staff-container" className="w-full">
+      <Accordion title="Staff List">
         <StaffContext.Provider
           value={{
             //  1.  GET

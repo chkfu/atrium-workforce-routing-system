@@ -67,16 +67,12 @@ interface DepartmentContextType {
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const DepartmentContext = createContext<
-  DepartmentContextType | undefined
->(undefined);
+export const DepartmentContext = createContext<DepartmentContextType | undefined>(undefined);
 
 export const useDepartmentContext = () => {
   const context = useContext(DepartmentContext);
   if (!context) {
-    throw new Error(
-      '[ManageDepartment] error: missing useContext at context provider.',
-    );
+    throw new Error('[ManageDepartment] error: missing useContext at context provider.');
   }
   return context;
 };

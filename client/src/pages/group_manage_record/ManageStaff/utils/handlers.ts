@@ -37,9 +37,7 @@ export const handle_checkbox_status = (id: number) => {
 };
 
 //  remarks: manage overall select all (main table)
-export const handle_checkbox_select_all = (
-  event: React.ChangeEvent<HTMLInputElement>,
-) => {
+export const handle_checkbox_select_all = (event: React.ChangeEvent<HTMLInputElement>) => {
   const { setSelectedStaff } = useStaffContext();
   const staff = useSelector((state: RootState) => state.staff.value);
   const checked = event.target.checked;
@@ -64,7 +62,7 @@ export const handle_create_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to create Staff'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to create Staff'}`
     );
   }
 };
@@ -74,7 +72,7 @@ export const handle_create_submit = async (
   data: yup.InferType<typeof CreateStaffSchema>,
   setIsCreating: (val: boolean) => void,
   setTriggerCreate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  learnt: remove empty string values for enum fields
@@ -106,7 +104,7 @@ export const handle_create_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to create Staff. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to create Staff. Please try again later.'}`
     );
   } finally {
     setIsCreating(false);
@@ -133,7 +131,7 @@ export const handle_update_popup = () => {
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to update Staff'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to update Staff'}`
     );
   }
 };
@@ -152,7 +150,7 @@ export const handle_update_submit = async (
   setIsUpdating: (val: boolean) => void,
   setSelectedStaff: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -187,7 +185,7 @@ export const handle_update_submit = async (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to update Staff status. Please try again later.'}`,
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to update Staff status. Please try again later.'}`
     );
   } finally {
     setIsUpdating(false);
@@ -199,7 +197,7 @@ export const handle_update_submit = async (
 //  remarks: manage convert active popup (convert active)
 export const handle_convert_popup = (
   selectedStaff: number[],
-  setTriggerConvert: (val: boolean) => void,
+  setTriggerConvert: (val: boolean) => void
 ) => {
   //  remarks: case of no selection
   if (selectedStaff.length === 0) {
@@ -216,7 +214,7 @@ export const handle_convert_popup = (
       message: err.message,
     });
     alert(
-      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to update Staff status'}`,
+      `Error: ${err.response?.data?.message || err.message || '[ManageStaff] error: Failed to update Staff status'}`
     );
   }
 };
@@ -225,7 +223,7 @@ export const handle_convert_popup = (
 export const handle_convert_cancel = (
   isConverting: boolean,
   setTriggerConvert: (val: boolean) => void,
-  setConvertStatus: (val: null) => void,
+  setConvertStatus: (val: null) => void
 ) => {
   if (isConverting) return;
   setTriggerConvert(false);
@@ -241,7 +239,7 @@ export const handle_convert_submit = async (
   setSelectedStaff: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
-  dispatch: Dispatch,
+  dispatch: Dispatch
 ) => {
   if (isConverting) return;
   try {
@@ -283,7 +281,7 @@ export const handle_temp_sort_reset = (
   setSortAsc: (val: boolean) => void,
   setSortTarget: (val: string) => void,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams
 ) => {
   const sort_order = searchParams.get('sort_order') === 'true';
   const sort_target = searchParams.get('sort_target') || '_id';
@@ -296,7 +294,7 @@ export const handle_sort_submit = (
   sortAsc: boolean,
   sortTarget: string,
   setTriggerSort: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -325,7 +323,7 @@ export const handle_temp_filter_clear = (
   setFilterCreatedFrom: (val: string) => void,
   setFilterCreatedTo: (val: string) => void,
   setFilterUpdatedFrom: (val: string) => void,
-  setFilterUpdatedTo: (val: string) => void,
+  setFilterUpdatedTo: (val: string) => void
 ) => {
   setFilterName('');
   setFilterGender('');
@@ -362,7 +360,7 @@ export const handle_temp_filter_reset = (
   setFilterCreatedTo: (val: string) => void,
   setFilterUpdatedFrom: (val: string) => void,
   setFilterUpdatedTo: (val: string) => void,
-  setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
+  setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   handle_temp_filter_clear(
     setFilterName,
@@ -380,7 +378,7 @@ export const handle_temp_filter_reset = (
     setFilterCreatedFrom,
     setFilterCreatedTo,
     setFilterUpdatedFrom,
-    setFilterUpdatedTo,
+    setFilterUpdatedTo
   );
   setTriggerFilter(false);
 };
@@ -403,7 +401,7 @@ export const handle_filter_submit = (
   filterUpdatedFrom: string,
   filterUpdatedTo: string,
   setTriggerFilter: React.Dispatch<React.SetStateAction<boolean>>,
-  setSearchParams: SetURLSearchParams,
+  setSearchParams: SetURLSearchParams
 ) => {
   setSearchParams((prev: URLSearchParams) => {
     const params = new URLSearchParams(prev);
@@ -421,17 +419,13 @@ export const handle_filter_submit = (
     else params.delete('filter_grade');
     if (filterExtension) params.set('filter_ext', filterExtension);
     else params.delete('filter_ext');
-    if (filterIsActive !== null)
-      params.set('filter_is_active', String(filterIsActive));
+    if (filterIsActive !== null) params.set('filter_is_active', String(filterIsActive));
     else params.delete('filter_is_active');
-    if (filterDateHiredFrom)
-      params.set('filter_date_hired_from', filterDateHiredFrom);
+    if (filterDateHiredFrom) params.set('filter_date_hired_from', filterDateHiredFrom);
     else params.delete('filter_date_hired_from');
-    if (filterDateHiredTo)
-      params.set('filter_date_hired_to', filterDateHiredTo);
+    if (filterDateHiredTo) params.set('filter_date_hired_to', filterDateHiredTo);
     else params.delete('filter_date_hired_to');
-    if (filterDateQuitFrom)
-      params.set('filter_date_quit_from', filterDateQuitFrom);
+    if (filterDateQuitFrom) params.set('filter_date_quit_from', filterDateQuitFrom);
     else params.delete('filter_date_quit_from');
     if (filterDateQuitTo) params.set('filter_date_quit_to', filterDateQuitTo);
     else params.delete('filter_date_quit_to');

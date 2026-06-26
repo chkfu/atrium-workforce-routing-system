@@ -125,9 +125,7 @@ export default function ManageDepartment(): JSX.Element {
         console.error('[ManageDepartment] error: fetching Department:', err);
         // learnt: state change for re-render, as throw error did not trigger
         dispatch(setDepartment([]));
-        setGetError(
-          err.message || '[ManageDepartment] error: Failed to load Department',
-        );
+        setGetError(err.message || '[ManageDepartment] error: Failed to load Department');
         setIsGetting(false);
       });
   }, [searchParams.toString()]);
@@ -137,16 +135,13 @@ export default function ManageDepartment(): JSX.Element {
   }
   //  error handling
   if (getError) {
-    return <div className='p-4 text-red-600'>Error: {getError}</div>;
+    return <div className="p-4 text-red-600">Error: {getError}</div>;
   }
 
   //  display
   return (
-    <div
-      id='manage-department-container'
-      className='w-full'
-    >
-      <Accordion title='Department List'>
+    <div id="manage-department-container" className="w-full">
+      <Accordion title="Department List">
         <DepartmentContext.Provider
           value={{
             //  1.  GET

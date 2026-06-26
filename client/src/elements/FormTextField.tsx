@@ -24,9 +24,9 @@ export default function FormTextField({
   return (
     <div className={`${className} group`}>
       {/*  section: label  */}
-      <label className='block text-sm font-semibold text-gray-700 mb-1 group-focus-within:text-teal-600 transition-colors duration-600'>
+      <label className="block text-sm font-semibold text-gray-700 mb-1 group-focus-within:text-teal-600 transition-colors duration-600">
         {label}
-        {required && <span className='text-red-500 ml-1'>*</span>}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {/*  section: input field */}
       <input
@@ -41,9 +41,7 @@ export default function FormTextField({
         } ${isDisabled ? 'bg-gray-200 text-gray-600' : ''}`}
       />
       {/*  section: error message, by requriements */}
-      {error && (
-        <p className='mt-1 text-sm font-bold text-red-600'>{error.message}</p>
-      )}
+      {error && <p className="mt-1 text-sm font-bold text-red-600">{error.message}</p>}
     </div>
   );
 }

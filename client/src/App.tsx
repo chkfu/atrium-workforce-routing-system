@@ -8,11 +8,10 @@ import Error from './pages/group_navigation/Error';
 import DashboardCandidate from './pages/group_dashboard/DashboardCandidate';
 import DashboardAssistant from './pages/group_dashboard/DashboardAssistant';
 import DashboardManager from './pages/group_dashboard/DashboardManager';
-import ManageCandidates from './pages/group_manage_record/ManageCandidates'
+import ManageCandidates from './pages/group_manage_record/ManageCandidates';
 import ManageStaff from './pages/group_manage_record/ManageStaff';
 import ManageDepartments from './pages/group_manage_record/ManageDepartments';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
-
 
 const routes: RouteObject[] = [
   {

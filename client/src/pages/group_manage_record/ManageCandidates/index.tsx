@@ -32,8 +32,7 @@ export default function ManageCandidates(): JSX.Element {
   const [filterName, setFilterName] = useState<string>('');
   const [filterEmail, setFilterEmail] = useState<string>('');
   const [filterGender, setFilterGender] = useState<enum_gender | null>(null);
-  const [filterProbStatus, setFilterProbStatus] =
-    useState<enum_prob_status | null>(null);
+  const [filterProbStatus, setFilterProbStatus] = useState<enum_prob_status | null>(null);
   const [filterIsActive, setFilterIsActive] = useState<boolean | null>(null);
   const [filterCreatedFrom, setFilterCreatedFrom] = useState<string>('');
   const [filterCreatedTo, setFilterCreatedTo] = useState<string>('');
@@ -123,9 +122,7 @@ export default function ManageCandidates(): JSX.Element {
         console.error('[ManageCandidates] error: fetching candidates:', err);
         // learnt: state change for re-render, as throw error did not trigger
         dispatch(setCandidates([]));
-        setGetError(
-          err.message || '[ManageCandidates] error: Failed to load candidates',
-        );
+        setGetError(err.message || '[ManageCandidates] error: Failed to load candidates');
         setIsGetting(false);
       });
   }, [searchParams.toString()]);
@@ -135,16 +132,13 @@ export default function ManageCandidates(): JSX.Element {
   }
   //  error handling
   if (getError) {
-    return <div className='p-4 text-red-600'>Error: {getError}</div>;
+    return <div className="p-4 text-red-600">Error: {getError}</div>;
   }
 
   //  display
   return (
-    <div
-      id='manage-candidates-container'
-      className='w-full'
-    >
-      <Accordion title='Candidate List'>
+    <div id="manage-candidates-container" className="w-full">
+      <Accordion title="Candidate List">
         <CandidateContext.Provider
           value={{
             //  1.  GET

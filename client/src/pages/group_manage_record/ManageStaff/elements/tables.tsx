@@ -95,7 +95,7 @@ export function TableHeaderBox(): JSX.Element {
   const staff = useSelector((state: RootState) => state.staff.value);
   //  display
   return (
-    <thead className='sticky top-0 z-10 bg-slate-200'>
+    <thead className="sticky top-0 z-10 bg-slate-200">
       <tr>
         {/*  checkbox column  */}
         <TableHeadCheckbox
@@ -123,14 +123,12 @@ export function TableBodyBox(): JSX.Element {
   const staff = useSelector((state: RootState) => state.staff.value);
   if (!staff || staff.length === 0) {
     return (
-      <p className='py-4 text-gray-500 transition-all ease-in-out duration-600'>
-        No Staff found.
-      </p>
+      <p className="py-4 text-gray-500 transition-all ease-in-out duration-600">No Staff found.</p>
     );
   }
   // display
   return (
-    <tbody className='relative transition-all ease-in-out duration-600'>
+    <tbody className="relative transition-all ease-in-out duration-600">
       {staff.map((el: any) => (
         <tr
           key={el._id}
@@ -143,10 +141,10 @@ export function TableBodyBox(): JSX.Element {
                   ${selectedStaff.includes(el._id) ? 'bg-teal-100' : ''}`}
         >
           {/*  checkbox column  */}
-          <td className='p-2 text-center align-middle'>
+          <td className="p-2 text-center align-middle">
             <input
-              type='checkbox'
-              className='w-4 h-4 cursor-pointer'
+              type="checkbox"
+              className="w-4 h-4 cursor-pointer"
               checked={selectedStaff.includes(el._id)}
               onChange={() => {
                 setSelectedStaff((checklist: any) => {
@@ -186,14 +184,13 @@ export function TableHeadCheckbox({
   onSelectChange: (selectedIds: number[]) => void;
 }): JSX.Element {
   //  remarks: declaration
-  const check_selected: boolean =
-    unit && unit.length > 0 && selected.length === unit.length;
+  const check_selected: boolean = unit && unit.length > 0 && selected.length === unit.length;
   //  display
   return (
-    <th className='p-2 text-center align-middle sticky top-0 bg-slate-50 z-10 shadow-2xl'>
+    <th className="p-2 text-center align-middle sticky top-0 bg-slate-50 z-10 shadow-2xl">
       <input
-        type='checkbox'
-        className='w-4 h-4 cursor-pointer'
+        type="checkbox"
+        className="w-4 h-4 cursor-pointer"
         onChange={(e) => {
           if (e.target.checked) {
             onSelectChange(unit.map((item: any) => item._id));

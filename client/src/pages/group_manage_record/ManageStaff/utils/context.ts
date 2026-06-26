@@ -82,16 +82,12 @@ interface StaffContextType {
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const StaffContext = createContext<StaffContextType | undefined>(
-  undefined,
-);
+export const StaffContext = createContext<StaffContextType | undefined>(undefined);
 
 export const useStaffContext = () => {
   const context = useContext(StaffContext);
   if (!context) {
-    throw new Error(
-      '[ManageStaff] error: missing useContext at context provider.',
-    );
+    throw new Error('[ManageStaff] error: missing useContext at context provider.');
   }
   return context;
 };

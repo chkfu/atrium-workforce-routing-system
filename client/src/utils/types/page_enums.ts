@@ -29,7 +29,7 @@ export enum enum_cert_institute {
   ex = 'University of Exeter',
   glas = 'University of Glasgow',
   imp = 'Imperial College London',
-  kcl = 'King\'s College London',
+  kcl = "King's College London",
   lanc = 'Lancaster University',
   lse = 'London School of Economics',
   manc = 'University of Manchester',
@@ -48,7 +48,7 @@ export enum enum_cert_institute {
 export enum enum_cert_degree {
   bachelors = 'Bachelor',
   masters = 'Master',
-  postdip = "Postgraduate Diploma",
+  postdip = 'Postgraduate Diploma',
   doctoral = 'Doctoral',
   other = 'Other',
 }

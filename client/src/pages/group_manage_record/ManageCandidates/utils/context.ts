@@ -26,9 +26,7 @@ interface CandidateContextType {
   filterGender: enum_gender | null;
   setFilterGender: React.Dispatch<React.SetStateAction<enum_gender | null>>;
   filterProbStatus: enum_prob_status | null;
-  setFilterProbStatus: React.Dispatch<
-    React.SetStateAction<enum_prob_status | null>
-  >;
+  setFilterProbStatus: React.Dispatch<React.SetStateAction<enum_prob_status | null>>;
   filterIsActive: boolean | null;
   setFilterIsActive: React.Dispatch<React.SetStateAction<boolean | null>>;
   filterCreatedFrom: string;
@@ -69,16 +67,12 @@ interface CandidateContextType {
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CandidateContext = createContext<CandidateContextType | undefined>(
-  undefined,
-);
+export const CandidateContext = createContext<CandidateContextType | undefined>(undefined);
 
 export const useCandidateContext = () => {
   const context = useContext(CandidateContext);
   if (!context) {
-    throw new Error(
-      '[ManageCandidates] error: missing useContext at context provider.',
-    );
+    throw new Error('[ManageCandidates] error: missing useContext at context provider.');
   }
   return context;
 };

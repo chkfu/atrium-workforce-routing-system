@@ -24,7 +24,7 @@ export const ButtonCreate = (): JSX.Element => {
   return (
     <>
       <ButtonConfirm
-        label='Create'
+        label="Create"
         onClick={() => setTriggerCreate(true)}
         style={{ backgroundColor: COLORS.dark_teal, color: 'white' }}
       />
@@ -37,7 +37,7 @@ export const ButtonCreateCancel = (): JSX.Element => {
   const { isCreating, setTriggerCreate } = useStaffContext();
   return (
     <ButtonConfirm
-      label='Cancel'
+      label="Cancel"
       onClick={() => {
         if (!isCreating) setTriggerCreate(false);
       }}
@@ -61,7 +61,7 @@ export const ButtonCreateSubmit = ({
     <ButtonConfirm
       label={isCreating ? 'Loading...' : 'Confirm'}
       onClick={onClick}
-      type='submit'
+      type="submit"
       style={{
         transition: 'all 0.5s ease',
         backgroundColor: COLORS.dark_teal,
@@ -88,7 +88,7 @@ export const ButtonUpdate = (): JSX.Element => {
   return (
     <>
       <ButtonConfirm
-        label='Update'
+        label="Update"
         onClick={handleClick}
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
@@ -103,7 +103,7 @@ export const ButtonUpdateCancel = (): JSX.Element => {
   const { isUpdating, setTriggerUpdate } = useStaffContext();
   return (
     <ButtonConfirm
-      label='Cancel'
+      label="Cancel"
       onClick={() => {
         if (!isUpdating) setTriggerUpdate(false);
       }}
@@ -118,11 +118,7 @@ export const ButtonUpdateCancel = (): JSX.Element => {
 };
 
 //  remarks: submit button for update Staff popup
-export const ButtonUpdateSubmit = ({
-  onClick,
-}: {
-  onClick: () => void;
-}): JSX.Element => {
+export const ButtonUpdateSubmit = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const { isUpdating } = useStaffContext();
   return (
     <ButtonConfirm
@@ -147,7 +143,7 @@ export const ButtonConvertActive = (): JSX.Element => {
   return (
     <>
       <ButtonConfirm
-        label='Convert Active'
+        label="Convert Active"
         onClick={() => handle_convert_popup(selectedStaff, setTriggerConvert)}
         style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
       />
@@ -159,14 +155,11 @@ export const ButtonConvertActive = (): JSX.Element => {
 
 //  remarks: buttons inside convert active popup
 export const ButtonConvertCancel = (): JSX.Element => {
-  const { isConverting, setTriggerConvert, setConvertStatus } =
-    useStaffContext();
+  const { isConverting, setTriggerConvert, setConvertStatus } = useStaffContext();
   return (
     <ButtonConfirm
-      label='Cancel'
-      onClick={() =>
-        handle_convert_cancel(isConverting, setTriggerConvert, setConvertStatus)
-      }
+      label="Cancel"
+      onClick={() => handle_convert_cancel(isConverting, setTriggerConvert, setConvertStatus)}
       style={{
         transition: 'all 1s ease',
         backgroundColor: COLORS.light_gray,
@@ -201,7 +194,7 @@ export const ButtonConvertSubmit = (): JSX.Element => {
           setSelectedStaff,
           setConvertStatus,
           setTriggerConvert,
-          dispatch,
+          dispatch
         )
       }
       style={{
@@ -228,16 +221,10 @@ export const ButtonSort = (): JSX.Element => {
         setTriggerFilter(false);
         setTriggerSort(!triggerSort);
       }}
-      type='button'
+      type="button"
       className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerSort ? 'bg-teal-100' : ''}`}
     >
-      <img
-        src={sort_asc}
-        alt='sort ascendingly'
-        width='24'
-        height='24'
-        className='text-teal-800'
-      />
+      <img src={sort_asc} alt="sort ascendingly" width="24" height="24" className="text-teal-800" />
     </button>
   );
 };
@@ -249,11 +236,9 @@ export const ButtonSortSubmit = (): JSX.Element => {
   //  display
   return (
     <ButtonConfirm
-      label='Confirm'
-      onClick={() =>
-        handle_sort_submit(sortAsc, sortTarget, setTriggerSort, setSearchParams)
-      }
-      type='button'
+      label="Confirm"
+      onClick={() => handle_sort_submit(sortAsc, sortTarget, setTriggerSort, setSearchParams)}
+      type="button"
       style={{
         backgroundColor: COLORS.dark_teal,
         color: COLORS.light_gray,
@@ -269,20 +254,14 @@ export const ButtonFilter = (): JSX.Element => {
   const { setTriggerSort, triggerFilter, setTriggerFilter } = useStaffContext();
   return (
     <button
-      type='button'
+      type="button"
       className={`w-10 h-10 flex items-center justify-center shadow-sm rounded-full bg-gray-300 cursor-pointer active:scale-95 transition duration-300 ${triggerFilter ? 'bg-teal-100' : ''}`}
       onClick={() => {
         setTriggerSort(false);
         setTriggerFilter(!triggerFilter);
       }}
     >
-      <img
-        src={filter}
-        alt='filter_active'
-        width='24'
-        height='24'
-        className='text-teal-800'
-      />
+      <img src={filter} alt="filter_active" width="24" height="24" className="text-teal-800" />
     </button>
   );
 };
@@ -310,7 +289,7 @@ export const ButtonFilterClear = (): JSX.Element => {
 
   return (
     <ButtonConfirm
-      label='Clear'
+      label="Clear"
       onClick={() =>
         handle_temp_filter_clear(
           setFilterName,
@@ -328,7 +307,7 @@ export const ButtonFilterClear = (): JSX.Element => {
           setFilterCreatedFrom,
           setFilterCreatedTo,
           setFilterUpdatedFrom,
-          setFilterUpdatedTo,
+          setFilterUpdatedTo
         )
       }
       style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
@@ -361,7 +340,7 @@ export const ButtonFilterSubmit = (): JSX.Element => {
   } = useStaffContext();
   return (
     <ButtonConfirm
-      label='Confirm'
+      label="Confirm"
       onClick={() => {
         handle_filter_submit(
           filterName,
@@ -381,11 +360,11 @@ export const ButtonFilterSubmit = (): JSX.Element => {
           filterUpdatedFrom,
           filterUpdatedTo,
           setTriggerFilter,
-          setSearchParams,
+          setSearchParams
         );
         setTriggerSort(false);
       }}
-      type='button'
+      type="button"
       style={{
         backgroundColor: COLORS.dark_teal,
         color: COLORS.light_gray,

@@ -22,12 +22,8 @@ export default function ProfileCandidateP(): JSX.Element {
   const { id } = useParams<{ id: string }>();
 
   //  remarks: local state management
-  const [targetCandidate, setTargetCandidate] = useState<ICandidate | null>(
-    null,
-  );
-  const [targetCandidateEdu, setTargetCandidateEdu] = useState<ICandidateEdu | null>(
-    null,
-  );
+  const [targetCandidate, setTargetCandidate] = useState<ICandidate | null>(null);
+  const [targetCandidateEdu, setTargetCandidateEdu] = useState<ICandidateEdu | null>(null);
   const [targetCandidateExp, setTargetCandidateExp] = useState<any>(null);
   const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
   const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
@@ -43,15 +39,10 @@ export default function ProfileCandidateP(): JSX.Element {
         setTargetCandidate(data);
       })
       .catch((err: any) => {
-        console.error(
-          '[ProfileCandidate] error: fetching targert candidate:',
-          err,
-        );
+        console.error('[ProfileCandidate] error: fetching targert candidate:', err);
         // remarks: state change for re-render
         setTargetCandidate(null);
-        setGetError(
-          err.message || '[ProfileCandidate] error: Failed to load candidates',
-        );
+        setGetError(err.message || '[ProfileCandidate] error: Failed to load candidates');
       });
   }, [id]);
 
@@ -60,8 +51,8 @@ export default function ProfileCandidateP(): JSX.Element {
       <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>
         <CandidateTestContext.Provider value={{ targetCandidateTest, setTargetCandidateTest }}>
           <CandidatePrefContext.Provider value={{ targetCandidatePref, setTargetCandidatePref }}>
-            <div id='candidate-profile-container'>
-              <Accordion title='Candidate Profile'>
+            <div id="candidate-profile-container">
+              <Accordion title="Candidate Profile">
                 <SectionDetails targetCandidate={targetCandidate} />
                 <SectionEducation />
                 <SectionExperience />

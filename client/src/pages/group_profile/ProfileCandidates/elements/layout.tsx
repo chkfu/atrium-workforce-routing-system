@@ -1,9 +1,12 @@
 import Accordion from '../../../../elements/Accordion';
-import { FormSubsectionUpdateReuse } from './forms';
-import { CandidateDetailStructure, CandidateEduStructrure, CandidateExpStructrure } from '../utils/structures';
-import { BoxSubsectionCreateReuse } from '../../shared/BoxSubsectionCreateReuse';
-import { useForm } from 'react-hook-form';
-import { useEffect, useContext } from 'react';
+import { FormSubsectionUpdateReuse } from '../../../../elements/forms/FormSubsectionUpdateReuse';
+import {
+  CandidateDetailStructure,
+  CandidateEduStructrure,
+  CandidateExpStructrure,
+} from '../utils/structures';
+import { BoxSubsectionCreateReuse } from '../../../../elements/forms/BoxSubsectionCreateReuse';
+import { useContext } from 'react';
 import { ICandidate } from '../../../../utils/types/redux_types';
 import { CandidateEduContext, CandidateExpContext } from '../utils/context';
 import { UpdateCandidateSchema } from '../../../group_manage_record/ManageCandidates/utils/schema';
@@ -17,16 +20,6 @@ export function SectionDetails({
 }: {
   targetCandidate: ICandidate | null;
 }): JSX.Element {
-  const { reset } = useForm<ICandidate>({
-    defaultValues: targetCandidate || {},
-  });
-  //  learnt: `reset` is used for sync the existing data
-  //  remarks: set to reset data based on curr targetCandidate, if it has been updated
-  useEffect(() => {
-    if (targetCandidate) {
-      reset(targetCandidate);
-    }
-  }, [targetCandidate]);
 
   const handleSubmit = (data: any) => {
     if (targetCandidate?._id) {
@@ -36,7 +29,14 @@ export function SectionDetails({
 
   return (
     <Accordion title="(1) Patron Details" titleSize="text-xl">
-      <FormSubsectionUpdateReuse sect_state={targetCandidate} form_schema={UpdateCandidateSchema} submit_handler={handleSubmit} form_structure={CandidateDetailStructure} form_subtitle="" />
+      <FormSubsectionUpdateReuse
+        key={targetCandidate?._id}
+        sect_state={targetCandidate}
+        form_schema={UpdateCandidateSchema}
+        submit_handler={handleSubmit}
+        form_structure={CandidateDetailStructure}
+        form_subtitle=""
+      />
     </Accordion>
   );
 }
@@ -47,7 +47,7 @@ export function SectionDetails({
 export function SectionEducation(): JSX.Element {
   const context = useContext(CandidateEduContext);
   return (
-    <Accordion title="(2) Section Qualification" titleSize="text-xl">
+    <Accordion title="(2) Qualification" titleSize="text-xl">
       <BoxSubsectionCreateReuse
         sect_state={context?.targetCandidateEdu || null}
         sect_structure={CandidateEduStructrure}
@@ -58,13 +58,12 @@ export function SectionEducation(): JSX.Element {
   );
 }
 
-
 //  ==========    Section: Candidate Experience    ==========
 
 export function SectionExperience(): JSX.Element {
   const context = useContext(CandidateExpContext);
   return (
-    <Accordion title="(3) Section Experience" titleSize="text-xl">
+    <Accordion title="(3) Experience" titleSize="text-xl">
       <BoxSubsectionCreateReuse
         sect_state={context?.targetCandidateExp || null}
         sect_structure={CandidateExpStructrure}
@@ -80,24 +79,31 @@ export function SectionExperience(): JSX.Element {
 // remarks: test score
 export function SectionTestScore(): JSX.Element {
   return (
-    <Accordion title="(4) Section Test Score" titleSize="text-xl">
+    <Accordion title="(4) Test Score" titleSize="text-xl">
       {/*  TODO: append update form  */}
     </Accordion>
   );
 }
-
 
 //  ==========    Section: Candidate Preference   ==========
 
-// remarks: preferences
+// remarks: preferences - get departments from Redux (fetched in parent), get pref data from Context
 export function SectionPreference(): JSX.Element {
+  // Get departments from Redux store (already fetched by parent component)
+
   return (
-    <Accordion title="(5) Section Preferences" titleSize="text-xl">
-      {/*  TODO: append update form  */}
+    <Accordion title="(5) Preferences" titleSize="text-xl">
+      {/*  to do  */}
     </Accordion>
   );
 }
 
+//  ==========    Section: Reuseable Component   ==========
 
-
-
+export function SectionNotFoundReuse(){
+  return (
+    <Accordion title="(5) Preferences" titleSize="text-xl">
+       <p>Section data not found.</p>
+    </Accordion>
+  )
+}

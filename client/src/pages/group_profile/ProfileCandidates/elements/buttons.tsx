@@ -14,12 +14,13 @@ export function ButtonCandidateDetailsReset({ reset }: { reset: () => void }) {
   );
 }
 
-export function ButtonCandidateDetailsSubmit() {
+export function ButtonCandidateDetailsSubmit({ disabled = false }: { disabled?: boolean } = {}) {
   return (
     <ButtonConfirm
       label="Save"
       style={{ background: COLORS.dark_teal, color: COLORS.light_gray }}
       type="submit"
+      disabled={disabled}
     />
   );
 }

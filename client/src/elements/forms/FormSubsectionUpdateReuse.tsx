@@ -1,30 +1,22 @@
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   ButtonCandidateDetailsReset,
   ButtonCandidateDetailsSubmit,
-} from './buttons';
-import { select_input_field } from '../../shared/utils/select_input_field';
-
-// =========== Forms ==========
-
-const default_date_format = {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-} as const;
+} from '../../pages/group_profile/ProfileCandidates/elements/buttons';
+import { select_input_field } from './handlers/select_input_field';
+import { default_date_format } from './utils/constants';
 
 
-export function FormSubsectionUpdateReuse<T extends { created_at: Date | string; updated_at: Date | string }>({
+export function FormSubsectionUpdateReuse<T extends { created_at: Date | string; updated_at: Date | string; is_active: boolean }>({
   sect_state,
   form_schema,
   submit_handler,
   form_structure,
   form_title = '',
-  form_subtitle = ''
+  form_subtitle = '',
+  isLoading = false
 }: {
   sect_state: T | null;
   form_schema: any;
@@ -32,7 +24,28 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
   form_structure: any;
   form_title?: string;
   form_subtitle?: string;
+  isLoading?: boolean;
 }): JSX.Element {
+  //  remarks: convert all numeric IDs to strings for select compatibility
+  const stateAsAny = sect_state as any;
+  const formattedState = sect_state ? {
+    ...sect_state,
+    pref_dept_1st: stateAsAny.pref_dept_1st != null ? String(stateAsAny.pref_dept_1st) : '',
+    pref_dept_2nd: stateAsAny.pref_dept_2nd != null ? String(stateAsAny.pref_dept_2nd) : '',
+    pref_dept_3rd: stateAsAny.pref_dept_3rd != null ? String(stateAsAny.pref_dept_3rd) : '',
+    is_active: sect_state.is_active ? 'true' : 'false',
+    created_at: new Date(sect_state.created_at).toLocaleString(
+      'en-GB',
+      default_date_format
+    ),
+    updated_at: new Date(sect_state.updated_at).toLocaleString(
+      'en-GB',
+      default_date_format
+    ),
+  } : { is_active: 'true' };
+
+  const [savedValues, setSavedValues] = useState(formattedState);
+
   //  remarks: extracted react hook form methods
   const {
     register,
@@ -40,26 +53,16 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
     formState: { errors },
     reset,
   } = useForm<any>({
-    defaultValues: sect_state || {},
+    defaultValues: formattedState,
     resolver: yupResolver(form_schema),
   });
-  //  remarks: re-render data upon updates
+
+  //  remarks: update saved values and reset form when sect_state changes (exclude reset from deps)
   useEffect(() => {
-    if (sect_state) {
-      reset({
-        ...sect_state,
-        created_at: new Date(sect_state.created_at).toLocaleString(
-          'en-GB',
-          default_date_format
-        ),
-        updated_at: new Date(sect_state.updated_at).toLocaleString(
-          'en-GB',
-          default_date_format
-        ),
-      });
-    }
-  }, [sect_state, reset]);
-  //  
+    setSavedValues(formattedState);
+    reset(formattedState);
+  }, [sect_state]);
+  //
   const entries = Object.entries(form_structure);
   const rows = [];
   for (let i = 0; i < entries.length; i += 2) {
@@ -85,8 +88,8 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
       ))}
       {/*  box: button for form control  */}
       <div className="flex justify-end gap-4 mt-4">
-        <ButtonCandidateDetailsReset reset={reset} />
-        <ButtonCandidateDetailsSubmit />
+        <ButtonCandidateDetailsReset reset={() => reset(savedValues)} />
+        <ButtonCandidateDetailsSubmit disabled={isLoading} />
       </div>
     </form>
   );

@@ -42,6 +42,57 @@ export interface ICandidateEduList {
   value: ICandidateEdu[];
 }
 
+export interface ICandidateExp {
+  _id: number;
+  candidate_id: number;
+  exp_nature: string;
+  exp_role: string;
+  exp_institute: string;
+  date_start: string;
+  date_end: string;
+  is_verified: boolean;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+}
+
+export interface ICandidateExpList {
+  value: ICandidateExp[];
+}
+
+export interface ICandidateTest {
+  _id: number;
+  candidate_id: number;
+  score_aptitude: number;
+  score_interview_1st: number;
+  score_interview_2nd: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+}
+
+export interface ICandidateTestList {
+  value: ICandidateTest[];
+}
+
+export interface ICandidatePref {
+  _id: number;
+  candidate_id: number;
+  pref_dept_1st: number | null;
+  pref_dept_2nd: number | null;
+  pref_dept_3rd: number | null;
+  is_active: boolean;
+  created_at: string | Date;
+  updated_at: string | Date;
+}
+
+export interface ICandidatePrefList {
+  value: ICandidatePref[];
+}
+
+
+
+
 //  staff
 
 export interface IStaff {

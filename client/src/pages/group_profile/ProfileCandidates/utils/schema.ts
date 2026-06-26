@@ -99,18 +99,15 @@ export const UpdateCandidatePrefSchema = yup.object({
   _id: yup.number(),
   candidate_id: yup.number().nullable(),
   pref_dept_1st: yup
-    .number()
-    .typeError('Department must be selected')
+    .string()
     .nullable()
     .optional(),
   pref_dept_2nd: yup
-    .number()
-    .typeError('Department must be selected')
+    .string()
     .nullable()
     .optional(),
   pref_dept_3rd: yup
-    .number()
-    .typeError('Department must be selected')
+    .string()
     .nullable()
     .optional(),
   is_active: yup.boolean().default(true).nullable(),

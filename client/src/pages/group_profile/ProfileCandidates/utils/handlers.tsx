@@ -1,4 +1,4 @@
-import { ICandidate, ICandidateEdu } from '../../../../utils/types/redux_types';
+import { ICandidate, ICandidateEdu, ICandidatePref } from '../../../../utils/types/redux_types';
 import axios from 'axios';
 import { API } from '../../../../config/api';
 
@@ -47,6 +47,42 @@ export async function handle_create_candidate_edu_submit(id: string, data: ICand
 
 //  ==========    Section: Candidate Preferences    ==========
 
+export async function get_candidate_pref<T> (id: string, setTargetCandidatePref: (state: T) => void) {
+      try {
+        const res = await axios.get(`${API.CANDIDATES_PREF}/${id}`);
+        setTargetCandidatePref(res.data.data.record || null);
+      } catch (error: any) {
+        console.error('Error fetching candidate preference:', error);
+        setTargetCandidatePref(null as T);
+      }
+    }
+
+export async function get_candidate_pref_async<T> (id: string, setTargetCandidatePref: (state: T) => void): Promise<void> {
+      try {
+        const res = await axios.get(`${API.CANDIDATES_PREF}/${id}`);
+        setTargetCandidatePref(res.data.data.record || null);
+      } catch (error: any) {
+        console.error('Error fetching candidate preference:', error);
+        setTargetCandidatePref(null as T);
+      }
+    };
+
+//  remarks: delete candidate preference record
+export async function handle_delete_candidate_pref(pref_id: string) {
+  try {
+    await axios.delete(`${API.CANDIDATES_PREF}`, {
+      data: {
+        _ids: [String(pref_id)],
+      },
+    });
+    alert(`[ProfileCandidate] succeed: the preference record has been deleted successfully.`);
+    return true;
+  } catch (err: any) {
+    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
+    return false;
+  }
+}
+
 export function init_select_dept_opts({ departments }: { departments: any[] }): Array<{ value: string; label: string }> {
   if (!departments || departments.length === 0) {
     return [];
@@ -59,3 +95,4 @@ export function init_select_dept_opts({ departments }: { departments: any[] }): 
     }));
   return result;
 }
+

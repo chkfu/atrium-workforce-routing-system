@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ButtonCandidateTrigger } from '../ProfileCandidates/elements/buttons';
+import { ButtonCandidateTrigger } from '../../pages/group_profile/ProfileCandidates/elements/buttons';
 import { FormSectionCreateReuse } from './FormSectionCreateReuse';
 
 //  ==========    Section: Reuse Component   ==========

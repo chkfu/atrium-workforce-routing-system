@@ -2,10 +2,10 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { UpdateCandidateEduSchema } from '../ProfileCandidates/utils/schema';
-import { ButtonCandidateEduReset, ButtonCandidateEduSubmit } from '../ProfileCandidates/elements/buttons';
-import { handle_create_candidate_edu_submit } from '../ProfileCandidates/utils/handlers';
-import { select_input_field } from './utils/select_input_field';
+import { UpdateCandidateEduSchema } from '../../pages/group_profile/ProfileCandidates/utils/schema';
+import { ButtonCandidateEduReset, ButtonCandidateEduSubmit } from '../../pages/group_profile/ProfileCandidates/elements/buttons';
+import { handle_create_candidate_edu_submit } from '../../pages/group_profile/ProfileCandidates/utils/handlers';
+import { select_input_field } from './handlers/select_input_field';
 
 //  remarks: reusable form for create record in sub-section forms
 export function FormSectionCreateReuse<T extends Record<string, any> = any>({

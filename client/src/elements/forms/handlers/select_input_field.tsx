@@ -1,5 +1,5 @@
-import FormTextField from '../../../../elements/FormTextField';
-import FormSelectInput from '../../../../elements/FormSelectInput';
+import FormTextField from '../../FormTextField';
+import FormSelectInput from '../../FormSelectInput';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 export const select_input_field = (

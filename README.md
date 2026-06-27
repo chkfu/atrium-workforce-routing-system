@@ -67,6 +67,8 @@ These core modules will support the two-tiered workflows for candidate selection
 
 #### (1) Candidate Selection Flow
 
+The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phrase 1) and hiring selection (phrase 2)</i>.
+
 <p>
   <img src="docs/charts/chart_domain_logic.png" width="100%">
 </p>
@@ -82,17 +84,71 @@ Each module contains API layers to ensure clear division of responsibilities bet
 | Services Layer     | Handles core business logics, receiving data for further transformation.  |
 | Repositories Layer | Manages queries for direct database access.                               |
 
+Each layer adheres with the single directional relationship, while processing the data with the top-down dependencies.  This model ensures layers to specialise to their logics and responsibilities, preventing over-coupling among the modules.
+
+
 <br/>
 
 ## Project Structure
 
 <i>\* Read `architecture.md` for further information of design and module reponsibilities. </i>
 
+├── client/                     	#  front-end collection
+│   ├── src/
+│    │  ├── auth/                 #  authentication
+│   │   ├── components/           #  Reusable UI layout (esp. header and footer)
+│   │   ├── config/               #  configurations files
+│   │   ├── elements/             #  reusable UI components
+│   │   ├── pages/                #  web pages
+│   │   ├── redux/                #  state management (centralised as shared resources)
+│   │   ├── utils/                #  shared declaration, types, functions, and etc.
+│   │   └── assets/      
+│   └── ...other files
+│
+├── server/                       #  back-end collection
+│   ├── src/
+│    │  ├── auth/                 #  authentication
+│   │   ├── core/                 #  abstract classes of API layers, as templates
+│   │   ├── database/             #  database level (PostgreSQL, Redis)
+│   │   ├── infra/                #  infrastructure level (logging, middlewares, caching, ssl, etc.)
+│   │   ├── modules/              #  domain-driven feature modules
+│   │   │   └── [module_name (by SQL tables)]/  
+│   │   │       ├── *.routes.ts
+│   │   │       ├── *.controller.ts
+│   │   │       ├── *.service.ts
+│   │   │       └── *.repository.ts
+│   │   └── util/                 #  shared types, config, error handling and validation, etc.
+│   └── ...other files
+│
+└── docs/                         #  project documentations
+
+
 <br/>
 
 ## Workflow
 
 <i>\* Read `architecture.md` for further information of design and module reponsibilities. </i>
+
+
+###  (A) Request-Response Flow
+
+<p>
+  <img src="docs/charts/chart_workflow_request-response.png" width="100%">
+</p>
+
+
+###  (B) State Management Flow
+
+<p>
+  <img src="docs/charts/chart_workflow_state_management.png" width="100%">
+</p>
+
+
+###  (C) Data Processing Flow
+
+<p>
+  <img src="docs/charts/chart_worrkflow_data-processing.png" width="100%">
+</p>
 
 <br/>
 

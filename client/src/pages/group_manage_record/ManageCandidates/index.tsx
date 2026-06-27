@@ -107,7 +107,7 @@ export default function ManageCandidates(): JSX.Element {
     if (filter_updated_to) params.filter_updated_to = filter_updated_to;
 
     //  remarks: getting data by querying database
-    axios
+    const fetch_candidates = async() => ( await axios
       .get(API.CANDIDATES, {
         params,
       })
@@ -124,7 +124,9 @@ export default function ManageCandidates(): JSX.Element {
         dispatch(setCandidates([]));
         setGetError(err.message || '[ManageCandidates] error: Failed to load candidates');
         setIsGetting(false);
-      });
+      }))
+      fetch_candidates()
+
   }, [searchParams.toString()]);
   //  loading spinner for pending status
   if (isGetting && !isInitialised) {

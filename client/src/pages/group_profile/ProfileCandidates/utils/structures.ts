@@ -187,7 +187,7 @@ export const CandidateTestStructrure = {
 
 
 //  remarks: table structure for building the forms (candidate preferences)
-export const getCandidatePrefStructrure = (departments: any) => ({
+export const getCandidatePrefStructure = (departments: any) => ({
   pref_dept_1st: {
     type: 'select',
     label: '1st Preference',

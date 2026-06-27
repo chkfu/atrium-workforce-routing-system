@@ -4,13 +4,19 @@ import {
   CandidateDetailStructure,
   CandidateEduStructrure,
   CandidateExpStructrure,
+  CandidateTestStructrure,
+  getCandidatePrefStructure
 } from '../utils/structures';
 import { BoxSubsectionCreateReuse } from '../../../../elements/forms/BoxSubsectionCreateReuse';
 import { useContext } from 'react';
-import { ICandidate } from '../../../../utils/types/redux_types';
+import { ICandidate, ICandidateEdu, ICandidatePref, ICandidateTest, IDepartment } from '../../../../utils/types/redux_types';
 import { CandidateEduContext, CandidateExpContext } from '../utils/context';
 import { UpdateCandidateSchema } from '../../../group_manage_record/ManageCandidates/utils/schema';
 import { handle_candidate_details_submit } from '../utils/handlers';
+import { UpdateCandidateEduSchema, UpdateCandidateExpSchema, UpdateCandidateTestSchema, UpdateCandidatePrefSchema } from '../utils/schema';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store';
+import { useParams } from 'react-router-dom';
 
 //  ==========    Section: Candidate Details   ==========
 
@@ -44,7 +50,7 @@ export function SectionDetails({
 //  ==========    Section: Candidate Qualification    ==========
 
 //  remarks: the section container of candidate qualification
-export function SectionEducation(): JSX.Element {
+export function SectionEducation({ targetCandidateEdu }: { targetCandidateEdu: ICandidateEdu | null; }): JSX.Element {
   const context = useContext(CandidateEduContext);
   return (
     <Accordion title="(2) Qualification" titleSize="text-xl">
@@ -54,13 +60,16 @@ export function SectionEducation(): JSX.Element {
         form_title="Create New Qualification"
         form_subtitle="Add new record to educational history."
       />
+      {/*  ===============================  */}
+      {/*  TODO: display exisiting results  */}
+      {/*  ===============================  */}
     </Accordion>
   );
 }
 
 //  ==========    Section: Candidate Experience    ==========
 
-export function SectionExperience(): JSX.Element {
+export function SectionExperience({ targetCandidateExp }: { targetCandidateExp: ICandidateEdu | null; }): JSX.Element {
   const context = useContext(CandidateExpContext);
   return (
     <Accordion title="(3) Experience" titleSize="text-xl">
@@ -70,6 +79,9 @@ export function SectionExperience(): JSX.Element {
         form_title="Create New Work Experience"
         form_subtitle="Add new record to work history."
       />
+      {/*  ===============================  */}
+      {/*  TODO: display exisiting results  */}
+      {/*  ===============================  */}
     </Accordion>
   );
 }
@@ -77,10 +89,31 @@ export function SectionExperience(): JSX.Element {
 //  ==========    Section: Candidate Test Score   ==========
 
 // remarks: test score
-export function SectionTestScore(): JSX.Element {
+export function SectionTestScore({
+  targetCandidateTest,
+}: {
+  targetCandidateTest: ICandidateTest | null;
+}): JSX.Element {
+
+  //  remarks: extract candidate id from params
+  const { id } = useParams();
+
+  const handleSubmit = (data: any) => {
+    if (targetCandidateTest?._id) {
+      //  TODO: to be follo-up
+    }
+  };
+
   return (
     <Accordion title="(4) Test Score" titleSize="text-xl">
-      {/*  TODO: append update form  */}
+      <FormSubsectionUpdateReuse
+        key={targetCandidateTest?._id}
+        sect_state={targetCandidateTest}
+        form_schema={UpdateCandidateTestSchema}
+        submit_handler={handleSubmit}
+        form_structure={CandidateTestStructrure}
+        form_subtitle=""
+      />
     </Accordion>
   );
 }
@@ -88,22 +121,36 @@ export function SectionTestScore(): JSX.Element {
 //  ==========    Section: Candidate Preference   ==========
 
 // remarks: preferences - get departments from Redux (fetched in parent), get pref data from Context
-export function SectionPreference(): JSX.Element {
-  // Get departments from Redux store (already fetched by parent component)
+export function SectionPreference({
+  targetCandidatePref,
+}: {
+  targetCandidatePref: ICandidatePref | null;
+}): JSX.Element {
+
+  //  remarks: extract candidate id from params
+  const { id } = useParams();
+
+  //  reamrks: updated departments list for preference options
+  const departments: IDepartment[] = useSelector((state: RootState) => state.department.value);
+
+  //  remarks: form submission handler
+  const handleSubmit = (data: any) => {
+    if (targetCandidatePref?._id) {
+      //  TODO: to be follo-up
+    }
+  };
 
   return (
     <Accordion title="(5) Preferences" titleSize="text-xl">
-      {/*  to do  */}
+      <FormSubsectionUpdateReuse
+        key={targetCandidatePref?._id}
+        sect_state={targetCandidatePref}
+        form_schema={UpdateCandidatePrefSchema}
+        submit_handler={handleSubmit}
+        form_structure={getCandidatePrefStructure(departments)}
+        form_title='Update Preferences'
+        form_subtitle='Select the first three options for enrolling the selection'
+      />
     </Accordion>
   );
-}
-
-//  ==========    Section: Reuseable Component   ==========
-
-export function SectionNotFoundReuse(){
-  return (
-    <Accordion title="(5) Preferences" titleSize="text-xl">
-       <p>Section data not found.</p>
-    </Accordion>
-  )
 }

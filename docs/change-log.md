@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jun 26, 2026  - In Progress
+## [1.0.5] - Jun 27, 2026  - In Progress
 
 <i>Objective: implement id-specific sub-page of candidates, staff and department table </i>
 

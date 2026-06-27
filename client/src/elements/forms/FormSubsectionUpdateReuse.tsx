@@ -16,7 +16,6 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
   form_structure,
   form_title = '',
   form_subtitle = '',
-  isLoading = false
 }: {
   sect_state: T | null;
   form_schema: any;
@@ -24,27 +23,7 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
   form_structure: any;
   form_title?: string;
   form_subtitle?: string;
-  isLoading?: boolean;
 }): JSX.Element {
-  //  remarks: convert all numeric IDs to strings for select compatibility
-  const stateAsAny = sect_state as any;
-  const formattedState = sect_state ? {
-    ...sect_state,
-    pref_dept_1st: stateAsAny.pref_dept_1st != null ? String(stateAsAny.pref_dept_1st) : '',
-    pref_dept_2nd: stateAsAny.pref_dept_2nd != null ? String(stateAsAny.pref_dept_2nd) : '',
-    pref_dept_3rd: stateAsAny.pref_dept_3rd != null ? String(stateAsAny.pref_dept_3rd) : '',
-    is_active: sect_state.is_active ? 'true' : 'false',
-    created_at: new Date(sect_state.created_at).toLocaleString(
-      'en-GB',
-      default_date_format
-    ),
-    updated_at: new Date(sect_state.updated_at).toLocaleString(
-      'en-GB',
-      default_date_format
-    ),
-  } : { is_active: 'true' };
-
-  const [savedValues, setSavedValues] = useState(formattedState);
 
   //  remarks: extracted react hook form methods
   const {
@@ -53,15 +32,48 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
     formState: { errors },
     reset,
   } = useForm<any>({
-    defaultValues: formattedState,
+    defaultValues: sect_state || { is_active: true },
     resolver: yupResolver(form_schema),
   });
 
   //  remarks: update saved values and reset form when sect_state changes (exclude reset from deps)
   useEffect(() => {
-    setSavedValues(formattedState);
-    reset(formattedState);
-  }, [sect_state]);
+    if (sect_state) {
+      reset({
+        ...sect_state,
+        is_active: String(sect_state.is_active),
+      });
+    } else {
+      const empty: any = {};
+      Object.keys(form_structure).forEach((key) => {
+        if (key === 'is_active') {
+          empty[key] = 'true';
+        } else {
+          empty[key] = '';
+        }
+      });
+      reset(empty);
+    }
+  }, [sect_state, reset, form_structure]);
+
+  const handleReset = () => {
+    if (sect_state) {
+      reset({
+        ...sect_state,
+        is_active: String(sect_state.is_active),
+      });
+    } else {
+      const empty: any = {};
+      Object.keys(form_structure).forEach((key) => {
+        if (key === 'is_active') {
+          empty[key] = 'true';
+        } else {
+          empty[key] = '';
+        }
+      });
+      reset(empty);
+    }
+  };
   //
   const entries = Object.entries(form_structure);
   const rows = [];
@@ -88,8 +100,8 @@ export function FormSubsectionUpdateReuse<T extends { created_at: Date | string;
       ))}
       {/*  box: button for form control  */}
       <div className="flex justify-end gap-4 mt-4">
-        <ButtonCandidateDetailsReset reset={() => reset(savedValues)} />
-        <ButtonCandidateDetailsSubmit disabled={isLoading} />
+        <ButtonCandidateDetailsReset reset={handleReset} />
+        <ButtonCandidateDetailsSubmit />
       </div>
     </form>
   );

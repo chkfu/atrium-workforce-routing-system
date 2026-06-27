@@ -73,10 +73,10 @@ export default function ProfileCandidateP(): JSX.Element {
             <div id="candidate-profile-container">
               <Accordion title="Candidate Profile">
                 <SectionDetails targetCandidate={targetCandidate} />
-                <SectionEducation />
-                <SectionExperience />
-                <SectionTestScore />
-                <SectionPreference />
+                <SectionEducation targetCandidateEdu={targetCandidateEdu} />
+                <SectionExperience targetCandidateExp={targetCandidateExp} />
+                <SectionTestScore targetCandidateTest={targetCandidateTest} />
+                <SectionPreference targetCandidatePref={targetCandidatePref} />
               </Accordion>
             </div>
           </CandidatePrefContext.Provider>

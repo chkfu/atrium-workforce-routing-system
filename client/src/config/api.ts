@@ -6,7 +6,7 @@ export const API = {
   CANDIDATES_EDU: `${BASE_URL}/candidate_education`,
   CANDIDATES_EXP: `${BASE_URL}/candidate_experience`,
   CANDIDATES_TEST: `${BASE_URL}/candidate_tests`,
-  CANDIDATES_PREF: `${BASE_URL}/candidate_preferences`,
+  CANDIDATES_PREF: `${BASE_URL}/candidate_preference`,
   STAFF: `${BASE_URL}/staff`,
   STAFF_ACTIVATE: `${BASE_URL}/staff/activation`,
   DEPARTMENTS: `${BASE_URL}/departments`,

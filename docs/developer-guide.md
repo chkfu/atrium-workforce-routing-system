@@ -12,40 +12,54 @@ specific structure.
 
 # DEVELOPMENT GUIDE
 
-<br/>
-
-## Table of Contents
-
-- [I. Overview](#i-overview)
-- [II. Environment Setup](#ii-environment-setup)
-- [III. Project Structure](#iii-project-structure)
-- [IV. Workflow Logic](#iv-workflow-logic)
-- [V. User Interface Guide](#v-user-interface-guide)
-- [VI. Error Handling](#vi-error-handling)
-- [VII. Trouble-shooting](#vii-trouble-shooting)
-- [VIII. Testing](#viii-testing)
+This guide provide the instructions for setting up the dev environment, maintaining the project and understanding the system operation.
 
 <br/>
 
-## I. Overview
+## Contents
+
+- [Installation / Initialisation](#installation--initialisation)
+- [Database Setups](#database-setups)
 
 <br/>
 
-## II. Environment Setup
+## Installation / Initialisation
+
+For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to proceed further.
+
+Please clone the project at the <a href='https://github.com/chkfu/atrium-workforce-routing-system.git'>Github repository</a>.
+
+### A. Server side setup (development environment)
+
+Beginning with a new terminal, and run the CLI with the commands below:
+
+```
+$ cd server
+$ npm install
+$ npm run dev
+```
+
+The server will be available at `https://localhost:8080` (or specified).
+
+### B. Client side setup (development environment)
+
+For browser display, please start the second terminal and run the below commands:
+
+```
+$ cd client
+$ npm install
+$ npm run dev
+```
+
+The client will be available at `http://localhost:5173` (or specified).
 
 <br/>
 
-## II. Architecture Rationale
-
-<br/>
-
-## III. Project Structure
-
-<br/>
-
-## IV. Dataabse Setups
+## Database Setups
 
 ### A. Initialise Neon PostGre database
+
+#### (1) database setup
 
 You may check the current postgresql version with:
 
@@ -61,28 +75,65 @@ $ brew services start postgresql@17
 
 ```
 
-Once installed, the initialised codes in `package.json` will be excuted by running:
+Once installed, the initialization script in `package.json` will execute the schema file by running:
 
 ```
 $ npm run db:init
 ```
 
-Finally, the designated codes will check whether the database and tables are available, in case missing tables leads to system crashes.
+This creates all required tables and enums defined in the schema.
+
+#### (2) operational rationale
+
+In `src/infra/database`, PostgreSQL codes have been stored in the listed files in below:
+
+| File Name  | Usage         | 
+| ------ | ----------------- | 
+| postgres.ts | Initialises database connection pool and manages connections |
+| pg_codes.ts | Reference list for PostgreSQL error codes to HTTP status codes| 
+| schema.sql | Defines schema for forming tabular data and their inter-relations therein. | 
+
+<p>
+  <img src="docs/charts/chart_dev_postgre-usage.png" width="100%">
+</p>
 
 <br/>
 
-## V. User Interface Guide
+### B. Initialise Redis
 
-<br/>
+#### (1) database setup
 
-## VI Error Handling
+You may check the current Redis version with:
 
-<br/>
+```
+$ redis-cli --version
+```
 
-## VII. Trouble-shooting
+Please run the below CLI instructions at terminal if it has not been installed:
+
+```
+$ brew install redis
+$ brew services start redis
+```
+
+Once installed, verify Redis is running:
+
+```
+$ redis-cli ping
+```
+
+Rate limiting is performed through the `rate-limit-redis` middleware. No additional initialization scripts are required.
+
+#### (2) operational rationale
+
+In `src/infra/database`, Redis codes have been stored in the listed files in `redis.ts`.
+
+<p>
+  <img src="docs/charts/chart_dev_redis-usage.png" width="100%">
+</p>
 
 <br/>
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: </i>
+<i> Last Updated: June 28, 2026</i>

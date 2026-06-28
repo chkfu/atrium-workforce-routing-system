@@ -13,7 +13,16 @@ efficient codes practice, and follow the established architectural practices.
 
 ## ARCHITECTURE
 
-This file records the plans and considerations of thre architecture design
+This file records the plans and considerations of thre architecture design.
+
+<br/>
+
+## Contents
+
+- [General Design](#general-design)
+- [Project Structure](#project-structure)
+- [Workflow](#workflow)
+- [Technical Consideration and Limitations](#technical-consideration-and-limitations)
 
 <br/>
 
@@ -44,7 +53,7 @@ These core modules will support the two-tiered workflows for candidate selection
 The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phrase 1) and hiring selection (phrase 2)</i>.
 
 <p>
-  <img src="docs/charts/chart_domain_logic.png" width="100%">
+  <img src="docs/charts/chart_domain-logic.png" width="100%">
 </p>
 
 ### C. Layered Architecture
@@ -83,8 +92,7 @@ Each layer adheres with the single directional relationship, while processing th
 │   ├── src/
 │   │   ├── auth/                   # Authentication
 │   │   ├── core/                   # Base API classes and templates
-│   │   ├── database/               # PostgreSQL, Redis, and database layer
-│   │   ├── infra/                  # Infrastructure (logging, middleware, caching, SSL, etc.)
+│   │   ├── infra/                  # Infrastructure (database, logging, middleware, caching, SSL, etc.)
 │   │   ├── modules/                # Domain-driven feature modules
 │   │   │   └── <module-name>/
 │   │   │       ├── *.routes.ts
@@ -96,7 +104,6 @@ Each layer adheres with the single directional relationship, while processing th
 │
 └── docs/                           # Project documentation
 ```
-
 
 <br/>
 
@@ -112,7 +119,7 @@ Each layer adheres with the single directional relationship, while processing th
 ###  (B) State Management Flow
 
 <p>
-  <img src="docs/charts/chart_workflow_state_management.png" width="100%">
+  <img src="docs/charts/chart_workflow_state-management.png" width="100%">
 </p>
 
 
@@ -121,38 +128,6 @@ Each layer adheres with the single directional relationship, while processing th
 <p>
   <img src="docs/charts/chart_worrkflow_data-processing.png" width="100%">
 </p>
-
-<br/>
-
-## Installation / Initialisation
-
-For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to proceed further.
-
-Please clone the project at the <a href='https://github.com/chkfu/atrium-workforce-routing-system.git'>Github repository</a>.
-
-### A. Server side setup (development environment)
-
-Beginning with a new terminal, and run the CLI with the commands below:
-
-```
-$ cd server
-$ npm install
-$ npm run dev
-```
-
-The server will be available at `https://localhost:8080` (or specified).
-
-### B. Client side setup (development environment)
-
-For browser display, please start the second terminal and run the below commands:
-
-```
-$ cd client
-$ npm install
-$ npm run dev
-```
-
-The client will be available at `http://localhost:5173` (or specified).
 
 <br/>
 
@@ -181,3 +156,7 @@ The client will be available at `http://localhost:5173` (or specified).
 - The client-side only adopted minor reusable components, but still yet to established modular structure causing by the complexity from table's specific columns and state management. Future improvements required.
 
 <br/>
+
+<i> Author: kchan </i>
+</br>
+<i> Last Updated: June 27, 2026</i>

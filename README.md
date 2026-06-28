@@ -6,11 +6,8 @@
 
 - [Overview](#overview)
 - [Features](#features)
-- [Architecture](#architecture)
-- [Project Structure](#project-structure)
-- [Workflow](#workflow)
 - [Installation / Initialisation](#installation--initialisation)
-- [Technical Consideration and Limitations](#technical-consideration-and-limitations)
+- [Architecture](#architecture)
 - [Dependencies](#dependencies)
 
 <br/>
@@ -38,6 +35,39 @@ Matching candidates and departments according to their preferences and departmen
 ### C. Comparable Evaluation of selection strategies
 
 Systematically re-running the selection process with different configurations, comparing various outcomes (e.g. passing rate, dropout rate, preference satisfaction) for management decision.
+
+<br/>
+
+## Installation / Initialisation
+
+For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to proceed further.
+
+Please clone the project at the <a href='https://github.com/chkfu/atrium-workforce-routing-system.git'>Github repository</a>.
+
+
+### A. Server side setup (development environment)
+
+Beginning with a new terminal, and run the CLI with the commands below:
+
+```
+$ cd server
+$ npm install
+$ npm run dev
+```
+
+The server will be available at `https://localhost:8080` (or specified).
+
+### B. Client side setup (development environment)
+
+For browser display, please start the second terminal and run the below commands:
+
+```
+$ cd client
+$ npm install
+$ npm run dev
+```
+
+The client will be available at `http://localhost:5173` (or specified).
 
 <br/>
 

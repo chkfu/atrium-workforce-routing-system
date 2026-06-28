@@ -26,6 +26,7 @@ This file records the major version changes of the projects.
 
 - implemented redux for the shared state management among the webpages.
 - implemented candidate details and education section at profile candidate page.
+- added database setup guide and ssl certificate creation guide to `developer-guide.md`.
 
 ### Edited
 

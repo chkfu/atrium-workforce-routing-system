@@ -126,7 +126,7 @@ Each layer adheres with the single directional relationship, while processing th
 ###  (C) Data Processing Flow
 
 <p>
-  <img src="charts/chart_worrkflow_data-processing.png" width="100%">
+  <img src="charts/chart_workflow_data-processing.png" width="100%">
 </p>
 
 <br/>

@@ -43,14 +43,22 @@ Systematically re-running the selection process with different configurations, c
 
 ## Architecture
 
-Atrium adopts a **Domain-Driven Design (DDD)** architecture with a layered backend to separate request handling, business logic, and data access. Business features are organised into independent domain modules, improving maintainability and scalability.
+Atrium adopts domain-driven architecture with a layered backend to separate request handling, business logic and data access. Business features are organised into independent domain modules for enhancing maintainability and scalability.
 
-**Key architectural principles**
+### A. Request-Response Flow
+
+This project illustrates the request-response lifecycle andhighlights the interaction between layers and the integration of Redis caching with the PostgreSQL database:
+
+<p>
+  <img src="docs/charts/chart_workflow_request-response.png" width="100%">
+</p>
+
+### B. Key Components
 
 - Domain-driven modular organisation
 - Layered API architecture (Routes → Controllers → Services → Repositories)
 - React + Redux for frontend state management
-- PostgreSQL + Redis for persistence and caching
+- PostgreSQL and Redis for persistence and caching
 
 For detailed architecture, module responsibilities, workflows, and design considerations, see **`architecture.md`**.
 

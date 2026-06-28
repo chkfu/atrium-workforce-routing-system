@@ -53,7 +53,7 @@ These core modules will support the two-tiered workflows for candidate selection
 The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phrase 1) and hiring selection (phrase 2)</i>.
 
 <p>
-  <img src="docs/charts/chart_design_domain-logic.png" width="100%">
+  <img src="charts/chart_design_domain-logic.png" width="100%">
 </p>
 
 ### C. Layered Architecture
@@ -112,21 +112,21 @@ Each layer adheres with the single directional relationship, while processing th
 ###  (A) Request-Response Flow
 
 <p>
-  <img src="docs/charts/chart_workflow_request-response.png" width="100%">
+  <img src="charts/chart_workflow_request-response.png" width="100%">
 </p>
 
 
 ###  (B) State Management Flow
 
 <p>
-  <img src="docs/charts/chart_workflow_state-management.png" width="100%">
+  <img src="charts/chart_workflow_state-management.png" width="100%">
 </p>
 
 
 ###  (C) Data Processing Flow
 
 <p>
-  <img src="docs/charts/chart_workflow_data-processing.png" width="100%">
+  <img src="charts/chart_worrkflow_data-processing.png" width="100%">
 </p>
 
 <br/>

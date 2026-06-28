@@ -94,7 +94,7 @@ In `src/infra/database`, PostgreSQL codes have been stored in the listed files i
 | schema.sql | Defines schema for forming tabular data and their inter-relations therein. | 
 
 <p>
-  <img src="docs/charts/chart_dev_postgre-usage.png" width="100%">
+  <img src="charts/chart_dev_postgre-usage.png" width="100%">
 </p>
 
 <br/>
@@ -129,7 +129,7 @@ Rate limiting is performed through the `rate-limit-redis` middleware. No additio
 In `src/infra/database`, Redis codes have been stored in the listed files in `redis.ts`.
 
 <p>
-  <img src="docs/charts/chart_dev_redis-usage.png" width="100%">
+  <img src="charts/chart_dev_redis-usage.png" width="100%">
 </p>
 
 <br/>

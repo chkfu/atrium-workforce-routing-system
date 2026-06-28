@@ -43,184 +43,31 @@ Systematically re-running the selection process with different configurations, c
 
 ## Architecture
 
-<i>\* Read `architecture.md` for further information of design and module reponsibilities. </i>
+Atrium adopts a **Domain-Driven Design (DDD)** architecture with a layered backend to separate request handling, business logic, and data access. Business features are organised into independent domain modules, improving maintainability and scalability.
 
-### A. Overall Design
+**Key architectural principles**
 
-The Atrium Platform follows Domain-Driven Design, with a modular API pipeline of routes, controllers, services and repositories. Each layer focuses on their module specialties for clarifying boundaries between request handling, business logic and data access.
+- Domain-driven modular organisation
+- Layered API architecture (Routes → Controllers → Services → Repositories)
+- React + Redux for frontend state management
+- PostgreSQL + Redis for persistence and caching
 
-### B. Module-Based Organisation
-
-RESTful API modules has been grouped into five key categories:
-
-| Module Group     | Description                                       |
-| ---------------- | ------------------------------------------------- |
-| group_system     | System operational settings related.              |
-| group_candidate  | New hires related, and their related information. |
-| group_department | Departmental structure and agenda.                |
-| group_selection  | Considerations related to pre-training intakes    |
-| group_probation  | Considerations related to probational performance |
-| group_hiring     | Considerations related to official hiring         |
-| group_final      | Final Result of Intakes                           |
-
-These core modules will support the two-tiered workflows for candidate selection as shown in below:
-
-#### (1) Candidate Selection Flow
-
-The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phrase 1) and hiring selection (phrase 2)</i>.
-
-<p>
-  <img src="docs/charts/chart_domain_logic.png" width="100%">
-</p>
-
-### C. Layered Architecture
-
-Each module contains API layers to ensure clear division of responsibilities between application flow and domain logic:
-
-| Layer              | Responsibility                                                            |
-| ------------------ | ------------------------------------------------------------------------- |
-| Routes Layer       | Defines the API entry points and forward https requests to controllers.   |
-| Controllers Layer  | Validates client inputs and https requests, forwarding tasks to services. |
-| Services Layer     | Handles core business logics, receiving data for further transformation.  |
-| Repositories Layer | Manages queries for direct database access.                               |
-
-Each layer adheres with the single directional relationship, while processing the data with the top-down dependencies.  This model ensures layers to specialise to their logics and responsibilities, preventing over-coupling among the modules.
-
-
-<br/>
-
-## Project Structure
-
-<i>\* Read `architecture.md` for further information of design and module reponsibilities. </i>
-
-├── client/                     	#  front-end collection
-│   ├── src/
-│    │  ├── auth/                 #  authentication
-│   │   ├── components/           #  Reusable UI layout (esp. header and footer)
-│   │   ├── config/               #  configurations files
-│   │   ├── elements/             #  reusable UI components
-│   │   ├── pages/                #  web pages
-│   │   ├── redux/                #  state management (centralised as shared resources)
-│   │   ├── utils/                #  shared declaration, types, functions, and etc.
-│   │   └── assets/      
-│   └── ...other files
-│
-├── server/                       #  back-end collection
-│   ├── src/
-│    │  ├── auth/                 #  authentication
-│   │   ├── core/                 #  abstract classes of API layers, as templates
-│   │   ├── database/             #  database level (PostgreSQL, Redis)
-│   │   ├── infra/                #  infrastructure level (logging, middlewares, caching, ssl, etc.)
-│   │   ├── modules/              #  domain-driven feature modules
-│   │   │   └── [module_name (by SQL tables)]/  
-│   │   │       ├── *.routes.ts
-│   │   │       ├── *.controller.ts
-│   │   │       ├── *.service.ts
-│   │   │       └── *.repository.ts
-│   │   └── util/                 #  shared types, config, error handling and validation, etc.
-│   └── ...other files
-│
-└── docs/                         #  project documentations
-
-
-<br/>
-
-## Workflow
-
-<i>\* Read `architecture.md` for further information of design and module reponsibilities. </i>
-
-
-###  (A) Request-Response Flow
-
-<p>
-  <img src="docs/charts/chart_workflow_request-response.png" width="100%">
-</p>
-
-
-###  (B) State Management Flow
-
-<p>
-  <img src="docs/charts/chart_workflow_state_management.png" width="100%">
-</p>
-
-
-###  (C) Data Processing Flow
-
-<p>
-  <img src="docs/charts/chart_worrkflow_data-processing.png" width="100%">
-</p>
-
-<br/>
-
-## Installation / Initialisation
-
-For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to proceed further.
-
-Please clone the project at the <a href='https://github.com/chkfu/atrium-workforce-routing-system.git'>Github repository</a>.
-
-### A. Server side setup (development environment)
-
-Beginning with a new terminal, and run the CLI with the commands below:
-
-```
-$ cd server
-$ npm install
-$ npm run dev
-```
-
-The server will be available at `https://localhost:8080` (or specified).
-
-### B. Client side setup (development environment)
-
-For browser display, please start the second terminal and run the below commands:
-
-```
-$ cd client
-$ npm install
-$ npm run dev
-```
-
-The client will be available at `http://localhost:5173` (or specified).
-
-<br/>
-
-## Technical Consideration and Limitations
-
-### A. Design Trade-off
-
-#### (1) Managing Complex Modular Structure
-
-- Solution: Converted to layered structure with model, controller, service and repository modules, decoupling functionalities and logics for better maintenance.
-- Tradeoff: New features requires to updates in more layers with additional efforts on managing module coordination and ensuring their completeness.
-
-#### (2) Prevent Database Overloading
-
-- Solution: Implemented Redis caching, rate limiting and lock, as the database-level shelter reducing loads and against race competition.
-- Tradeoff: Requires additional redis handlers for the querying methods with more complex modular relations, plus extra costs for setup and maintain the redis server.
-
-### B. Limitations
-
-#### (1) Long-term Data Dependency
-
-- The design has limitation handling frequent strategy changes, as each recruitment batch presented as vaiable factors. Lack of data consistency could harm the reliability and failed to match the fair test requirements.
-
-#### (2) Limited refactorisation for Page Interface
-
-- The client-side only adopted minor reusable components, but still yet to established modular structure causing by the complexity from table's specific columns and state management. Future improvements required.
+For detailed architecture, module responsibilities, workflows, and design considerations, see **`architecture.md`**.
 
 <br/>
 
 ## Dependencies
 
-| Scope  | Category  | Package            | Version |
-| ------ | --------- | ------------------ | ------- |
-| Client | Framework | react              | ^18.3.1 |
-| Client | Styling   | tailwindcss        | ^4.2.4  |
-| Server | Framework | express            | ^5.2.1  |
-| Server | Security  | express-rate-limit | ^8.3.1  |
-| Server | Database  | pg                 | ^8.20.0 |
-| Server | Cache     | redis              | ^5.12.1 |
-| Server | Logging   | winston            | ^3.19.0 |
+| Scope  | Category          | Package            | Version |
+| ------ | ----------------- | ------------------ | ------- |
+| Client | Framework         | react              | ^18.3.1 |
+| Client | Styling           | tailwindcss        | ^4.2.4  |
+| Client | State Management  | redux              | ^4.2.0  |
+| Server | Framework         | express            | ^5.2.1  |
+| Server | Security          | express-rate-limit | ^8.3.1  |
+| Server | Database          | pg                 | ^8.20.0 |
+| Server | Cache             | redis              | ^5.12.1 |
+| Server | Logging           | winston            | ^3.19.0 |
 
 See `client/package.json` and `server/package.json` for the full package list.
 

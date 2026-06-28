@@ -18,12 +18,12 @@ This guide provide the instructions for setting up the dev environment, maintain
 
 ## Contents
 
-- [Installation / Initialisation](#installation--initialisation)
+- [Installation Guide](#installation--initialisation)
 - [Database Setups](#database-setups)
 
 <br/>
 
-## Installation / Initialisation
+## Installation Guide
 
 For project setup, you need to install Node.js v18+, PostgreSQL, and Redis to proceed further.
 

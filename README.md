@@ -75,6 +75,10 @@ The client will be available at `http://localhost:5173` (or specified).
 
 Atrium adopts domain-driven architecture with a layered backend to separate request handling, business logic and data access. Business features are organised into independent domain modules for enhancing maintainability and scalability.
 
+<p>
+  <img src="docs/charts/chart_design_domain-logic.png" width="100%">
+</p>
+
 ### A. Request-Response Flow
 
 This project illustrates the request-response lifecycle andhighlights the interaction between layers and the integration of Redis caching with the PostgreSQL database:

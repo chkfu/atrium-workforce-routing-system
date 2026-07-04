@@ -41,6 +41,11 @@ $ npm run dev
 
 The server will be available at `https://localhost:8080` (or specified).
 
+<i>
+Make sure to setup the `config.env` file at the root level, before starting the express server.  The file specifically centralises the project configuration related to sever, database, security and etc.
+</i>
+
+
 ### B. Client side setup (development environment)
 
 For browser display, please start the second terminal and run the below commands:
@@ -190,9 +195,50 @@ $ mkcert localhost
 ```
 
 
+<br/>
+
+# Logging Guide
+
+### A. Logger Structure
+
+The loggers setting is stored at `server/infra/logger` in the server side. 
+
+Through winston, the project centralise the logger managements (especially categorisation, formatting and configuration). The file contains three core parts:
+
+| Function / Component | Description |
+|----------------------|-------------|
+| `createRotateTransport()` | Customises the configuration and settings of future log files, including rotation policy, file naming, retention period, maximum file size, compression, and logging level. |
+| `msg_format` | Defines the format of logger messages listed in the log files and console output. |
+| `create_loggers()` | Reusable method for creating new loggers that adopts the customised preferences and predefined configurations. |
+
+In our design, the project utilise the serveral log with their specific features:
+
+| Logger | Description |
+|--------|-------------|
+| `app_logger` | related to system operation. |
+| `http_logger` | related to HTTP requests and responses. |
+| `auth_logger` | related to authentication and authorisation. |
+| `critical_logger` | related critical errors. |
+
+### B. Log Storage
+
+After initialised the project, a `server/logs/` folder will be automatically created once new log message has been formed. 
+
+As default, the log file will stored as default setting:
+
+| Setting | Value | Description |
+|---------|-------|-------------|
+| `filename` | `./logs/<filename>-%DATE%.log` | Log file path with date. |
+| `datePattern` | `YYYY-MM-DD` | Daily rotation. |
+| `zippedArchive` | `true` | Compress old logs. |
+| `maxSize` | `128m` | Rotate at 128MB. |
+| `maxFiles` | `7d` | Keep logs for 7 days. |
+| `level` | Configurable | Log level filter. |
+
+Please refined the settings at rooted file (in `server/infra/logger`) and update this guide, if any amendment has been made.
 
 <br/>
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: June 28, 2026</i>
+<i> Last Updated: July 4, 2026</i>

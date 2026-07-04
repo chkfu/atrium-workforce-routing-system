@@ -61,10 +61,10 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   ) {
     //  remarks: handling data types
     //  1. pagination-related
-    const MAX_PAGE_LIMIT = 100;
+    const EXP_MAX_PAGE_LIMIT = Number(process.env.EXP_MAX_PAGE_LIMIT) || 100;
     let page_current: number = Math.max(1, Number(page_opts.page_current) || 1);
     let page_limit: number = Math.min(
-      MAX_PAGE_LIMIT,
+      EXP_MAX_PAGE_LIMIT,
       Number(page_opts.page_limit) || 20,
     );
     const formatted_page_opts = {

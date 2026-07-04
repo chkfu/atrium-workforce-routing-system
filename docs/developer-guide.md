@@ -207,9 +207,9 @@ Through winston, the project centralise the logger managements (especially categ
 
 | Function / Component | Description |
 |----------------------|-------------|
-| `createRotateTransport()` | Customises the configuration and settings of future log files, including rotation policy, file naming, retention period, maximum file size, compression, and logging level. |
-| `msg_format` | Defines the format of logger messages listed in the log files and console output. |
-| `create_loggers()` | Reusable method for creating new loggers that adopts the customised preferences and predefined configurations. |
+| `createRotateTransport()` | Customises the configuration and settings of future log files. |
+| `msg_format` | The format of logger messages listed in the log files. |
+| `create_loggers()` | Creating new loggers to adopt the customised configurations. |
 
 In our design, the project utilise the serveral log with their specific features:
 

@@ -18,7 +18,7 @@ Companies often lack consistent procedures on assigning the new hires for intern
 
 The Atrium Platform is a full-stack web application that systematically matches candidates with departments throughout the probation period, while enabling management to monitor assignment outcomes during the probation period.
 
-It gives top management the structured visibility into assignment outcomes during probation, and lets them make smart changes to how things work.
+It provides the structured visibility into assignment outcomes during probation, and enable the management to review and adjust their strategies over time.
 
 <br/>
 
@@ -81,7 +81,7 @@ Atrium adopts domain-driven architecture with a layered backend to separate requ
 
 ### A. Request-Response Flow
 
-This project illustrates the request-response lifecycle andhighlights the interaction between layers and the integration of Redis caching with the PostgreSQL database:
+This project illustrates the request-response lifecycle and highlights the interaction between layers and the integration of Redis caching with the PostgreSQL database:
 
 <p>
   <img src="docs/charts/chart_workflow_request-response.png" width="100%">
@@ -94,7 +94,7 @@ This project illustrates the request-response lifecycle andhighlights the intera
 - React + Redux for frontend state management
 - PostgreSQL and Redis for persistence and caching
 
-For detailed architecture, module responsibilities, workflows, and design considerations, see **`architecture.md`**.
+The server-side is organised into seven domain modules to keep logic independent, complying with the design principles of "low coupling, high cohesion" (see architecture.md for more design trade-offs and considerations).
 
 <br/>
 

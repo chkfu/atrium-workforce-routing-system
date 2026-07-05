@@ -141,7 +141,7 @@ In `src/infra/database`, Redis codes have been stored in the listed files in `re
 
 # SSL/TLS Setup Guide
 
-To support HTTPS connection, SSL/TLS certificate is requried to encrypt the sensitive data when it is transistioning. 
+To support HTTPS connection, SSL/TLS certificate is required to encrypt the sensitive data when it is transitioning. 
 
 <br/>
 

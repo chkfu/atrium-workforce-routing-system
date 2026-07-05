@@ -34,7 +34,7 @@ The Atrium Platform follows Domain-Driven Design, with a modular API pipeline of
 
 ### B. Module-Based Organisation
 
-RESTful API modules has been grouped into five key categories:
+RESTful API modules has been grouped into seven key categories:
 
 | Module Group     | Description                                       |
 | ---------------- | ------------------------------------------------- |
@@ -50,7 +50,7 @@ These core modules will support the two-tiered workflows for candidate selection
 
 #### (1) Candidate Selection Flow
 
-The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phrase 1) and hiring selection (phrase 2)</i>.
+The multi-stage flow helps to track the candidates’ journey from application to final enrollment. It specifically centralises the raw data, serving for further performance and metrics evaluation in the major intaking periods -  <i>probational selection (phase 1) and hiring selection (phase 2)</i>.
 
 <p>
   <img src="charts/chart_design_domain-logic.png" width="100%">
@@ -149,7 +149,7 @@ Each layer adheres with the single directional relationship, while processing th
 
 #### (1) Long-term Data Dependency
 
-- The design has limitation handling frequent strategy changes, as each recruitment batch presented as vaiable factors. Lack of data consistency could harm the reliability and failed to match the fair test requirements.
+- The design has limitation handling frequent strategy changes, as each recruitment batch presented as variable factors. Lack of data consistency could harm the reliability and failed to match the fair test requirements.
 
 #### (2) Limited refactorisation for Page Interface
 

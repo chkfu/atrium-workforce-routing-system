@@ -10,6 +10,7 @@ import {
 import ValueError from '../util/errors/ValueError';
 import bcrypt from 'bcrypt';
 import loggers from '../infra/loggers';
+import { hash_password } from './utils/handlers';
 
 //  Service class
 
@@ -82,10 +83,11 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     const formatted_fname = format_text(first_name);
     const formatted_lname = format_text(last_name);
     const formatted_email = format_email(email);
-
+    const hashed_password = await hash_password(_password);
+    const hashed_pw_confirm = await hash_password(_password_confirm);
     //  (b) optional parameters
     const formatted_gender = user_data.gender ?? format_text(user_data.gender);
-    const formatted_pstatus =
+    const formatted_pstatus = user_data.prob_status ?? format_text(user_data.prob_status);
       user_data.prob_status ?? format_text(user_data.prob_status);
     //  remarks: pass the formatted parameters
     return this.repository.register_user_with_candidate({
@@ -93,8 +95,8 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       last_name: formatted_lname as string,
       email: formatted_email as string,
       username,
-      _password,
-      _password_confirm,
+      _password: hashed_password as string,
+      _password_confirm: hashed_pw_confirm as string,
       gender: formatted_gender as string,
       prob_status: formatted_pstatus as string,
     });
@@ -134,6 +136,8 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     const formatted_fname = format_text(first_name);
     const formatted_lname = format_text(last_name);
     const formatted_email = format_email(email);
+    const hashed_password = await hash_password(_password);
+    const hashed_pw_confirm = await hash_password(_password_confirm);
     //  (b) optional parameters
     const formatted_gender = user_data.gender ?? format_text(user_data.gender);
     const formatted_work_pos =
@@ -160,8 +164,8 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       date_hired: formatted_date_hired as Date,
       date_quit: formatted_date_quit as Date,
       username,
-      _password,
-      _password_confirm,
+      _password: hashed_password as string,
+      _password_confirm: hashed_pw_confirm as string,
       gender: formatted_gender as string,
     });
   }

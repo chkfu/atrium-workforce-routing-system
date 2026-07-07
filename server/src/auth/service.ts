@@ -10,7 +10,11 @@ import {
 import ValueError from '../util/errors/ValueError';
 import bcrypt from 'bcrypt';
 import loggers from '../infra/loggers';
-import { hash_password } from './utils/handlers';
+import {
+  generate_jwt_token,
+  hash_password_bcrypt,
+  validate_password_bcrypt,
+} from './utils/handlers';
 
 //  Service class
 
@@ -83,12 +87,13 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     const formatted_fname = format_text(first_name);
     const formatted_lname = format_text(last_name);
     const formatted_email = format_email(email);
-    const hashed_password = await hash_password(_password);
-    const hashed_pw_confirm = await hash_password(_password_confirm);
+    const hashed_password = await hash_password_bcrypt(_password);
+    const hashed_pw_confirm = await hash_password_bcrypt(_password_confirm);
     //  (b) optional parameters
     const formatted_gender = user_data.gender ?? format_text(user_data.gender);
-    const formatted_pstatus = user_data.prob_status ?? format_text(user_data.prob_status);
+    const formatted_pstatus =
       user_data.prob_status ?? format_text(user_data.prob_status);
+    user_data.prob_status ?? format_text(user_data.prob_status);
     //  remarks: pass the formatted parameters
     return this.repository.register_user_with_candidate({
       first_name: formatted_fname as string,
@@ -136,8 +141,8 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     const formatted_fname = format_text(first_name);
     const formatted_lname = format_text(last_name);
     const formatted_email = format_email(email);
-    const hashed_password = await hash_password(_password);
-    const hashed_pw_confirm = await hash_password(_password_confirm);
+    const hashed_password = await hash_password_bcrypt(_password);
+    const hashed_pw_confirm = await hash_password_bcrypt(_password_confirm);
     //  (b) optional parameters
     const formatted_gender = user_data.gender ?? format_text(user_data.gender);
     const formatted_work_pos =
@@ -168,6 +173,45 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       _password_confirm: hashed_pw_confirm as string,
       gender: formatted_gender as string,
     });
+  }
+
+  //  remarks: user login, includes get user, compare password and create token
+  async login_user(login_data: any) {
+    
+    //  remarks: validate input username and password
+    const { username, _password } = login_data;
+    if (!username || !_password){
+      const err_msg = '[AuthService] error: username and password are required for login.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+
+    //  remarks: get target user from database
+    const user = await this.repository.get_user_by_username({ username });
+    if (!user) {
+      const err_msg = `[AuthService] error: target user cannot be found.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    const user_role = user.user_role;
+
+    //  remarks: extract and compare the passwords
+    const result_validate = await validate_password_bcrypt(
+      _password,
+      user._password,
+    );
+    if (!result_validate) {
+      const err_msg = `[AuthService] error: passwords not matched.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+
+    //  remarks: return token for verification
+    const jwt_token = await generate_jwt_token(user._id);
+    return {
+      user_role: user_role,
+      token: jwt_token
+    };
   }
 }
 

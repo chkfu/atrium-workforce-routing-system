@@ -20,6 +20,8 @@ const user_controller = new UserController(
 
 router.route('/register_new_user').post(user_controller.register_new_user());
 
+router.route('/login_user').post(user_controller.login_user());
+
 //  Export
 
 export default router;

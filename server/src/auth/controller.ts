@@ -23,7 +23,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
 
   //  remarks: user registration
   //  POST  /api/v1/auth/register_new_user
-  public register_new_user (){
+  public register_new_user(){
     return handle_async(async (req: Request, res: Response, next: NextFunction) => {
       const records = await (this.service as UserService).register_new_user(req.body);
       res.status(200).json({
@@ -33,6 +33,20 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
         },
       });
     });}
+
+  //  remarks: user login
+  //  POST  /api/v1/auth/login_user
+  public login_user(){
+    return handle_async(async(req: Request, res: Response, next: NextFunction) => {
+      const result = await (this.service as UserService).login_user(req.body);
+      res.status(200).json({
+        status: 'success',
+        data: {
+          result
+        },
+      });
+    })
+  }
 }
 
 //  Export

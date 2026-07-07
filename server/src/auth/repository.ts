@@ -17,6 +17,20 @@ class UserRepository extends BaseRepository<TUserBase & TSchemaBase> {
 
   // Methods
 
+  //  GET Methods
+
+  public async get_user_by_username({ username }: { username: string }) {
+    //  remarks: query with username only
+    const result = await pool.query(
+      `SELECT * FROM "sys_users" WHERE username = $1`,
+      [username],
+    );
+    return result.rows[0];
+  }
+
+
+  //  POST Methods
+
   //  remarks: user registration, with new candidate record creation
   public async register_user_with_candidate({
     first_name,

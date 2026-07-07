@@ -27,7 +27,7 @@ This file records the major version changes of the projects.
 - implemented redux for the shared state management among the webpages.
 - implemented candidate details and education section at profile candidate page.
 - provided new content for setup and maintenance guides at `developer-guide.md`.
-- implemented user sign-up for authentication at the server-side.
+- implemented user sign-up and log-in for authentication at the server-side.
 
 ### Edited
 

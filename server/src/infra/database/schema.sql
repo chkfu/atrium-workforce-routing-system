@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS candidates(
   _id  SERIAL  PRIMARY KEY,
   first_name  VARCHAR(50) NOT NULL,
   last_name  VARCHAR(50) NOT NULL,
-  gender  enum_gender  NOT NULL,
+  gender  enum_gender,
   email  VARCHAR(50) UNIQUE,
-  prob_status  enum_prob_status NOT NULL,
+  prob_status  enum_prob_status,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_active  BOOLEAN DEFAULT TRUE
@@ -61,7 +61,9 @@ CREATE TABLE IF NOT EXISTS candidates(
 CREATE TABLE IF NOT EXISTS sys_users(
   _id          SERIAL PRIMARY KEY,
   username     VARCHAR(50) UNIQUE NOT NULL,
+  email        VARCHAR(50) UNIQUE NOT NULL,
   _password    VARCHAR(255) NOT NULL,
+  _password_confirm VARCHAR(255) NOT NULL,
   user_role    enum_user_role,
   staff_id     INTEGER UNIQUE REFERENCES staff(_id) ON DELETE SET NULL,
   candidate_id INTEGER UNIQUE REFERENCES candidates(_id) ON DELETE SET NULL,

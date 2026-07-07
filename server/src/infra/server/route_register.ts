@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import auth_route from '../../auth/route';
 import dept_route from '../../modules/group_department/departments/route';
 import staff_route from '../../modules/group_department/staff/route';
 import candidate_route from '../../modules/group_candidate/candidates/route';
@@ -18,6 +19,7 @@ import hire_criteria_route from '../../modules/group_hiring/hire_criteria/route'
 import final_intake_route from '../../modules/group_final/final_intakes/route';
 
 export const route_register: Record<string, Router> = {
+  auth: auth_route,
   departments: dept_route,
   staff: staff_route,
   candidates: candidate_route,

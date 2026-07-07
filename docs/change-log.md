@@ -18,15 +18,16 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jun 27, 2026  - In Progress
+## [1.0.5] - Jul 7, 2026  - In Progress
 
-<i>Objective: implement id-specific sub-page of candidates, staff and department table </i>
+<i>Objective: build basic authentication and implement id-specific sub-page of candidates, staff and department table </i>
 
 ### Added
 
 - implemented redux for the shared state management among the webpages.
 - implemented candidate details and education section at profile candidate page.
-- added database setup guide and ssl certificate creation guide to `developer-guide.md`.
+- provided new content for setup and maintenance guides at `developer-guide.md`.
+- implemented user sign-up for authentication at the server-side.
 
 ### Edited
 

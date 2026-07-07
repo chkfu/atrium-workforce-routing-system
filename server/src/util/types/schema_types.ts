@@ -57,9 +57,12 @@ export type TCandidateBase = {
 
 //  tags: sys_users
 //  remarks: contains both staff and candidates, for accessing the system
-export type TSysUserBase = {
+export type TUserBase = {
   username: string;
+  email?: string;
   _password: string;
+  _password_confirm: string;
+  user_role: enum_user_role;
   staff_id?: number;
   candidate_id?: number;
   is_active: boolean;

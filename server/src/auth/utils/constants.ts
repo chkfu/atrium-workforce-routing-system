@@ -1,0 +1,1 @@
+export const PASSWORD_CHARSET_REGEX = /^[A-Za-z0-9!@#$%^&*()_\-+=\[\]{}|;:'",.<>/?`~]*$/;

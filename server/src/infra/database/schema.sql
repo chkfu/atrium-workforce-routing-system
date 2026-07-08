@@ -59,17 +59,18 @@ CREATE TABLE IF NOT EXISTS candidates(
 --  remarks: authentication related tables should be seperated, if needed to be in multi-cloud architecture
 --           tradeoff: data lantency, systematic complexity, and cost of maintenance
 CREATE TABLE IF NOT EXISTS sys_users(
-  _id          SERIAL PRIMARY KEY,
-  username     VARCHAR(50) UNIQUE NOT NULL,
-  email        VARCHAR(50) UNIQUE NOT NULL,
-  _password    VARCHAR(255) NOT NULL,
+  _id           SERIAL PRIMARY KEY,
+  username      VARCHAR(50) UNIQUE NOT NULL,
+  email         VARCHAR(50) UNIQUE NOT NULL,
+  _password     VARCHAR(255) NOT NULL,
   _password_confirm VARCHAR(255) NOT NULL,
-  user_role    enum_user_role,
-  staff_id     INTEGER UNIQUE REFERENCES staff(_id) ON DELETE SET NULL,
-  candidate_id INTEGER UNIQUE REFERENCES candidates(_id) ON DELETE SET NULL,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  is_active    BOOLEAN DEFAULT TRUE,
+  user_role     enum_user_role,
+  staff_id      INTEGER UNIQUE REFERENCES staff(_id) ON DELETE SET NULL,
+  candidate_id  INTEGER UNIQUE REFERENCES candidates(_id) ON DELETE SET NULL,
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  pw_changed_at TIMESTAMP,
+  is_active     BOOLEAN DEFAULT TRUE,
 
   --  learnt: ensure staff, candidate, or admin has their corresponding id for tracking
   CONSTRAINT check_user_role CHECK (

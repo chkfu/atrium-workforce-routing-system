@@ -66,6 +66,7 @@ export type TUserBase = {
   staff_id?: number;
   candidate_id?: number;
   is_active: boolean;
+  pw_changed_at: Date;    //  remarks: JWT timestamp
 };
 
 //  2.  Candidates-supported table

@@ -32,6 +32,12 @@ router.route('/register_new_user').post(user_controller.register_new_user());
 router.route('/login_user').post(user_controller.login_user());
 
 //  remarks: password changes
+router
+  .route('/update_password_self')
+  .patch(
+    user_controller.access_control_token(),
+    user_controller.update_password_self(),
+  );
 router.route('/reset_password_opt_out').post(user_controller.reset_password_opt_out());
 router.route('/reset_password_opt_in/:token').post(user_controller.reset_password_opt_in());
 

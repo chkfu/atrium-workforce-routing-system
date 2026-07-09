@@ -12,6 +12,39 @@ import crypto from 'crypto';
 
 //  ==========  Password-related Methods  ==========
 
+//  remarks: compare password and password confirm
+export async function validate_new_passwords(
+  _password: string,
+  _password_confirm: string,
+) {
+  if (!_password || !_password_confirm) {
+    const err_msg = '[AuthService] error: new password is missing.';
+    loggers.auth_logger.error(err_msg);
+    throw new ValueError(400, `${err_msg}`);
+  }
+  if (_password !== _password_confirm) {
+    const err_msg = '[AuthService] error: password not matched.';
+    loggers.auth_logger.error(err_msg);
+    throw new ValueError(400, `${err_msg}`);
+  }
+}
+
+//  remarks: compare stored password and input password
+export async function validate_prev_passwords(
+  _password_prev: string,
+  _password_input: string,
+) {
+  const validate_password_prev = await validate_password_bcrypt(
+    _password_prev,
+    _password_input,
+  );
+  if (!validate_password_prev) {
+    const err_msg = `[AuthService] error: current password is incorrect.`;
+    loggers.auth_logger.error(err_msg);
+    throw new ValueError(400, `${err_msg}`);
+  }
+}
+
 //  remarks: hashed password for database storage
 export async function hash_password_bcrypt(raw_password: string) {
   //  remarks: validations
@@ -124,11 +157,13 @@ export function access_check_password_changed(
   }
 }
 
-
 //  remarks: handle_reset_password
 //  remarks: raw token is sent to the user, hashed token is stored in the database
 export function generate_password_reset_token() {
   const reset_token = crypto.randomBytes(32).toString('hex');
-  const hashed_token = crypto.createHash('sha256').update(reset_token).digest('hex');
+  const hashed_token = crypto
+    .createHash('sha256')
+    .update(reset_token)
+    .digest('hex');
   return { reset_token, hashed_token };
 }

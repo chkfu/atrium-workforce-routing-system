@@ -16,6 +16,8 @@ import {
   hash_password_bcrypt,
   validate_password_bcrypt,
   generate_password_reset_token,
+  validate_new_passwords,
+  validate_prev_passwords,
 } from './utils/handlers';
 import { node_mailing } from '../util/nodemailer';
 import AuthError from '../util/errors/AuthError';
@@ -191,7 +193,10 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     }
 
     //  remarks: get target user from database
-    const user = await this.repository.get_record_by_column('username', username);
+    const user = await this.repository.get_record_by_column(
+      'username',
+      username,
+    );
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
@@ -218,6 +223,43 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     };
   }
 
+  //  ==========    PASSWORD MANAGEMENT    ==========
+
+  //  remarks: update password with self-access point
+  async update_password_self(req: Request) {
+    //  remarks: ensure req.user information exists
+    if (!req.user) {
+      const err_msg =
+        '[AuthService] error: login is required to change password.';
+      loggers.auth_logger.error(err_msg);
+      throw new AuthError(401, err_msg);
+    }
+    //  remarks: search user record matching
+    const user = await this.repository.get_record_by_id(String(req.user._id));
+    if (!user) {
+      const err_msg = `[AuthService] error: target user cannot be found.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    //  remarks: validate provided old password, new password and password confirm
+    //  (a) check validity of passwords to be processed
+    const { _password_prev, _password, _password_confirm } = req.body;
+    if (!_password_prev || !_password || !_password_confirm) {
+      const err_msg =
+        '[AuthService] error: current password and new password are required.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    //  (b) validate old passwords to permit new passwords
+    await validate_prev_passwords(_password_prev, user._password);
+    await validate_new_passwords(_password, _password_confirm);
+    const hashed_password = await hash_password_bcrypt(_password);
+    //  (3) update user record and login
+    await this.repository.clear_password_reset(user._id, hashed_password);
+    return this.login_user({ username: user.username, _password });
+  }
+
+  //  remarks:  opt-out procedure, sending out tokens to proceed
   async reset_password_opt_out(req: Request) {
     //  learnt: (1) get the target user
     const { username } = req.body;
@@ -227,7 +269,10 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
-    const user = await this.repository.get_record_by_column('username', username);
+    const user = await this.repository.get_record_by_column(
+      'username',
+      username,
+    );
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
@@ -250,15 +295,16 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
         message: reset_message,
       });
     } catch (err: any) {
-      const err_msg = `[AuthService] error: failed to send out details for user password reset.`
+      const err_msg = `[AuthService] error: failed to send out details for user password reset.`;
       loggers.auth_logger.error(err_msg);
-      throw new AuthError(500, `${err_msg}: ${err}`)
+      throw new AuthError(500, `${err_msg}: ${err}`);
     }
   }
 
+  //  remarks:  opt-in procedure, receiving new passwords to be set
   async reset_password_opt_in(req: Request) {
     //  learnt: (1) get target user
-    //  remarks: (a) extract token and check existence 
+    //  remarks: (a) extract token and check existence
     const { token } = req.params;
     if (!token || Array.isArray(token)) {
       const err_msg = '[AuthService] error: reset token is required.';
@@ -266,30 +312,27 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       throw new ValueError(400, `${err_msg}`);
     }
     //  remarks: (b) search user with obtained token, check validity
-    const hashed_token = crypto.createHash('sha256').update(token).digest('hex');
-    const user = await this.repository.get_record_by_column('pw_reset_token', hashed_token);
+    const hashed_token = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+    const user = await this.repository.get_record_by_column(
+      'pw_reset_token',
+      hashed_token,
+    );
     if (!user) {
-      const err_msg = `[AuthService] error: failed to reset password with invalid token.`
+      const err_msg = `[AuthService] error: failed to reset password with invalid token.`;
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
-    if (!user.pw_reset_expired || user.pw_reset_expired < Date.now()){
-      const err_msg = `[AuthService] error: failed to reset password with expired token.`
+    if (!user.pw_reset_expired || user.pw_reset_expired < Date.now()) {
+      const err_msg = `[AuthService] error: failed to reset password with expired token.`;
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
     //  learnt: (2) validate token and setup new password
     const { _password, _password_confirm } = req.body;
-    if (!_password || !_password_confirm) {
-      const err_msg = '[AuthService] error: new password is missing.';
-      loggers.auth_logger.error(err_msg);
-      throw new ValueError(400, `${err_msg}`);
-    }
-    if (_password !== _password_confirm) {
-      const err_msg = '[AuthService] error: password not matched.';
-      loggers.auth_logger.error(err_msg);
-      throw new ValueError(400, `${err_msg}`);
-    }
+    await validate_new_passwords(_password, _password_confirm);
     const hashed_password = await hash_password_bcrypt(_password);
     //  learnt: (3) update user record
     //  remarks: empty all reset information, as task completed

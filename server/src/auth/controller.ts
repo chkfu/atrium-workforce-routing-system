@@ -28,7 +28,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
 
   //  Methods
 
-  //  ==========  LOGIN / SIGNUP  ==========
+  //  ==========    LOGIN / SIGNUP    ==========
 
   //  remarks: user registration
   //  POST  /api/v1/auth/register_new_user
@@ -64,7 +64,20 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     );
   }
 
-  //  ==========  PASSWORD MANAGEMENT  ==========
+  //  ==========    PASSWORD MANAGEMENT    ==========
+
+  //  remarks: update password with self-access point
+  public update_password_self(){
+    return handle_async(
+      async (req: Request, res: Response, next: NextFunction) => {
+        await (this.service as UserService).update_password_self(req)
+        res.status(200).json({
+          status: 'success',
+          message: 'New password has been adopted.'
+        })
+      })
+  }
+
 
   //  remarks:  opt-out procedure, sending out tokens to proceed
   public reset_password_opt_out() {
@@ -98,7 +111,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
   }
 
 
-  //  ==========  ACCESS MANAGEMENT  ==========
+  //  ==========    ACCESS MANAGEMENT    ==========
 
   //  remarks: access control, as middleware
   public access_control_token() {

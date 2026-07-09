@@ -18,15 +18,6 @@ const user_controller = new UserController(
 
 //  Build routes
 
-//  remarks: system admin actions
-router
-  .route('/')
-  .get(user_controller.get_record_batch())
-  .post(user_controller.create_record_batch())
-  .patch(user_controller.update_record_details_batch())
-  .patch(user_controller.update_record_active_batch)
-  .delete(user_controller.remove_record_batch());
-
 //  remarks: sign-up / log-in
 router.route('/register_new_user').post(user_controller.register_new_user());
 router.route('/login_user').post(user_controller.login_user());

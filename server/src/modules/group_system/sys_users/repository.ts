@@ -1,13 +1,13 @@
 import BaseRepository from '../../../core/BaseRepository';
-import { TSysUserBase, TSchemaBase } from '../../../util/types/schema_types';
+import { TUserBase, TSchemaBase } from '../../../util/types/schema_types';
 
 //  Repository class
 
-class SysUserRepository extends BaseRepository<TSysUserBase & TSchemaBase> {
+class UserRepository extends BaseRepository<TUserBase & TSchemaBase> {
   //  Constructor
   constructor(
     table: string,
-    columns: Extract<keyof (TSysUserBase & TSchemaBase), string>[],
+    columns: Extract<keyof (TUserBase & TSchemaBase), string>[],
     primary_key: string,
   ) {
     super(table, columns, primary_key);
@@ -15,4 +15,4 @@ class SysUserRepository extends BaseRepository<TSysUserBase & TSchemaBase> {
 }
 
 //  Export
-export default SysUserRepository;
+export default UserRepository;

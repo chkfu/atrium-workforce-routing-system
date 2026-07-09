@@ -52,6 +52,8 @@ const db_structure = {
       'user_role',
       'staff_id',
       'candidate_id',
+      'pw_reset_token',
+      'pw_reset_expired',
       'is_active',
     ],
     primary_key: SHARED_PRIMARY_KEY,

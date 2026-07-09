@@ -22,6 +22,9 @@ router.route('/register_new_user').post(user_controller.register_new_user());
 
 router.route('/login_user').post(user_controller.login_user());
 
+router.route('/reset_password_opt_out').post(user_controller.reset_password_opt_out());
+router.route('/reset_password_opt_in/:token').post(user_controller.reset_password_opt_in());
+
 //  Export
 
 export default router;

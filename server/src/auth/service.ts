@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import BaseService from '../core/BaseService';
 import UserRepository from './repository';
 import { TUserBase, TSchemaBase } from '../util/types/schema_types';
@@ -8,13 +9,15 @@ import {
   format_text,
 } from '../util/types/type_formatter';
 import ValueError from '../util/errors/ValueError';
-import bcrypt from 'bcrypt';
 import loggers from '../infra/loggers';
 import {
   generate_jwt_token,
   hash_password_bcrypt,
   validate_password_bcrypt,
+  generate_password_reset_token,
 } from './utils/handlers';
+import { node_mailing } from '../util/nodemailer';
+import AuthError from '../util/errors/AuthError';
 
 //  Service class
 
@@ -41,7 +44,7 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
 
   //  remarks: extracted user role to decide create which kind of user record
   //  INPUT: user_data
-  public async register_new_user(user_data: any) {
+  public async register_new_user(user_data: any = {}) {
     const { user_role } = user_data;
     if (!user_role || user_role in ['candidate', 'staff']) {
       throw new Error(
@@ -176,12 +179,12 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
   }
 
   //  remarks: user login, includes get user, compare password and create token
-  async login_user(login_data: any) {
-    
+  async login_user(login_data: any = {}) {
     //  remarks: validate input username and password
     const { username, _password } = login_data;
-    if (!username || !_password){
-      const err_msg = '[AuthService] error: username and password are required for login.';
+    if (!username || !_password) {
+      const err_msg =
+        '[AuthService] error: username and password are required for login.';
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
@@ -210,9 +213,49 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     const jwt_token = await generate_jwt_token(user._id);
     return {
       user_role: user_role,
-      token: jwt_token
+      token: jwt_token,
     };
   }
+
+  async reset_password_opt_out(req: Request) {
+    //  learnt: (1) get the target user
+    const { username } = req.body;
+    if (!username) {
+      const err_msg =
+        '[AuthService] error: username is required for password reset.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    const user = await this.repository.get_user_by_username({ username });
+    if (!user) {
+      const err_msg = `[AuthService] error: target user cannot be found.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    //  learnt: (2) generate and stored temp reset token
+    const pw_reset_token = generate_password_reset_token();
+    const pw_reset_expired = new Date(Date.now() + 1000 * 60 * 10);
+    await this.repository.update_record_details_batch([user._id], {
+      pw_reset_token,
+      pw_reset_expired,
+    });
+    //  learnt: (3) send the details to the user
+    try {
+      const reset_url = `${req.protocol}://${req.get('host')}/api/v1/auth/reset_password_opt_in/${pw_reset_token}`;
+      const reset_message = `Hi ${username},\n\nWe received a request to reset your password. Click the link below to choose a new one:\n\n${reset_url}\n\nThis link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.\n\n- Atrium Team`;
+      await node_mailing({
+        email: user.email,
+        subject: 'Reset your Atrium password',
+        message: reset_message,
+      });
+    } catch (err: any) {
+      const err_msg = `[AuthService] error: failed to send out details for user password reset.`
+      loggers.auth_logger.error(err_msg);
+      throw new AuthError(500, `${err_msg}: ${err}`)
+    }
+  }
+
+  async reset_password_opt_in(login_data: any = {}) {}
 }
 
 //  Export

@@ -8,6 +8,7 @@ import AuthError from '../../util/errors/AuthError';
 import { Request } from 'express';
 import { TUserBase } from '../../util/types/schema_types';
 import UserService from '../service';
+import crypto from 'crypto';
 
 //  ==========  Password-related Methods  ==========
 
@@ -121,4 +122,12 @@ export function access_check_password_changed(
     loggers.auth_logger.error(err_msg);
     throw new AuthError(401, err_msg);
   }
+}
+
+
+//  remarks: handle_reset_password
+export function generate_password_reset_token(){
+  const reset_token = crypto.randomBytes(32).toString('hex');
+  const hashed_token = crypto.createHash('sha256').update(reset_token).digest('hex');
+  return hashed_token;
 }

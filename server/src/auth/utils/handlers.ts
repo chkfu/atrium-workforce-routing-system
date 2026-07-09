@@ -126,8 +126,9 @@ export function access_check_password_changed(
 
 
 //  remarks: handle_reset_password
-export function generate_password_reset_token(){
+//  remarks: raw token is sent to the user, hashed token is stored in the database
+export function generate_password_reset_token() {
   const reset_token = crypto.randomBytes(32).toString('hex');
   const hashed_token = crypto.createHash('sha256').update(reset_token).digest('hex');
-  return hashed_token;
+  return { reset_token, hashed_token };
 }

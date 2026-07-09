@@ -17,18 +17,6 @@ class UserRepository extends BaseRepository<TUserBase & TSchemaBase> {
 
   // Methods
 
-  //  GET Methods
-
-  public async get_user_by_username({ username }: { username: string }) {
-    //  remarks: query with username only
-    const result = await pool.query(
-      `SELECT * FROM "sys_users" WHERE username = $1`,
-      [username],
-    );
-    return result.rows[0];
-  }
-
-
   //  POST Methods
 
   //  remarks: user registration, with new candidate record creation
@@ -204,6 +192,27 @@ class UserRepository extends BaseRepository<TUserBase & TSchemaBase> {
     } finally {
       query_connector.release();
     }
+  }
+
+  //  UPDATE Methods
+
+  //  remarks: for password reset specifically
+  //  learnt: the change will be skipped, if update column as null or undefined
+  public async clear_password_reset(id: number, hashed_password: string) {
+    const result = await pool.query(
+      `
+      UPDATE "${this.table}"
+      SET
+        "_password" = $1,
+        "pw_reset_token" = NULL,
+        "pw_reset_expired" = NULL,
+        "updated_at" = CURRENT_TIMESTAMP
+      WHERE "${this.primary_key}" = $2
+      RETURNING *;
+      `,
+      [hashed_password, id],
+    );
+    return result.rows[0];
   }
 }
 

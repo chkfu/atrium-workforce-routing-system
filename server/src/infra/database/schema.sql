@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS sys_users(
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   pw_changed_at TIMESTAMP,
   pw_reset_token  VARCHAR,
-  pw_reset_expired  DATE,
+  pw_reset_expired  TIMESTAMPTZ,    
   is_active     BOOLEAN DEFAULT TRUE,
 
   --  learnt: ensure staff, candidate, or admin has their corresponding id for tracking

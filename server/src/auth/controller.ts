@@ -86,7 +86,14 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
   //  remarks:  opt-in procedure, receiving new passwords to be set
   public reset_password_opt_in() {
     return handle_async(
-      async (req: Request, res: Response, next: NextFunction) => {},
+      async (req: Request, res: Response, next: NextFunction) => {
+        const result = await (this.service as UserService).reset_password_opt_in(req);
+         //  remarks: network response
+        res.status(200).json({
+          status: 'success',
+          ...result,
+        });
+      },
     );
   }
 

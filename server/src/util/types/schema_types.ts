@@ -67,6 +67,8 @@ export type TUserBase = {
   candidate_id?: number;
   is_active: boolean;
   pw_changed_at: Date;    //  remarks: JWT timestamp
+  pw_reset_token?: string;
+  pw_reset_expired?: Date;
 };
 
 //  2.  Candidates-supported table

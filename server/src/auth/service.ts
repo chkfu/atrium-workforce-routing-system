@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Request } from 'express';
 import BaseService from '../core/BaseService';
 import UserRepository from './repository';
@@ -190,7 +191,7 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     }
 
     //  remarks: get target user from database
-    const user = await this.repository.get_user_by_username({ username });
+    const user = await this.repository.get_record_by_column('username', username);
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
@@ -226,22 +227,22 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
-    const user = await this.repository.get_user_by_username({ username });
+    const user = await this.repository.get_record_by_column('username', username);
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
     //  learnt: (2) generate and stored temp reset token
-    const pw_reset_token = generate_password_reset_token();
+    const { reset_token, hashed_token } = generate_password_reset_token();
     const pw_reset_expired = new Date(Date.now() + 1000 * 60 * 10);
     await this.repository.update_record_details_batch([user._id], {
-      pw_reset_token,
+      pw_reset_token: hashed_token,
       pw_reset_expired,
     });
     //  learnt: (3) send the details to the user
     try {
-      const reset_url = `${req.protocol}://${req.get('host')}/api/v1/auth/reset_password_opt_in/${pw_reset_token}`;
+      const reset_url = `${req.protocol}://${req.get('host')}/api/v1/auth/reset_password_opt_in/${reset_token}`;
       const reset_message = `Hi ${username},\n\nWe received a request to reset your password. Click the link below to choose a new one:\n\n${reset_url}\n\nThis link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.\n\n- Atrium Team`;
       await node_mailing({
         email: user.email,
@@ -255,7 +256,47 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     }
   }
 
-  async reset_password_opt_in(login_data: any = {}) {}
+  async reset_password_opt_in(req: Request) {
+    //  learnt: (1) get target user
+    //  remarks: (a) extract token and check existence 
+    const { token } = req.params;
+    if (!token || Array.isArray(token)) {
+      const err_msg = '[AuthService] error: reset token is required.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    //  remarks: (b) search user with obtained token, check validity
+    const hashed_token = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await this.repository.get_record_by_column('pw_reset_token', hashed_token);
+    if (!user) {
+      const err_msg = `[AuthService] error: failed to reset password with invalid token.`
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    if (!user.pw_reset_expired || user.pw_reset_expired < Date.now()){
+      const err_msg = `[AuthService] error: failed to reset password with expired token.`
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    //  learnt: (2) validate token and setup new password
+    const { _password, _password_confirm } = req.body;
+    if (!_password || !_password_confirm) {
+      const err_msg = '[AuthService] error: new password is missing.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    if (_password !== _password_confirm) {
+      const err_msg = '[AuthService] error: password not matched.';
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    const hashed_password = await hash_password_bcrypt(_password);
+    //  learnt: (3) update user record
+    //  remarks: empty all reset information, as task completed
+    await this.repository.clear_password_reset(user._id, hashed_password);
+    //  learnt: (4) login and refresh token
+    return this.login_user({ username: user.username, _password });
+  }
 }
 
 //  Export

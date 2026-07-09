@@ -182,6 +182,27 @@ abstract class BaseRepository<T> {
     return result.rows[0];
   };
 
+  //  remarks: GET single record matched by any whitelisted column
+  //  INPUT: column key (must be a known column or primary key), value to match
+  public get_record_by_column = async (
+    col_key: Extract<keyof (T & TSchemaBase), string>,
+    col_val: string,
+  ) => {
+    //  validation: whitelist columns to prevent sql injection via column name
+    if (col_key !== this.primary_key && !this.columns.includes(col_key)) {
+      throw new KeyError(
+        400,
+        `[${this.table.toUpperCase()}] error: the provided column ${col_key} is not found.`,
+      );
+    }
+    //  querying
+    const result = await pool.query(
+      `SELECT * FROM "${this.table}" WHERE "${col_key}" = $1;`,
+      [col_val],
+    );
+    return result.rows[0];
+  };
+
   //  3b.  CREATE methods
 
   //  remarks: CREATE multiple records with same values

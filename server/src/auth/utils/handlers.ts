@@ -89,7 +89,7 @@ export async function generate_jwt_token(id: number) {
   });
 }
 
-//  remarks: set jwt token as cookie, so the client can carry it for future requests
+//  learnt: set jwt token as cookie, enable client side to call
 export function set_jwt_cookie(res: Response, token: string) {
   res.cookie('jwt', token, {
     expires: new Date(
@@ -97,8 +97,7 @@ export function set_jwt_cookie(res: Response, token: string) {
         Number(process.env.JWT_COOKIE_EXPIRED) * 24 * 60 * 60 * 1000,
     ),
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production'
   });
 }
 

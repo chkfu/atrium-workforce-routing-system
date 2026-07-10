@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jul 9, 2026  - In Progress
+## [1.0.5] - Jul 10, 2026  - In Progress
 
 <i>Objective: build basic authentication and implement id-specific sub-page of candidates, staff and department table </i>
 
@@ -27,7 +27,7 @@ This file records the major version changes of the projects.
 - implemented redux for the shared state management among the webpages.
 - implemented candidate details and education section at profile candidate page.
 - provided new content for setup and maintenance guides at `developer-guide.md`.
-- implemented user sign-up, log-in and access control for authentication at the server-side.
+- implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.
 
 ### Edited
 

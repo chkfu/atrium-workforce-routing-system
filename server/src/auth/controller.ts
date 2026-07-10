@@ -8,6 +8,7 @@ import {
   extract_token_from_header,
   access_check_user_exist,
   access_check_password_changed,
+  set_jwt_cookie,
 } from './utils/handlers';
 import loggers from '../infra/loggers';
 import AuthError from '../util/errors/AuthError';
@@ -54,6 +55,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
         const result = await (this.service as UserService).login_user(req.body);
+        set_jwt_cookie(res, result.token);
         res.status(200).json({
           status: 'success',
           data: {
@@ -101,6 +103,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
         const result = await (this.service as UserService).reset_password_opt_in(req);
+        set_jwt_cookie(res, result.token);
          //  remarks: network response
         res.status(200).json({
           status: 'success',

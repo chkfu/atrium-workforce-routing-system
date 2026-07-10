@@ -5,7 +5,7 @@ import { PASSWORD_CHARSET_REGEX } from './constants';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { promisify } from 'util';
 import AuthError from '../../util/errors/AuthError';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { TUserBase } from '../../util/types/schema_types';
 import UserService from '../service';
 import crypto from 'crypto';
@@ -85,7 +85,20 @@ export async function validate_password_bcrypt(
 export async function generate_jwt_token(id: number) {
   return await jwt.sign({ id }, process.env.JWT_SECRET as string, {
     //  learnt: the type is needed for env variables for specification
-    expiresIn: process.env.JWT_EXPIRED as SignOptions['expiresIn'],
+    expiresIn: process.env.JWT_TOKEN_EXPIRED as SignOptions['expiresIn'],
+  });
+}
+
+//  remarks: set jwt token as cookie, so the client can carry it for future requests
+export function set_jwt_cookie(res: Response, token: string) {
+  res.cookie('jwt', token, {
+    expires: new Date(
+      Date.now() +
+        Number(process.env.JWT_COOKIE_EXPIRED) * 24 * 60 * 60 * 1000,
+    ),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
   });
 }
 

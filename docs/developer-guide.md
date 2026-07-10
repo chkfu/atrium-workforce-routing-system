@@ -19,7 +19,9 @@ This guide provide the instructions for setting up the dev environment, maintain
 ## Contents
 
 - [Installation Guide](#installation-guide)
-- [Database Setups Guide](#database-setups-guide)
+- [Database Setup Guide](#database-setups-guide)
+- [SSL/TLS Setup Guide](#ssltls-setup-guide)
+- [Logging Guide](#logging-guide)
 
 <br/>
 
@@ -60,7 +62,7 @@ The client will be available at `http://localhost:5173` (or specified).
 
 <br/>
 
-## Database Setups Guide
+## Database Setup Guide
 
 ### A. Initialise Neon PostGre database
 

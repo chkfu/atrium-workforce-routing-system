@@ -108,45 +108,45 @@ Each layer adheres with the single directional relationship, while processing th
 
 ## Workflow
 
-### (A) Request-Response Flow
+### A. Request-Response Flow
 
 <p>
   <img src="charts/chart_workflow_request-response.png" width="100%">
 </p>
 
-### (B) State Management Flow
+### B. State Management Flow
 
 <p>
   <img src="charts/chart_workflow_state-management.png" width="100%">
 </p>
 
-### (C) Data Processing Flow
+### C. Data Processing Flow
 
 <p>
   <img src="charts/chart_workflow_data-processing.png" width="100%">
 </p>
 
-### (D) Authentication
+### D. Authentication
 
-#### 1. Login Flow
+#### (1) Login Flow
 
 <p>
   <img src="charts/chart_workflow_login-flow.png" width="100%">
 </p>
 
-#### 2. Registration Flow
+#### (2) Registration Flow
 
 <p>
   <img src="charts/chart_workflow_register-flow.png" width="100%">
 </p>
 
-#### 3. Reset Password Flow (external access)
+#### (3) Reset Password Flow (external access)
 
 <p>
   <img src="charts/chart_workflow_reset-password.png" width="100%">
 </p>
 
-#### 4. Reset Password Flow (self-access)
+#### (4) Reset Password Flow (self-access)
 
 <p>
   <img src="charts/chart_workflow_self-access-password-change.png" width="100%">

@@ -57,7 +57,6 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
   public async get_record_batch(
     page_opts: Record<string, number> = { page_current: 1, page_limit: 20 },
     sort_opts: Record<string, any> = { sort_target: null, sort_order: true },
-    filter_opts: Record<string, any> = {},
   ) {
     //  remarks: handling data types
     //  1. pagination-related

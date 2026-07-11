@@ -241,6 +241,71 @@ Please refined the settings at rooted file (in `server/infra/logger`) and update
 
 <br/>
 
+# Cache Guide
+
+The Redis database has been set up at `infra/database/redis.ts` for initialisation, and `CacheService` (`infra/cache/CacheServices`) centralise all cache management methods to assist massive CRUD action with better efficiency.
+
+This cache design aims to:
+- serve as a fast in-memory layer to prevent overloading the permanent storage
+- support high-frequency operations with rate-limiting
+- prevent race conditions over editing the same cached data
+
+### A. Composition
+
+| Method | Description |
+|---|---|
+| `create_key` | Create new key (`table:id` / `table:all`) |
+| `validate_key` | Validate key |
+| `acquire_lock` | Acquire a lock, support `handle_lock` |
+| `release_lock` | Release the lock, support `handle_lock` |
+| `handle_lock` | Run through locking cycle |
+| `get_cache` | Cache read |
+| `set_cache` | Cache change |
+| `del_cache` | Remove cache by key |
+| `del_cache_by_pattern` | remove cache by table |
+
+
+### B. Usage
+
+#### Example: getting record with specific id
+
+For example, data records with specific id has been requested to read action.
+
+In cache handling, however, the system need to consider for both senario when whether cache record has been stored in reids's fast memeories: 
+
+```
+public get_record_by_id = async (id: string) => {
+  return await this.cache_service.handle_lock(this.table, id, async () => {
+
+    //  remarks: senario 1 - cache found
+    //  task: use get_cache methods to retrieve existing data
+
+    const cached_key: string = this.cache_service.create_key(this.table, id);
+    const cached_val: any = await this.cache_service.get_cache(cached_key);
+    if (cached_val) {
+      return cached_val;
+    }
+
+    //  remarks:  senario 2 - not in cache
+    //  task: call data from permanant database, and then update cache with set_cache method
+
+    // ... fetch data  ...
+
+    // populate cache for future reads
+    await this.cache_service.set_cache(cached_key, result);
+    return result;
+  });
+};
+```
+
+Once updated data has been stored, subsequebnt reading requests will find the existing record, preventing the loop on frequent queries over permanant database.
+
+#### Exception: getting all record from a table
+
+Considered that the batch record queries involving massive combination of sorting, filtering and pagination. Massive combination will overload the fast-memory storage, while these queries are unlikely to be repeated with lower hit possibility. In practice, it scarisfied memory for unused data with actually improvement over caching efficiency.
+
+<br/>
+
 <i> Author: kchan </i>
 </br>
 <i> Last Updated: July 4, 2026</i>

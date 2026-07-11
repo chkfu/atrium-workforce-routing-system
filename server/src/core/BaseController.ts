@@ -68,7 +68,6 @@ abstract class BaseController<T> {
       const result = await this.service.get_record_batch(
         page_opts,
         sort_opts,
-        filter_opts,
       );
       //  normal response
       res.status(200).json({

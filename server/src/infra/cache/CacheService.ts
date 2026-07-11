@@ -8,37 +8,46 @@ class CacheService {
   //  attribute
   private name: string = 'CacheService';
   private redis: RedisClientType = redis;
-  private query_ttl: number;
-  private lock_ttl: number = 30;
+  private query_ttl: number;    // remarks: timeout of the caching, prevent overloading
+  private lock_ttl: number = 30;    // remarks: timeout of lock system, prevent dead lock
   private timeout_base: number = 3000;
   private timeout_jitter: number = 0.1;
 
   //  constructor
   constructor() {
+    //  learnt: standard as 3000s with tolerance of 10%, random ratio for better distribution
     this.query_ttl =
       this.timeout_base +
       Math.floor(this.timeout_base * this.timeout_jitter * Math.random());
   }
 
-  //  1. redis supported methods
+  //  ==========    Redis Supported Methods    ===========
 
+  //  1. core methods
+
+  //  remarks: use `table:all` for overall key or `table:id` for specific's key
   public create_key(tb_name: string, id?: string) {
     const clean_tb = String(tb_name).trim().toLowerCase();
     const clean_id = id ? String(id).trim().toLowerCase() : 'all';
     return `${clean_tb}:${clean_id}`;
   }
 
+  //  reamrks: checking the existence of cache key
   public validate_key(key: string) {
     if (!key || key.trim() === '')
       throw new ValueError(400, `[${this.name}] invalid cache key found.`);
     return key.trim().toLowerCase();
   }
+
+  //  2. lock related methods
+
   //  remarks: acquire lock to prevent race competition, ensure db updates remain in order
   public async acquire_lock(tb_name: string, id: string) {
     const cached_key: string = this.create_key(tb_name, id);
+    //  remarks: get validated key
     const lock_key: string = `lock:${this.validate_key(cached_key)}`;
     const result = await this.redis.set(lock_key, 'locked', {
-      NX: true,
+      NX: true,   // remarks: only exercise when key is exist, else ignore. 
       EX: this.lock_ttl,
     });
     return result ? true : false;
@@ -50,6 +59,7 @@ class CacheService {
     await this.del_cache(lock_key);
   }
 
+  //  remarks: manage the whole lock workflow
   public async handle_lock(
     tb_name: string,
     id: string,
@@ -73,16 +83,17 @@ class CacheService {
     }
   }
 
-  //  2. cacahe access methods
+  //  ===========    Cache Access Methods    ===========
 
-  //  * GET
+  //  GET Method
+
   public async get_cache(key: string) {
     this.validate_key(key);
     const val = await this.redis.get(key); // learnt: return JSON format
     return val ? JSON.parse(val) : null; // leanrt: parse into JS object to proceed
   }
 
-  //  * SET
+  //  POSR Method
   public async set_cache(cached_key: string, cached_val: any) {
     //  error handling
     if (
@@ -106,13 +117,15 @@ class CacheService {
     return result;
   }
 
-  //  * DELETE
+  //  DELETE Mehtod
+  
+  //  remarks: remove cache record based on specific key
   public async del_cache(cached_key: string) {
     cached_key = this.validate_key(cached_key);
     await this.redis.del(cached_key);
   }
 
-  //  * DELETE by pattern (e.g., 'candidates:*' to clear all pagination caches for that table)
+  //  learnt: empty all cache record with single table key
   public async del_cache_by_pattern(pattern: string) {
     const keys = await this.redis.keys(pattern);
     if (keys.length > 0) {

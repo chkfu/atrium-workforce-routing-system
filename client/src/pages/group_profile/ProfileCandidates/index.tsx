@@ -65,6 +65,20 @@ export default function ProfileCandidateP(): JSX.Element {
       });
   }, [id]);
 
+  //  remarks: query candidate preference
+  useEffect(() => {
+    axios
+      .get(`${API.CANDIDATES_PREF}/column-list/candidate_id/${id}`)
+      .then((res) => {
+        const target_list = res.data?.data?.records ?? [];
+        setTargetCandidatePref(target_list[0] || null);
+      })
+      .catch((err: any) => {
+        console.error('[ProfileCandidate] error: fetching target candidate preference:', err);
+        setTargetCandidatePref(null);
+      });
+  }, [id]);
+
   return (
     <CandidateEduContext.Provider value={{ targetCandidateEdu, setTargetCandidateEdu }}>
       <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>

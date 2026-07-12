@@ -2,6 +2,7 @@ import { ICandidate, ICandidateEdu, ICandidatePref } from '../../../../utils/typ
 import axios from 'axios';
 import { API } from '../../../../config/api';
 
+
 //  ==========    Section: Candidate Details    ==========
 
 //  remarks: update candidate details record
@@ -47,31 +48,42 @@ export async function handle_create_candidate_edu_submit(id: string, data: ICand
 
 //  ==========    Section: Candidate Preferences    ==========
 
-export async function get_candidate_pref<T>(candidate_id: string, setTargetCandidatePref: (state: T) => void) {
+export async function handle_candidate_pref_submit<T>(candidate_id: string, data: T) {
+  //  remarks: validate candidate id
+  if (!candidate_id) throw new Error(`[CandidatePref] error: candidate_id is missing.`)
   try {
-    const res = await axios.get(`${API.CANDIDATES_PREF}`, {
-      params: {
-        candidate_id
-      }
-    });
-    setTargetCandidatePref(res.data.data.record || null);
-  } catch (error: any) {
-    console.error('[ProfileCandidates] error: fetching candidate preference:', error);
-    setTargetCandidatePref(null as T);
-  }
-}
+    //  remarks: look up every existing preference record for this candidate, to detect duplicates
+    const res = await axios.get(`${API.CANDIDATES_PREF}/column-list/candidate_id/${candidate_id}`);
+    const matches: any[] = res.data?.data?.records ?? [];
 
-export async function create_candidate_pref<T>(candidate_id: string, setTargetCandidatePref: (state: any) => void){
-  try {
-    const res = await axios.get(`${API.CANDIDATES_PREF}`, {
-      params: {
-        candidate_id
+    if (matches.length === 1) {
+      //  remarks: unique record, then update
+      await axios.patch(`${API.CANDIDATES_PREF}`, {
+        _ids: [String(matches[0]._id)],
+        ...data,
+      });
+    } else {
+      //  remarks: if 0, create a new one; 2 or more, remove old and create new
+      //  remarks: already set unique at schema, delete action in case of accidents
+      if (matches.length > 1) {
+        await axios.delete(`${API.CANDIDATES_PREF}`, {
+          data: { _ids: matches.map((record) => String(record._id)) },
+        });
       }
-    });
-    setTargetCandidatePref(res.data.data.record || null);
-  } catch (error: any) {
-    console.error('[ProfileCandidates] error: creating candidate preference:', error);
-    setTargetCandidatePref(null as T);
+      await axios.post(`${API.CANDIDATES_PREF}`, {
+        candidate_preferences: [
+          {
+            candidate_id,
+            ...data,
+          },
+        ],
+      });
+    }
+    alert(`[ProfileCandidate] succeed: candidate ${candidate_id} preferences have been updated successfully.`);
+    return true;
+  } catch (err: any) {
+    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
+    return false;
   }
 }
 

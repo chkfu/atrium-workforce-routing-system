@@ -137,6 +137,21 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     });
   };
 
+  //  GET /api/v1/{table_name}/column/:col_key/:col_val
+  //  INPUT: column key (must be a known column or primary key), value to match
+  public get_record_by_column = async (
+    col_key: Extract<keyof (T & TSchemaBase), string>,
+    col_val: string,
+  ) => {
+    const result = await this.repository.get_record_by_column(col_key, col_val);
+    if (result === null || result === undefined)
+      throw new ValueError(
+        404,
+        `[${this.table.toUpperCase()}] error: no record is found.`,
+      );
+    return result;
+  };
+
   //  2.  POST methods
 
   //  POST /api/v1/{table_name}

@@ -24,6 +24,10 @@ router
   .post(cdd_pref_controller.create_record_batch())
   .patch(cdd_pref_controller.update_record_details_batch())
   .delete(cdd_pref_controller.remove_record_batch());
+  
+router
+  .route('/column-list/:col_key/:col_val')
+  .get(cdd_pref_controller.get_record_column_list());
 
 router
   .route('/activation')

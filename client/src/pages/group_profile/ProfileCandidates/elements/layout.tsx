@@ -12,7 +12,7 @@ import { useContext } from 'react';
 import { ICandidate, ICandidateEdu, ICandidatePref, ICandidateTest, IDepartment } from '../../../../utils/types/redux_types';
 import { CandidateEduContext, CandidateExpContext } from '../utils/context';
 import { UpdateCandidateSchema } from '../../../group_manage_record/ManageCandidates/utils/schema';
-import { handle_candidate_details_submit } from '../utils/handlers';
+import { handle_candidate_details_submit, handle_candidate_pref_submit } from '../utils/handlers';
 import { UpdateCandidateEduSchema, UpdateCandidateExpSchema, UpdateCandidateTestSchema, UpdateCandidatePrefSchema } from '../utils/schema';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
@@ -128,23 +128,31 @@ export function SectionPreference({
 }): JSX.Element {
 
   //  remarks: extract candidate id from params
-  const { id } = useParams();
+  const { id: candidate_id } = useParams();
 
   //  reamrks: updated departments list for preference options
   const departments: IDepartment[] = useSelector((state: RootState) => state.department.value);
 
   //  remarks: form submission handler
-  const handleSubmit = (data: any) => {
-    if (targetCandidatePref?._id) {
-      //  TODO: to be follo-up
+  const handleSubmit = async (data: any) => {
+    if (candidate_id) {
+      await handle_candidate_pref_submit(candidate_id, data)
     }
+  };
+
+  //  remarks: temp state for interface
+  const temp_pref_state = targetCandidatePref && {
+    ...targetCandidatePref,
+    pref_dept_1st: targetCandidatePref.pref_dept_1st === null ? '' : String(targetCandidatePref.pref_dept_1st),
+    pref_dept_2nd: targetCandidatePref.pref_dept_2nd === null ? '' : String(targetCandidatePref.pref_dept_2nd),
+    pref_dept_3rd: targetCandidatePref.pref_dept_3rd === null ? '' : String(targetCandidatePref.pref_dept_3rd),
   };
 
   return (
     <Accordion title="(5) Preferences" titleSize="text-xl">
       <FormSubsectionUpdateReuse
         key={targetCandidatePref?._id}
-        sect_state={targetCandidatePref}
+        sect_state={temp_pref_state}
         form_schema={UpdateCandidatePrefSchema}
         submit_handler={handleSubmit}
         form_structure={getCandidatePrefStructure(departments)}

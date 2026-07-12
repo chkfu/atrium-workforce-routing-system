@@ -98,6 +98,23 @@ abstract class BaseController<T> {
       });
     });
 
+  //  GET /api/v1/{table_name}/column/:col_key/:col_val
+  //  INPUT: col_key, col_val in req.params
+  public get_record_column = (): RequestHandler =>
+    handle_async(async (req: Request, res: Response, next: NextFunction) => {
+      const col_key = req.params['col_key'] as Extract<keyof T, string>;
+      const col_val: string = req.params['col_val'] as string;
+      const record = await this.service.get_record_by_column(col_key, col_val);
+      //  normal response
+      res.status(200).json({
+        status: 'success',
+        count: 1,
+        data: {
+          record,
+        },
+      });
+    });
+
   //  2.  POST methods
 
   //  POST /api/v1/{table_name}

@@ -14,15 +14,6 @@ class CddPrefService extends BaseService<TCddPrefBase & TSchemaBase, CddPrefRepo
     const repository = new CddPrefRepository(table, columns, primary_key);
     super(table, columns, primary_key, repository);
   }
-
-  //  remarks: GET all records matched by any whitelisted column, to detect duplicates
-  //  INPUT: column key (must be a known column or primary key), value to match
-  public get_record_list_by_column = async (
-    col_key: Extract<keyof (TCddPrefBase & TSchemaBase), string>,
-    col_val: string,
-  ) => {
-    return await this.repository.get_record_list_by_column(col_key, col_val);
-  };
 }
 
 //  Export

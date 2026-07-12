@@ -5,6 +5,7 @@ BEGIN;
 --  remarks: postgres enums are not supported by 'create if not exists'
 --           'DO $$ $$' for static catching; if not, script will crash
 DO $$ BEGIN CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE enum_user_role AS ENUM ('candidate', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive', 'sys_admin'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_gender AS ENUM ('male', 'female', 'other'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_prob_status AS ENUM ('selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_hire_decision AS ENUM ('approved', 'rejected', 'deferred'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
@@ -156,6 +157,10 @@ CREATE TABLE IF NOT EXISTS candidate_preferences(
   pref_dept_1st  INTEGER,
   pref_dept_2nd  INTEGER,
   pref_dept_3rd  INTEGER,
+  CONSTRAINT fk_candidate_pref
+    FOREIGN KEY (candidate_id)
+    REFERENCES candidates(_id)
+    ON DELETE CASCADE,
   CONSTRAINT fk_candidate_pref_1st
     FOREIGN KEY (pref_dept_1st)
     REFERENCES departments(_id)

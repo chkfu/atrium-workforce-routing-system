@@ -25,7 +25,7 @@ This file records the major version changes of the projects.
 ### Added
 
 - implemented redux for the shared state management among the webpages.
-- implemented candidate details and education section at profile candidate page.
+- implemented candidate details, education, test score and preference section at profile candidate page.
 - provided new content for setup and maintenance guides at `developer-guide.md`.
 - provided new authentication workflow chart at `architecture.md`.
 - implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.

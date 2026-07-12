@@ -44,7 +44,7 @@ function global_err_handler(
       postgre_err_list[pgcode_full] ?? postgre_err_list[pgcode_type];
     if (match && typeof match === 'object') {
       statusCode = Number(match.err_code);
-      message = `[POSTGRES] error: ${match.message}. ${err.message || ''}`;
+      message = `[POSTGRES] error: ${match.message}. ${err.message || ''} ${err.detail || ''}`;
     }
 
     //  2b. without expectation

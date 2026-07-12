@@ -26,6 +26,10 @@ router
   .delete(cdd_test_controller.remove_record_batch());
 
 router
+  .route('/column-list/:col_key/:col_val')
+  .get(cdd_test_controller.get_record_column_list());
+
+router
   .route('/activation')
   .patch(cdd_test_controller.update_record_active_batch());
 router.route('/empty').delete(cdd_test_controller.empty_record_all());

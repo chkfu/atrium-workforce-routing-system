@@ -12,11 +12,12 @@ import { useContext } from 'react';
 import { ICandidate, ICandidateEdu, ICandidatePref, ICandidateTest, IDepartment } from '../../../../utils/types/redux_types';
 import { CandidateEduContext, CandidateExpContext } from '../utils/context';
 import { UpdateCandidateSchema } from '../../../group_manage_record/ManageCandidates/utils/schema';
-import { handle_candidate_details_submit, handle_candidate_pref_submit } from '../utils/handlers';
+import { handle_candidate_details_submit, handle_candidate_subsection_unique } from '../utils/handlers';
 import { UpdateCandidateEduSchema, UpdateCandidateExpSchema, UpdateCandidateTestSchema, UpdateCandidatePrefSchema } from '../utils/schema';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useParams } from 'react-router-dom';
+import { API } from '../../../../config/api';
 
 //  ==========    Section: Candidate Details   ==========
 
@@ -96,19 +97,27 @@ export function SectionTestScore({
 }): JSX.Element {
 
   //  remarks: extract candidate id from params
-  const { id } = useParams();
+  const { id: candidate_id } = useParams();
 
-  const handleSubmit = (data: any) => {
-    if (targetCandidateTest?._id) {
-      //  TODO: to be follo-up
+  const handleSubmit = async (data: any) => {
+    if (candidate_id) {
+      await handle_candidate_subsection_unique('CandidateTest', API.CANDIDATES_TEST, candidate_id, data)
     }
+  };
+
+  //  remarks: temp state for interface
+  const temp_test_state = targetCandidateTest && {
+    ...targetCandidateTest,
+    score_aptitude: targetCandidateTest.score_aptitude === null ? '' : String(targetCandidateTest.score_aptitude),
+    score_interview_1st: targetCandidateTest.score_interview_1st === null ? '' : String(targetCandidateTest.score_interview_1st),
+    score_interview_2nd: targetCandidateTest.score_interview_2nd === null ? '' : String(targetCandidateTest.score_interview_2nd),
   };
 
   return (
     <Accordion title="(4) Test Score" titleSize="text-xl">
       <FormSubsectionUpdateReuse
         key={targetCandidateTest?._id}
-        sect_state={targetCandidateTest}
+        sect_state={temp_test_state}
         form_schema={UpdateCandidateTestSchema}
         submit_handler={handleSubmit}
         form_structure={CandidateTestStructrure}
@@ -136,7 +145,7 @@ export function SectionPreference({
   //  remarks: form submission handler
   const handleSubmit = async (data: any) => {
     if (candidate_id) {
-      await handle_candidate_pref_submit(candidate_id, data)
+      await handle_candidate_subsection_unique('CandidatePref', API.CANDIDATES_PREF, candidate_id, data)
     }
   };
 

@@ -152,6 +152,15 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     return result;
   };
 
+  //  remarks: GET all records matched by any whitelisted column, to detect duplicates
+  //  INPUT: column key (must be a known column or primary key), value to match
+  public get_record_list_by_column = async (
+    col_key: Extract<keyof (T & TSchemaBase), string>,
+    col_val: string,
+  ) => {
+    return await this.repository.get_record_list_by_column(col_key, col_val);
+  };
+
   //  2.  POST methods
 
   //  POST /api/v1/{table_name}

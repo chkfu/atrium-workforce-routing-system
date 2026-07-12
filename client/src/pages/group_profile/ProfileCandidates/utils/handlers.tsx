@@ -45,33 +45,34 @@ export async function handle_create_candidate_edu_submit(id: string, data: ICand
   }
 }
 
+//  ==========    Section: Candidate Test / Preferences    ==========
 
-//  ==========    Section: Candidate Preferences    ==========
-
-export async function handle_candidate_pref_submit<T>(candidate_id: string, data: T) {
+export async function handle_candidate_subsection_unique<T>(section_name: string, url: string, candidate_id: string, data: T) {
   //  remarks: validate candidate id
-  if (!candidate_id) throw new Error(`[CandidatePref] error: candidate_id is missing.`)
+  if (!candidate_id) throw new Error(`[${section_name}] error: candidate_id is missing.`)
   try {
     //  remarks: look up every existing preference record for this candidate, to detect duplicates
-    const res = await axios.get(`${API.CANDIDATES_PREF}/column-list/candidate_id/${candidate_id}`);
-    const matches: any[] = res.data?.data?.records ?? [];
+    const res = await axios.get(`${url}/column-list/candidate_id/${candidate_id}`);
+    const result: any[] = res.data?.data?.records ?? [];
 
-    if (matches.length === 1) {
+    if (result.length === 1) {
       //  remarks: unique record, then update
-      await axios.patch(`${API.CANDIDATES_PREF}`, {
-        _ids: [String(matches[0]._id)],
+      await axios.patch(url, {
+        _ids: [String(result[0]._id)],
         ...data,
       });
     } else {
       //  remarks: if 0, create a new one; 2 or more, remove old and create new
       //  remarks: already set unique at schema, delete action in case of accidents
-      if (matches.length > 1) {
-        await axios.delete(`${API.CANDIDATES_PREF}`, {
-          data: { _ids: matches.map((record) => String(record._id)) },
+      if (result.length > 1) {
+        await axios.delete(url, {
+          data: { _ids: result.map((el) => String(el._id)) },
         });
       }
-      await axios.post(`${API.CANDIDATES_PREF}`, {
-        candidate_preferences: [
+      //  remarks: server's create_record_batch reads req.body[table_name], and
+      const table_name = url.split('/').pop();
+      await axios.post(url, {
+        [table_name as string]: [
           {
             candidate_id,
             ...data,
@@ -79,10 +80,10 @@ export async function handle_candidate_pref_submit<T>(candidate_id: string, data
         ],
       });
     }
-    alert(`[ProfileCandidate] succeed: candidate ${candidate_id} preferences have been updated successfully.`);
+    alert(`[${section_name}] succeed: candidate ${candidate_id} record has been updated successfully.`);
     return true;
   } catch (err: any) {
-    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
+    alert(`[${section_name}] error: ${err.response?.data?.message || err.message}`);
     return false;
   }
 }

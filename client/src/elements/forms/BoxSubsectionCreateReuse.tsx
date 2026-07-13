@@ -10,12 +10,14 @@ export function BoxSubsectionCreateReuse<T extends Record<string, any> = any>({
   form_title,
   form_subtitle,
   form_schema,
+  submit_handler,
 }: {
   sect_state: T | null;
   sect_structure: Record<string, any>;
   form_title: string;
   form_subtitle: string;
   form_schema?: any;
+  submit_handler: (data: any) => Promise<boolean>;
 }): JSX.Element {
   const [triggerCreateForm, setTriggerCreateForm] = useState<boolean>(false);
   return (
@@ -30,6 +32,7 @@ export function BoxSubsectionCreateReuse<T extends Record<string, any> = any>({
         <FormSectionCreateReuse
           sect_state={sect_state}
           form_trigger={setTriggerCreateForm}
+          submit_handler={submit_handler}
           form_title={form_title}
           form_subtitle={form_subtitle}
           form_structure={sect_structure}

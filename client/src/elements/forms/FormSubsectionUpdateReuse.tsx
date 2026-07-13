@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   ButtonCandidateDetailsReset,
   ButtonCandidateDetailsSubmit,
 } from '../../pages/group_profile/ProfileCandidates/elements/buttons';
 import { select_input_field } from './handlers/select_input_field';
-import { default_date_format } from './utils/constants';
 
 
 export function FormSubsectionUpdateReuse<T extends { created_at: Date | string; updated_at: Date | string; is_active: boolean }>({

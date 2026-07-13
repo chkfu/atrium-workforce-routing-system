@@ -90,8 +90,8 @@ export type TCddExpBase = {
   exp_nature: string;
   exp_role: string;
   exp_institute: string;
-  year_start: number;
-  year_end?: number;
+  date_start: string;
+  date_end?: string;
   is_verified: boolean;
   is_active: boolean;
 };

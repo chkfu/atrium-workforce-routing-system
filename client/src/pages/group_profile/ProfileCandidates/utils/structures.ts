@@ -57,7 +57,7 @@ export const CandidateDetailStructure = {
 
 
 //  remarks: table structure for building the forms (candidate education)
-export const CandidateEduStructrure = {
+export const CandidateEduStructure = {
   cert_degree: {
     type: 'select',
     label: 'Degree',
@@ -111,7 +111,7 @@ export const CandidateEduStructrure = {
 };
 
 //  remarks: table structure for building the forms (candidate experience)
-export const CandidateExpStructrure = {
+export const CandidateExpStructure = {
   exp_nature: {
     type: 'text',
     label: 'Nature of Work',
@@ -158,7 +158,7 @@ export const CandidateExpStructrure = {
 };
 
 //  remarks: table structure for building the forms (candidate test score)
-export const CandidateTestStructrure = {
+export const CandidateTestStructure = {
   score_aptitude: {
     type: 'number',
     label: 'Aptitude Score',

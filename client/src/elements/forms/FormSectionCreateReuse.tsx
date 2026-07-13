@@ -1,16 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UpdateCandidateEduSchema } from '../../pages/group_profile/ProfileCandidates/utils/schema';
 import { ButtonCandidateEduReset, ButtonCandidateEduSubmit } from '../../pages/group_profile/ProfileCandidates/elements/buttons';
-import { handle_create_candidate_edu_submit } from '../../pages/group_profile/ProfileCandidates/utils/handlers';
 import { select_input_field } from './handlers/select_input_field';
 
 //  remarks: reusable form for create record in sub-section forms
 export function FormSectionCreateReuse<T extends Record<string, any> = any>({
   sect_state,
   form_trigger,
+  submit_handler,
   form_title = '',
   form_subtitle = '',
   form_structure,
@@ -18,6 +17,7 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
 }: {
   sect_state: T | null;
   form_trigger: (value: boolean) => void;
+  submit_handler: (data: any) => Promise<boolean>;
   form_title?: string;
   form_subtitle?: string;
   form_structure: Record<string, any>;
@@ -33,8 +33,6 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
     defaultValues: sect_state || {},
     resolver: yupResolver(form_schema),
   });
-  //  remarks: extracted candidate id for further updates
-  const { id } = useParams();
   //  remarks: immediately re-rendering the form once data has been updated
   useEffect(() => {
     if (sect_state) {
@@ -60,7 +58,7 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
   }, [sect_state, reset, form_structure]);
   //  remakrs: submit handler
   const onSubmit = async (data: any) => {
-    const success = await handle_create_candidate_edu_submit(id as string, data);
+    const success: boolean = await submit_handler(data);
     if (success) {
       form_trigger(false);
     }

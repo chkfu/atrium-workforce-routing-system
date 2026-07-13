@@ -1,36 +1,27 @@
 import { createContext, useContext, Context, Dispatch, SetStateAction } from 'react';
-import { ICandidateEdu } from '../../../../utils/types/redux_types';
 
 //  remarks: types
-
 interface CandidateEduType {
-  targetCandidateEdu: ICandidateEdu | null;
-  setTargetCandidateEdu: Dispatch<SetStateAction<ICandidateEdu | null>>;
+  targetCandidateEdu: any;
+  setTargetCandidateEdu: Dispatch<SetStateAction<any>>;
 }
-
 interface CandidateExpType {
   targetCandidateExp: any;
   setTargetCandidateExp: Dispatch<SetStateAction<any>>;
 }
-
 interface CandidateTestType {
   targetCandidateTest: any;
   setTargetCandidateTest: Dispatch<SetStateAction<any>>;
 }
-
 interface CandidatePrefType {
   targetCandidatePref: any;
   setTargetCandidatePref: Dispatch<SetStateAction<any>>;
 }
 
 //  remarks: contexts
-
 export const CandidateEduContext = createContext<CandidateEduType | undefined>(undefined);
-
 export const CandidateExpContext = createContext<CandidateExpType | undefined>(undefined);
-
 export const CandidateTestContext = createContext<CandidateTestType | undefined>(undefined);
-
 export const CandidatePrefContext = createContext<CandidatePrefType | undefined>(undefined);
 
 //  remarks: reusable customised context hook

@@ -12,7 +12,7 @@ import {
 import Accordion from '../../../elements/Accordion';
 import axios from 'axios';
 import { API } from '../../../config/api';
-import { ICandidate, ICandidateEdu } from '../../../utils/types/redux_types';
+import { ICandidate } from '../../../utils/types/redux_types';
 import {
   CandidateEduContext,
   CandidateExpContext,
@@ -29,8 +29,8 @@ export default function ProfileCandidateP(): JSX.Element {
 
   //  remarks: local state management
   const [targetCandidate, setTargetCandidate] = useState<ICandidate | null>(null);
-  const [targetCandidateEdu, setTargetCandidateEdu] = useState<ICandidateEdu | null>(null);
-  const [targetCandidateExp, setTargetCandidateExp] = useState<any>(null);
+  const [targetCandidateEdu, setTargetCandidateEdu] = useState<any>([]);
+  const [targetCandidateExp, setTargetCandidateExp] = useState<any>([]);
   const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
   const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
   const [getError, setGetError] = useState<any | null>(null);
@@ -49,7 +49,7 @@ export default function ProfileCandidateP(): JSX.Element {
       });
   }, [dispatch]);
 
-  //  remarks: querying data from SQL
+  //  remarks: querying candidate data from SQL
   useEffect(() => {
     axios
       .get(`${API.CANDIDATES}/${id}`)
@@ -65,7 +65,35 @@ export default function ProfileCandidateP(): JSX.Element {
       });
   }, [id]);
 
-   //  remarks: query candidate test
+  //  remarks: query candidate education
+  useEffect(() => {
+    axios
+      .get(`${API.CANDIDATES_EDU}/column-list/candidate_id/${id}`)
+      .then((res) => {
+        const target_list = res.data?.data?.records ?? [];
+        setTargetCandidateEdu(target_list);
+      })
+      .catch((err: any) => {
+        console.error('[ProfileCandidate] error: fetching target candidate education:', err);
+        setTargetCandidateEdu([]);
+      });
+  }, [id]);
+
+  //  remarks: query candidate experience
+   useEffect(() => {
+    axios
+      .get(`${API.CANDIDATES_EXP}/column-list/candidate_id/${id}`)
+      .then((res) => {
+        const target_list = res.data?.data?.records ?? [];
+        setTargetCandidateExp(target_list);
+      })
+      .catch((err: any) => {
+        console.error('[ProfileCandidate] error: fetching target candidate experience:', err);
+        setTargetCandidateExp([]);
+      });
+  }, [id]);
+
+  //  remarks: query candidate test score
   useEffect(() => {
     axios
       .get(`${API.CANDIDATES_TEST}/column-list/candidate_id/${id}`)
@@ -74,8 +102,8 @@ export default function ProfileCandidateP(): JSX.Element {
         setTargetCandidateTest(target_list[0] || null);
       })
       .catch((err: any) => {
-        console.error('[ProfileCandidate] error: fetching target candidate preference:', err);
-        setTargetCandidatePref(null);
+        console.error('[ProfileCandidate] error: fetching target candidate test score:', err);
+        setTargetCandidateTest(null);
       });
   }, [id]);
 
@@ -101,10 +129,10 @@ export default function ProfileCandidateP(): JSX.Element {
             <div id="candidate-profile-container">
               <Accordion title="Candidate Profile">
                 <SectionDetails targetCandidate={targetCandidate} />
-                <SectionEducation targetCandidateEdu={targetCandidateEdu} />
-                <SectionExperience targetCandidateExp={targetCandidateExp} />
-                <SectionTestScore targetCandidateTest={targetCandidateTest} />
-                <SectionPreference targetCandidatePref={targetCandidatePref} />
+                <SectionEducation />
+                <SectionExperience />
+                <SectionTestScore />
+                <SectionPreference />
               </Accordion>
             </div>
           </CandidatePrefContext.Provider>

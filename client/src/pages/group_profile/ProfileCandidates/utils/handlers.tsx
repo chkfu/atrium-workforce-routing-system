@@ -1,4 +1,4 @@
-import { ICandidate, ICandidateEdu, ICandidatePref } from '../../../../utils/types/redux_types';
+import { ICandidate, ICandidateExp, ICandidatePref } from '../../../../utils/types/redux_types';
 import axios from 'axios';
 import { API } from '../../../../config/api';
 
@@ -21,33 +21,34 @@ export async function handle_candidate_details_submit(id: string, data: ICandida
   }
 }
 
-//  ==========    Section: Candidate Education    ==========
+//  ==========    Sub-Section: Reusable Methods   ==========
 
-//  remarks: create candidate education record
-export async function handle_create_candidate_edu_submit(id: string, data: ICandidateEdu) {
+//  remarks: for create new record
+export async function create_candidate_subsection<T>(section_name: string, url: string, id: string, data: T) {
+  if (!id) throw new Error(`[${section_name}] error: candidate_id is missing.`)
   try {
-    const { _id, created_at, updated_at, candidate_id, ...payload } = data;
-    await axios.post(`${API.CANDIDATES_EDU}`, {
-      candidate_education: [
+    const { _id, created_at, updated_at, candidate_id, ...payload } = data as any;
+    const table_name = url.split('/').pop();
+    await axios.post(url, {
+      [table_name as string]: [
         {
           candidate_id: Number(id),
           ...payload,
         },
       ],
     });
-    alert(
-      `[ProfileCandidate] succeed: the education record of candidate ${id} has been created successfully.`
-    );
+    alert(`[${section_name}] succeed: candidate ${id} record has been created successfully.`);
     return true;
   } catch (err: any) {
-    alert(`[ProfileCandidate] error: ${err.response?.data?.message || err.message}`);
+    const err_msg = `[${section_name}] error: failed to create subsection record.`;
+    alert(`[${section_name}] error: ${err_msg}`);
+    console.error(err_msg, err);
     return false;
   }
 }
 
-//  ==========    Section: Candidate Test / Preferences    ==========
-
-export async function handle_candidate_subsection_unique<T>(section_name: string, url: string, candidate_id: string, data: T) {
+//  remarks: for update existing record
+export async function update_candidate_subsection<T>(section_name: string, url: string, candidate_id: string, data: T) {
   //  remarks: validate candidate id
   if (!candidate_id) throw new Error(`[${section_name}] error: candidate_id is missing.`)
   try {
@@ -83,10 +84,15 @@ export async function handle_candidate_subsection_unique<T>(section_name: string
     alert(`[${section_name}] succeed: candidate ${candidate_id} record has been updated successfully.`);
     return true;
   } catch (err: any) {
-    alert(`[${section_name}] error: ${err.response?.data?.message || err.message}`);
+    const err_msg = `[${section_name}] error: failed to update subsection record.`;
+    alert(`[${section_name}] error: ${err_msg}`);
+    console.error(err_msg, err);
     return false;
   }
 }
+
+//  ==========    Sub-Section: Supporting Mehtods    ==========
+
 
 //  remarks: the function set for providing updated department list for selection
 export function init_select_dept_opts({ departments }: { departments: any[]; }): Array<{ value: string; label: string; }> {

@@ -26,6 +26,10 @@ router
   .delete(cdd_edu_controller.remove_record_batch());
 
 router
+  .route('/column-list/:col_key/:col_val')
+  .get(cdd_edu_controller.get_record_column_list());
+
+router
   .route('/activation')
   .patch(cdd_edu_controller.update_record_active_batch());
 router.route('/empty').delete(cdd_edu_controller.empty_record_all());

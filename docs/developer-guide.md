@@ -22,6 +22,7 @@ This guide provide the instructions for setting up the dev environment, maintain
 - [Database Setup Guide](#database-setups-guide)
 - [SSL/TLS Setup Guide](#ssltls-setup-guide)
 - [Logging Guide](#logging-guide)
+- [Cache Guide](#cache-guide)
 
 <br/>
 
@@ -141,7 +142,7 @@ In `src/infra/database`, Redis codes have been stored in the listed files in `re
 
 <br/>
 
-# SSL/TLS Setup Guide
+##  SSL/TLS Setup Guide
 
 To support HTTPS connection, SSL/TLS certificate is required to encrypt the sensitive data when it is transitioning. 
 
@@ -199,7 +200,7 @@ $ mkcert localhost
 
 <br/>
 
-# Logging Guide
+## Logging Guide
 
 ### A. Logger Structure
 
@@ -241,7 +242,7 @@ Please refined the settings at rooted file (in `server/infra/logger`) and update
 
 <br/>
 
-# Cache Guide
+## Cache Guide
 
 The Redis database has been set up at `infra/database/redis.ts` for initialisation, and `CacheService` (`infra/cache/CacheServices`) centralise all cache management methods to assist massive CRUD action with better efficiency.
 
@@ -308,4 +309,4 @@ Considered that the batch record queries involving massive combination of sortin
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: July 4, 2026</i>
+<i> Last Updated: July 14, 2026</i>

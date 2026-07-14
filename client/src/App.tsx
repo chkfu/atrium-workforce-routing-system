@@ -12,6 +12,7 @@ import ManageCandidates from './pages/group_manage_record/ManageCandidates';
 import ManageStaff from './pages/group_manage_record/ManageStaff';
 import ManageDepartments from './pages/group_manage_record/ManageDepartments';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
+import ProfileStaff from './pages/group_profile/ProfileStaff';
 
 const routes: RouteObject[] = [
   {
@@ -47,11 +48,17 @@ const routes: RouteObject[] = [
         path: '/manage-departments',
         element: <ManageDepartments />,
       },
+
       //  Single page, sepecified by id
       {
         path: '/candidates-profile/:id',
         element: <ProfileCandidates />,
       },
+      {
+        path: '/staff-profile/:id',
+        element: <ProfileStaff />,
+      },
+
       //  Dashboards, by role positions
       {
         path: '/candidate-dashboard',

@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jul 12, 2026  - In Progress
+## [1.0.5] - Jul 14, 2026  - In Progress
 
 <i>Objective: build basic authentication and implement id-specific sub-page of candidates, staff and department table </i>
 
@@ -29,6 +29,7 @@ This file records the major version changes of the projects.
 - provided new content for setup and maintenance guides at `developer-guide.md`.
 - provided new authentication workflow chart at `architecture.md`.
 - implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.
+- applied the profile format into profile staff, following with loading spinner and error page redirection.
 
 ### Edited
 

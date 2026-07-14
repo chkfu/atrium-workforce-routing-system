@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS staff(
   first_name  VARCHAR(50) NOT NULL,
   last_name  VARCHAR(50) NOT NULL,
   gender  enum_gender,
-  work_position VARCHAR(50),
-  work_grade  enum_staff_role,
+  work_position  VARCHAR(50),
+  work_grade  enum_staff_role DEFAULT 'pending',
   work_email  VARCHAR(50) UNIQUE,
   work_ext  VARCHAR(20) UNIQUE,
   dept_id  INTEGER,
@@ -41,8 +41,13 @@ CREATE TABLE IF NOT EXISTS staff(
   CONSTRAINT fk_staff_dept
     FOREIGN KEY (dept_id)
     REFERENCES departments(_id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+  CONSTRAINT chk_staff_dates
+    CHECK (date_quit IS NULL OR date_hired IS NULL OR date_quit >= date_hired)
 );
+
+CREATE INDEX IF NOT EXISTS idx_staff_dept_id ON staff(dept_id);
 
 CREATE TABLE IF NOT EXISTS candidates(
   _id  SERIAL  PRIMARY KEY,

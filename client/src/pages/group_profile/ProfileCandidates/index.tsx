@@ -19,6 +19,9 @@ import {
   CandidateTestContext,
   CandidatePrefContext,
 } from './utils/context';
+import Error from '../../group_navigation/Error';
+import LoadSpinner from '../../../elements/LoadSpinner';
+import { PAGE_PRELOAD_TIME } from '../../../config/constant';
 
 export default function ProfileCandidateP(): JSX.Element {
   //  remarks: identify the specific candidate profile to be viewed
@@ -34,6 +37,13 @@ export default function ProfileCandidateP(): JSX.Element {
   const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
   const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
   const [getError, setGetError] = useState<any | null>(null);
+  const [pageLoading, setPageLoading] = useState<boolean>(true);
+
+  //  remarks: loading time with timeout error page
+  useEffect(() => {
+    const page_timeout = setTimeout(() => setPageLoading(false), PAGE_PRELOAD_TIME);
+    return () => clearTimeout(page_timeout);
+  }, [id]);
 
   //  remarks: load departments on mount
   useEffect(() => {
@@ -80,7 +90,7 @@ export default function ProfileCandidateP(): JSX.Element {
   }, [id]);
 
   //  remarks: query candidate experience
-   useEffect(() => {
+  useEffect(() => {
     axios
       .get(`${API.CANDIDATES_EXP}/column-list/candidate_id/${id}`)
       .then((res) => {
@@ -121,23 +131,30 @@ export default function ProfileCandidateP(): JSX.Element {
       });
   }, [id]);
 
-  return (
-    <CandidateEduContext.Provider value={{ targetCandidateEdu, setTargetCandidateEdu }}>
-      <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>
-        <CandidateTestContext.Provider value={{ targetCandidateTest, setTargetCandidateTest }}>
-          <CandidatePrefContext.Provider value={{ targetCandidatePref, setTargetCandidatePref }}>
-            <div id="candidate-profile-container">
-              <Accordion title="Candidate Profile">
-                <SectionDetails targetCandidate={targetCandidate} />
-                <SectionEducation />
-                <SectionExperience />
-                <SectionTestScore />
-                <SectionPreference />
-              </Accordion>
-            </div>
-          </CandidatePrefContext.Provider>
-        </CandidateTestContext.Provider>
-      </CandidateExpContext.Provider>
-    </CandidateEduContext.Provider>
-  );
+  //  remarks: display
+  if (!pageLoading && targetCandidate) {
+    return (
+      <CandidateEduContext.Provider value={{ targetCandidateEdu, setTargetCandidateEdu }}>
+        <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>
+          <CandidateTestContext.Provider value={{ targetCandidateTest, setTargetCandidateTest }}>
+            <CandidatePrefContext.Provider value={{ targetCandidatePref, setTargetCandidatePref }}>
+              <div id="candidate-profile-container">
+                <Accordion title="Candidate Profile">
+                  <SectionDetails targetCandidate={targetCandidate} />
+                  <SectionEducation />
+                  <SectionExperience />
+                  <SectionTestScore />
+                  <SectionPreference />
+                </Accordion>
+              </div>
+            </CandidatePrefContext.Provider>
+          </CandidateTestContext.Provider>
+        </CandidateExpContext.Provider>
+      </CandidateEduContext.Provider>
+    );
+  } else if (!pageLoading && !targetCandidate) {
+    return <Error />;
+  } else {
+    return <LoadSpinner />;
+  }
 }

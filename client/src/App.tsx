@@ -13,6 +13,7 @@ import ManageStaff from './pages/group_manage_record/ManageStaff';
 import ManageDepartments from './pages/group_manage_record/ManageDepartments';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
 import ProfileStaff from './pages/group_profile/ProfileStaff';
+import ProfileDepartment from './pages/group_profile/ProfileDepartment';
 
 const routes: RouteObject[] = [
   {
@@ -57,6 +58,10 @@ const routes: RouteObject[] = [
       {
         path: '/staff-profile/:id',
         element: <ProfileStaff />,
+      },
+      {
+        path: '/department-profile/:id',
+        element: <ProfileDepartment />,
       },
 
       //  Dashboards, by role positions

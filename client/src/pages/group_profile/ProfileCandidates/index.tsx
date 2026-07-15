@@ -132,7 +132,7 @@ export default function ProfileCandidateP(): JSX.Element {
   }, [id]);
 
   //  remarks: display
-  if (!pageLoading && targetCandidate) {
+  if (targetCandidate) {
     return (
       <CandidateEduContext.Provider value={{ targetCandidateEdu, setTargetCandidateEdu }}>
         <CandidateExpContext.Provider value={{ targetCandidateExp, setTargetCandidateExp }}>
@@ -152,9 +152,9 @@ export default function ProfileCandidateP(): JSX.Element {
         </CandidateExpContext.Provider>
       </CandidateEduContext.Provider>
     );
-  } else if (!pageLoading && !targetCandidate) {
-    return <Error />;
-  } else {
+  } else if (pageLoading) {
     return <LoadSpinner />;
+  } else {
+    return <Error />;
   }
 }

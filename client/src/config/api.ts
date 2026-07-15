@@ -11,4 +11,5 @@ export const API = {
   STAFF_ACTIVATE: `${BASE_URL}/staff/activation`,
   DEPARTMENTS: `${BASE_URL}/departments`,
   DEPARTMENTS_ACTIVATE: `${BASE_URL}/departments/activation`,
+  // SELECT_CRITERIA: ``;
 };

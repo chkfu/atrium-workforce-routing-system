@@ -1,6 +1,7 @@
 const BASE_URL = '/api/v1';
 
 export const API = {
+  LOGIN: `${BASE_URL}/auth/login_user`,
   CANDIDATES: `${BASE_URL}/candidates`,
   CANDIDATES_ACTIVATE: `${BASE_URL}/candidates/activation`,
   CANDIDATES_EDU: `${BASE_URL}/candidate_education`,

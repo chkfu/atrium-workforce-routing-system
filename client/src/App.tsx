@@ -3,7 +3,7 @@ import Home from './pages/group_navigation/Home';
 import About from './pages/group_navigation/About';
 import Contact from './pages/group_navigation/Contact';
 import Layout from './components/Layout';
-import Login from './pages/group_auth/Login';
+import Login from './pages/group_auth/login';
 import Error from './pages/group_navigation/Error';
 import DashboardCandidate from './pages/group_dashboard/DashboardCandidate';
 import DashboardAssistant from './pages/group_dashboard/DashboardAssistant';
@@ -14,10 +14,11 @@ import ManageDepartments from './pages/group_manage_record/ManageDepartments';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
 import ProfileStaff from './pages/group_profile/ProfileStaff';
 import ProfileDepartment from './pages/group_profile/ProfileDepartment';
+import { HREF } from './config/href';
 
 const routes: RouteObject[] = [
   {
-    path: '/login',
+    path: HREF.LOGIN,
     element: <Login />,
   },
   {
@@ -25,56 +26,56 @@ const routes: RouteObject[] = [
     children: [
       //  Public Access
       {
-        path: '/',
+        path: HREF.HOME,
         element: <Home />,
       },
       {
-        path: '/about',
+        path: HREF.ABOUT,
         element: <About />,
       },
       {
-        path: '/contact',
+        path: HREF.CONTACT,
         element: <Contact />,
       },
       //  Group List, by permissions
       {
-        path: '/manage-candidates',
+        path: HREF.MANAGE_CANDIDATES,
         element: <ManageCandidates />,
       },
       {
-        path: '/manage-staff',
+        path: HREF.MANAGE_STAFF,
         element: <ManageStaff />,
       },
       {
-        path: '/manage-departments',
+        path: HREF.MANAGE_DEPARTMENTS,
         element: <ManageDepartments />,
       },
 
       //  Single page, sepecified by id
       {
-        path: '/candidates-profile/:id',
+        path: HREF.CANDIDATES_PROFILE_ROUTE,
         element: <ProfileCandidates />,
       },
       {
-        path: '/staff-profile/:id',
+        path: HREF.STAFF_PROFILE_ROUTE,
         element: <ProfileStaff />,
       },
       {
-        path: '/department-profile/:id',
+        path: HREF.DEPARTMENT_PROFILE_ROUTE,
         element: <ProfileDepartment />,
       },
 
       //  Dashboards, by role positions
       {
-        path: '/candidate-dashboard',
+        path: HREF.CANDIDATE_DASHBOARD,
         element: <DashboardCandidate />,
       },
       {
-        path: '/assistant-dashboard',
+        path: HREF.ASSISTANT_DASHBOARD,
         element: <DashboardAssistant />,
       },
       {
-        path: '/manager-dashboard',
+        path: HREF.MANAGER_DASHBOARD,
         element: <DashboardManager />,
       },
     ],

@@ -58,9 +58,9 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
         set_jwt_cookie(res, result.token);
         res.status(200).json({
           status: 'success',
-          data: {
-            result,
-          },
+          message: 'Login successful.',
+          token: result.token,
+          role: result.user_role,
         });
       },
     );
@@ -79,7 +79,6 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
         })
       })
   }
-
 
   //  remarks:  opt-out procedure, sending out tokens to proceed
   public reset_password_opt_out() {

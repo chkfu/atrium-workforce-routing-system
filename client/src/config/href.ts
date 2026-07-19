@@ -1,3 +1,5 @@
+
+
 export const HREF = {
   //  Public Access
   HOME: '/',
@@ -7,6 +9,7 @@ export const HREF = {
   //  remarks: authentication
   LOGIN: '/login',
   FORGET_PASSWORD: '/forget-password',
+  RESET_PASSWORD: '/reset-password/:token',
 
   //  remakrs: dashboards, by role
   CANDIDATE_DASHBOARD: '/candidate-dashboard',

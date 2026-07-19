@@ -3,7 +3,9 @@ import Home from './pages/group_navigation/Home';
 import About from './pages/group_navigation/About';
 import Contact from './pages/group_navigation/Contact';
 import Layout from './components/Layout';
-import Login from './pages/group_auth/login';
+import Login from './pages/group_auth/pages/Login';
+import ForgetPassword from './pages/group_auth/pages/ForgetPassword'
+import ResetPassword from './pages/group_auth/pages/ResetPassword';
 import Error from './pages/group_navigation/Error';
 import DashboardCandidate from './pages/group_dashboard/DashboardCandidate';
 import DashboardAssistant from './pages/group_dashboard/DashboardAssistant';
@@ -20,6 +22,14 @@ const routes: RouteObject[] = [
   {
     path: HREF.LOGIN,
     element: <Login />,
+  },
+   {
+    path: HREF.FORGET_PASSWORD,
+    element: <ForgetPassword />,
+  },
+  {
+    path: HREF.RESET_PASSWORD,
+    element: <ResetPassword />,
   },
   {
     element: <Layout />,

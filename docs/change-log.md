@@ -25,7 +25,11 @@ This file records the major version changes of the projects.
 ### Added
 
 - implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.
-- implemented login page and its navigation to corresponding role-based dashboard.
+- implemented login and forget password pages and its navigation to corresponding role-based dashboard.
+
+### Edited
+
+- improve reset password (opt out) to enable both username and email verification at authentication.
 
 <br/>
 

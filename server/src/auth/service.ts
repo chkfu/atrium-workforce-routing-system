@@ -49,7 +49,7 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
   //  INPUT: user_data
   public async register_new_user(user_data: any = {}) {
     const { user_role } = user_data;
-    if (!user_role || user_role in ['candidate', 'staff']) {
+    if (!user_role || !['candidate', 'staff'].includes(user_role)) {
       throw new Error(
         `[${this.table.toUpperCase()}] error: Invalid user role provided`,
       );
@@ -262,17 +262,16 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
   //  remarks:  opt-out procedure, sending out tokens to proceed
   async reset_password_opt_out(req: Request) {
     //  learnt: (1) get the target user
-    const { username } = req.body;
-    if (!username) {
+    const { input } = req.body;
+    if (!input) {
       const err_msg =
-        '[AuthService] error: username is required for password reset.';
+        '[AuthService] error: username or email is required for password reset.';
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
-    const user = await this.repository.get_record_by_column(
-      'username',
-      username,
-    );
+    const user =
+      (await this.repository.get_record_by_column('username', input)) ??
+      (await this.repository.get_record_by_column('email', input));
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
@@ -287,8 +286,8 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     });
     //  learnt: (3) send the details to the user
     try {
-      const reset_url = `${req.protocol}://${req.get('host')}/api/v1/auth/reset_password_opt_in/${reset_token}`;
-      const reset_message = `Hi ${username},\n\nWe received a request to reset your password. Click the link below to choose a new one:\n\n${reset_url}\n\nThis link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.\n\n- Atrium Team`;
+      const reset_url = `${process.env.CLIENT_URL}/reset-password/${reset_token}`;
+      const reset_message = `Dear User,\n\nWe received a request to reset your password. Click the link below to choose a new one:\n\n${reset_url}\n\nThis link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.\n\n- Atrium Team`;
       await node_mailing({
         email: user.email,
         subject: 'Reset your Atrium password',

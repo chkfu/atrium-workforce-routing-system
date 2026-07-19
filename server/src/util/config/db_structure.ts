@@ -48,10 +48,13 @@ const db_structure = {
     table: 'sys_users',
     columns: [
       'username',
+      'email',
       '_password',
+      '_password_confirm',
       'user_role',
       'staff_id',
       'candidate_id',
+      'pw_changed_at',
       'pw_reset_token',
       'pw_reset_expired',
       'is_active',

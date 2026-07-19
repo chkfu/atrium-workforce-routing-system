@@ -84,9 +84,6 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
   public reset_password_opt_out() {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
-        //  learnt: (1) get the target user
-        //  learnt: (2) create new reset token
-        //  learnt: (3) send the details to the user
         await (this.service as UserService).reset_password_opt_out(req);
         //  remarks: network response
         res.status(200).json({

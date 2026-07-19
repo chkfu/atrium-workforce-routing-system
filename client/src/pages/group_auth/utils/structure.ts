@@ -4,32 +4,42 @@
 const login_structure = (
   setUsername: (value: string) => void,
   setPassword: (value: string) => void
-): {
-  name: 'username' | '_password';
-  label: string;
-  placeholder: string;
-  type: 'text' | 'password';
-  customisedOnChange: (el: React.ChangeEvent<HTMLInputElement>) => void;
-}[] => [
+) => [
   {
     name: 'username',
     label: 'Username',
     placeholder: 'Insert your username...',
     type: 'text',
-    customisedOnChange: (el) => setUsername(el.target.value),
+    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setUsername(event.target.value),
   },
   {
     name: '_password',
     label: 'Password',
     placeholder: 'Insert your password...',
     type: 'password',
-    customisedOnChange: (el) => setPassword(el.target.value),
+    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setPassword(event.target.value),
   },
-];
+] as const;
 
+//  remarks: forget password
+const reset_pw_opt_out_structure = (
+  setUsername: (value: string) => void,
+) => [
+  {
+    name: 'username',
+    label: 'Username',
+    placeholder: 'Insert your username...',
+    type: 'text',
+    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setUsername(event.target.value),
+  }
+] as const;
 
-//  remarks: structure collection with export 
+//  remarks: structure collection with export
 
 export const AUTH_STRUCTURE = {
-  login: login_structure
-}
+  login: login_structure,
+  forget_password: reset_pw_opt_out_structure
+};

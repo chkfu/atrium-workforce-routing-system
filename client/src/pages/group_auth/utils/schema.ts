@@ -3,7 +3,7 @@ import { AUTH_TYPES } from './types';
 
 //  remarks: form login
 const login_form_schema: yup.ObjectSchema<AUTH_TYPES['login']> = yup.object({
-  username: yup.string().required('Username is required.'),
+  input: yup.string().required('Username is required.'),
   _password: yup
     .string()
     .required('Password is required.')

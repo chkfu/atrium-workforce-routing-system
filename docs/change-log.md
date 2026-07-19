@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jul 18, 2026  - In Progress
+## [1.0.5] - Jul 19, 2026  - In Progress
 
 <i>Objective: build authentication-related interface and link navigation </i>
 
@@ -29,7 +29,7 @@ This file records the major version changes of the projects.
 
 ### Edited
 
-- improve reset password (opt out) to enable both username and email verification at authentication.
+- improve login and reset password (opt out) to enable both username and email verification at authentication.
 
 <br/>
 

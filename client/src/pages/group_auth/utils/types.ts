@@ -9,7 +9,7 @@ export type AUTH_TYPES = {
 //  remarks: types
 
 type TLogin = {
-    username: string,
+    input: string,
     _password: string
   }
 

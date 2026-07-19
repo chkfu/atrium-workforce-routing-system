@@ -184,19 +184,22 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
   //  remarks: user login, includes get user, compare password and create token
   async login_user(login_data: any = {}) {
     //  remarks: validate input username and password
-    const { username, _password } = login_data;
-    if (!username || !_password) {
+    const { input, _password } = login_data;
+    if (!input || !_password) {
       const err_msg =
-        '[AuthService] error: username and password are required for login.';
+        '[AuthService] error: username/email and password are required for login.';
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
 
     //  remarks: get target user from database
-    const user = await this.repository.get_record_by_column(
+    const user = (await this.repository.get_record_by_column(
       'username',
-      username,
-    );
+      input,
+    )) ?? (await this.repository.get_record_by_column(
+      'email',
+      input,
+    ));
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);

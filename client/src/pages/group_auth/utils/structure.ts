@@ -3,8 +3,8 @@
 //  remarks: form login
 const login_structure = [
   {
-    name: 'username',
-    label: 'Username',
+    name: 'input',
+    label: 'Username or Email',
     placeholder: 'Insert your username...',
     type: 'text',
   },

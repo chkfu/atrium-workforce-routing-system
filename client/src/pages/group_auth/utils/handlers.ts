@@ -8,7 +8,7 @@ import { HREF } from "../../../config/href";
 //  remarks: form login
 export const handle_login = async (data: AUTH_TYPES['login'], navigate: NavigateFunction, setIsLoading: (loading: boolean) => void) => {
   //  remarks: validate inputs
-  if (!data.username || !data._password) {
+  if (!data.input || !data._password) {
     return alert(`[Login] error: invalid username or password not provided.`);
   }
   //  remarks: request with data
@@ -16,7 +16,7 @@ export const handle_login = async (data: AUTH_TYPES['login'], navigate: Navigate
   try {
     setIsLoading(true);
     const res = await axios.post(API.LOGIN, {
-      username: data.username,
+      input: data.input,
       _password: data._password,
     })
     result = res.data;

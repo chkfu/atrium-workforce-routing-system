@@ -2,6 +2,8 @@ import { useDepartmentContext } from '../utils/context';
 import { COLORS } from '../../../../styles/color';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
+import { Link } from 'react-router-dom';
+import { HREF } from '../../../../config/href';
 
 //  ==========     MAIN DISPLAY     ==========
 
@@ -30,7 +32,11 @@ const table_cols = [
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     },
-    element: (el: any) => `${el.dept_name}`,
+    element: (el: any) => (
+      <Link to={HREF.DEPARTMENT_PROFILE(el._id)} className="hover:underline hover:text-teal-700">
+        {el.dept_name}
+      </Link>
+    ),
   },
   {
     key: 'capacity',

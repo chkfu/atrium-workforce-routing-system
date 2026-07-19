@@ -21,6 +21,8 @@ export default function ForgetPassword() {
   } = useForm<AUTH_TYPES['reset_pw_opt_out']>({
     resolver: yupResolver(AUTH_SCHEMA.reset_pw_opt_out),
   });
+
+  //  remarks: navigation
   const navigate = useNavigate();
 
   //  remarks: state management

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { HREF } from '../../../../config/href';
 import { useCandidateContext } from '../utils/context';
 import { COLORS } from '../../../../styles/color';
 import { useSelector } from 'react-redux';
@@ -31,7 +33,11 @@ const table_cols = [
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     },
-    element: (el: any) => `${el.first_name} ${el.last_name}`,
+    element: (el: any) => (
+      <Link to={HREF.CANDIDATES_PROFILE(el._id)} className="hover:underline hover:text-teal-700">
+        {el.first_name} {el.last_name}
+      </Link>
+    ),
   },
   {
     key: 'email',

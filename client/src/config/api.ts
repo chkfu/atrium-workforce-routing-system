@@ -3,6 +3,7 @@ const BASE_URL = '/api/v1';
 export const API = {
   LOGIN: `${BASE_URL}/auth/login_user`,
   RESET_OPT_OUT: `${BASE_URL}/auth/reset_password_opt_out`,
+  RESET_OPT_IN: `${BASE_URL}/auth/reset_password_opt_in`,
   CANDIDATES: `${BASE_URL}/candidates`,
   CANDIDATES_ACTIVATE: `${BASE_URL}/candidates/activation`,
   CANDIDATES_EDU: `${BASE_URL}/candidate_education`,

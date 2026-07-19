@@ -1,45 +1,50 @@
 //  remarks: specific structure
 
 //  remarks: form login
-const login_structure = (
-  setUsername: (value: string) => void,
-  setPassword: (value: string) => void
-) => [
+const login_structure = [
   {
     name: 'username',
     label: 'Username',
     placeholder: 'Insert your username...',
     type: 'text',
-    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setUsername(event.target.value),
   },
   {
     name: '_password',
     label: 'Password',
     placeholder: 'Insert your password...',
     type: 'password',
-    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setPassword(event.target.value),
   },
 ] as const;
 
 //  remarks: forget password
-const reset_pw_opt_out_structure = (
-  setUsername: (value: string) => void,
-) => [
+const reset_pw_opt_out_structure = [
   {
-    name: 'username',
-    label: 'Username',
-    placeholder: 'Insert your username...',
+    name: 'input',
+    label: 'User Identifier',
+    placeholder: 'Insert your username or email address...',
     type: 'text',
-    customisedOnChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setUsername(event.target.value),
-  }
+  },
+] as const;
+
+//  remarks: reset password
+const reset_pw_opt_in_structure = [
+  {
+    name: '_password',
+    label: 'New Password',
+    placeholder: 'Insert your password...',
+    type: 'password',
+  },
+  {
+    name: '_password_confirm',
+    label: 'Confirm Password',
+    placeholder: 'Confirm your password...',
+    type: 'password',
+  },
 ] as const;
 
 //  remarks: structure collection with export
-
 export const AUTH_STRUCTURE = {
   login: login_structure,
-  forget_password: reset_pw_opt_out_structure
+  reset_pw_opt_out: reset_pw_opt_out_structure,
+  reset_pw_opt_in: reset_pw_opt_in_structure,
 };

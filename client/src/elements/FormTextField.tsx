@@ -9,7 +9,6 @@ export default function FormTextField({
   isDisabled = false,
   required = false,
   className = 'mb-4',
-  customisedOnChange,
 }: {
   label: string;
   placeholder?: string;
@@ -19,7 +18,6 @@ export default function FormTextField({
   isDisabled?: boolean;
   required?: boolean;
   className?: string;
-  customisedOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className={`${className} group`}>
@@ -33,7 +31,7 @@ export default function FormTextField({
         type={type}
         placeholder={placeholder || label}
         disabled={isDisabled}
-        {...(register || { onChange: customisedOnChange })}
+        {...register}
         className={`w-full px-3 py-2 border rounded-lg focus:outline-none text-sm focus:text-teal-800 focus:border-teal-800 placeholder:text-sm transition-all duration-600 ${
           error
             ? 'border-red-500 focus:ring-red-300 bg-red-50'

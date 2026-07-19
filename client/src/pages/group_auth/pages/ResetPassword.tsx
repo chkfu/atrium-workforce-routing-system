@@ -13,8 +13,11 @@ import { AuthSectHeading } from '../../../elements/AuthSectHeading';
 import NavigateAnchor from '../../../elements/NavigateAnchor';
 
 export default function ResetPassword() {
-  //
+
+  //  remarks: navigation
   const navigate = useNavigate();
+
+  //  remarks: access params details
   const { token } = useParams<{ token: string }>();
 
   //  reamrks: init react hook fo rm
@@ -45,13 +48,13 @@ export default function ResetPassword() {
         onSubmit={handleSubmit(submit_handler)}
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
-        {/*  Back Button  */}
+        {/*  section: back anchor  */}
         <NavigateAnchor url={HREF.HOME} text="Back" />
 
-        {/*  Heading  */}
+        {/*  section: heading  */}
         <AuthSectHeading title="Reset Password" description="Please provide your new passwords." />
 
-        {/* Login Fields */}
+        {/*  section: form filling  */}
         {AUTH_STRUCTURE['reset_pw_opt_in'].map((el) => (
           <FormTextField
             key={el.label}
@@ -63,7 +66,7 @@ export default function ResetPassword() {
           />
         ))}
 
-        {/*  Action Button  */}
+        {/*  section: button trigger  */}
         <ResetChangeSubmitButton isLoading={isLoading} />
       </form>
     </div>

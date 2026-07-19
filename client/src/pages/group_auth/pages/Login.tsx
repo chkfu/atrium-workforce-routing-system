@@ -8,16 +8,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AUTH_SCHEMA } from '../utils/schema';
 import { AUTH_STRUCTURE } from '../utils/structure';
 import { HREF } from '../../../config/href';
-import nav_left_icon from '../../../assets/svg/nav_left_icon.svg';
 import { LoginSubmitButton } from '../elements/buttons';
 import { AuthSectHeading } from '../../../elements/AuthSectHeading';
 import NavigateAnchor from '../../../elements/NavigateAnchor';
 
 export default function Login(): JSX.Element {
+
+  //  remarks: navigation
   const navigate = useNavigate();
+
+  //  remarks: state management
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  //  handler
+  //  remarks: handle submission
   const submit_handler = async (data: AUTH_TYPES['login']) => {
     await handle_login(data, navigate, setIsLoading);
   };
@@ -38,14 +41,13 @@ export default function Login(): JSX.Element {
         onSubmit={handleSubmit(submit_handler)}
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
-        {/*  Back Button  */}
+        {/*  section: back anchor  */}
         <NavigateAnchor url={HREF.HOME} text="Back" />
 
-        {/* Login Title */}
+        {/*  section: heading  */}
         <AuthSectHeading title="Login" />
 
-        {/* Login Fields */}
-
+        {/*  section: form filling  */}
         {AUTH_STRUCTURE['login'].map((el) => (
           <FormTextField
             key={el.label}
@@ -57,17 +59,10 @@ export default function Login(): JSX.Element {
           />
         ))}
 
-        {/* Forgot Password Link */}
-        <div>
-          <a
-            href={HREF.FORGET_PASSWORD}
-            className="text-sm text-teal-600 hover:text-teal-800 font-semibold underline"
-          >
-            Forgot your password?
-          </a>
-        </div>
+        {/*  section: anchor to forget password  */}
+        <NavigateAnchor url={HREF.FORGET_PASSWORD} text="Forgot your password?" />
 
-        {/* Login Button */}
+        {/*  section: button trigger  */}
         <LoginSubmitButton isLoading={isLoading} />
       </form>
     </div>

@@ -38,16 +38,16 @@ export default function ForgetPassword() {
         onSubmit={handleSubmit(submit_handler)}
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
-        {/*  Back Button  */}
+        {/*  section: back button  */}
         <NavigateAnchor url={HREF.LOGIN} text="Back" />
 
-        {/*  Heading  */}
+        {/*  section: heading  */}
         <AuthSectHeading
           title="Reset Password"
           description="We will email you with a link to reset your password."
         />
 
-        {/* Username Detection Fields */}
+        {/*  section: form filling  */}
         {AUTH_STRUCTURE['reset_pw_opt_out'].map((el) => (
           <FormTextField
             key={el.label}
@@ -59,7 +59,7 @@ export default function ForgetPassword() {
           />
         ))}
 
-        {/*  Action Button  */}
+        {/*  section: button trigger  */}
         <ResetTokenEmailButton isLoading={isLoading} />
       </form>
     </div>

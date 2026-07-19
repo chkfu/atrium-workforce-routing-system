@@ -11,7 +11,7 @@ efficient codes practice, and follow the established architectural practices.
 
 -->
 
-## ARCHITECTURE
+# ARCHITECTURE
 
 This file records the plans and considerations of thre architecture design.
 

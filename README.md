@@ -14,11 +14,26 @@
 
 ## Overview
 
+### A. Introduction
+
 Companies often lack consistent procedures on assigning the new hires for internal re-training and jobs, leading to high dropout rates, poor role fits and the waste of resources.
 
 The Atrium Platform is a full-stack web application that systematically matches candidates with departments throughout the probation period, while enabling management to monitor assignment outcomes during the probation period.
 
 It provides the structured visibility into assignment outcomes during probation, and enable the management to review and adjust their strategies over time.
+
+<br/>
+
+### B. Origin and Redesign
+
+This project was initially based on [Jonas Schmedtmann's Node.js Bootcamp](https://github.com/jonasschmedtmann/complete-node-bootcamp) 
+— an online trip booking platform built with Pug, Express, and MongoDB.
+
+It was subsequently transformed and redesigned into a talent selection platform, with the following changes made upon the original structure:
+
+- **Architecture**: Improved from MVC to Domain-Driven Design with a 4-layer backend division of business logic from data access.
+- **Tech stack**: Replaced JavaScript with TypeScript, MongoDB with PostgreSQL, and Pug with React.
+- **New additions**: Introduced Redis caching, React Form, Tailwind CSS, Redux and logging.
 
 <br/>
 
@@ -117,4 +132,4 @@ See `client/package.json` and `server/package.json` for the full package list.
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: Jun 27, 2026 </i>
+<i> Last Updated: Jul 20, 2026 </i>

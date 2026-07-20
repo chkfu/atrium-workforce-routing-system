@@ -12,7 +12,7 @@ import {
 import ValueError from '../util/errors/ValueError';
 import loggers from '../infra/loggers';
 import {
-  generate_jwt_token,
+  sign_jwt_token,
   hash_password_bcrypt,
   validate_password_bcrypt,
   generate_password_reset_token,
@@ -219,7 +219,7 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     }
 
     //  remarks: return token for verification
-    const jwt_token = await generate_jwt_token(user._id);
+    const jwt_token = await sign_jwt_token(user._id);
     return {
       user_role: user_role,
       token: jwt_token,

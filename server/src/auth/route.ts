@@ -21,6 +21,7 @@ const user_controller = new UserController(
 //  remarks: sign-up / log-in
 router.route('/register_new_user').post(user_controller.register_new_user());
 router.route('/login_user').post(user_controller.login_user());
+router.route('/logout_user').post(user_controller.logout_user());
 
 //  remarks: password changes
 router

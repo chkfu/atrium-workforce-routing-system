@@ -42,7 +42,7 @@ exp_app.use(
 //  5. prevent clients pollute secret with signed cookies
 exp_app.use(cookie_parser(process.env.COOKIE_SECRET));
 
-//  Setup express router
+//  6. setup express router
 const API_BASE_PATH = '/api/v1';
 exp_app.use(API_BASE_PATH, rate_restriction);
 
@@ -50,14 +50,13 @@ for (const [key, value] of Object.entries(route_register)) {
   exp_app.use(`${API_BASE_PATH}/${key}`, value);
 }
 
-//  Catch-all handler for 404: invalid routes
+//  7. global error handler 
 exp_app.use((req: Request, res: Response) => {
   res.status(404).json({
     status: 'failed',
     message: `[SERVER] error: can't find ${req.originalUrl} on this server.`,
   });
 });
-
 exp_app.use(global_err_handler);
 
 //  Export

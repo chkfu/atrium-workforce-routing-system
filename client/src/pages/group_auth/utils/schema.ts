@@ -7,7 +7,10 @@ const login_form_schema: yup.ObjectSchema<AUTH_TYPES['login']> = yup.object({
   _password: yup
     .string()
     .required('Password is required.')
-    .matches(/^[a-zA-Z0-9-]+$/, 'Password can only contain letters, numbers and hyphens.'),
+    .matches(
+      /^[A-Za-z0-9!@#$%^&*()_\-+=\[\]{}|;:'",.<>/?`~]*$/,
+      'Password can only contain english alphabets, numbers and special characters.',
+    ),
 });
 
 //  remarks: forget password (sending out reset url)
@@ -20,7 +23,10 @@ const reset_opt_in_schema: yup.ObjectSchema<AUTH_TYPES['reset_pw_opt_in']> = yup
   _password: yup
     .string()
     .required('Password is required.')
-    .matches(/^[a-zA-Z0-9-]+$/, 'Password can only contain letters, numbers and hyphens.'),
+    .matches(
+      /^[A-Za-z0-9!@#$%^&*()_\-+=\[\]{}|;:'",.<>/?`~]*$/,
+      'Password can only contain english alphabets, numbers and special characters.',
+    ),
   _password_confirm: yup
     .string()
     .required('Password confirmation is required.')

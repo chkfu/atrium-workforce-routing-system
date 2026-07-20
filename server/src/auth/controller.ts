@@ -8,7 +8,8 @@ import {
   extract_token_from_header,
   access_check_user_exist,
   access_check_password_changed,
-  set_jwt_cookie,
+  set_cookie_token,
+  clear_cookie_token,
 } from './utils/handlers';
 import loggers from '../infra/loggers';
 import AuthError from '../util/errors/AuthError';
@@ -29,7 +30,7 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
 
   //  Methods
 
-  //  ==========    LOGIN / SIGNUP    ==========
+  //  ==========    LOGIN / LOGOUT / SIGNUP    ==========
 
   //  remarks: user registration
   //  POST  /api/v1/auth/register_new_user
@@ -55,12 +56,26 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
         const result = await (this.service as UserService).login_user(req.body);
-        set_jwt_cookie(res, result.token);
+        set_cookie_token(res, result.token);
         res.status(200).json({
           status: 'success',
           message: 'Login successful.',
           token: result.token,
           role: result.user_role,
+        });
+      },
+    );
+  }
+
+  //  remarks: user logout
+  //  POST  /api/v1/auth/logout_user
+  public logout_user() {
+    return handle_async(
+      async (req: Request, res: Response, next: NextFunction) => {
+        clear_cookie_token(res);
+        res.status(200).json({
+          status: 'success',
+          message: 'Logout successful.',
         });
       },
     );
@@ -94,12 +109,14 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     );
   }
 
+
+
   //  remarks:  opt-in procedure, receiving new passwords to be set
   public reset_password_opt_in() {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
         const result = await (this.service as UserService).reset_password_opt_in(req);
-        set_jwt_cookie(res, result.token);
+        set_cookie_token(res, result.token);
          //  remarks: network response
         res.status(200).json({
           status: 'success',

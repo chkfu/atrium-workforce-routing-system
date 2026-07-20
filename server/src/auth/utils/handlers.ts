@@ -82,7 +82,7 @@ export async function validate_password_bcrypt(
 }
 
 //  remarks: create jwt token for identity verification
-export async function generate_jwt_token(id: number) {
+export async function sign_jwt_token(id: number) {
   return await jwt.sign({ id }, process.env.JWT_SECRET as string, {
     //  learnt: the type is needed for env variables for specification
     expiresIn: process.env.JWT_TOKEN_EXPIRED as SignOptions['expiresIn'],
@@ -90,15 +90,23 @@ export async function generate_jwt_token(id: number) {
 }
 
 //  learnt: set jwt token as cookie, enable client side to call
-export function set_jwt_cookie(res: Response, token: string) {
-  res.cookie('jwt', token, {
+export function set_cookie_token(res: Response, token: string) {
+  try {
+    res.cookie('jwt', token, {
     expires: new Date(
-      Date.now() +
-        Number(process.env.JWT_COOKIE_EXPIRED) * 24 * 60 * 60 * 1000,
+      Date.now() + Number(process.env.JWT_COOKIE_EXPIRED) * 24 * 60 * 60 * 1000,
     ),
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
   });
+  } catch {
+    throw Error(`[AuthService] error: failed to clear cookie token.`)
+  }
+}
+
+//  remarks: clear jwt details for logout
+export function clear_cookie_token(res: Response) {
+  res.clearCookie('jwt', { httpOnly: true });
 }
 
 //  ==========  Token-related Methods  ==========

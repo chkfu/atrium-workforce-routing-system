@@ -26,13 +26,12 @@ It provides the structured visibility into assignment outcomes during probation,
 
 ### B. Origin and Redesign
 
-This project was initially based on [Jonas Schmedtmann's Node.js Bootcamp](https://github.com/jonasschmedtmann/complete-node-bootcamp) 
-— an online trip booking platform built with Pug, Express, and MongoDB.
+This project was initially based on [Jonas Schmedtmann's Node.js Bootcamp](https://github.com/jonasschmedtmann/complete-node-bootcamp) — an online trip booking platform built with Pug, Express, and MongoDB (server-side rendering).
 
 It was subsequently transformed and redesigned into a talent selection platform, with the following changes made upon the original structure:
 
 - **Architecture**: Improved from MVC to Domain-Driven Design with a 4-layer backend division of business logic from data access.
-- **Tech stack**: Replaced JavaScript with TypeScript, MongoDB with PostgreSQL, and Pug with React.
+- **Tech stack**: Replaced JavaScript with TypeScript, MongoDB with PostgreSQL, and Pug with React (client-side rendering).
 - **New additions**: Introduced Redis caching, React Form, Tailwind CSS, Redux and logging.
 
 <br/>

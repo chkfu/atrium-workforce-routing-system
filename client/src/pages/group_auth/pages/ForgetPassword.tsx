@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { AUTH_STRUCTURE } from '../utils/structure';
 import { ResetTokenEmailButton } from '../elements/buttons';
 import { AuthSectHeading } from '../../../elements/AuthSectHeading';
-import NavigateAnchor from '../../../elements/NavigateAnchor';
+import NavAnchorBack from '../../../elements/NavAnchorBack';
 
 export default function ForgetPassword() {
   //  reamrks: init react hook form
@@ -41,7 +41,7 @@ export default function ForgetPassword() {
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
         {/*  section: back button  */}
-        <NavigateAnchor url={HREF.LOGIN} text="Back" />
+        <NavAnchorBack url={HREF.LOGIN} />
 
         {/*  section: heading  */}
         <AuthSectHeading

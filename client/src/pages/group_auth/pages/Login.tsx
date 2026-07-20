@@ -10,7 +10,7 @@ import { AUTH_STRUCTURE } from '../utils/structure';
 import { HREF } from '../../../config/href';
 import { LoginSubmitButton } from '../elements/buttons';
 import { AuthSectHeading } from '../../../elements/AuthSectHeading';
-import NavigateAnchor from '../../../elements/NavigateAnchor';
+import NavAnchorBack from '../../../elements/NavAnchorBack';
 
 export default function Login(): JSX.Element {
 
@@ -42,7 +42,7 @@ export default function Login(): JSX.Element {
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
         {/*  section: back anchor  */}
-        <NavigateAnchor url={HREF.HOME} text="Back" />
+        <NavAnchorBack url={HREF.HOME} />
 
         {/*  section: heading  */}
         <AuthSectHeading title="Login" />
@@ -60,7 +60,12 @@ export default function Login(): JSX.Element {
         ))}
 
         {/*  section: anchor to forget password  */}
-        <NavigateAnchor url={HREF.FORGET_PASSWORD} text="Forgot your password?" />
+        <a
+          href={HREF.FORGET_PASSWORD}
+          className="block text-left bold text-sm text-teal-600 underline bold hover:brightness-110 mb-4"
+        >
+          Forgot your password?
+        </a>
 
         {/*  section: button trigger  */}
         <LoginSubmitButton isLoading={isLoading} />

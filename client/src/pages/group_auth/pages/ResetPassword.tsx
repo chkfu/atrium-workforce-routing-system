@@ -10,7 +10,7 @@ import { HREF } from '../../../config/href';
 import { handle_reset_opt_in } from '../utils/handlers';
 import { ResetChangeSubmitButton } from '../elements/buttons';
 import { AuthSectHeading } from '../../../elements/AuthSectHeading';
-import NavigateAnchor from '../../../elements/NavigateAnchor';
+import NavAnchorBack from '../../../elements/NavAnchorBack';
 
 export default function ResetPassword() {
 
@@ -49,7 +49,7 @@ export default function ResetPassword() {
         className="relative bg-white px-12 py-24 rounded-lg shadow-lg w-full max-w-md"
       >
         {/*  section: back anchor  */}
-        <NavigateAnchor url={HREF.HOME} text="Back" />
+        <NavAnchorBack url={HREF.HOME} />
 
         {/*  section: heading  */}
         <AuthSectHeading title="Reset Password" description="Please provide your new passwords." />

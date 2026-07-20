@@ -30,6 +30,7 @@ This file records the major version changes of the projects.
 ### Edited
 
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
+- updated documentation content at readme
 
 <br/>
 

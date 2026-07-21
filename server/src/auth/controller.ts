@@ -13,7 +13,12 @@ import {
 } from './utils/handlers';
 import loggers from '../infra/loggers';
 import AuthError from '../util/errors/AuthError';
-import { enum_user_role } from '../util/enums';
+import {
+  enum_staff_grade,
+  enum_user_role,
+  enum_user_role_obj,
+} from '../util/enums';
+import { ROLE_RANK } from '../util/config/role_rank';
 
 //  Controller class
 
@@ -62,13 +67,13 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
           message: 'Login successful.',
           token: result.token,
           data: {
-          _id: result._id,
-          first_name: result.first_name,
-          last_name: result.last_name,
-          candidate_id: result.candidate_id,
-          staff_id: result.staff_id,
-          user_role: result.user_role,
-          }
+            _id: result._id,
+            first_name: result.first_name,
+            last_name: result.last_name,
+            candidate_id: result.candidate_id,
+            staff_id: result.staff_id,
+            user_role: result.user_role,
+          },
         });
       },
     );
@@ -88,14 +93,13 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     );
   }
 
-
   //  remarks: restore session on page refresh, using the token already verified by access_control_token()
   //  GET  /api/v1/auth/check_login_status
   public check_login_status() {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
         const result = await (this.service as UserService).check_login_user(
-          req.user!._id,    //  remarks: _id from req.user to prevent frontend polluted injection
+          req.user!._id, //  remarks: _id from req.user to prevent frontend polluted injection
         );
         res.status(200).json({
           status: 'success',
@@ -108,15 +112,16 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
   //  ==========    PASSWORD MANAGEMENT    ==========
 
   //  remarks: update password with self-access point
-  public update_password_self(){
+  public update_password_self() {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
-        await (this.service as UserService).update_password_self(req)
+        await (this.service as UserService).update_password_self(req);
         res.status(200).json({
           status: 'success',
-          message: 'New password has been adopted.'
-        })
-      })
+          message: 'New password has been adopted.',
+        });
+      },
+    );
   }
 
   //  remarks:  opt-out procedure, sending out tokens to proceed
@@ -137,9 +142,11 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
   public reset_password_opt_in() {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
-        const result = await (this.service as UserService).reset_password_opt_in(req);
+        const result = await (
+          this.service as UserService
+        ).reset_password_opt_in(req);
         set_cookie_token(res, result.token);
-         //  remarks: network response
+        //  remarks: network response
         res.status(200).json({
           status: 'success',
           ...result,
@@ -147,7 +154,6 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
       },
     );
   }
-
 
   //  ==========    ACCESS MANAGEMENT    ==========
 
@@ -177,17 +183,60 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
     );
   }
 
-  //  remarks: restrict access management, as middleware
-  public access_restrict_roles(...roles: enum_user_role[]) {
+  //  remarks: middleware to restrict user access by permission rank, or self-access to their own record
+  public access_restrict_roles(
+    role_boundary: enum_user_role,
+    enable_self_access: boolean,
+  ) {
     return handle_async(
       async (req: Request, res: Response, next: NextFunction) => {
-        if (!req.user || !roles.includes(req.user.user_role)) {
-          const err_msg =
-            '[AuthController] error: the action has not been permitted.';
+        //  remarks: declaration
+        const err_msg =
+          '[AuthController] error: the action has not been permitted.';
+
+        //  remarks: drop all request which user is not found
+        if (!req.user) {
           loggers.auth_logger.error(err_msg);
           throw new AuthError(403, err_msg);
         }
-        next();
+
+        //  remarks: (1) enable all staff who passed the criteria
+        if (ROLE_RANK[req.user.user_role] >= ROLE_RANK[role_boundary]) {
+          return next();
+        }
+
+        //  remarks: (2) user self-access
+        if (!enable_self_access) {
+          loggers.auth_logger.error(err_msg);
+          throw new AuthError(403, err_msg);
+        }
+        //  remarks: extract current requester id
+        let target_identifier: number | undefined;
+        if (!enum_user_role_obj.includes(req.user.user_role)) {
+          loggers.auth_logger.error(err_msg);
+          throw new AuthError(403, err_msg);
+        }
+        if (
+          enable_self_access &&
+          req.user.user_role === enum_user_role.candidate
+        ) {
+          target_identifier = req.user.candidate_id;
+        } else if (enable_self_access) {
+          target_identifier = req.user.staff_id;
+        }
+        //  remarks: requested user details can be identified by params.id or user input
+        const param_id = req.params.id as string | undefined;
+        //  remarks: grant access by matching with the identifier from client and server
+        if (
+          param_id != null &&
+          target_identifier != null &&
+          param_id === String(target_identifier)
+        ) {
+          return next();
+        } else {
+          loggers.auth_logger.error(err_msg);
+          throw new AuthError(403, err_msg);
+        }
       },
     );
   }

@@ -1,8 +1,11 @@
+import { Request } from 'express';
 import BaseService from '../../../core/BaseService';
 import CandidateRepository from './repository';
 import { TCandidateBase, TSchemaBase } from '../../../util/types/schema_types';
 import { filter_criteria } from '../../../util/yup/validate_criteria';
 import { ValueError } from '../../../util/errors/ValueError';
+import AppError from '../../../util/errors/AppError';
+import loggers from '../../../infra/loggers';
 import {
   format_boolean,
   format_date,
@@ -11,6 +14,7 @@ import {
   format_text,
 } from '../../../util/types/type_formatter';
 import { enum_gender_obj, enum_prob_status_obj } from '../../../util/enums';
+import { handle_async } from '../../../infra/middlewares/handle_async';
 
 //  Service class
 

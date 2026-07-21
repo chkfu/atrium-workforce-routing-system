@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { LoginButton, LogoutButton, NavItem } from './items';
 import { TNavItem } from '../utils/types';
 import { RootState } from '../../redux/store';
+import { HREF } from '../../config/href';
+import { ROLE_DASHBOARD } from '../../pages/group_auth/utils/constants';
 
 //  remarks: logo container
 export const SectionLogo = function () {
@@ -29,14 +31,17 @@ export const SectionLogin = function () {
   const user_fname: string = useSelector(
     (state: RootState) => state.auth.user?.first_name
   ) as string;
+  const user_role: string = useSelector((state: RootState) => state.auth.user?.user_role) as string;
 
   return (
     <div className="flex absolute right-8 top-8 gap-2">
       {has_login ? (
         <div className="flex gap-4 items-center">
-          <h4 className="text-md font-bold text-gray-300">
-            Hi, {user_fname[0].toUpperCase() + user_fname.slice(1).toLowerCase()}
-          </h4>
+          <Link to={ROLE_DASHBOARD[user_role] ?? HREF.HOME}>
+            <h4 className="text-md font-bold text-gray-300">
+              Hi, {user_fname[0].toUpperCase() + user_fname.slice(1).toLowerCase()}
+            </h4>
+          </Link>
           <LogoutButton />
         </div>
       ) : (

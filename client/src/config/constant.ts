@@ -1,1 +1,1 @@
-export const PAGE_PRELOAD_TIME: number = 7000;
+export const PAGE_PRELOAD_TIME: number = 3500;

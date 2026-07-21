@@ -34,7 +34,7 @@ export enum enum_hire_decision {
   deferred = 'deferred',
 }
 
-//  Extract enum values for validation arrays (keeps enum and array in sync)
+//  remarks: object convertion for data extraction
 export const enum_gender_obj = Object.values(enum_gender);
 export const enum_grade_obj = Object.values(enum_staff_grade);
 export const enum_user_role_obj = Object.values(enum_user_role);

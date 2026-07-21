@@ -1,18 +1,25 @@
 import DashboardCard from '../../components/DashboardCard';
 import Accordion from '../../elements/Accordion';
 import { TCardItem } from '../../utils/types/element_types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { HREF } from '../../config/href';
 
-//  Declaration
+//  Function
 
-const card_list_personal: TCardItem[] = [
-  {
-    title: 'View Profile',
-    description: 'View and update your personal information and profile.',
-    path: '/me/staff-profile',
-  },
-];
+export default function ManagerDashboard(): JSX.Element {
+  //  remarks: extract user id
+  const staff_id = useSelector((state: RootState) => state.auth.user?.staff_id);
 
-const card_list_task_panel: TCardItem[] = [
+  //  remarks: declaration
+  const card_list_personal: TCardItem[] = [
+    {
+      title: 'View Profile',
+      description: 'View and update your personal information and profile.',
+      path: staff_id != null ? HREF.STAFF_PROFILE(String(staff_id)) : '',
+    },
+  ];
+  const card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
     description: 'Review and manage candidate applications and profiles',
@@ -30,10 +37,7 @@ const card_list_task_panel: TCardItem[] = [
   },
 ];
 
-//  Function
-
-export default function ManagerDashboard(): JSX.Element {
-  //  visualise
+  //   remarks: display
   return (
     <section id="manager-dashboard-section" className="px-12 py-6 flex flex-col gap-6">
       <Accordion title="Task Pending">

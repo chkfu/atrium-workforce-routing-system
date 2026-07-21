@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UpdateCandidateEduSchema } from '../../pages/group_profile/ProfileCandidates/utils/schema';
 import { ButtonCandidateEduReset, ButtonCandidateEduSubmit } from '../../pages/group_profile/ProfileCandidates/elements/buttons';
@@ -56,11 +56,19 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
       reset(empty);
     }
   }, [sect_state, reset, form_structure]);
+  //  remarks: tracks in-flight save requests, so the button shows "Loading..." and disables during the round-trip
+  const [isLoading, setIsLoading] = useState(false);
+
   //  remakrs: submit handler
   const onSubmit = async (data: any) => {
-    const success: boolean = await submit_handler(data);
-    if (success) {
-      form_trigger(false);
+    setIsLoading(true);
+    try {
+      const success: boolean = await submit_handler(data);
+      if (success) {
+        form_trigger(false);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,7 +103,7 @@ export function FormSectionCreateReuse<T extends Record<string, any> = any>({
       {/*  box: button for form control  */}
       <div className="flex justify-end gap-4 mt-4">
         <ButtonCandidateEduReset reset={reset} />
-        <ButtonCandidateEduSubmit />
+        <ButtonCandidateEduSubmit isLoading={isLoading} />
       </div>
     </form>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setDepartment } from '../../../redux/slices/DepartmentSlice';
 import {
   SectionDetails,
@@ -22,6 +22,7 @@ import {
 import Error from '../../group_navigation/Error';
 import LoadSpinner from '../../../elements/LoadSpinner';
 import { PAGE_PRELOAD_TIME } from '../../../config/constant';
+import { RootState } from '../../../redux/store';
 
 export default function ProfileCandidateP(): JSX.Element {
   //  remarks: identify the specific candidate profile to be viewed
@@ -131,6 +132,8 @@ export default function ProfileCandidateP(): JSX.Element {
       });
   }, [id]);
 
+  const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
+
   //  remarks: display
   if (targetCandidate) {
     return (
@@ -143,7 +146,7 @@ export default function ProfileCandidateP(): JSX.Element {
                   <SectionDetails targetCandidate={targetCandidate} />
                   <SectionEducation />
                   <SectionExperience />
-                  <SectionTestScore />
+                  { curr_user_role !== 'candidate' && <SectionTestScore />}
                   <SectionPreference />
                 </Accordion>
               </div>

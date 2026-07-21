@@ -38,6 +38,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useParams } from 'react-router-dom';
 import { API } from '../../../../config/api';
+import axios from 'axios';
 
 //  ==========    Section: Candidate Details   ==========
 
@@ -47,20 +48,36 @@ export function SectionDetails({
 }: {
   targetCandidate: ICandidate | null;
 }): JSX.Element {
+  //  remarks: a candidate self-editing their own profile may not touch staff-only administrative fields
+  const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
+  const is_self_service = curr_user_role === 'candidate';
+
+  const form_structure = is_self_service
+    ? Object.fromEntries(
+        Object.entries(CandidateDetailStructure).filter(
+          ([key]) => key !== 'prob_status' && key !== 'is_active',
+        ),
+      )
+    : CandidateDetailStructure;
+
   const handleSubmit = (data: any) => {
     if (targetCandidate?._id) {
-      handle_candidate_details_submit(String(targetCandidate._id), data);
+      const { prob_status, is_active, ...self_payload } = data;
+      handle_candidate_details_submit(
+        String(targetCandidate._id),
+        is_self_service ? self_payload : data,
+      );
     }
   };
 
   return (
-    <Accordion title="(1) Patron Details" titleSize="text-xl">
+    <Accordion title="Patron Details" titleSize="text-xl">
       <FormSubsectionUpdateReuse
         key={targetCandidate?._id}
         sect_state={targetCandidate}
         form_schema={UpdateCandidateSchema}
         submit_handler={handleSubmit}
-        form_structure={CandidateDetailStructure}
+        form_structure={form_structure}
         form_subtitle=""
       />
     </Accordion>
@@ -76,33 +93,65 @@ export function SectionEducation(): JSX.Element {
   //  remarks: extract data from context
   //  learnt: `userPofileCandidateContext` hook refers only one record, requries to get the record list and spread out
     const context = useContext(CandidateEduContext);
+  //  remarks: a candidate self-editing their own qualification may not touch staff-only verification/activation fields
+  const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
+  const is_self_service = curr_user_role === 'candidate';
+  const form_structure = is_self_service
+    ? Object.fromEntries(
+        Object.entries(CandidateEduStructure).filter(
+          ([key]) => key !== 'is_verified' && key !== 'is_active',
+        ),
+      )
+    : CandidateEduStructure;
 
   //  remarks: submission handler
   const handle_create_submit = async (data: any) => {
     if (!candidate_id) return false;
-    return await create_candidate_subsection(
+
+    const { is_verified, is_active, ...self_payload } = data;
+    const is_created = await create_candidate_subsection(
       'CandidateEdu',
       API.CANDIDATES_EDU,
       candidate_id,
-      data
+      is_self_service ? self_payload : data
     );
+    if (!is_created) return false;
+
+    //  remarks: fetch the updated list, so the new record shows up right away
+    const res = await axios.get(`${API.CANDIDATES_EDU}/column-list/candidate_id/${candidate_id}`);
+    context?.setTargetCandidateEdu(res.data.data.records);
+    return true;
   };
   const handle_update_submit = async (data: any) => {
     if (!candidate_id) return false;
+    const { is_verified, is_active, ...self_payload } = data;
     return await update_candidate_subsection(
       'CandidateEdu',
       API.CANDIDATES_EDU,
       candidate_id,
-      data
+      is_self_service ? self_payload : data
     );
+  };
+  //  remarks: delete an existing qualification record, then refresh the list
+  const handle_delete = async (record_id: string) => {
+    if (!candidate_id) return;
+
+    try {
+      await axios.delete(API.CANDIDATES_EDU, { data: { _ids: [String(record_id)] } });
+
+      const res = await axios.get(`${API.CANDIDATES_EDU}/column-list/candidate_id/${candidate_id}`);
+      context?.setTargetCandidateEdu(res.data.data.records);
+    } catch (err: any) {
+      alert(`[CandidateEdu] error: ${err.response?.data?.message || err.message}`);
+    }
   };
   //  remakrs: display
   return (
-    <Accordion title="(3) Qualification" titleSize="text-xl">
+    <Accordion title="Qualification" titleSize="text-xl">
       {/*  remarks: (1) create form in extendable container */}
       <BoxSubsectionCreateReuse
         sect_state={null}
-        sect_structure={CandidateEduStructure}
+        sect_structure={form_structure}
         submit_handler={handle_create_submit}
         form_title="Create New Qualification"
         form_subtitle="Add new record to qualification."
@@ -126,8 +175,9 @@ export function SectionEducation(): JSX.Element {
                 }}
                 form_schema={UpdateCandidateEduSchema}
                 submit_handler={handle_update_submit}
-                form_structure={CandidateEduStructure}
+                form_structure={form_structure}
                 form_title={`Edit Qualification Record (${index + 1})`}
+                on_delete={() => handle_delete(String(el._id))}
               />
             );
           })}
@@ -144,33 +194,65 @@ export function SectionExperience(): JSX.Element {
   //  remarks: extract data from context
   //  learnt: `userPofileCandidateContext` hook refers only one record, requries to get the record list and spread out
     const context = useContext(CandidateExpContext)
+  //  remarks: a candidate self-editing their own experience may not touch staff-only verification/activation fields
+  const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
+  const is_self_service = curr_user_role === 'candidate';
+  const form_structure = is_self_service
+    ? Object.fromEntries(
+        Object.entries(CandidateExpStructure).filter(
+          ([key]) => key !== 'is_verified' && key !== 'is_active',
+        ),
+      )
+    : CandidateExpStructure;
 
   //  remarks: submission handler
   const handle_create_submit = async (data: any) => {
     if (!candidate_id) return false;
-    return await create_candidate_subsection(
+
+    const { is_verified, is_active, ...self_payload } = data;
+    const is_created = await create_candidate_subsection(
       'CandidateExp',
       API.CANDIDATES_EXP,
       candidate_id,
-      data
+      is_self_service ? self_payload : data
     );
+    if (!is_created) return false;
+
+    //  remarks: fetch the updated list, so the new record shows up right away
+    const res = await axios.get(`${API.CANDIDATES_EXP}/column-list/candidate_id/${candidate_id}`);
+    context?.setTargetCandidateExp(res.data.data.records);
+    return true;
   };
   const handle_update_submit = async (data: any) => {
     if (!candidate_id) return false;
+    const { is_verified, is_active, ...self_payload } = data;
     return await update_candidate_subsection(
       'CandidateExp',
       API.CANDIDATES_EXP,
       candidate_id,
-      data
+      is_self_service ? self_payload : data
     );
+  };
+  //  remarks: delete an existing experience record, then refresh the list
+  const handle_delete = async (record_id: string) => {
+    if (!candidate_id) return;
+
+    try {
+      await axios.delete(API.CANDIDATES_EXP, { data: { _ids: [String(record_id)] } });
+
+      const res = await axios.get(`${API.CANDIDATES_EXP}/column-list/candidate_id/${candidate_id}`);
+      context?.setTargetCandidateExp(res.data.data.records);
+    } catch (err: any) {
+      alert(`[CandidateExp] error: ${err.response?.data?.message || err.message}`);
+    }
   };
   //  remakrs: display
   return (
-    <Accordion title="(3) Experience" titleSize="text-xl">
+    <Accordion title="Experience" titleSize="text-xl">
       {/*  remarks: (1) create form in extendable container */}
       <BoxSubsectionCreateReuse
         sect_state={null}
-        sect_structure={CandidateExpStructure}
+        sect_structure={form_structure}
         submit_handler={handle_create_submit}
         form_title="Create New Work Experience"
         form_subtitle="Add new record to work history."
@@ -194,8 +276,9 @@ export function SectionExperience(): JSX.Element {
                 }}
                 form_schema={UpdateCandidateExpSchema}
                 submit_handler={handle_update_submit}
-                form_structure={CandidateExpStructure}
+                form_structure={form_structure}
                 form_title={`Edit Experience Record (${index + 1})`}
+                on_delete={() => handle_delete(String(el._id))}
               />
             );
           })}
@@ -207,17 +290,23 @@ export function SectionExperience(): JSX.Element {
 //  ==========    Section: Candidate Test Score   ==========
 
 // remarks: test score
-export function SectionTestScore(): JSX.Element {
+export function SectionTestScore(): JSX.Element | null {
   //  remarks: extract candidate id from params
   const { id: candidate_id } = useParams();
   //  remarks: get context data
   const { targetCandidateTest } = useProfileCandidateContext('CandidateTest', CandidateTestContext);
+  //  remarks: candidate should not see their own test score
+  const user_role = useSelector((state: RootState) => state.auth.user?.user_role);
 
   const handle_submit = async (data: any) => {
     if (candidate_id) {
       await update_candidate_subsection('CandidateTest', API.CANDIDATES_TEST, candidate_id, data);
     }
   };
+
+  if (user_role === 'candidate') {
+    return null;
+  }
 
   //  remarks: temp state for interface
   const temp_test_state = targetCandidateTest && {
@@ -235,7 +324,7 @@ export function SectionTestScore(): JSX.Element {
   };
 
   return (
-    <Accordion title="(4) Test Score" titleSize="text-xl">
+    <Accordion title="Test Score" titleSize="text-xl">
       <FormSubsectionUpdateReuse
         key={targetCandidateTest?._id}
         sect_state={temp_test_state}
@@ -261,11 +350,27 @@ export function SectionPreference(): JSX.Element {
 
   //  reamrks: updated departments list for preference options
   const departments: IDepartment[] = useSelector((state: RootState) => state.department.value);
+  //  remarks: a candidate self-editing their own preferences may not touch the staff-only activation field
+  const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
+  const is_self_service = curr_user_role === 'candidate';
+  const pref_structure = is_self_service
+    ? Object.fromEntries(
+        Object.entries(getCandidatePrefStructure(departments)).filter(
+          ([key]) => key !== 'is_active',
+        ),
+      )
+    : getCandidatePrefStructure(departments);
 
   //  remarks: form submission handler
   const handle_submit = async (data: any) => {
     if (candidate_id) {
-      await update_candidate_subsection('CandidatePref', API.CANDIDATES_PREF, candidate_id, data);
+      const { is_active, ...self_payload } = data;
+      await update_candidate_subsection(
+        'CandidatePref',
+        API.CANDIDATES_PREF,
+        candidate_id,
+        is_self_service ? self_payload : data,
+      );
     }
   };
 
@@ -281,13 +386,13 @@ export function SectionPreference(): JSX.Element {
   };
 
   return (
-    <Accordion title="(5) Preferences" titleSize="text-xl">
+    <Accordion title="Preferences" titleSize="text-xl">
       <FormSubsectionUpdateReuse
         key={targetCandidatePref?._id}
         sect_state={temp_pref_state}
         form_schema={UpdateCandidatePrefSchema}
         submit_handler={handle_submit}
-        form_structure={getCandidatePrefStructure(departments)}
+        form_structure={pref_structure}
         form_title="Update Preferences"
         form_subtitle="Select the first three options for enrolling the selection."
       />

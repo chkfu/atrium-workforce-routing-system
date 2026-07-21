@@ -47,7 +47,7 @@ router
   )
   .patch(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    candidate_controller.restrict_details_to_owner(),
     candidate_controller.update_record_details_batch(),
   )
   .delete(

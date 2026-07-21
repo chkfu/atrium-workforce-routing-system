@@ -14,13 +14,16 @@ export function ButtonCandidateDetailsReset({ reset }: { reset: () => void }) {
   );
 }
 
-export function ButtonCandidateDetailsSubmit({ disabled = false }: { disabled?: boolean } = {}) {
+export function ButtonCandidateDetailsSubmit({
+  disabled = false,
+  isLoading = false,
+}: { disabled?: boolean; isLoading?: boolean } = {}) {
   return (
     <ButtonConfirm
-      label="Save"
+      label={isLoading ? 'Loading...' : 'Save'}
       style={{ background: COLORS.dark_teal, color: COLORS.light_gray }}
       type="submit"
-      disabled={disabled}
+      disabled={disabled || isLoading}
     />
   );
 }
@@ -57,12 +60,31 @@ export function ButtonCandidateEduReset({ reset }: { reset: () => void }) {
   );
 }
 
-export function ButtonCandidateEduSubmit() {
+export function ButtonCandidateEduSubmit({ isLoading = false }: { isLoading?: boolean } = {}) {
   return (
     <ButtonConfirm
-      label="Save"
+      label={isLoading ? 'Loading...' : 'Save'}
       style={{ background: COLORS.dark_teal, color: COLORS.light_gray }}
       type="submit"
+      disabled={isLoading}
+    />
+  );
+}
+
+//  remarks: shared delete button for existing subsection records (education, experience, ...)
+export function ButtonCandidateSubsectionDelete({
+  onClick,
+  isLoading = false,
+}: {
+  onClick: () => void;
+  isLoading?: boolean;
+}) {
+  return (
+    <ButtonConfirm
+      label={isLoading ? 'Loading...' : 'Delete'}
+      style={{ background: COLORS.error_red, color: COLORS.light_gray }}
+      onClick={onClick}
+      disabled={isLoading}
     />
   );
 }

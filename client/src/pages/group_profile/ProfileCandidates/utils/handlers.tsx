@@ -108,3 +108,14 @@ export function init_select_dept_opts({ departments }: { departments: any[]; }):
   return result;
 }
 
+//  remarks: supporting to validate preference with yup validation
+//  learnt: the 3 preferences must not repeat a department
+export function no_dup_pref(this: any) {
+  const picked = [
+    this.parent.pref_dept_1st,
+    this.parent.pref_dept_2nd,
+    this.parent.pref_dept_3rd,
+  ].filter(Boolean);
+  return new Set(picked).size === picked.length;
+}
+

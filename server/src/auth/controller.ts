@@ -226,14 +226,49 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
         }
         //  remarks: requested user details can be identified by params.id or user input
         const param_id = req.params.id as string | undefined;
+        //  remarks: column-list routes identify the target via col_key/col_val instead of id
+        const col_key = req.params.col_key as string | undefined;
+        const col_val = req.params.col_val as string | undefined;
+
+        //  remarks: (3) decide action
         //  remarks: grant access by matching with the identifier from client and server
+        //  remarks: (3a) server and client side target matched, enable action
         if (
           param_id != null &&
           target_identifier != null &&
           param_id === String(target_identifier)
         ) {
           return next();
-        } else {
+        }
+        //  remarks: (3a-2) column-list route: col_key is candidate_id/staff_id and col_val matches
+        else if (
+          (col_key === 'candidate_id' || col_key === 'staff_id') &&
+          col_val != null &&
+          target_identifier != null &&
+          col_val === String(target_identifier)
+        ) {
+          return next();
+        }
+        //  remarks: (3b) if batch records without params id
+        else {
+          const records = Object.values(req.body)[0];
+          //  learnt: convert req.body items into list of array, and see validity
+          let is_valid = Array.isArray(records) && records.length > 0;
+          if (Array.isArray(records)) {
+            //  learnt: refers the target id with the candidate / staff id for changes
+            for (const record of records) {
+              const owner_id = record.candidate_id ?? record.staff_id;
+              if (String(owner_id) !== String(target_identifier)) {
+                is_valid = false;
+              }
+            }
+          }
+          //  learnt: only matched identifier could proceed further
+          if (is_valid) {
+            return next();
+          }
+
+          //  remarks: failed result to errors
           loggers.auth_logger.error(err_msg);
           throw new AuthError(403, err_msg);
         }

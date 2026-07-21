@@ -33,22 +33,22 @@ router
   .route('/')
   .get(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.get_record_batch(),
   )
   .post(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.create_record_batch(),
   )
   .patch(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.update_record_details_batch(),
   )
   .delete(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.remove_record_batch(),
   );
 
@@ -56,7 +56,7 @@ router
   .route('/column-list/:col_key/:col_val')
   .get(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.get_record_column_list(),
   );
 
@@ -80,7 +80,7 @@ router
   .route('/:id')
   .get(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     cdd_test_controller.get_record_by_id(),
   );
 

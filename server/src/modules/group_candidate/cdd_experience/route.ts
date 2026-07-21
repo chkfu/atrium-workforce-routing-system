@@ -39,16 +39,18 @@ router
   .post(
     auth_controller.access_control_token(),
     auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    cdd_exp_controller.restrict_fields_to_editable(),
     cdd_exp_controller.create_record_batch(),
   )
   .patch(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    cdd_exp_controller.restrict_batch_to_owner(),
+    cdd_exp_controller.restrict_fields_to_editable(),
     cdd_exp_controller.update_record_details_batch(),
   )
   .delete(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, true),
+    cdd_exp_controller.restrict_batch_to_owner(),
     cdd_exp_controller.remove_record_batch(),
   );
 

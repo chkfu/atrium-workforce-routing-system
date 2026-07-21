@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { no_dup_pref } from './handlers';
 
 //  remarks: schema for updating candidate education (all fields optional)
 export const UpdateCandidateEduSchema = yup.object({
@@ -101,15 +102,18 @@ export const UpdateCandidatePrefSchema = yup.object({
   pref_dept_1st: yup
     .string()
     .nullable()
-    .optional(),
+    .optional()
+    .test('no-dup-pref', 'Preferences cannot be duplicated.', no_dup_pref),
   pref_dept_2nd: yup
     .string()
     .nullable()
-    .optional(),
+    .optional()
+    .test('no-dup-pref', 'Preferences cannot be duplicated.', no_dup_pref),
   pref_dept_3rd: yup
     .string()
     .nullable()
-    .optional(),
+    .optional()
+    .test('no-dup-pref', 'Preferences cannot be duplicated.', no_dup_pref),
   is_active: yup.boolean().default(true).nullable(),
 });
 

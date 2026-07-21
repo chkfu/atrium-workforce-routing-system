@@ -1,10 +1,20 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import BaseController from '../../../core/BaseController';
-import { TCddEduBase, TSchemaBase, TSltScoreBase } from '../../../util/types/schema_types';
+import {
+  TCddEduBase,
+  TSchemaBase,
+  TSltScoreBase,
+} from '../../../util/types/schema_types';
 import CddEduService from './service';
 import SltScoreService from '../../group_selection/slt_scoring/service';
 import { handle_async } from '../../../infra/middlewares/handle_async';
 import db_structure from '../../../util/config/db_structure';
+import AuthError from '../../../util/errors/AuthError';
+import { enum_user_role } from '../../../util/enums';
+import { ROLE_RANK } from '../../../util/config/role_rank';
+
+//  remarks: administrative fields blocked from self-service create/update; they feed the score calculation
+const RESTRICTED_FIELDS = ['is_verified', 'is_active'];
 
 //  Controller class
 
@@ -31,6 +41,71 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
 
   //  Methods
 
+  //  1.  REUSED
+
+  //  learnt: middleware to restrict record deletion by permission rank, or self-access to their own record
+  public restrict_batch_to_owner = (): RequestHandler =>
+    handle_async(async (req: Request, res: Response, next: NextFunction) => {
+      //  remarks: declaration
+      const err_msg =
+        '[CddEduController] error: the action has not been permitted.';
+      //  remarks: drop all request which user is not found
+      if (!req.user) throw new AuthError(403, err_msg);
+      //  remarks: (1) enable all staff who passed the criteria
+      if (
+        ROLE_RANK[req.user.user_role] >=
+        ROLE_RANK[enum_user_role.grade_1_assistant]
+      ) {
+        return next();
+      }
+      //  remarks: (2) user self-access, only candidate role is eligible
+      if (req.user.user_role !== enum_user_role.candidate) {
+        throw new AuthError(403, err_msg);
+      }
+      //  remarks: (3) requested records can be identified by _ids in body
+      const id_arr: string[] = req.body._ids.map((id: string | string[]) =>
+        typeof id === 'string' ? id : id[0],
+      );
+      const records: any[] = await Promise.all(
+        id_arr.map((id) => this.service.get_record_by_id(id)),
+      );
+      //  remarks: grant access by matching every record's candidate_id with the requester
+      const owns_all = records.every(
+        (record) =>
+          String(record.candidate_id) === String(req.user!.candidate_id),
+      );
+      if (!owns_all) throw new AuthError(403, err_msg);
+      return next();
+    });
+
+  //  learnt: middleware to block administrative fields (is_verified, is_active) from self-service create/update
+  public restrict_fields_to_editable = (): RequestHandler =>
+    handle_async(async (req: Request, res: Response, next: NextFunction) => {
+      //  remarks: declaration
+      const err_msg =
+        '[CddEduController] error: the action has not been permitted.';
+      if (!req.user) throw new AuthError(403, err_msg);
+      //  remarks: (1) enable all staff who passed the criteria
+      if (
+        ROLE_RANK[req.user.user_role] >=
+        ROLE_RANK[enum_user_role.grade_1_assistant]
+      ) {
+        return next();
+      }
+      if (req.user.user_role !== enum_user_role.candidate) {
+        throw new AuthError(403, err_msg);
+      }
+      //  remarks: locate the record(s) payload, covering both POST (records array keyed by table) and PATCH (_ids + flat fields) body shapes
+      const record_arr: any[] = Array.isArray(req.body[this.table])
+        ? req.body[this.table]
+        : [req.body];
+      const has_restricted_field = record_arr.some((record) =>
+        Object.keys(record).some((key) => RESTRICTED_FIELDS.includes(key)),
+      );
+      if (has_restricted_field) throw new AuthError(403, err_msg);
+      return next();
+    });
+
   //  2.  POST methods
 
   //  POST /api/v1/{table_name}
@@ -39,18 +114,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       const obj_arr: any = req.body[this.table];
       const records = await this.service.create_record_batch(obj_arr);
-      //  remarks: trigger immediate creation of scoring record with calculation
-      // const candidate_ids = Array.from(
-      //   new Set(records.map((record: any) => record.candidate_id)),
-      // );
-      // await Promise.all(
-      //   candidate_ids.map((candidate_id: any) =>
-      //     this.slt_score_service.update_score_edu_by_candidate(
-      //       String(candidate_id),
-      //     ),
-      //   ),
-      // );
-      //  normal response
       res.status(201).json({
         status: 'success',
         count: records.length,
@@ -67,18 +130,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
   public update_record_details_batch = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       const records = await this.service.update_record_details_batch(req.body);
-      // //  remarks: trigger immediate creation of scoring record with calculation
-      // const candidate_ids = Array.from(
-      //   new Set(records.map((record: any) => record.candidate_id)),
-      // );
-      // await Promise.all(
-      //   candidate_ids.map((candidate_id: any) =>
-      //     this.slt_score_service.update_score_edu_by_candidate(
-      //       String(candidate_id),
-      //     ),
-      //   ),
-      // );
-      //  normal response
       res.status(200).json({
         status: 'success',
         count: records.length,
@@ -94,18 +145,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       // remarks: update is_active as true
       const records = await this.service.update_record_active_batch(req.body);
-      // //  remarks: trigger immediate creation of scoring record with calculation
-      // const candidate_ids = Array.from(
-      //   new Set(records.map((record: any) => record.candidate_id)),
-      // );
-      // await Promise.all(
-      //   candidate_ids.map((candidate_id: any) =>
-      //     this.slt_score_service.update_score_edu_by_candidate(
-      //       String(candidate_id),
-      //     ),
-      //   ),
-      // );
-      //  normal response
       res.status(200).json({
         status: 'success',
         count: records.length,
@@ -127,17 +166,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
       );
       //  delete records and get returned data
       const records = await this.service.remove_record_batch(id_arr);
-      // //  remarks: trigger immediate recalculation of scoring record with new education data
-      // const candidate_ids = Array.from(
-      //   new Set(records.map((record: any) => record.candidate_id)),
-      // );
-      // await Promise.all(
-      //   candidate_ids.map((candidate_id: any) =>
-      //     this.slt_score_service.update_score_edu_by_candidate(
-      //       String(candidate_id),
-      //     ),
-      //   ),
-      // );
       return res.status(204).send();
     });
 

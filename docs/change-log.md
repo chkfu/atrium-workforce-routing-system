@@ -27,25 +27,19 @@ This file records the major version changes of the projects.
 - implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.
 - implemented login, logout and reset password pages and its navigation to corresponding role-based dashboard.
 - implemented role permission and self-access route at server-side authentication.
+- added the loading states for the save and delete buttons in the candidate profile pages.
+- applied view table of user profile for frequent reading joined tables, prevent unnecessary and duplicate data storage related to general login status details.
 
 ### Edited
 
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
 - updated documentation content at readme.
-- hide manager-only department fields from lower roles after opening up the list route.
-
-Lowering the role requirement on GET /departments let candidates and
-assistants list departments, but the response still included fields
-only managers should see (dept_capacity, importance_weight). Added a
-check that strips those two fields from the response for anyone below
-grade_2_manager, so lower roles only get what they need for the
-department dropdown.
+- hide manager-only department fields from lower roles after opening up the list route, and internal use fields in candidate profile page
 
 
 ### Deleted
 
 - remove redis lock from get_record_by_id, which access issue caused by the same user made many requests at the same time.
-
 
 <br/>
 

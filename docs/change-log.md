@@ -18,7 +18,7 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jul 19, 2026  - In Progress
+## [1.0.5] - Jul 21, 2026  - In Progress
 
 <i>Objective: build authentication-related interface and link navigation </i>
 
@@ -26,11 +26,12 @@ This file records the major version changes of the projects.
 
 - implemented user sign-up, log-in, access control, cookie and password reset for authentication at the server-side.
 - implemented login, logout and reset password pages and its navigation to corresponding role-based dashboard.
+- implemented role permission and self-access route at server-side authentication.
 
 ### Edited
 
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
-- updated documentation content at readme
+- updated documentation content at readme.
 
 <br/>
 

@@ -4,9 +4,11 @@ import { API } from "../../../config/api"
 import { NavigateFunction } from "react-router-dom"
 import { ROLE_DASHBOARD } from "./constants"
 import { HREF } from "../../../config/href";
+import { AppDispatch } from "../../../redux/store";
+import { setAuth } from "../../../redux/slices/AuthSlice";
 
 //  remarks: form login
-export const handle_login = async (data: AUTH_TYPES['login'], navigate: NavigateFunction, setIsLoading: (loading: boolean) => void) => {
+export const handle_login = async (data: AUTH_TYPES['login'], navigate: NavigateFunction, setIsLoading: (loading: boolean) => void, dispatch: AppDispatch) => {
   //  remarks: validate inputs
   if (!data.input || !data._password) {
     return alert(`[Login] error: invalid username or password not provided.`);
@@ -28,11 +30,13 @@ export const handle_login = async (data: AUTH_TYPES['login'], navigate: Navigate
     setIsLoading(false)
   }
   //  remarks: redirect to corresponding dashboard page by role
-  const has_dashboard = result?.token && ROLE_DASHBOARD[result.role];
+  const has_dashboard = result?.token && ROLE_DASHBOARD[result.data.user_role];
   if (!has_dashboard) {
     alert(`[Login] error: unable to identify user. please contact system administrators.`);
     return;
   }
+  //  remarks: populate auth redux slice with logged-in user's profile
+  dispatch(setAuth(result.data));
   navigate(has_dashboard);
 }
 

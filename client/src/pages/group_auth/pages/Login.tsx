@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import FormTextField from '../../../elements/FormTextField';
 import { useForm } from 'react-hook-form';
 import { handle_login } from '../utils/handlers';
@@ -11,6 +12,7 @@ import { HREF } from '../../../config/href';
 import { LoginSubmitButton } from '../elements/buttons';
 import { AuthSectHeading } from '../../../elements/AuthSectHeading';
 import NavAnchorBack from '../../../elements/NavAnchorBack';
+import { AppDispatch } from '../../../redux/store';
 
 export default function Login(): JSX.Element {
 
@@ -19,10 +21,11 @@ export default function Login(): JSX.Element {
 
   //  remarks: state management
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   //  remarks: handle submission
   const submit_handler = async (data: AUTH_TYPES['login']) => {
-    await handle_login(data, navigate, setIsLoading);
+    await handle_login(data, navigate, setIsLoading, dispatch);
   };
 
   //  reamrks: init react hook form

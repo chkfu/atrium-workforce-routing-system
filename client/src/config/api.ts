@@ -3,6 +3,7 @@ const BASE_URL = '/api/v1';
 export const API = {
   LOGIN: `${BASE_URL}/auth/login_user`,
   LOGOUT: `${BASE_URL}/auth/logout_user`,
+  SECURED_SELF: `${BASE_URL}/auth/secured-self`,
   RESET_OPT_OUT: `${BASE_URL}/auth/reset_password_opt_out`,
   RESET_OPT_IN: `${BASE_URL}/auth/reset_password_opt_in`,
   CANDIDATES: `${BASE_URL}/candidates`,

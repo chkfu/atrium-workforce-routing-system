@@ -7,6 +7,22 @@ import {
   enum_staff_role,
 } from './page_enums';
 
+//  auth
+
+export interface IAuth {
+  _id: number;
+  first_name: string;
+  last_name: string;
+  candidate_id: number | null;
+  staff_id: number | null;
+  user_role: string;
+}
+
+export interface IAuthState {
+  user: IAuth | null;
+  isAuthenticated: boolean;
+}
+
 //  candidates
 
 export interface ICandidate {

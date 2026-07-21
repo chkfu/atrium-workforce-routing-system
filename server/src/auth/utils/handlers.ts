@@ -111,7 +111,7 @@ export function clear_cookie_token(res: Response) {
 
 //  ==========  Token-related Methods  ==========
 
-//  remarks: call token from the request header for further verification
+//  remarks: call token from the request header or 'jwt' cookie for further verification
 export function extract_token_from_header(req: Request) {
   let token: string | null = null;
   if (
@@ -120,6 +120,9 @@ export function extract_token_from_header(req: Request) {
   ) {
     //  remarks: token as 'Bearer 1a2b3c4d5e', extract the latter part
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies?.jwt) {
+    //  remarks: check user stored token, with scenario which user has valid token at cookie
+    token = req.cookies.jwt;
   }
   //  (b) case of missing token, and terminate
   if (!token) {
@@ -168,7 +171,10 @@ export function access_check_password_changed(
   },
 ) {
   //  remarks: in here, decoded.iat has less digit in format, * 1000 for matching
-  const result: boolean = new Date(decoded.iat * 1000) > user.pw_changed_at;
+  //  remarks: pw_changed_at is null until a password reset ever happens - treat that as "never invalidated"
+  const result: boolean =
+    !!user.pw_changed_at &&
+    new Date(decoded.iat * 1000) > new Date(user.pw_changed_at);
   if (result) {
     const err_msg =
       '[AuthController] error: password changed, please login again';

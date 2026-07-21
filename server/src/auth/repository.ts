@@ -17,6 +17,26 @@ class UserRepository extends BaseRepository<TUserBase & TSchemaBase> {
 
   // Methods
 
+  //  GET Methods
+
+  //  remarks: get prepared view tables (user joined candidate and staff by local _id)
+  public async get_user_profile_by_username_email(username: string){
+    const result = await pool.query(
+      `SELECT * FROM "user_profiles" 
+      WHERE "username" = $1 OR "email" = $1;`, [username]
+    )
+    return result.rows[0];
+  }
+
+  //  remarks: get prepared view tables by id
+  public async get_user_profile_by_id(id: string){
+    const result = await pool.query(
+      `SELECT * FROM "user_profiles" 
+      WHERE "_id" = $1;`, [id]
+    )
+    return result.rows[0];
+  }
+
   //  POST Methods
 
   //  remarks: user registration, with new candidate record creation

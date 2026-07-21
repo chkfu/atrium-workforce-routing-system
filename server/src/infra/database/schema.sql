@@ -376,5 +376,18 @@ CREATE TABLE IF NOT EXISTS final_intakes(
   is_active BOOLEAN DEFAULT TRUE
 );
 
+--  ***  BUILD VIEWS TABLES
+
+--  learnt: view table enable advanced logical pattern without additional space occupied (virtual)
+--  learnt: COALESCE takes the first value which is not null; returns null if all are null
+CREATE OR REPLACE VIEW user_profiles AS
+SELECT sys_users.*, 
+  COALESCE(candidates.first_name, staff.first_name) AS first_name,    -- remarks: first_name column could be first name from either table
+  COALESCE(candidates.last_name, staff.last_name) AS last_name    -- remarks: last_name column could be last name from either table
+FROM sys_users    -- remarks: sys_users as the main table, _id as primary identifier
+LEFT JOIN candidates ON sys_users.candidate_id = candidates._id    -- remarks: based on foreign key, expand candidates details
+LEFT JOIN staff ON sys_users.staff_id = staff._id    -- remarks: based on foreign key, expand staff details
+;
+
 
 COMMIT;

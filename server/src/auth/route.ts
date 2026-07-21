@@ -33,6 +33,14 @@ router
 router.route('/reset_password_opt_out').post(user_controller.reset_password_opt_out());
 router.route('/reset_password_opt_in/:token').post(user_controller.reset_password_opt_in());
 
+//  remarks: user-secured access
+router
+  .route('/secured-self')
+  .get(
+    user_controller.access_control_token(),
+    user_controller.check_login_status(),
+  );
+
 
 //  Export
 

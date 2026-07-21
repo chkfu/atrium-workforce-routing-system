@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import logo_login from '../../assets/svg/user-icon.svg';
 import { handle_logout } from '../utils/handlers';
 import { TNavItem } from '../utils/types';
+import { AppDispatch } from '../../redux/store';
 
 //  remarks: entry point for login
 export const LoginButton = () => {
@@ -11,8 +13,25 @@ export const LoginButton = () => {
         type='button'
         className="transform px-4 h-8 rounded-3xl bg-slate-300 flex items-center justify-left cursor-pointer hover:bg-slate-100 hover:text-teal-800 transition duration-500 active:scale-95">
         <img src={logo_login} alt="User" width="24" height="24" className="text-teal-800" />
-        <span className="px-2 text-sm text-teal-800">Login</span>
+        <span className="px-2 text-sm text-teal-800 font-bold">Login</span>
       </button>
+    </Link>
+  );
+};
+
+//  remarks: entry point for login
+export const LogoutButton = () => {
+  //  remarks: auth state change
+  const dispatch = useDispatch<AppDispatch>();
+  //  remarks: display
+  return (
+    <Link to="/">
+    <button
+      type='button'
+      className="transform px-4 h-8 rounded-3xl bg-slate-300 flex items-center justify-left cursor-pointer hover:bg-slate-100 hover:text-teal-800 transition duration-500 active:scale-95"
+      onClick={() => handle_logout(dispatch)}>
+      <span className="px-2 text-sm text-teal-800 font-bold">Logout</span>
+    </button>
     </Link>
   );
 };
@@ -29,21 +48,6 @@ export const NavItem = ({ item }: { item: TNavItem }) => {
           {item.label}
         </div>
       </li>
-    </Link>
-  );
-};
-
-//  remarks: entry point for login
-export const LogoutButton = () => {
-  return (
-    <Link to="/">
-    <button 
-      type='button'
-      className="transform px-4 h-8 rounded-3xl bg-slate-300 flex items-center justify-left cursor-pointer hover:bg-slate-100 hover:text-teal-800 transition duration-500 active:scale-95"
-      onClick={handle_logout}>
-      <img src={logo_login} alt="User" width="24" height="24" className="text-teal-800" />
-      <span className="px-2 text-sm text-teal-800">Logout</span>
-    </button>
     </Link>
   );
 };

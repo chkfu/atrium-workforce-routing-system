@@ -193,19 +193,17 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
     }
 
     //  remarks: get target user from database
-    const user = (await this.repository.get_record_by_column(
-      'username',
-      input,
-    )) ?? (await this.repository.get_record_by_column(
-      'email',
-      input,
-    ));
+    const user = await this.repository.get_user_profile_by_username_email(input);    //  remarks: return target joined record by _id or email
     if (!user) {
       const err_msg = `[AuthService] error: target user cannot be found.`;
       loggers.auth_logger.error(err_msg);
       throw new ValueError(400, `${err_msg}`);
     }
-    const user_role = user.user_role;
+    if (!user.is_active){
+      const err_msg = `[AuthService] error: the user account has been locked. please contact the system administrator.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
 
     //  remarks: extract and compare the passwords
     const result_validate = await validate_password_bcrypt(
@@ -220,9 +218,37 @@ class UserService extends BaseService<TUserBase & TSchemaBase> {
 
     //  remarks: return token for verification
     const jwt_token = await sign_jwt_token(user._id);
+    return {     
+        _id: user._id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        candidate_id: user.candidate_id,
+        staff_id: user.staff_id,
+        user_role: user.user_role,
+        token: jwt_token,
+    };
+  }
+
+  //  remarks: subsequent check login status, from token
+  async check_login_user(id: number) {
+    const user = await this.repository.get_user_profile_by_id(String(id));
+    if (!user) {
+      const err_msg = `[AuthService] error: target user cannot be found.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
+    if (!user.is_active) {
+      const err_msg = `[AuthService] error: the user account has been locked. please contact the system administrator.`;
+      loggers.auth_logger.error(err_msg);
+      throw new ValueError(400, `${err_msg}`);
+    }
     return {
-      user_role: user_role,
-      token: jwt_token,
+      _id: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      candidate_id: user.candidate_id,
+      staff_id: user.staff_id,
+      user_role: user.user_role,
     };
   }
 

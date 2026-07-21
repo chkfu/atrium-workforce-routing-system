@@ -1,7 +1,9 @@
 import logo_atrium from '../../assets/svg/atrium-logo.svg';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { LoginButton, LogoutButton, NavItem } from './items';
 import { TNavItem } from '../utils/types';
+import { RootState } from '../../redux/store';
 
 //  remarks: logo container
 export const SectionLogo = function () {
@@ -22,10 +24,24 @@ export const SectionLogo = function () {
 
 //  remarks: login container
 export const SectionLogin = function () {
+  //  remarks: validate user login status
+  const has_login: boolean = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user_fname: string = useSelector(
+    (state: RootState) => state.auth.user?.first_name
+  ) as string;
+
   return (
     <div className="flex absolute right-8 top-8 gap-2">
-      <LoginButton />
-      <LogoutButton />
+      {has_login ? (
+        <div className="flex gap-4 items-center">
+          <h4 className="text-md font-bold text-gray-300">
+            Hi, {user_fname[0].toUpperCase() + user_fname.slice(1).toLowerCase()}
+          </h4>
+          <LogoutButton />
+        </div>
+      ) : (
+        <LoginButton />
+      )}
     </div>
   );
 };

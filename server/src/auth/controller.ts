@@ -1,7 +1,7 @@
 import BaseController from '../core/BaseController';
 import { TUserBase, TSchemaBase } from '../util/types/schema_types';
 import UserService from './service';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, response } from 'express';
 import { handle_async } from '../infra/middlewares/handle_async';
 import {
   verify_token_jwt,
@@ -61,7 +61,14 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
           status: 'success',
           message: 'Login successful.',
           token: result.token,
-          role: result.user_role,
+          data: {
+          _id: result._id,
+          first_name: result.first_name,
+          last_name: result.last_name,
+          candidate_id: result.candidate_id,
+          staff_id: result.staff_id,
+          user_role: result.user_role,
+          }
         });
       },
     );
@@ -76,6 +83,23 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
         res.status(200).json({
           status: 'success',
           message: 'Logout successful.',
+        });
+      },
+    );
+  }
+
+
+  //  remarks: restore session on page refresh, using the token already verified by access_control_token()
+  //  GET  /api/v1/auth/check_login_status
+  public check_login_status() {
+    return handle_async(
+      async (req: Request, res: Response, next: NextFunction) => {
+        const result = await (this.service as UserService).check_login_user(
+          req.user!._id,    //  remarks: _id from req.user to prevent frontend polluted injection
+        );
+        res.status(200).json({
+          status: 'success',
+          data: result,
         });
       },
     );
@@ -108,8 +132,6 @@ class UserController extends BaseController<TUserBase & TSchemaBase> {
       },
     );
   }
-
-
 
   //  remarks:  opt-in procedure, receiving new passwords to be set
   public reset_password_opt_in() {

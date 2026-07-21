@@ -6,6 +6,7 @@ import axios from 'axios';
 import './index.css';
 import App from './App';
 import { store } from './redux/store';
+import AuthProvider from './providers/AuthProvider';
 
 //  learnt: require the broswer store axios related details in cookie
 axios.defaults.withCredentials = true;
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <ReduxProvider store={store}>
         <BrowserRouter>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </ReduxProvider>
   </StrictMode>

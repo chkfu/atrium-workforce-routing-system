@@ -32,6 +32,20 @@ This file records the major version changes of the projects.
 
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
 - updated documentation content at readme.
+- hide manager-only department fields from lower roles after opening up the list route.
+
+Lowering the role requirement on GET /departments let candidates and
+assistants list departments, but the response still included fields
+only managers should see (dept_capacity, importance_weight). Added a
+check that strips those two fields from the response for anyone below
+grade_2_manager, so lower roles only get what they need for the
+department dropdown.
+
+
+### Deleted
+
+- remove redis lock from get_record_by_id, which access issue caused by the same user made many requests at the same time.
+
 
 <br/>
 
@@ -110,7 +124,7 @@ This file records the major version changes of the projects.
 
 - fixed sendCommand syntax caused by specific format requried in node-redis, resumed redis client connection.
 
-### Delete
+### Deleted
 
 - remove draft schema `schema_draft.sql` after finalised version is confirmed.
 
@@ -141,7 +155,7 @@ This file records the major version changes of the projects.
 
 - fixed postgre warning of ssl related settings at `pool.ts`.
 
-### Delete
+### Deleted
 
 - removed controller and repositories scripts for table `departments` and `staff`.
 

@@ -117,24 +117,21 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
     //  remarks: this.primary_key is development setting, skip column validation
     //  remarks: in case of spec case as req.params['id'] is an array, normally string
     //  leanrt: express `params` always return string, but not affect in schema types
-    return await this.cache_service.handle_lock(this.table, id, async () => {
-      //  cache calling details
-      const cached_key: string = this.cache_service.create_key(this.table, id);
-      const cached_val: any = await this.cache_service.get_cache(cached_key);
-      if (cached_val) {
-        return cached_val;
-      }
-      //  error handling
-      const result = await this.repository.get_record_by_id(id);
-      if (result === null || result === undefined)
-        throw new ValueError(
-          404,
-          `[${this.table.toUpperCase()}] error: no record is found.`,
-        );
-      //  update cache
-      await this.cache_service.set_cache(cached_key, result);
-      return result;
-    });
+    const cached_key: string = this.cache_service.create_key(this.table, id);
+    const cached_val: any = await this.cache_service.get_cache(cached_key);
+    if (cached_val) {
+      return cached_val;
+    }
+    //  error handling
+    const result = await this.repository.get_record_by_id(id);
+    if (result === null || result === undefined)
+      throw new ValueError(
+        404,
+        `[${this.table.toUpperCase()}] error: no record is found.`,
+      );
+    //  update cache
+    await this.cache_service.set_cache(cached_key, result);
+    return result;
   };
 
   //  GET /api/v1/{table_name}/column/:col_key/:col_val

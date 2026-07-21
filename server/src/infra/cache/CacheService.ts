@@ -1,6 +1,7 @@
 import { RedisClientType } from 'redis';
 import redis from '../database/redis';
 import ValueError from '../../util/errors/ValueError';
+import AppError from '../../util/errors/AppError';
 
 //  Cache service class
 
@@ -70,7 +71,8 @@ class CacheService {
     //  check lock status
     const is_locked: boolean = await this.acquire_lock(tb_name, id);
     if (!is_locked)
-      throw new Error(
+      throw new AppError(
+        423,
         `[${this.name}] error: cache access '${lock_key}' is currenly locked`,
       );
     //  execution

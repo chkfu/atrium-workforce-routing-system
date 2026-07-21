@@ -1,9 +1,10 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import DepartmentsController from './controller';
 import AuthController from '../../../auth/controller';
 import { TDepartmentBase, TSchemaBase, TUserBase } from '../../../util/types/schema_types';
 import { enum_user_role } from '../../../util/enums';
 import db_structure from '../../../util/config/db_structure';
+import { ROLE_RANK } from '../../../util/config/role_rank';
 
 //  Import router
 
@@ -29,11 +30,37 @@ const auth_controller = new AuthController(
 
 //  Build routes
 
+//  remarks: provide tailor-made data for grade below managers
+//  remarks: considered confidential info will be disclosed with lower restriction
+function restrict_department_fields(req: Request, res: Response, next: NextFunction) {
+  const user_rank = ROLE_RANK[req.user!.user_role];
+  const manager_rank = ROLE_RANK[enum_user_role.grade_2_manager];
+  if (user_rank >= manager_rank) {
+    
+    return next();
+  }
+  //  learnt: through delete column to hide unnecessary columns
+  //  learnt: bind res here first, so send_json can be called directly later
+  const send_json = res.json.bind(res);
+  res.json = function (body: any) {
+    if (body.data && body.data.result) {
+      for (let i = 0; i < body.data.result.length; i++) {
+        delete body.data.result[i].dept_capacity;
+        delete body.data.result[i].importance_weight;
+      }
+    }
+    return send_json(body);
+  };
+
+  next();
+}
+
 router
   .route('/')
   .get(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_2_manager, false),
+    auth_controller.access_restrict_roles(enum_user_role.candidate, false),
+    restrict_department_fields,
     dept_controller.get_record_batch(),
   )
   .post(

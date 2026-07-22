@@ -3,10 +3,7 @@ import SectCardListReuse from '../elements/SectCardListReuse';
 import { TCardItem } from '../../../utils/types/element_types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import {
-  director_card_list_personal,
-  director_card_list_task_panel,
-} from '../utils/structure';
+import { STRUCTURE } from '../utils/structure';
 
 //  Function
 
@@ -15,8 +12,8 @@ export default function DirectorDashboard(): JSX.Element {
   const staff_id = useSelector((state: RootState) => state.auth.user?.staff_id);
 
   //  remarks: declaration
-  const card_list_personal = director_card_list_personal(staff_id);
-  const card_list_task_panel = director_card_list_task_panel;
+  const card_list_personal = STRUCTURE.dashboard.personal.director(staff_id);
+  const card_list_task_panel = STRUCTURE.dashboard.task_panel.director;
 
   //   remarks: display
   return (

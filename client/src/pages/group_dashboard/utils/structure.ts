@@ -3,7 +3,7 @@ import { HREF } from '../../../config/href';
 
 //  Director Dashboard
 
-export const director_card_list_personal = (staff_id?: number | null): TCardItem[] => [
+const director_card_list_personal = (staff_id?: number | null): TCardItem[] => [
   {
     title: 'View Profile',
     description: 'View and update your personal information and profile.',
@@ -11,7 +11,7 @@ export const director_card_list_personal = (staff_id?: number | null): TCardItem
   },
 ];
 
-export const director_card_list_task_panel: TCardItem[] = [
+const director_card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Staff',
     description: 'Oversee and manage all staff members and their roles',
@@ -36,7 +36,7 @@ export const director_card_list_task_panel: TCardItem[] = [
 
 //  Manager Dashboard
 
-export const manager_card_list_personal = (staff_id?: number | null): TCardItem[] => [
+const manager_card_list_personal = (staff_id?: number | null): TCardItem[] => [
   {
     title: 'View Profile',
     description: 'View and update your personal information and profile.',
@@ -44,7 +44,7 @@ export const manager_card_list_personal = (staff_id?: number | null): TCardItem[
   },
 ];
 
-export const manager_card_list_task_panel: TCardItem[] = [
+const manager_card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
     description: 'Review and manage candidate applications and profiles',
@@ -64,7 +64,7 @@ export const manager_card_list_task_panel: TCardItem[] = [
 
 //  Assistant Dashboard
 
-export const assistant_card_list_personal = (staff_id?: number | null): TCardItem[] => [
+const assistant_card_list_personal = (staff_id?: number | null): TCardItem[] => [
   {
     title: 'View Profile',
     description: 'View and update your personal information and profile.',
@@ -72,7 +72,7 @@ export const assistant_card_list_personal = (staff_id?: number | null): TCardIte
   },
 ];
 
-export const assistant_card_list_task_panel: TCardItem[] = [
+const assistant_card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
     description: 'Manage and review candidate applications',
@@ -82,7 +82,7 @@ export const assistant_card_list_task_panel: TCardItem[] = [
 
 //  Candidate Dashboard
 
-export const candidate_card_list_personal = (candidate_id?: number | null): TCardItem[] => [
+const candidate_card_list_personal = (candidate_id?: number | null): TCardItem[] => [
   {
     title: 'View Profile',
     description: 'View and update your personal information and profile.',
@@ -90,10 +90,31 @@ export const candidate_card_list_personal = (candidate_id?: number | null): TCar
   },
 ];
 
-export const candidate_card_list_task_panel: TCardItem[] = [
+const candidate_card_list_task_panel: TCardItem[] = [
   {
     title: 'View Progress',
     description: 'Monitor your application status and task assignments.',
     path: '/#',
   },
 ];
+
+
+//  remarks: centralised collection
+export const STRUCTURE = {
+  'dashboard': {
+    'personal': {
+      'director': director_card_list_personal,
+      'manager': manager_card_list_personal,
+      'assistant': assistant_card_list_personal,
+      'candidate': candidate_card_list_personal,
+    },
+    'task_panel': {
+      'director': director_card_list_task_panel,
+      'manager': manager_card_list_task_panel,
+      'assistant': assistant_card_list_task_panel,
+      'candidate': candidate_card_list_task_panel,
+    },
+  },
+};
+
+export default STRUCTURE;

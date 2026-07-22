@@ -3,10 +3,7 @@ import SectCardListReuse from '../elements/SectCardListReuse';
 import { TCardItem } from '../../../utils/types/element_types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import {
-  candidate_card_list_personal,
-  candidate_card_list_task_panel,
-} from '../utils/structure';
+import { STRUCTURE } from '../utils/structure';
 
 //  Function
 
@@ -15,8 +12,8 @@ export default function CandidateDashboard(): JSX.Element {
   const candidate_id = useSelector((state: RootState) => state.auth.user?.candidate_id);
 
   //  remarks: declaration
-  const card_list_personal = candidate_card_list_personal(candidate_id);
-  const card_list_task_panel = candidate_card_list_task_panel;
+  const card_list_personal = STRUCTURE.dashboard.personal.candidate(candidate_id);
+  const card_list_task_panel = STRUCTURE.dashboard.task_panel.candidate;
 
   //  remarks: display
   return (

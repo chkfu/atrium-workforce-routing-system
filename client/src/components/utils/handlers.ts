@@ -1,9 +1,11 @@
 import { API } from "../../config/api"
 import axios from 'axios';
+import { NavigateFunction } from "react-router-dom";
 import { AppDispatch } from "../../redux/store";
 import { clearAuth } from "../../redux/slices/AuthSlice";
+import { HREF } from "../../config/href";
 
-export const handle_logout = async (dispatch: AppDispatch) => {
+export const handle_logout = async (dispatch: AppDispatch, navigate: NavigateFunction) => {
   try {
     await axios.post(API.LOGOUT);
   } catch (err) {
@@ -13,4 +15,5 @@ export const handle_logout = async (dispatch: AppDispatch) => {
     return;
   }
   dispatch(clearAuth());
+  navigate(HREF.HOME);
 };

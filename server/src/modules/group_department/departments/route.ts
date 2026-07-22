@@ -36,12 +36,10 @@ function restrict_department_fields(req: Request, res: Response, next: NextFunct
   const user_rank = ROLE_RANK[req.user!.user_role];
   const manager_rank = ROLE_RANK[enum_user_role.grade_2_manager];
   if (user_rank >= manager_rank) {
-    
     return next();
   }
   //  learnt: through delete column to hide unnecessary columns
-  //  learnt: bind res here first, so send_json can be called directly later
-  const send_json = res.json.bind(res);
+  const send_json = res.json;
   res.json = function (body: any) {
     if (body.data && body.data.result) {
       for (let i = 0; i < body.data.result.length; i++) {
@@ -49,9 +47,9 @@ function restrict_department_fields(req: Request, res: Response, next: NextFunct
         delete body.data.result[i].importance_weight;
       }
     }
-    return send_json(body);
+    return send_json.call(res, body);   //  learnt: refer this to res, put body into send_json
   };
-
+  //  remarks: enable to run the subsequent chained methods
   next();
 }
 

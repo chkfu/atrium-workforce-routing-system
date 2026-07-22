@@ -18,7 +18,17 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.5] - Jul 21, 2026  - In Progress
+## [1.0.6] - Jul 22, 2026  -  In Progress
+
+<i>Objective: implement scoring first algorithm for the candidate selection stage.</i>
+
+### Added
+
+### Edited
+
+<br/>
+
+## [1.0.5] - Jul 22, 2026
 
 <i>Objective: build authentication-related interface and link navigation </i>
 
@@ -35,6 +45,10 @@ This file records the major version changes of the projects.
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
 - updated documentation content at readme.
 - hide manager-only department fields from lower roles after opening up the list route, and internal use fields in candidate profile page
+
+### Fixed
+
+- the user permit issues causing by self-access checks comparing the wrong user identifier.
 
 
 ### Deleted

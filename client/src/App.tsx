@@ -7,9 +7,9 @@ import Login from './pages/group_auth/pages/Login';
 import ForgetPassword from './pages/group_auth/pages/ForgetPassword'
 import ResetPassword from './pages/group_auth/pages/ResetPassword';
 import Error from './pages/group_navigation/Error';
-import DashboardCandidate from './pages/group_dashboard/DashboardCandidate';
-import DashboardAssistant from './pages/group_dashboard/DashboardAssistant';
-import DashboardManager from './pages/group_dashboard/DashboardManager';
+import DashboardCandidate from './pages/group_dashboard/pages/DashboardCandidate';
+import DashboardAssistant from './pages/group_dashboard/pages/DashboardAssistant';
+import DashboardManager from './pages/group_dashboard/pages/DashboardManager';
 import ManageCandidates from './pages/group_manage_record/ManageCandidates';
 import ManageStaff from './pages/group_manage_record/ManageStaff';
 import ManageDepartments from './pages/group_manage_record/ManageDepartments';

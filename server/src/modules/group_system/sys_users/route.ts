@@ -34,23 +34,15 @@ const auth_controller = new AuthController(
 router
   .route('/')
   .get(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.get_record_batch(),
   )
   .post(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.create_record_batch(),
   )
   .patch(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.update_record_details_batch(),
   )
   .patch(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.update_record_active_batch(),
   )
   .patch(
@@ -58,32 +50,24 @@ router
     user_controller.update_record_details_self(),   //  remarks: user's self-access entry point
   )
   .delete(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.remove_record_batch(),
   );
 
 router
   .route('/activation')
   .patch(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.update_record_active_batch(),
   );
 
 router
   .route('/empty')
   .delete(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.empty_record_all(),
   );
 
 router
   .route('/:id')
   .get(
-    auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.sys_admin, false),
     user_controller.get_record_by_id(),
   );
 

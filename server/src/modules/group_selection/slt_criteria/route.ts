@@ -76,6 +76,15 @@ router
     slt_criteria_controller.get_record_by_id(),
   );
 
+//  remarks: dept_id is UNIQUE on select_criteria, so this always resolves to at most one record
+router
+  .route('/column/:col_key/:col_val')
+  .get(
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    slt_criteria_controller.get_record_column(),
+  );
+
 //  Testort
 
 export default router;

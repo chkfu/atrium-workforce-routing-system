@@ -15,7 +15,7 @@ export const select_input_field = (
         options={config.options}
         register={register(name)}
         error={errors[name] as any}
-        isDisabled={false}
+        isDisabled={!!config.disabled}
         required={false}
         placeholder={config.placeholder}
       />
@@ -24,11 +24,12 @@ export const select_input_field = (
   return (
     <FormTextField
       type={config.type || 'text'}
+      step={config.step}
       label={config.label}
       placeholder={config.placeholder}
       register={register(name)}
       error={errors[name]}
-      isDisabled={false}
+      isDisabled={!!config.disabled}
       required={false}
     />
   );

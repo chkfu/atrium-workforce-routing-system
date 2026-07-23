@@ -147,3 +147,18 @@ export interface IDepartment {
 export interface IDepartmentList {
   value: IDepartment[];
 }
+
+//  selection
+
+export interface ISelectCriteria {
+  _id: number;
+  dept_id: number;
+  min_score_qual: number;
+  min_score_exp: number;
+  min_score_tests: number;
+  pref_criteria: Record<string, string[]>;
+  blacklist: Record<string, string[]>;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+}

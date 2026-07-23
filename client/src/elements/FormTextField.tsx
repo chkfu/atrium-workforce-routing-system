@@ -9,6 +9,7 @@ export default function FormTextField({
   isDisabled = false,
   required = false,
   className = 'mb-4',
+  step = 1
 }: {
   label: string;
   placeholder?: string;
@@ -18,6 +19,7 @@ export default function FormTextField({
   isDisabled?: boolean;
   required?: boolean;
   className?: string;
+  step?: number;
 }) {
   return (
     <div className={`${className} group`}>
@@ -29,6 +31,7 @@ export default function FormTextField({
       {/*  section: input field */}
       <input
         type={type}
+        step={type === 'number' ? step : 1}
         placeholder={placeholder || label}
         disabled={isDisabled}
         {...register}
@@ -36,7 +39,7 @@ export default function FormTextField({
           error
             ? 'border-red-500 focus:ring-red-300 bg-red-50'
             : 'border-gray-300 focus:ring-teal-300'
-        } ${isDisabled ? 'bg-gray-200 text-gray-600' : ''}`}
+        } ${isDisabled && 'bg-gray-200 text-gray-600'} ${isDisabled && 'bg-gray-300'}`}
       />
       {/*  section: error message, by requriements */}
       {error && <p className="mt-1 text-sm font-bold text-red-600">{error.message}</p>}

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { SectionDetails } from './elements/layout';
+import { SectionDetails, SectionSelectCriteria } from './elements/layout';
 import Accordion from '../../../elements/Accordion';
-import { IDepartment } from '../../../utils/types/redux_types';
+import { IDepartment, ISelectCriteria } from '../../../utils/types/redux_types';
 import axios from 'axios';
 import { API } from '../../../config/api';
 import Error from '../../../pages/group_navigation/Error';
@@ -14,13 +14,12 @@ export default function ProfileDepartment(): JSX.Element {
   //  remarks: identify the specific department profile to be viewed
   const { id } = useParams<{ id: string }>();
 
-  //  remarks: dispatch for Redux
-  const dispatch = useDispatch();
-
   //  remarks: local state management
   const [targetDept, setTargetDept] = useState<IDepartment | null>(null);
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
-  const [getError, setGetError] = useState<any | null>(null);
+  const [selectCriteria, setSelectCriteria] = useState<ISelectCriteria | null>(null);
+  const [pageLoading, setPageLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [getError, setGetError] = useState<string>('');
 
   //  remarks: loading time with timeout error page
   useEffect(() => {
@@ -46,28 +45,29 @@ export default function ProfileDepartment(): JSX.Element {
   }, [id]);
 
   //  remarks: query select criteria - department-based
-  // useEffect(() => {
-  //   axios
-  //     .get(`${API.SELECT_CRITERIA}/${id}`)
-  //     .then((res) => {
-  //       const data = res.data.data.record;
-  //       setTargetSltCriteria(data);
-  //     })
-  //     .catch((err: any) => {
-  //       const err_msg = `[ProfileDept] error: Failed to load select criteria.`
-  //       console.error(err_msg, err);
-  //       // remarks: state change for re-render
-  //       setTargetSltCriteria(null);
-  //       setGetError(err.message || err_msg);
-  //     });
-  // }, [id]);
+  useEffect(() => {
+    axios
+      .get(`${API.SELECT_CRITERIA}/column/dept_id/${id}`)
+      .then((res) => {
+        const data = res.data.data.record;
+        setSelectCriteria(data);
+      })
+      .catch((err: any) => {
+        const err_msg = `[ProfileDept] error: Failed to load select criteria.`
+        console.error(err_msg, err);
+        // remarks: state change for re-render
+        setSelectCriteria(null);
+        setGetError(err.message || err_msg);
+      });
+  }, [id]);
 
   //  remarks: display
   if (targetDept) {
     return (
       <div id="dept-profile-container">
         <Accordion title="Department Profile">
-          <SectionDetails targetDept={targetDept} />
+          <SectionDetails targetDept={targetDept}  setIsLoading={setIsLoading} />
+          <SectionSelectCriteria targetDept={targetDept} selectCriteria={selectCriteria} setIsLoading={setIsLoading} />
         </Accordion>
       </div>
     );

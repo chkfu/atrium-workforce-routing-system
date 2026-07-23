@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS departments(
   _id  SERIAL  PRIMARY KEY,
   dept_name  VARCHAR(50) NOT NULL,
   dept_capacity  INTEGER DEFAULT 50,
-  importance_weight  NUMERIC(5,3) DEFAULT 0,
+  importance_weight  NUMERIC(5,2) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_active BOOLEAN DEFAULT TRUE
@@ -189,9 +189,11 @@ CREATE TABLE IF NOT EXISTS select_weighting(
   _id  SERIAL  PRIMARY KEY,
   strategy_name  VARCHAR(50),
   strategy_goal  TEXT,
-  weight_qual  NUMERIC(4,3),
-  weight_exp  NUMERIC(4,3),
-  weight_tests  NUMERIC(4,3),
+  weight_qual  NUMERIC(3,2) CHECK (weight_qual BETWEEN 0 AND 1),
+  weight_exp  NUMERIC(3,2) CHECK (weight_exp BETWEEN 0 AND 1),
+  weight_tests  NUMERIC(3,2) CHECK (weight_tests BETWEEN 0 AND 1),
+  --  learnt: implement new rules with constraint
+  CONSTRAINT chk_weight_sum CHECK (weight_qual + weight_exp + weight_tests <= 1),
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_active  BOOLEAN DEFAULT TRUE
@@ -201,11 +203,11 @@ CREATE TABLE IF NOT EXISTS select_weighting(
 CREATE TABLE IF NOT EXISTS select_criteria (
   _id  SERIAL PRIMARY KEY,
   dept_id  INTEGER UNIQUE,
-  min_score_qual  NUMERIC(5,2) DEFAULT 0,
-  min_score_exp  NUMERIC(5,2) DEFAULT 0,
-  min_score_tests  NUMERIC(5,2) DEFAULT 0,
-  pref_criteria  JSONB,
-  blacklist  JSONB,
+  min_score_qual  NUMERIC(5,2) DEFAULT 0 CHECK (weight_qual BETWEEN 0 AND 100),
+  min_score_exp  NUMERIC(5,2) DEFAULT 0 CHECK (weight_qual BETWEEN 0 AND 100),
+  min_score_tests  NUMERIC(5,2) DEFAULT 0 CHECK (weight_qual BETWEEN 0 AND 100),
+  pref_criteria  JSONB DEFAULT '{}',
+  blacklist  JSONB DEFAULT '{}',
   CONSTRAINT fk_dept 
     FOREIGN KEY (dept_id) REFERENCES departments(_id)
     ON DELETE CASCADE,

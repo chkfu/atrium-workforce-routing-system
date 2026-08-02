@@ -3,12 +3,9 @@ import BaseController from '../../../core/BaseController';
 import {
   TCddEduBase,
   TSchemaBase,
-  TSltScoreBase,
 } from '../../../util/types/schema_types';
 import CddEduService from './service';
-import SltScoreService from '../../group_selection/slt_scoring/service';
 import { handle_async } from '../../../infra/middlewares/handle_async';
-import db_structure from '../../../util/config/db_structure';
 import AuthError from '../../../util/errors/AuthError';
 import { enum_user_role } from '../../../util/enums';
 import { ROLE_RANK } from '../../../util/config/role_rank';
@@ -19,8 +16,6 @@ const RESTRICTED_FIELDS = ['is_verified', 'is_active'];
 //  Controller class
 
 class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
-  private slt_score_service: SltScoreService;
-
   //  Constructor
   constructor(
     table: string,
@@ -29,14 +24,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
   ) {
     const service = new CddEduService(table, columns, primary_key);
     super(table, columns, primary_key, service);
-    this.slt_score_service = new SltScoreService(
-      db_structure.slt_score.table,
-      db_structure.slt_score.columns as Extract<
-        keyof (TSltScoreBase & TSchemaBase),
-        string
-      >[],
-      db_structure.slt_score.primary_key,
-    );
   }
 
   //  Methods
@@ -175,7 +162,6 @@ class CddEduController extends BaseController<TCddEduBase & TSchemaBase> {
   public empty_record_all = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
       await this.service.empty_record_all();
-      await this.slt_score_service.reset_score_edu_nullify();
       return res.status(204).send();
     });
 }

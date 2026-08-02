@@ -13,7 +13,10 @@ import { enum_gender_obj } from '../../../util/enums';
 
 //  Service class
 
-class DepartmentService extends BaseService<TDepartmentBase & TSchemaBase> {
+class DepartmentService extends BaseService<
+  TDepartmentBase & TSchemaBase,
+  DepartmentRepository
+> {
   //  Constructor
   constructor(
     table: string,
@@ -121,6 +124,10 @@ class DepartmentService extends BaseService<TDepartmentBase & TSchemaBase> {
         );
       return result;
     }
+
+    public get_department_criteria_desc = async () => {
+      return this.repository.get_department_criteria_desc();
+    };
 }
 
 //  Export

@@ -154,12 +154,13 @@ export type TSltScoreBase = {
 //  tags: prob_intakes
 export type TPbtIntakeBase = {
   candidate_id: number;
-  department_id: number;
   select_weight_id: number;
   select_score_id: number;
-  intake_round: number;
-  training_start: Date;
-  training_end: Date;
+  dept_intake: number;
+  round_intake: number;
+  date_start: Date;
+  date_end: Date;
+  remarks: string;
   is_active: boolean;
 };
 

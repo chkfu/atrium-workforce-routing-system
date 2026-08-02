@@ -15,9 +15,9 @@ export enum enum_prob_status {
 
 export enum enum_staff_role {
   pending = 'pending',
-  grade_1_assistant = 'grade_1_assistant',
-  grade_2_manager = 'grade_2_manager',
-  grade_3_executive = 'grade_3_executive',
+  grade_1_assistant = 'Assistant (1)',
+  grade_2_manager = 'Manager (2)',
+  grade_3_director = 'Directors (3)',
 }
 
 export enum enum_cert_institute {

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start": "node dist/server.js",
-    "db:init": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/schema.sql'",
+    "db:init": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/commands/schema.sql'",
+    "db:drop": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/commands/drop_db.sql'",
     "build": "tsc",
     "test": "jest"
   },

@@ -94,6 +94,26 @@ export function FormCreate() {
             { value: 'failed', label: 'Failed' },
           ]}
         />
+        <FormTextField
+          label="Username"
+          register={register('username')}
+          error={errors.username}
+          required={true}
+        />
+        <FormTextField
+          label="Password"
+          type="password"
+          register={register('_password')}
+          error={errors._password}
+          required={true}
+        />
+        <FormTextField
+          label="Confirm Password"
+          type="password"
+          register={register('_password_confirm')}
+          error={errors._password_confirm}
+          required={true}
+        />
       </div>
 
       {/*  section: buttons - fixed at bottom  */}

@@ -85,7 +85,7 @@ export function TableSection(): JSX.Element {
         {selectedStaff.length === 1 ? 'staff member' : 'staff members'} selected
       </p>
       <div className="flex-1 overflow-x-auto overflow-y-auto">
-        <table className="min-w-300 border-collapse table-auto w-full">
+        <table className="min-w-300 h-84 border-collapse table-auto w-full">
           <TableHeaderBox />
           <TableBodyBox />
         </table>

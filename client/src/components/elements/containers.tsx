@@ -39,7 +39,7 @@ export const SectionLogin = function () {
         <div className="flex gap-4 items-center">
           <Link to={ROLE_DASHBOARD[user_role] ?? HREF.HOME}>
             <h4 className="text-md font-bold text-gray-300 px-3 py-1 shadow-lg active:scale-98 border-gray-400 border">
-              Hi, {user_fname[0].toUpperCase() + user_fname.slice(1).toLowerCase()}
+              Dashboard | {user_fname[0].toUpperCase() + user_fname.slice(1).toLowerCase()}
             </h4>
           </Link>
           <LogoutButton />

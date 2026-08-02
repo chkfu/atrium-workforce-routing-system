@@ -81,7 +81,7 @@ router
   .route('/activation')
   .patch(
     auth_controller.access_control_token(),
-    auth_controller.access_restrict_roles(enum_user_role.grade_2_manager, false),
+    // auth_controller.access_restrict_roles(enum_user_role.grade_2_manager, false),
     dept_controller.update_record_active_batch(),
   );
 

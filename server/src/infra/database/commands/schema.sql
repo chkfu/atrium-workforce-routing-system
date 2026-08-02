@@ -4,8 +4,8 @@ BEGIN;
 
 --  remarks: postgres enums are not supported by 'create if not exists'
 --           'DO $$ $$' for static catching; if not, script will crash
-DO $$ BEGIN CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_director'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
-DO $$ BEGIN CREATE TYPE enum_user_role AS ENUM ('candidate', 'grade_1_assistant', 'grade_2_manager', 'grade_3_director', 'sys_admin'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE enum_staff_role AS ENUM ('pending', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE enum_user_role AS ENUM ('candidate', 'grade_1_assistant', 'grade_2_manager', 'grade_3_executive', 'sys_admin'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_gender AS ENUM ('male', 'female', 'other'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_prob_status AS ENUM ('selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE TYPE enum_hire_decision AS ENUM ('approved', 'rejected', 'deferred'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
@@ -286,116 +286,6 @@ CREATE TABLE IF NOT EXISTS probation_intakes(
 );
 
 
-
-
--- CREATE TABLE IF NOT EXISTS probation_scoring(
---   _id  SERIAL  PRIMARY KEY,
---   candidate_id  INTEGER,
---   department_id  INTEGER,
---   count_awarding  INTEGER,
---   count_warning  INTEGER,
---   score_performance  NUMERIC(5,2) DEFAULT 0,
---   score_attendance  NUMERIC(5,2) DEFAULT 0,
---   score_adaptability  NUMERIC(5,2) DEFAULT 0,
---   CONSTRAINT fk_candidate_probation
---     FOREIGN KEY (candidate_id)
---     REFERENCES candidates(_id)
---     ON DELETE SET NULL,
---   CONSTRAINT fk_department_probation
---     FOREIGN KEY (department_id)
---     REFERENCES departments(_id)
---     ON DELETE SET NULL,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   is_active BOOLEAN DEFAULT TRUE
--- );
-
--- --  5. hiring stage
-
--- CREATE TABLE IF NOT EXISTS hire_weighting(
---   _id  SERIAL  PRIMARY KEY,
---   method_name  VARCHAR(50),
---   method_goal  TEXT,
---   weight_performance  NUMERIC(4,3),
---   weight_attendance  NUMERIC(4,3),
---   weight_adaptability  NUMERIC(4,3),
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   is_active BOOLEAN DEFAULT TRUE
--- );
-
--- CREATE TABLE IF NOT EXISTS hire_criteria(
---   _id  SERIAL  PRIMARY KEY,
---   dept_id INTEGER UNIQUE,
---   min_score_foundation NUMERIC(5,2) DEFAULT 0,
---   min_score_preference NUMERIC(5,2) DEFAULT 0,
---   pref_criteria JSONB,
---   blacklist JSONB,
---   CONSTRAINT fk_dept_hiring
---     FOREIGN KEY (dept_id)
---     REFERENCES departments(_id)
---     ON DELETE CASCADE,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   is_active BOOLEAN DEFAULT TRUE
--- );
-
--- CREATE TABLE IF NOT EXISTS hire_scoring(
---   _id  SERIAL  PRIMARY KEY,
---   candidate_id  INTEGER,
---   hire_weight_id  INTEGER,
---   score_performance  NUMERIC(5,2) DEFAULT 0,
---   score_attendance  NUMERIC(5,2) DEFAULT 0,
---   score_adaptability  NUMERIC(5,2) DEFAULT 0,
---   CONSTRAINT fk_weighting_scores_hiring
---     FOREIGN KEY (hire_weight_id)
---     REFERENCES hire_weighting(_id)
---     ON DELETE RESTRICT,
---   CONSTRAINT fk_candidate_scores_hiring
---     FOREIGN KEY (candidate_id)
---     REFERENCES candidates(_id)
---     ON DELETE RESTRICT,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   is_active BOOLEAN DEFAULT TRUE
--- );
-
--- CREATE TABLE IF NOT EXISTS final_intakes(
---   _id  SERIAL  PRIMARY KEY,
---   candidate_id  INTEGER,
---   department_id  INTEGER,
---   hire_weight_id  INTEGER,
---   hire_criteria_id  INTEGER,
---   hire_score_id  INTEGER,
---   intake_round  INTEGER,
---   onboarding_start  DATE,
---   onboarding_end  DATE,
---   final_decision  enum_hire_decision,
---   CONSTRAINT fk_candidate_intake
---     FOREIGN KEY (candidate_id)
---     REFERENCES candidates(_id)
---     ON DELETE SET NULL,
---   CONSTRAINT fk_department_intake
---     FOREIGN KEY (department_id)
---     REFERENCES departments(_id)
---     ON DELETE SET NULL,
---   CONSTRAINT fk_weighting_intake
---     FOREIGN KEY (hire_weight_id)
---     REFERENCES hire_weighting(_id)
---     ON DELETE SET NULL,
---   CONSTRAINT fk_criteria_intake
---     FOREIGN KEY (hire_criteria_id)
---     REFERENCES hire_criteria(_id)
---     ON DELETE SET NULL,
---   CONSTRAINT fk_score_intake
---     FOREIGN KEY (hire_score_id)
---     REFERENCES hire_scoring(_id)
---     ON DELETE SET NULL,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   is_active BOOLEAN DEFAULT TRUE
--- );
-
 --  ***  BUILD VIEWS TABLES
 
 --  learnt: view table enable advanced logical pattern without additional space occupied (virtual)2d2    2222
@@ -534,9 +424,7 @@ SELECT
   dept.importance_weight,
   crit.min_score_qual,
   crit.min_score_exp,
-  crit.min_score_tests,
-  crit.pref_criteria,
-  crit.blacklist
+  crit.min_score_tests
 FROM departments dept
 LEFT JOIN (
   SELECT dept_id, COUNT(*) AS staff_count

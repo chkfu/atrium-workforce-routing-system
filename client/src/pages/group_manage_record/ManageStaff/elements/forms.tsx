@@ -83,9 +83,9 @@ export function FormCreate() {
           error={errors.work_grade}
           options={[
             { value: 'pending', label: 'Pending' },
-            { value: 'grade_1_assistant', label: 'Grade 1 Assistant' },
-            { value: 'grade_2_manager', label: 'Grade 2 Manager' },
-            { value: 'grade_3_executive', label: 'Grade 3 Executive' },
+            { value: 'grade_1_assistant', label: 'Assistant (Grade 1)' },
+            { value: 'grade_2_manager', label: 'Manager (Grade 2)' },
+            { value: 'grade_3_executive', label: 'Executive (Grade 3)' },
           ]}
         />
         <FormTextField
@@ -105,6 +105,7 @@ export function FormCreate() {
             { value: '5', label: 'Project Management Office' },
             { value: '6', label: 'Solutions Architecture' },
             { value: '7', label: 'Cyber Security' },
+            { value: '8', label: 'Technical Support' },
           ]}
         />
         <FormTextField
@@ -118,6 +119,26 @@ export function FormCreate() {
           type="date"
           register={register('date_quit', { required: false })}
           error={errors.date_quit}
+        />
+        <FormTextField
+          label="Username"
+          register={register('username')}
+          error={errors.username}
+          required={true}
+        />
+        <FormTextField
+          label="Password"
+          type="password"
+          register={register('_password')}
+          error={errors._password}
+          required={true}
+        />
+        <FormTextField
+          label="Confirm Password"
+          type="password"
+          register={register('_password_confirm')}
+          error={errors._password_confirm}
+          required={true}
         />
       </div>
 

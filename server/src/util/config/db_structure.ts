@@ -139,8 +139,6 @@ const db_structure = {
       'min_score_qual',
       'min_score_exp',
       'min_score_tests',
-      'pref_criteria',
-      'blacklist',
       'is_active',
     ],
     primary_key: SHARED_PRIMARY_KEY,

@@ -132,8 +132,6 @@ export type TSltCriteriaBase = {
   min_score_qual: number;
   min_score_exp: number;
   min_score_tests: number;
-  pref_criteria: Record<string, any>;
-  blacklist: Record<string, any>;
   is_active: boolean;
 };
 

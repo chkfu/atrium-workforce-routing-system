@@ -82,14 +82,13 @@ export const handle_create_submit = async (
         new_data[key] = value;
       }
     }
-    new_data['is_active'] = true;
 
     //  remarks: valid case for create
-    //  remarks: sub-table records are listed separately (not nested);
-    //           must be added manually after candidate creation
+    //  remarks: register_new_user creates both the sys_user and the candidate record together
     setIsCreating(true);
-    await axios.post(API.CANDIDATES, {
-      candidates: [new_data],
+    await axios.post(API.REGISTER_USER, {
+      ...new_data,
+      user_role: 'candidate',
     });
     alert(`[ManageCandidates] succeed: new candidate record has been created.`);
     const res = await axios.get(API.CANDIDATES);

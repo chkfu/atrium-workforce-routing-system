@@ -35,7 +35,7 @@ const table_cols = [
     },
     element: (el: any) => (
       <Link to={HREF.CANDIDATES_PROFILE(el._id)} className="hover:underline hover:text-teal-700">
-        {el.first_name} {el.last_name}
+        {el.first_name.charAt(0).toUpperCase() + el.first_name.slice(1).toLowerCase()} {el.last_name.charAt(0).toUpperCase() + el.last_name.slice(1).toLowerCase()}
       </Link>
     ),
   },

@@ -43,7 +43,7 @@ export const UpdateCandidateExpSchema = yup.object({
   exp_nature: yup
     .string()
     .trim()
-    .matches(/^[a-zA-Z\s\-\.]*$/, 'Special characters and numbers not allowed.')
+    .matches(/^[a-zA-Z\s\-\._]*$/, 'Special characters and numbers not allowed.')
     .max(50, 'Exceeded length of 50 characters.')
     .nullable()
     .optional(),
@@ -57,7 +57,7 @@ export const UpdateCandidateExpSchema = yup.object({
   exp_institute: yup
     .string()
     .trim()
-    .matches(/^[a-zA-Z\s\-\.]*$/, 'Special characters and numbers not allowed.')
+    .matches(/^[a-zA-Z\s\-\.&_]*$/, 'Special characters and numbers not allowed.')
     .max(50, 'Exceeded length of 50 characters.')
     .nullable()
     .optional(),

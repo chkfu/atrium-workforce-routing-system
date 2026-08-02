@@ -34,7 +34,7 @@ const table_cols = [
     },
     element: (el: any) => (
       <Link to={HREF.DEPARTMENT_PROFILE(el._id)} className="hover:underline hover:text-teal-700">
-        {el.dept_name}
+        {el.dept_name.charAt(0).toUpperCase() + el.dept_name.slice(1).toLowerCase()}
       </Link>
     ),
   },

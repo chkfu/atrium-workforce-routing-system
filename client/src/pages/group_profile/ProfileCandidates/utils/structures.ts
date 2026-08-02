@@ -1,4 +1,4 @@
-import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_gender, enum_prob_status } from "../../../../utils/types/page_enums";
+import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_exp_nature, enum_gender, enum_prob_status } from "../../../../utils/types/page_enums";
 import { init_select_dept_opts } from "./handlers";
 import { PLACEHOLDER_SELECT } from "../../../../utils/constants";
 
@@ -113,9 +113,15 @@ export const CandidateEduStructure = {
 //  remarks: table structure for building the forms (candidate experience)
 export const CandidateExpStructure = {
   exp_nature: {
-    type: 'text',
+    type: 'select',
     label: 'Nature of Work',
-    placeholder: 'Insert text...',
+    options: [
+      { value: 'fulltime', label: 'Full-time' },
+      { value: 'parttime', label: 'Part-time' },
+      { value: 'internship', label: 'Internship' },
+      { value: 'volunteer', label: 'Volunteer' },
+    ],
+    placeholder: PLACEHOLDER_SELECT,
   },
   exp_role: {
     type: 'text',
@@ -166,12 +172,12 @@ export const CandidateTestStructure = {
   },
   score_interview_1st: {
     type: 'number',
-    label: 'First Interview Score',
+    label: '1st Interview Score',
     placeholder: 'Insert score between 0 and 100...',
   },
   score_interview_2nd: {
     type: 'number',
-    label: 'Second Interview Score',
+    label: '2nd Interview Score',
     placeholder: 'Insert score between 0 and 100...',
   },
   is_active: {

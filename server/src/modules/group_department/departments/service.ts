@@ -1,7 +1,7 @@
 import BaseService from '../../../core/BaseService';
 import DepartmentRepository from './repository';
 import { TDepartmentBase, TSchemaBase } from '../../../util/types/schema_types';
-import { filter_criteria } from '../../../util/yup/validate_criteria';
+import { filter_criteria_departments } from '../../../util/yup/validate_criteria';
 import { ValueError } from '../../../util/errors/ValueError';
 import {
   format_boolean,
@@ -114,7 +114,7 @@ class DepartmentService extends BaseService<
         formatted_page_opts,
         formatted_sort_opts,
         formatted_filter_opts,
-        filter_criteria,
+        filter_criteria_departments,
       );
       //  error handling - only throw if result itself is invalid, not when data is empty
       if (result === null || result === undefined)

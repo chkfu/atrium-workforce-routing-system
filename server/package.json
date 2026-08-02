@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "db:init": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/commands/schema.sql'",
     "db:drop": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/commands/drop_db.sql'",
+    "db:init_data": "dotenv -e process.env.example -- sh -c 'psql \"$POSTGRE_CONN\" -f src/infra/database/commands/init_data.sql'",
     "build": "tsc",
     "test": "jest"
   },

@@ -7,11 +7,11 @@ export const CreateCandidateSchema = yup.object({
     .required('First name is required')
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim()
-    .max(20, 'Exceeded length of 20 characters.'),
+    .max(50, 'Exceeded length of 50 characters.'),
   last_name: yup
     .string()
     .required('Last name is required')
-    .max(20, 'Exceed length of 20 characters.')
+    .max(50, 'Exceed length of 50 characters.')
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim(),
   gender: yup
@@ -31,6 +31,19 @@ export const CreateCandidateSchema = yup.object({
       ['selecting', 'training', 'completed', 'postponed', 'withdrawn', 'failed'],
       'Invalid option'
     ),
+  username: yup
+    .string()
+    .required('Username is required')
+    .trim()
+    .max(20, 'Exceeded length of 20 characters.'),
+  _password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters.'),
+  _password_confirm: yup
+    .string()
+    .required('Password confirmation is required')
+    .oneOf([yup.ref('_password')], 'Passwords do not match.'),
 });
 
 //  remarks: schema for updating candidates (all fields optional)
@@ -39,10 +52,10 @@ export const UpdateCandidateSchema = yup.object({
     .string()
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim()
-    .max(20, 'Exceeded length of 20 characters.'),
+    .max(50, 'Exceeded length of 50 characters.'),
   last_name: yup
     .string()
-    .max(20, 'Exceed length of 20 characters.')
+    .max(50, 'Exceed length of 50 characters.')
     .matches(/^[a-zA-Z\s\-]*$/, 'Special characters not allowed.')
     .trim(),
   gender: yup.string().oneOf(['', 'male', 'female', 'other'], 'Invalid option').nullable(), // learnt: nullable enables to skipped

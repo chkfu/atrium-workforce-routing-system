@@ -17,7 +17,7 @@ export enum enum_staff_role {
   pending = 'pending',
   grade_1_assistant = 'Assistant (1)',
   grade_2_manager = 'Manager (2)',
-  grade_3_director = 'Directors (3)',
+  grade_3_executive = 'Executive (3)',
 }
 
 export enum enum_cert_institute {
@@ -51,6 +51,13 @@ export enum enum_cert_degree {
   postdip = 'Postgraduate Diploma',
   doctoral = 'Doctoral',
   other = 'Other',
+}
+
+export enum enum_exp_nature {
+  fulltime = 'Full-time',
+  parttime = 'Part-time',
+  internship = 'Internship',
+  volunteer = 'Volunteer',
 }
 
 export enum enum_cert_major {

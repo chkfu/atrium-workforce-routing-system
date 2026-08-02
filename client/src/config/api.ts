@@ -1,6 +1,7 @@
 const BASE_URL = '/api/v1';
 
 export const API = {
+  REGISTER_USER: `${BASE_URL}/auth/register_new_user`,
   LOGIN: `${BASE_URL}/auth/login_user`,
   LOGOUT: `${BASE_URL}/auth/logout_user`,
   SECURED_SELF: `${BASE_URL}/auth/secured-self`,

@@ -82,14 +82,17 @@ export const handle_create_submit = async (
         new_data[key] = value;
       }
     }
-    new_data['is_active'] = true;
+    //  remarks: register_new_user expects `email`/`work_ext`, form fields are named `work_email`/`work_extension`
+    const { work_email, work_extension, ...rest } = new_data;
 
     //  remarks: valid case for create
-    //  remarks: sub-table records are listed separately (not nested);
-    //           must be added manually after Staff creation
+    //  remarks: register_new_user creates both the sys_user and the staff record together
     setIsCreating(true);
-    await axios.post(API.STAFF, {
-      staff: [new_data],
+    await axios.post(API.REGISTER_USER, {
+      ...rest,
+      email: work_email,
+      work_ext: work_extension,
+      user_role: 'staff',
     });
     alert(`[ManageStaff] succeed: new Staff record has been created.`);
     const res = await axios.get(API.STAFF);

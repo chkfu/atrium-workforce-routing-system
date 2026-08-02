@@ -24,7 +24,12 @@ This file records the major version changes of the projects.
 
 ### Added
 
+- implemented view table for calculating selection scores and updated department capacity
+- implemented preliminary probational intakes logic with double layer arrangement
+- created new terminal entry point for drop postgre database
+
 ### Edited
+- replaced form create handler from normal creation to user registration at profile candidate and staff (with username and password setup)
 
 <br/>
 

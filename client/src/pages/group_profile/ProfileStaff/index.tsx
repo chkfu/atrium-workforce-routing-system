@@ -10,6 +10,8 @@ import { API } from '../../../config/api';
 import Error from '../../../pages/group_navigation/Error';
 import LoadSpinner from '../../../elements/LoadSpinner';
 import { PAGE_PRELOAD_TIME } from '../../../config/constant';
+import { HREF } from '../../../config/href';
+import { ProfileBackButton } from '../../../elements/BackButtons';
 
 export default function ProfileStaff(): JSX.Element {
   //  remarks: identify the specific staff profile to be viewed
@@ -67,6 +69,7 @@ export default function ProfileStaff(): JSX.Element {
   if (targetStaff) {
     return (
       <div id="staff-profile-container">
+        <ProfileBackButton path_staff={HREF.MANAGE_STAFF} path_candidate={HREF.CANDIDATE_DASHBOARD} />
         <Accordion title="Staff Profile">
           <SectionDetails targetStaff={targetStaff} />
         </Accordion>

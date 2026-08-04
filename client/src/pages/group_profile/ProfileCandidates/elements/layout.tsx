@@ -40,6 +40,7 @@ import { useParams } from 'react-router-dom';
 import { API } from '../../../../config/api';
 import axios from 'axios';
 
+
 //  ==========    Section: Candidate Details   ==========
 
 //  remarks: the section container of candidate details
@@ -55,8 +56,8 @@ export function SectionDetails({
   const form_structure = is_self_service
     ? Object.fromEntries(
         Object.entries(CandidateDetailStructure).filter(
-          ([key]) => key !== 'prob_status' && key !== 'is_active',
-        ),
+          ([key]) => key !== 'prob_status' && key !== 'is_active'
+        )
       )
     : CandidateDetailStructure;
 
@@ -65,22 +66,22 @@ export function SectionDetails({
       const { prob_status, is_active, ...self_payload } = data;
       handle_candidate_details_submit(
         String(targetCandidate._id),
-        is_self_service ? self_payload : data,
+        is_self_service ? self_payload : data
       );
     }
   };
 
   return (
-    <Accordion title="Patron Details" titleSize="text-xl">
-      <FormSubsectionUpdateReuse
-        key={targetCandidate?._id}
-        sect_state={targetCandidate}
-        form_schema={UpdateCandidateSchema}
-        submit_handler={handleSubmit}
-        form_structure={form_structure}
-        form_subtitle=""
-      />
-    </Accordion>
+      <Accordion title="Patron Details" titleSize="text-xl">
+        <FormSubsectionUpdateReuse
+          key={targetCandidate?._id}
+          sect_state={targetCandidate}
+          form_schema={UpdateCandidateSchema}
+          submit_handler={handleSubmit}
+          form_structure={form_structure}
+          form_subtitle=""
+        />
+      </Accordion>
   );
 }
 
@@ -88,19 +89,19 @@ export function SectionDetails({
 
 //  remarks: the section container of candidate qualification
 export function SectionEducation(): JSX.Element {
-   //  remarks: extract candidate id from params
+  //  remarks: extract candidate id from params
   const { id: candidate_id } = useParams();
   //  remarks: extract data from context
   //  learnt: `userPofileCandidateContext` hook refers only one record, requries to get the record list and spread out
-    const context = useContext(CandidateEduContext);
+  const context = useContext(CandidateEduContext);
   //  remarks: a candidate self-editing their own qualification may not touch staff-only verification/activation fields
   const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
   const is_self_service = curr_user_role === 'candidate';
   const form_structure = is_self_service
     ? Object.fromEntries(
         Object.entries(CandidateEduStructure).filter(
-          ([key]) => key !== 'is_verified' && key !== 'is_active',
-        ),
+          ([key]) => key !== 'is_verified' && key !== 'is_active'
+        )
       )
     : CandidateEduStructure;
 
@@ -193,15 +194,15 @@ export function SectionExperience(): JSX.Element {
   const { id: candidate_id } = useParams();
   //  remarks: extract data from context
   //  learnt: `userPofileCandidateContext` hook refers only one record, requries to get the record list and spread out
-    const context = useContext(CandidateExpContext)
+  const context = useContext(CandidateExpContext);
   //  remarks: a candidate self-editing their own experience may not touch staff-only verification/activation fields
   const curr_user_role = useSelector((state: RootState) => state.auth.user?.user_role);
   const is_self_service = curr_user_role === 'candidate';
   const form_structure = is_self_service
     ? Object.fromEntries(
         Object.entries(CandidateExpStructure).filter(
-          ([key]) => key !== 'is_verified' && key !== 'is_active',
-        ),
+          ([key]) => key !== 'is_verified' && key !== 'is_active'
+        )
       )
     : CandidateExpStructure;
 
@@ -356,8 +357,8 @@ export function SectionPreference(): JSX.Element {
   const pref_structure = is_self_service
     ? Object.fromEntries(
         Object.entries(getCandidatePrefStructure(departments)).filter(
-          ([key]) => key !== 'is_active',
-        ),
+          ([key]) => key !== 'is_active'
+        )
       )
     : getCandidatePrefStructure(departments);
 
@@ -369,7 +370,7 @@ export function SectionPreference(): JSX.Element {
         'CandidatePref',
         API.CANDIDATES_PREF,
         candidate_id,
-        is_self_service ? self_payload : data,
+        is_self_service ? self_payload : data
       );
     }
   };

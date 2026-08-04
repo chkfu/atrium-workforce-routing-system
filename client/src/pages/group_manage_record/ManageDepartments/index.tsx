@@ -9,6 +9,7 @@ import { API } from '../../../config/api';
 import { DepartmentContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
+import { ManagePageBackButton } from '../../../elements/BackButtons';
 
 //  remarks: main page for manage Department
 export default function ManageDepartment(): JSX.Element {
@@ -141,6 +142,7 @@ export default function ManageDepartment(): JSX.Element {
   //  display
   return (
     <div id="manage-department-container" className="w-full">
+      <ManagePageBackButton />
       <Accordion title="Department List">
         <DepartmentContext.Provider
           value={{

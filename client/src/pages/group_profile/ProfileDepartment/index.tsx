@@ -9,6 +9,8 @@ import { API } from '../../../config/api';
 import Error from '../../../pages/group_navigation/Error';
 import LoadSpinner from '../../../elements/LoadSpinner';
 import { PAGE_PRELOAD_TIME } from '../../../config/constant';
+import { HREF } from '../../../config/href';
+import { ProfileBackButton } from '../../../elements/BackButtons';
 
 export default function ProfileDepartment(): JSX.Element {
   //  remarks: identify the specific department profile to be viewed
@@ -65,6 +67,7 @@ export default function ProfileDepartment(): JSX.Element {
   if (targetDept) {
     return (
       <div id="dept-profile-container">
+        <ProfileBackButton path_staff={HREF.MANAGE_DEPARTMENTS} path_candidate={HREF.CANDIDATE_DASHBOARD} />
         <Accordion title="Department Profile">
           <SectionDetails targetDept={targetDept}  setIsLoading={setIsLoading} />
           <SectionSelectCriteria targetDept={targetDept} selectCriteria={selectCriteria} setIsLoading={setIsLoading} />

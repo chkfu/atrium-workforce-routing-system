@@ -8,6 +8,7 @@ import { API } from '../../../config/api';
 import { StaffContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
+import { ManagePageBackButton } from '../../../elements/BackButtons';
 
 //  remarks: main page for manage Staff
 export default function ManageStaff(): JSX.Element {
@@ -161,6 +162,7 @@ export default function ManageStaff(): JSX.Element {
   //  display
   return (
     <div id="manage-staff-container" className="w-full">
+      <ManagePageBackButton />
       <Accordion title="Staff List">
         <StaffContext.Provider
           value={{

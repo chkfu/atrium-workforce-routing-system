@@ -9,6 +9,8 @@ import { API } from '../../../config/api';
 import Error from '../../../pages/group_navigation/Error';
 import LoadSpinner from '../../../elements/LoadSpinner';
 import { PAGE_PRELOAD_TIME } from '../../../config/constant';
+import { HREF } from '../../../config/href';
+import { ProfileBackButton } from '../../../elements/BackButtons';
 
 export default function ProfileSelectWeight(): JSX.Element {
   //  remarks: identify the specific department profile to be viewed
@@ -47,6 +49,7 @@ export default function ProfileSelectWeight(): JSX.Element {
   if (targetSelectWeight) {
     return (
       <div id="select-weight-profile-container">
+        <ProfileBackButton path_staff={HREF.MANAGE_SELECT_WEIGHT} path_candidate={HREF.CANDIDATE_DASHBOARD} />
         <Accordion title="Selection Weight Profile">
           <SectionDetails targetSelectWeight={targetSelectWeight}  setIsLoading={setIsLoading} />
         </Accordion>

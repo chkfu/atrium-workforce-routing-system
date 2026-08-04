@@ -23,6 +23,8 @@ import Error from '../../group_navigation/Error';
 import LoadSpinner from '../../../elements/LoadSpinner';
 import { PAGE_PRELOAD_TIME } from '../../../config/constant';
 import { RootState } from '../../../redux/store';
+import { ProfileBackButton } from '../../../elements/BackButtons';
+import { HREF } from '../../../config/href';
 
 export default function ProfileCandidateP(): JSX.Element {
   //  remarks: identify the specific candidate profile to be viewed
@@ -142,6 +144,7 @@ export default function ProfileCandidateP(): JSX.Element {
           <CandidateTestContext.Provider value={{ targetCandidateTest, setTargetCandidateTest }}>
             <CandidatePrefContext.Provider value={{ targetCandidatePref, setTargetCandidatePref }}>
               <div id="candidate-profile-container">
+                <ProfileBackButton path_staff={HREF.MANAGE_CANDIDATES} path_candidate={HREF.CANDIDATE_DASHBOARD} />
                 <Accordion title="Candidate Profile">
                   <SectionDetails targetCandidate={targetCandidate} />
                   <SectionEducation />

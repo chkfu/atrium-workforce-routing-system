@@ -9,6 +9,7 @@ import { API } from '../../../config/api';
 import { SelectWeightContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
+import { ManagePageBackButton } from '../../../elements/BackButtons';
 
 //  remarks: main page for manage Select Weight
 export default function ManageSelectWeight(): JSX.Element {
@@ -141,6 +142,7 @@ export default function ManageSelectWeight(): JSX.Element {
   //  display
   return (
     <div id="manage-select-weight-container" className="w-full">
+      <ManagePageBackButton />
       <Accordion title="Select Weight List">
         <SelectWeightContext.Provider
           value={{

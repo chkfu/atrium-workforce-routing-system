@@ -9,6 +9,7 @@ import { CandidateContext } from './utils/context';
 import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
 import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
+import { ManagePageBackButton } from '../../../elements/BackButtons';
 
 //  remarks: main page for manage candidates
 export default function ManageCandidates(): JSX.Element {
@@ -140,6 +141,7 @@ export default function ManageCandidates(): JSX.Element {
   //  display
   return (
     <div id="manage-candidates-container" className="w-full">
+      <ManagePageBackButton />
       <Accordion title="Candidate List">
         <CandidateContext.Provider
           value={{

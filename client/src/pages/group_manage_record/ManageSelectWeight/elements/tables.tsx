@@ -36,7 +36,10 @@ const table_cols = [
     },
     element: (el: any) => (
       <Link to={HREF.SELECT_WEIGHT_PROFILE(el._id)} className="hover:underline hover:text-teal-700">
-        {el.strategy_name}
+        {el.strategy_name
+          .split(' ')
+          .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ')}
       </Link>
     ),
   },

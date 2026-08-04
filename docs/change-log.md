@@ -24,12 +24,16 @@ This file records the major version changes of the projects.
 
 ### Added
 
-- implemented view table for calculating selection scores and updated department capacity
-- implemented preliminary probational intakes logic with double layer arrangement
-- created new terminal entry point for drop postgre database
+- implemented view table for calculating selection scores and updated department capacity.
+- implemented preliminary probational intakes logic with double layer arrangement.
+- implemented manage page and profile page for selection weighting.
+- created new terminal entry point for drop postgre database.
+- added back button for manage pages and profile pages.
 
 ### Edited
-- replaced form create handler from normal creation to user registration at profile candidate and staff (with username and password setup)
+
+- replaced form create handler from normal creation to user registration at profile candidate and staff (with username and password setup).
+- refine name styling in title case at manage pages.
 
 <br/>
 
@@ -49,7 +53,7 @@ This file records the major version changes of the projects.
 
 - improve login and reset password (opt out) to enable both username and email verification at authentication.
 - updated documentation content at readme.
-- hide manager-only department fields from lower roles after opening up the list route, and internal use fields in candidate profile page
+- hide manager-only department fields from lower roles after opening up the list route, and internal use fields in candidate profile page.
 
 ### Fixed
 

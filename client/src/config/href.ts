@@ -34,4 +34,5 @@ export const HREF = {
   CANDIDATES_PROFILE_ROUTE: '/candidates-profile/:id',
   STAFF_PROFILE_ROUTE: '/staff-profile/:id',
   DEPARTMENT_PROFILE_ROUTE: '/department-profile/:id',
+  SELECT_WEIGHT_PROFILE_ROUTE: '/select-weight-profile/:id',
 };

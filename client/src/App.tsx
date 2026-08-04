@@ -17,6 +17,7 @@ import ManageSelectWeight from './pages/group_manage_record/ManageSelectWeight';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
 import ProfileStaff from './pages/group_profile/ProfileStaff';
 import ProfileDepartment from './pages/group_profile/ProfileDepartment';
+import ProfileSelectWeight from './pages/group_profile/ProfileSelectWeight';
 import { HREF } from './config/href';
 
 const routes: RouteObject[] = [
@@ -78,7 +79,10 @@ const routes: RouteObject[] = [
         path: HREF.DEPARTMENT_PROFILE_ROUTE,
         element: <ProfileDepartment />,
       },
-
+      {
+        path: HREF.SELECT_WEIGHT_PROFILE_ROUTE,
+        element: <ProfileSelectWeight />,
+      },
       //  Dashboards, by role positions
       {
         path: HREF.CANDIDATE_DASHBOARD,

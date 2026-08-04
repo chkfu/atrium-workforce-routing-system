@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 
 //  remarks: schema for creating select weighting strategies
+//  learnt: handler code already fill in the null value, which yup.default never run.
+//  learnt: here, leave undefined value to postrgre for auto filling
 export const CreateSelectWeightSchema = yup
   .object({
     strategy_name: yup
@@ -14,105 +16,90 @@ export const CreateSelectWeightSchema = yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(20)
       .nullable()
       .optional(),
     edu_degree_bachelor: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(30)
       .nullable()
       .optional(),
     edu_degree_postdip: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(35)
       .nullable()
       .optional(),
     edu_degree_master: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(40)
       .nullable()
       .optional(),
     edu_degree_doctoral: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(50)
       .nullable()
       .optional(),
     edu_inst_other: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(0)
       .nullable()
       .optional(),
     edu_inst_1st: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(10)
       .nullable()
       .optional(),
     edu_inst_2nd: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(7)
       .nullable()
       .optional(),
     edu_inst_3rd: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(4)
       .nullable()
       .optional(),
     edu_major_stem: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(5)
       .nullable()
       .optional(),
     edu_major_eng: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(5)
       .nullable()
       .optional(),
     edu_major_bus: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(3)
       .nullable()
       .optional(),
     edu_major_law: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(3)
       .nullable()
       .optional(),
     edu_major_sosc: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(0)
       .nullable()
       .optional(),
     edu_major_other: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(0)
       .nullable()
       .optional(),
     //  experience rules
@@ -120,28 +107,24 @@ export const CreateSelectWeightSchema = yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(40)
       .nullable()
       .optional(),
     exp_nature_pt: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(20)
       .nullable()
       .optional(),
     exp_nature_intern: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(30)
       .nullable()
       .optional(),
     exp_nature_vol: yup
       .number()
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
-      .default(10)
       .nullable()
       .optional(),
     exp_year_rate: yup
@@ -149,7 +132,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0, 'Rate must be between 0 and 2')
       .max(2, 'Rate must be between 0 and 2')
-      .default(1.33)
       .nullable()
       .optional(),
     //  test score rules
@@ -180,7 +162,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0, 'Share must be between 0 and 1')
       .max(1, 'Share must be between 0 and 1')
-      .default(0.33)
       .nullable()
       .optional(),
     weight_exp: yup
@@ -188,7 +169,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0, 'Share must be between 0 and 1')
       .max(1, 'Share must be between 0 and 1')
-      .default(0.33)
       .nullable()
       .optional(),
     weight_test: yup
@@ -196,7 +176,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0, 'Share must be between 0 and 1')
       .max(1, 'Share must be between 0 and 1')
-      .default(0.33)
       .nullable()
       .optional(),
     //  passing standard
@@ -205,7 +184,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
       .max(100)
-      .default(30)
       .nullable()
       .optional(),
     pass_exp: yup
@@ -213,7 +191,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
       .max(100)
-      .default(0)
       .nullable()
       .optional(),
     pass_test: yup
@@ -221,7 +198,6 @@ export const CreateSelectWeightSchema = yup
       .transform((value) => (value === '' || isNaN(value) ? null : value))
       .min(0)
       .max(100)
-      .default(50)
       .nullable()
       .optional(),
   })

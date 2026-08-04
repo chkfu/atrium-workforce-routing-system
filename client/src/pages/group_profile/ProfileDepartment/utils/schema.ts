@@ -68,7 +68,5 @@ export const UpdateSelectCriteriaSchema = yup.object({
     .default(0)
     .nullable()
     .optional(),
-  pref_criteria: yup.object().nullable().optional(),
-  blacklist: yup.object().nullable().optional(),
   is_active: yup.boolean().default(true).nullable(),
 });

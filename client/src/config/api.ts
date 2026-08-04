@@ -19,5 +19,6 @@ export const API = {
   DEPARTMENTS_ACTIVATE: `${BASE_URL}/departments/activation`,
   SELECT_CRITERIA: `${BASE_URL}/selection_criteria`,
   SELECT_WEIGHTING: `${BASE_URL}/selection_weighting`,
+  SELECT_WEIGHTING_ACTIVATE: `${BASE_URL}/selection_weighting/activation`,
   SELECT_SCORING: `${BASE_URL}/selection_scoring`,
 };

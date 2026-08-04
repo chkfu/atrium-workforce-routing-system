@@ -32,47 +32,47 @@ const auth_controller = new AuthController(
 router
   .route('/')
   .get(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.get_record_batch(),
   )
   .post(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.create_record_batch(),
   )
   .patch(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.update_record_details_batch(),
   )
   .delete(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.remove_record_batch(),
   );
 
 router
   .route('/activation')
   .patch(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.update_record_active_batch(),
   );
 
 router
   .route('/empty')
   .delete(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.empty_record_all(),
   );
 
 router
   .route('/:id')
   .get(
-    // auth_controller.access_control_token(),
-    // auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
+    auth_controller.access_control_token(),
+    auth_controller.access_restrict_roles(enum_user_role.grade_1_assistant, false),
     slt_weight_controller.get_record_by_id(),
   );
 

@@ -156,9 +156,65 @@ export interface ISelectCriteria {
   min_score_qual: number;
   min_score_exp: number;
   min_score_tests: number;
-  pref_criteria: Record<string, string[]>;
-  blacklist: Record<string, string[]>;
   created_at: string;
   updated_at: string;
   is_active: boolean;
+}
+
+export interface ISelectCriteriaList {
+  value: ISelectCriteria[];
+}
+
+
+export interface ISelectWeight {
+  _id: number;
+  strategy_name: string;
+  strategy_goal: string;
+  //  education rules
+  edu_degree_other: number;
+  edu_degree_bachelor: number;
+  edu_degree_postdip: number;
+  edu_degree_master: number;
+  edu_degree_doctoral: number;
+  edu_inst_other: number;
+  edu_inst_1st: number;
+  edu_inst_2nd: number;
+  edu_inst_3rd: number;
+  edu_major_stem: number;
+  edu_major_eng: number;
+  edu_major_bus: number;
+  edu_major_law: number;
+  edu_major_sosc: number;
+  edu_major_other: number;
+  //  experience rules
+  exp_nature_ft: number;
+  exp_nature_pt: number;
+  exp_nature_intern: number;
+  exp_nature_vol: number;
+  exp_year_rate: number;
+  //  test score rules
+  test_apt: number;
+  test_int_1st: number;
+  test_int_2nd: number;
+  //  overall shares
+  weight_edu: number;
+  weight_exp: number;
+  weight_test: number;
+  //  passing standard
+  pass_edu: number;
+  pass_exp: number;
+  pass_test: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+}
+
+export interface ISelectWeightTypeField {
+  name: string;
+  label: string;
+  step?: number;
+}
+
+export interface ISelectWeightList {
+  value: ISelectWeight[];
 }

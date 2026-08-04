@@ -182,7 +182,9 @@ abstract class BaseService<T, R extends BaseRepository<T> = BaseRepository<T>> {
           //  learnt: clear the type with unknown first, then exercise the omit type
           obj_arr.map(async (el: any) => {
             const new_item = Object.fromEntries(
-              this.columns.map((key) => [key, el[key]]),
+              this.columns
+                .filter((key) => el[key] !== undefined)
+                .map((key) => [key, el[key]]),
             ) as unknown as Omit<T, keyof TSchemaBase>;
             // reamrks: put the new string into service function to proceed
             return this.repository.create_record_single(new_item);

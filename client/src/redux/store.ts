@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import candidate_reducer from './slices/CandidateSlice';
 import staff_reducer from './slices/StaffSlice';
 import department_reducer from './slices/DepartmentSlice';
+import select_weight_reducer from './slices/SelectWeightSlice';
 import auth_slice from './slices/AuthSlice';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     candidates: candidate_reducer,
     staff: staff_reducer,
     department: department_reducer,
+    select_weight: select_weight_reducer,
   },
 });
 

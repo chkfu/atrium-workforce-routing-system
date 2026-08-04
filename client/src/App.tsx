@@ -13,6 +13,7 @@ import DashboardManager from './pages/group_dashboard/pages/DashboardManager';
 import ManageCandidates from './pages/group_manage_record/ManageCandidates';
 import ManageStaff from './pages/group_manage_record/ManageStaff';
 import ManageDepartments from './pages/group_manage_record/ManageDepartments';
+import ManageSelectWeight from './pages/group_manage_record/ManageSelectWeight';
 import ProfileCandidates from './pages/group_profile/ProfileCandidates';
 import ProfileStaff from './pages/group_profile/ProfileStaff';
 import ProfileDepartment from './pages/group_profile/ProfileDepartment';
@@ -60,7 +61,10 @@ const routes: RouteObject[] = [
         path: HREF.MANAGE_DEPARTMENTS,
         element: <ManageDepartments />,
       },
-
+      {
+        path: HREF.MANAGE_SELECT_WEIGHT,
+        element: <ManageSelectWeight />,
+      },
       //  Single page, sepecified by id
       {
         path: HREF.CANDIDATES_PROFILE_ROUTE,

@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS select_weighting(
   exp_nature_pt INTEGER DEFAULT 20,
   exp_nature_intern INTEGER DEFAULT 30,
   exp_nature_vol INTEGER DEFAULT 10,
-  exp_year_rate NUMERIC(5,2) DEFAULT 1.33 CHECK (exp_year_rate BETWEEN 0 AND 1),
+  exp_year_rate NUMERIC(5,2) DEFAULT 1.33 CHECK (exp_year_rate BETWEEN 0 AND 2),
   --  remarks: test score rules
   test_apt  NUMERIC(3,2) CHECK (test_apt BETWEEN 0 AND 1),
   test_int_1st  NUMERIC(3,2) CHECK (test_int_1st BETWEEN 0 AND 1),

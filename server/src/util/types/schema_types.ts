@@ -120,9 +120,40 @@ export type TCddPrefBase = {
 export type TSltWeightBase = {
   strategy_name: string;
   strategy_goal?: string;
-  weight_qual: number;
-  weight_exp: number;
-  weight_tests: number;
+  //  education rules
+  edu_degree_other?: number;
+  edu_degree_bachelor?: number;
+  edu_degree_postdip?: number;
+  edu_degree_master?: number;
+  edu_degree_doctoral?: number;
+  edu_inst_other?: number;
+  edu_inst_1st?: number;
+  edu_inst_2nd?: number;
+  edu_inst_3rd?: number;
+  edu_major_stem?: number;
+  edu_major_eng?: number;
+  edu_major_bus?: number;
+  edu_major_law?: number;
+  edu_major_sosc?: number;
+  edu_major_other?: number;
+  //  experience rules
+  exp_nature_ft?: number;
+  exp_nature_pt?: number;
+  exp_nature_intern?: number;
+  exp_nature_vol?: number;
+  exp_year_rate?: number;
+  //  test score rules
+  test_apt?: number;
+  test_int_1st?: number;
+  test_int_2nd?: number;
+  //  overall shares
+  weight_edu?: number;
+  weight_exp?: number;
+  weight_test?: number;
+  //  passing standard
+  pass_edu?: number;
+  pass_exp?: number;
+  pass_test?: number;
   is_active: boolean;
 };
 

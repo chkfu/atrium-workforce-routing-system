@@ -47,19 +47,24 @@ const manager_card_list_personal = (staff_id?: number | null): TCardItem[] => [
 const manager_card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
-    description: 'Review and manage candidate applications and profiles',
+    description: 'Review and manage candidate applications and profiles.',
     path: '/manage-candidates',
   },
   {
     title: 'Manage Staff',
-    description: 'Manage staff members and their assignments',
+    description: 'Manage staff members and their assignments.',
     path: '/manage-staff',
   },
   {
     title: 'Manage Departments',
-    description: 'Organize and manage department information',
+    description: 'Organize and manage department information.',
     path: '/manage-departments',
   },
+  {
+    title: 'Manage Weighting',
+    description: 'Adjust weighting scores for candidate selection.',
+    path: '/manage-select-weight',
+  }
 ];
 
 //  Assistant Dashboard

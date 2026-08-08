@@ -21,4 +21,6 @@ export const API = {
   SELECT_WEIGHTING: `${BASE_URL}/selection_weighting`,
   SELECT_WEIGHTING_ACTIVATE: `${BASE_URL}/selection_weighting/activation`,
   SELECT_SCORING: `${BASE_URL}/selection_scoring`,
+  PBT_INTAKES: `${BASE_URL}/probation_intakes`,
+  PBT_INTAKES_ACTIVATE: `${BASE_URL}/probation_intakes/activation`,
 };

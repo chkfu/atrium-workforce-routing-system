@@ -184,7 +184,6 @@ export type TSltScoreBase = {
 export type TPbtIntakeBase = {
   candidate_id: number;
   select_weight_id: number;
-  select_score_id: number;
   dept_intake: number;
   round_intake: number;
   date_start: Date;

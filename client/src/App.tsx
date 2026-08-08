@@ -19,6 +19,7 @@ import ProfileStaff from './pages/group_profile/ProfileStaff';
 import ProfileDepartment from './pages/group_profile/ProfileDepartment';
 import ProfileSelectWeight from './pages/group_profile/ProfileSelectWeight';
 import { HREF } from './config/href';
+import ManageProbIntakes from './pages/group_manage_record/ManageProbIntakes';
 
 const routes: RouteObject[] = [
   {
@@ -66,6 +67,10 @@ const routes: RouteObject[] = [
         path: HREF.MANAGE_SELECT_WEIGHT,
         element: <ManageSelectWeight />,
       },
+      {
+        path: HREF.MANAGE_PROB_INTAKES,
+        element: <ManageProbIntakes />,
+      },
       //  Single page, sepecified by id
       {
         path: HREF.CANDIDATES_PROFILE_ROUTE,
@@ -83,6 +88,10 @@ const routes: RouteObject[] = [
         path: HREF.SELECT_WEIGHT_PROFILE_ROUTE,
         element: <ProfileSelectWeight />,
       },
+      // {
+      //   path: HREF.PROB_INTAKE_PROFILE_ROUTE,
+      //   element: <ProfileProbIntake />,
+      // },
       //  Dashboards, by role positions
       {
         path: HREF.CANDIDATE_DASHBOARD,

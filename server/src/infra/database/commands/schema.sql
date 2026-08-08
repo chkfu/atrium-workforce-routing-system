@@ -258,7 +258,6 @@ CREATE TABLE IF NOT EXISTS probation_intakes(
   _id  SERIAL  PRIMARY KEY,
   candidate_id  INTEGER,
   select_weight_id  INTEGER,
-  select_score_id  INTEGER,
   dept_intake  INTEGER,
   round_intake  INTEGER,
   date_start  DATE,
@@ -275,10 +274,6 @@ CREATE TABLE IF NOT EXISTS probation_intakes(
   CONSTRAINT fk_weighting_training
     FOREIGN KEY (select_weight_id)
     REFERENCES select_weighting(_id)
-    ON DELETE SET NULL,
-  CONSTRAINT fk_score_training
-    FOREIGN KEY (select_score_id)
-    REFERENCES select_scoring(_id)
     ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -366,6 +361,7 @@ CROSS JOIN select_weighting swei
 WHERE cexp.is_active = TRUE AND swei.is_active = TRUE
 GROUP BY cexp.candidate_id, swei._id;
 
+
 --  remarks: total score (candidate test score), (attempt 2)
 
 CREATE OR REPLACE VIEW view_candidate_tests AS
@@ -436,6 +432,34 @@ LEFT JOIN select_criteria crit
   ON dept._id = crit.dept_id AND crit.is_active = TRUE
 WHERE dept.is_active = TRUE
 ORDER BY dept.importance_weight DESC;
+
+
+--  remarks: probation instake list with projected details
+CREATE OR REPLACE VIEW view_prob_intakes AS
+SELECT
+  pint._id AS intake_id,
+  cand.first_name AS candidate_first_name,
+  cand.last_name AS candidate_last_name,
+  cand.gender AS candidate_gender,
+  cand.prob_status AS candidate_prob_status,
+  dept.dept_name AS intake_dept_name,
+  swei.strategy_name AS intake_strategy_name,
+  vss.edu_score AS intake_edu_score,
+  vss.exp_score AS intake_exp_score,
+  vss.test_score AS intake_test_score,
+  vss.total_score AS intake_total_score,
+  pint.is_active AS intake_is_active,
+  pint.created_at AS intake_created_at,
+  pint.updated_at AS intake_updated_at
+FROM probation_intakes pint
+LEFT JOIN candidates cand ON pint.candidate_id = cand._id
+LEFT JOIN departments dept ON pint.dept_intake = dept._id
+LEFT JOIN select_weighting swei ON pint.select_weight_id = swei._id
+LEFT JOIN view_select_scoring vss
+  ON pint.candidate_id = vss.candidate_id
+  AND pint.select_weight_id = vss.weight_id
+WHERE pint.is_active = TRUE
+ORDER BY vss.total_score DESC;
 
 
 COMMIT;

@@ -192,7 +192,6 @@ const db_structure = {
     columns: [
       'candidate_id',
       'select_weight_id',
-      'select_score_id',
       'dept_intake',
       'round_intake',
       'date_start',

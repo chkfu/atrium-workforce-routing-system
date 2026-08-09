@@ -148,6 +148,4 @@ function PageOptBox(): JSX.Element {
   );
 }
 
-//  remarks: download file option popup
-
 

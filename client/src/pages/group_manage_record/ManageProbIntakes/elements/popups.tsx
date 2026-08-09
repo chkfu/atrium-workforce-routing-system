@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useIntakesContext } from '../utils/context';
 import {
   ButtonConvertSubmit,
@@ -7,7 +8,11 @@ import {
 } from './buttons';
 import { FormCreate } from './forms';
 import ButtonClose from '../../../../elements/ButtonClose';
+import ButtonConfirm from '../../../../elements/ButtonConfirm';
+import { COLORS } from '../../../../styles/color';
 import { handle_candidates_status_cancel } from '../utils/handlers.ts';
+import { IProbIntake } from '../../../../utils/types/redux_types';
+import { handle_download } from '../utils/handlers.ts';
 
 //  remarks: popups for create new candidates record
 export const PopupCreate = (): JSX.Element => {
@@ -119,6 +124,73 @@ export const PopupCandidatesStatus = (): JSX.Element => {
           <div className="flex gap-4 justify-end">
             <ButtonCandidateStatusSubmit />
             <ButtonCandidateStatusCancel />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+//  remarks: download file option popup
+export const PopupExportData = ({
+  trigger,
+  setTrigger,
+  data,
+}: {
+  trigger: boolean;
+  setTrigger: (val: boolean) => void;
+  data: IProbIntake[];
+}): JSX.Element => {
+  //  remarks: file format selection
+  const [format, setFormat] = useState<string>('json');
+  //  remarks: display
+  return (
+    <div
+      className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-900 pointer-events-none ${
+        trigger ? 'bg-opacity-20 opacity-100 pointer-events-auto' : 'bg-opacity-0 opacity-0'
+      }`}
+    >
+      {trigger && (
+        <div className="relative bg-white rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 pointer-events-auto">
+          <ButtonClose fn={() => setTrigger(false)} />
+          <h2 className="text-xl font-bold mb-3 text-gray-800">Export Data</h2>
+          {/* form elements */}
+          <div className="mb-6 flex gap-12 justify-center">
+            <label className="p-2 flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="export_format"
+                value="json"
+                checked={format === 'json'}
+                onChange={() => setFormat('json')}
+                className="p-2 w-4 h-4 cursor-pointer"
+              />
+              <span className="text-gray-700 font-medium">to json</span>
+            </label>
+            <label className="p-2 flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="export_format"
+                value="csv"
+                checked={format === 'csv'}
+                onChange={() => setFormat('csv')}
+                className="w-4 h-4 cursor-pointer"
+              />
+              <span className="text-gray-700 font-medium">to CSV</span>
+            </label>
+          </div>
+          <div className="flex gap-4 justify-end">
+            <ButtonConfirm
+              label="Download"
+              onClick={() => handle_download(data, format, setTrigger)}
+              style={{ backgroundColor: COLORS.dark_teal, color: COLORS.light_gray }}
+            />
+            <ButtonConfirm
+              label="Cancel"
+              onClick={() => setTrigger(false)}
+              style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
+            />
           </div>
         </div>
       )}

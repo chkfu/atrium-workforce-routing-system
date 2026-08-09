@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import FilterTextField from '../../../../elements/FilterTextField';
 import FilterSelectInput from '../../../../elements/FilterSelectInput';
 import FilterDateRangeInput from '../../../../elements/FilterRangeInput';
@@ -27,7 +27,6 @@ import { RootState } from '../../../../redux/store';
 
 export function FormCreate() {
   //  declaration
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -35,14 +34,14 @@ export function FormCreate() {
   } = useForm({
     resolver: yupResolver(CreateIntakeSchema),
   });
-  const { setIsCreating, setTriggerCreate } = useIntakesContext();
+  const { setIsCreating, setTriggerCreate, setRawIntakes } = useIntakesContext();
   const select_weight = useSelector((state: RootState) => state.select_weight.value);
   const select_weight_sorted = [...select_weight].sort((a, b) =>
     a.strategy_name > b.strategy_name ? 1 : -1
   );
 
   function recalling(data: any) {
-    handle_create_submit(data, setIsCreating, setTriggerCreate, dispatch);
+    handle_create_submit(data, setIsCreating, setTriggerCreate, setRawIntakes);
   }
   //  display
   return (

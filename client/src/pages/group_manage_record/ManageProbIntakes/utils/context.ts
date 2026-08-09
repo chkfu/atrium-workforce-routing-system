@@ -1,9 +1,12 @@
 import { createContext, useContext } from 'react';
 import { enum_gender, enum_prob_status } from '../../../../utils/types/page_enums';
+import { IProbIntake } from '../../../../utils/types/redux_types';
 
 interface IntakesContextType {
   //  1. GET
   //  1a. receive general data
+  rawIntakes: IProbIntake[];
+  setRawIntakes: React.Dispatch<React.SetStateAction<IProbIntake[]>>;
   selectedIntakes: number[];
   setSelectedIntakes: React.Dispatch<React.SetStateAction<number[]>>;
   //  1b. receive pagination data

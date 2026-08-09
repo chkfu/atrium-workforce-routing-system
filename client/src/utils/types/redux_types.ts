@@ -107,8 +107,6 @@ export interface ICandidatePrefList {
 }
 
 
-
-
 //  staff
 
 export interface IStaff {
@@ -217,4 +215,28 @@ export interface ISelectWeightTypeField {
 
 export interface ISelectWeightList {
   value: ISelectWeight[];
+}
+
+//  probation intakes
+
+export interface IProbIntake {
+  intake_id: number;
+  candidate_id: number;
+  candidate_first_name: string;
+  candidate_last_name: string;
+  candidate_gender: enum_gender;
+  candidate_prob_status: enum_prob_status;
+  intake_dept_name: string;
+  intake_strategy_name: string;
+  intake_edu_score: number;
+  intake_exp_score: number;
+  intake_test_score: number;
+  intake_total_score: number;
+  intake_is_active: boolean;
+  intake_created_at: string;
+  intake_updated_at: string;
+}
+
+export interface IProbIntakeList {
+  value: IProbIntake[];
 }

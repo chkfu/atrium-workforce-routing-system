@@ -1,9 +1,8 @@
+import { useState } from 'react';
 import { useIntakesContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
 import { COLORS } from '../../../../styles/color';
-import { PopupCreate, PopupConvertActive, PopupCandidatesStatus } from './popups';
+import { PopupCreate, PopupConvertActive, PopupCandidatesStatus, PopupExportData } from './popups';
 import ButtonConfirm from '../../../../elements/ButtonConfirm';
 import sort_asc from '../../../../assets/svg/sort-asc.svg';
 import {
@@ -118,7 +117,6 @@ export const ButtonConvertCancel = (): JSX.Element => {
 
 //  remarks: submit button inside convert active popup
 export const ButtonConvertSubmit = (): JSX.Element => {
-  const dispatch = useDispatch();
   const {
     convertStatus,
     isConverting,
@@ -127,6 +125,7 @@ export const ButtonConvertSubmit = (): JSX.Element => {
     setSelectedIntakes,
     setConvertStatus,
     setTriggerConvert,
+    setRawIntakes,
   } = useIntakesContext();
   return (
     <ButtonConfirm
@@ -140,7 +139,7 @@ export const ButtonConvertSubmit = (): JSX.Element => {
           setSelectedIntakes,
           setConvertStatus,
           setTriggerConvert,
-          dispatch
+          setRawIntakes
         )
       }
       style={{
@@ -157,13 +156,12 @@ export const ButtonConvertSubmit = (): JSX.Element => {
 
 //  DELETE
 export const ButtonDelete = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const { selectedIntakes, setSelectedIntakes, isDeleting, setIsDeleting } = useIntakesContext();
+  const { selectedIntakes, setSelectedIntakes, isDeleting, setIsDeleting, setRawIntakes } = useIntakesContext();
   return (
     <ButtonConfirm
       label={isDeleting ? 'Loading...' : 'Delete'}
       onClick={() =>
-        handle_delete_submit(selectedIntakes, setIsDeleting, setSelectedIntakes, dispatch)
+        handle_delete_submit(selectedIntakes, setIsDeleting, setSelectedIntakes, setRawIntakes)
       }
       style={{
         backgroundColor: COLORS.light_gray,
@@ -210,8 +208,7 @@ export const ButtonCandidateStatusCancel = (): JSX.Element => {
 
 //  remarks: save button inside candidate status popup
 export const ButtonCandidateStatusSubmit = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const intakes = useSelector((state: RootState) => state.candidates.value);
+  const { rawIntakes } = useIntakesContext()
   const {
     updateDetails,
     isUpdating,
@@ -219,6 +216,7 @@ export const ButtonCandidateStatusSubmit = (): JSX.Element => {
     setIsUpdating,
     setSelectedIntakes,
     setTriggerUpdate,
+    setRawIntakes
   } = useIntakesContext();
   return (
     <ButtonConfirm
@@ -226,7 +224,7 @@ export const ButtonCandidateStatusSubmit = (): JSX.Element => {
       onClick={() => {
         //  learnt: patch targets `candidates`, but selection tracks intake rows -
         //  translate via the joined `candidate_id` before submitting
-        const candidateIds = intakes
+        const candidateIds = rawIntakes
           .filter((row: any) => selectedIntakes.includes(row.intake_id))
           .map((row: any) => row.candidate_id);
         handle_candidates_status_submit(
@@ -235,7 +233,7 @@ export const ButtonCandidateStatusSubmit = (): JSX.Element => {
           setIsUpdating,
           setSelectedIntakes,
           setTriggerUpdate,
-          dispatch
+          setRawIntakes
         );
       }}
       style={{
@@ -249,7 +247,6 @@ export const ButtonCandidateStatusSubmit = (): JSX.Element => {
     />
   );
 };
-
 
 export const ButtonSwitchStatus = ({
   onClick,
@@ -273,6 +270,25 @@ export const ButtonSwitchStatus = ({
   );
 }
 
+//  EXPORT DATA
+
+export const ButtonExportDataTrigger = (): JSX.Element => {
+  const { selectedIntakes, rawIntakes } = useIntakesContext();
+  const [triggerPopup, setTriggerPopup] = useState<boolean>(false);
+  const intake_arr = rawIntakes.filter((el) => selectedIntakes.includes(el.intake_id));
+  return (
+    <>
+      <ButtonConfirm
+        label="Export Data"
+        type="button"
+        style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
+        onClick={() => setTriggerPopup(true)}
+        disabled={selectedIntakes.length === 0}
+      />
+      <PopupExportData trigger={triggerPopup} setTrigger={setTriggerPopup} data={intake_arr} />
+    </>
+  );
+}
 
 //  SORTING
 

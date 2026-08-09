@@ -1,23 +1,22 @@
 import { useIntakesContext } from './context';
-import { useSelector } from 'react-redux';
-import { setCandidates } from '../../../../redux/slices/CandidateSlice';
-import { RootState } from '../../../../redux/store';
-import type { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../../config/api';
 import { CreateIntakeSchema, UpdateCandidateSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
+import { IProbIntake } from '../../../../utils/types/redux_types';
+import { Dispatch } from '@reduxjs/toolkit';
 
 //  ==========  checkbox status  ==========
 
 //  remarks
-
-export const handle_selected = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { setSelectedIntakes } = useIntakesContext();
-  const candidates = useSelector((state: RootState) => state.candidates.value);
+export const handle_selected = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  rawIntakes: IProbIntake[],
+  setSelectedIntakes: (val: number[]) => void
+) => {
   if (event.target.checked) {
-    setSelectedIntakes(candidates.map((item: any) => item.id));
+    setSelectedIntakes(rawIntakes.map((item) => item.intake_id));
   } else {
     setSelectedIntakes([]);
   }
@@ -37,12 +36,14 @@ export const handle_checkbox_status = (id: number) => {
 };
 
 //  remarks: manage overall select all (main table)
-export const handle_checkbox_select_all = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { setSelectedIntakes } = useIntakesContext();
-  const candidates = useSelector((state: RootState) => state.candidates.value);
+export const handle_checkbox_select_all = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  rawIntakes: IProbIntake[],
+  setSelectedIntakes: (val: number[]) => void
+) => {
   const checked = event.target.checked;
-  if (checked && candidates && candidates.length > 0) {
-    const id_list = candidates.map((candidate) => candidate._id as number);
+  if (checked && rawIntakes && rawIntakes.length > 0) {
+    const id_list = rawIntakes.map((intake) => intake.intake_id);
     setSelectedIntakes(id_list);
   } else {
     setSelectedIntakes([]);
@@ -72,7 +73,7 @@ export const handle_create_submit = async (
   data: yup.InferType<typeof CreateIntakeSchema>,
   setIsCreating: (val: boolean) => void,
   setTriggerCreate: (val: boolean) => void,
-  dispatch: Dispatch
+  setRawIntakes: (val: IProbIntake[]) => void
 ) => {
   try {
     //  remarks: valid case for create
@@ -85,7 +86,7 @@ export const handle_create_submit = async (
     const createdIntakes = res?.data?.data?.result || [];
 
     //  remarks: refresh intakes list
-    dispatch(setCandidates(createdIntakes));
+    setRawIntakes(createdIntakes);
     setTriggerCreate(false);
   } catch (err: any) {
     console.error('[ManageIntakes] error: create intake:', {
@@ -147,7 +148,7 @@ export const handle_convert_submit = async (
   setSelectedIntakes: (val: any) => void,
   setConvertStatus: (val: null) => void,
   setTriggerConvert: (val: boolean) => void,
-  dispatch: Dispatch
+  setRawIntakes: (val: IProbIntake[]) => void
 ) => {
   if (isConverting) return;
   try {
@@ -165,7 +166,7 @@ export const handle_convert_submit = async (
     // remarks: refresh with updated data
     const res = await axios.get(API.PBT_INTAKES);
     const data = res?.data?.data?.result || [];
-    dispatch(setCandidates(data));
+    setRawIntakes(data);
     setSelectedIntakes([]);
     setConvertStatus(null);
     setTriggerConvert(false);
@@ -187,7 +188,7 @@ export const handle_delete_submit = async (
   selectedIntakes: number[],
   setIsDeleting: (val: boolean) => void,
   setSelectedIntakes: (val: any) => void,
-  dispatch: Dispatch
+  setRawIntakes: (val: IProbIntake[]) => void
 ) => {
   try {
     //  remarks: no selected intakes
@@ -203,7 +204,7 @@ export const handle_delete_submit = async (
     // remarks: refresh with updated data
     const res = await axios.get(API.PBT_INTAKES);
     const data = res?.data?.data?.result || [];
-    dispatch(setCandidates(data));
+    setRawIntakes(data);
     setSelectedIntakes([]);
   } catch (err: any) {
     // remarks: error handling
@@ -263,7 +264,7 @@ export const handle_candidates_status_submit = async (
   setIsUpdating: (val: boolean) => void,
   setSelectedCandidates: (val: any) => void,
   setTriggerUpdate: (val: boolean) => void,
-  dispatch: Dispatch
+  setRawIntakes: (val: IProbIntake[]) => void
 ) => {
   try {
     //  remarks: invalid case with no selection
@@ -289,7 +290,7 @@ export const handle_candidates_status_submit = async (
     //  remarks: refresh intakes list (this handler is used from the probation intakes table)
     const res = await axios.get(API.PBT_INTAKES);
     const updatedIntakes = res?.data?.data?.result || [];
-    dispatch(setCandidates(updatedIntakes));
+    setRawIntakes(updatedIntakes);
     setSelectedCandidates([]);
     setTriggerUpdate(false);
   } catch (err: any) {
@@ -445,3 +446,40 @@ export const handle_filter_submit = (
   });
   setTriggerFilter(false);
 };
+
+
+//   ==========    Export data   ==========
+
+  //  remarks: convert javascript object into designated file format to be exported
+  //  ref: https://stackoverflow.com/questions/55613438/reactwrite-to-json-file-or-export-download-no-server
+  export const handle_download = (data: any, format: string, setTrigger: (bool: boolean) => void) => {
+
+    const content =
+      format === 'json'
+        ? JSON.stringify(data)   //  remarks: stringify, convert from object to json format
+        : [
+            //  learnt:  (1) csv firstly require table head details
+            Object.keys(data[0] ?? {}).join(','),   
+            //  learnt:  (2) csv then require list of data by rows
+            ...data.map((row: any) => Object.values(row).join(',')),
+          ].join('\n');   //  learnt: convert to csv format
+
+    //  remarks: build export route
+    //  learnt: (1) convert to the binary format data chunks
+    const blob = new Blob([content], {
+      type: format === 'json' ? 'application/json' : 'text/csv',
+    });
+    //  leanrt: (2) create data links for download connection
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');   // learnt: (a) build the <a> html tag
+    link.href = url;   // learnt: (b) inject the href link as the created download connection
+    link.download = `prob_intakes.${format}`;   // learnt: (c) specify download filename
+    //  leanrt: (3) append new component at client side
+    //  leanrt: keep the blob data and its connection will lead to memory leaks,
+    //          client can keep create the additional data which consume memory without releasing 
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);    // learnt: inactivate the url and link connection after activated download, then close window
+    URL.revokeObjectURL(url);
+    setTrigger(false);
+  };

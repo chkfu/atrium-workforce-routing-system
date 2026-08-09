@@ -8,11 +8,10 @@ import {
   ButtonSort,
   ButtonFilter,
   ButtonDelete,
+  ButtonExportDataTrigger,
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
 import { FormSorting, FormFiltering } from './forms';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
 
 //  ==========    MAIN    ==========
 
@@ -62,9 +61,8 @@ export function ControlPanelSection(): JSX.Element {
 
 //  remarks: table display
 export function TableSection(): JSX.Element {
-  const { selectedIntakes } = useIntakesContext();
-  const candidates = useSelector((state: RootState) => state.candidates.value);
-  if (candidates.length === 0) {
+  const { selectedIntakes, rawIntakes } = useIntakesContext();
+  if (rawIntakes.length === 0) {
     return (
       <div className="pt-2 w-full">
         <div className="p-4 text-gray-500">No record found</div>
@@ -119,6 +117,7 @@ function FormButtonBox(): JSX.Element {
       <ButtonConvertActive />
       <ButtonCandidateStatusTrigger />
       <ButtonDelete />
+      <ButtonExportDataTrigger />
     </div>
   );
 }
@@ -148,3 +147,7 @@ function PageOptBox(): JSX.Element {
     </div>
   );
 }
+
+//  remarks: download file option popup
+
+

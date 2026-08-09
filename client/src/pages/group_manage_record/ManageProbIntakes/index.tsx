@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { setCandidates } from '../../../redux/slices/CandidateSlice';
 import { setSelectWeight } from '../../../redux/slices/SelectWeightSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -11,6 +10,7 @@ import { PanelFromContainer } from './elements/layout';
 import { useSearchParams } from 'react-router-dom';
 import { enum_gender, enum_prob_status } from '../../../utils/types/page_enums';
 import { ManagePageBackButton } from '../../../elements/BackButtons';
+import { IProbIntake } from '../../../utils/types/redux_types';
 
 //  remarks: main page for manage candidates
 export default function ManageProbIntakes(): JSX.Element {
@@ -22,6 +22,7 @@ export default function ManageProbIntakes(): JSX.Element {
 
   //  1. GET
   //  1a. receive general data
+  const [rawIntakes, setRawIntakes] = useState<IProbIntake[]>([]);
   const [selectedIntakes, setSelectedIntakes] = useState<number[]>([]);
   //  1b. receive pagination data
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -119,16 +120,15 @@ export default function ManageProbIntakes(): JSX.Element {
         params,
       })
       .then((res) => {
-        const intakes = res.data.data.result;
+        setRawIntakes(res.data.data.result);
         const totalPages = res.data.data.total_pages;
-        dispatch(setCandidates(intakes));
         setTotalPage(totalPages);
         setIsGetting(false);
       })
       .catch((err: any) => {
         console.error('[ManageProbIntakes] error: fetching intakes:', err);
         // learnt: state change for re-render, as throw error did not trigger
-        dispatch(setCandidates([]));
+        setRawIntakes([]);
         setGetError(err.message || '[ManageProbIntakes] error: Failed to load intakes');
         setIsGetting(false);
       }))
@@ -173,6 +173,8 @@ export default function ManageProbIntakes(): JSX.Element {
             //  1.  GET
 
             //  1a. receive general data
+            rawIntakes,
+            setRawIntakes,
             selectedIntakes,
             setSelectedIntakes,
             //  1b. receive pagination data

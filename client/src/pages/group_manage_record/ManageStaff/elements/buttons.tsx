@@ -12,6 +12,7 @@ import {
   handle_sort_submit,
   handle_filter_submit,
   handle_temp_filter_clear,
+  handle_delete_submit,
 } from '../utils/handlers';
 import filter from '../../../../assets/svg/filter_icon.svg';
 
@@ -205,6 +206,26 @@ export const ButtonConvertSubmit = (): JSX.Element => {
         cursor: isConverting ? 'none' : 'pointer',
       }}
       disabled={convertStatus === null || isConverting}
+    />
+  );
+};
+
+//  DELETE
+export const ButtonDelete = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const { selectedStaff, setSelectedStaff, isDeleting, setIsDeleting } = useStaffContext();
+  return (
+    <ButtonConfirm
+      label={isDeleting ? 'Loading...' : 'Delete'}
+      onClick={() =>
+        handle_delete_submit(selectedStaff, setIsDeleting, setSelectedStaff, dispatch)
+      }
+      style={{
+        backgroundColor: COLORS.light_gray,
+        color: COLORS.dark_teal,
+        cursor: isDeleting ? 'none' : 'pointer',
+      }}
+      disabled={isDeleting}
     />
   );
 };

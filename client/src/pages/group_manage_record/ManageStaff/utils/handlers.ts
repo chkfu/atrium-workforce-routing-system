@@ -277,6 +277,42 @@ export const handle_convert_submit = async (
   }
 };
 
+//  ==========    delete    ==========
+export const handle_delete_submit = async (
+  selectedStaff: number[],
+  setIsDeleting: (val: boolean) => void,
+  setSelectedStaff: (val: any) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: no selected Staff
+    if (!selectedStaff || selectedStaff.length === 0) {
+      alert('Please select any Staff.');
+      return;
+    }
+    setIsDeleting(true);
+    // remarks: delete selected Staff
+    await axios.delete(API.STAFF, {
+      data: { _ids: selectedStaff.map((id) => String(id)) },
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.STAFF);
+    const data = res?.data?.data?.result || [];
+    dispatch(setStaff(data));
+    setSelectedStaff([]);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageStaff] error: Error deleting Staff:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageStaff] error: Failed to delete Staff records';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 //  ==========    sorting    ==========
 
 //  remarks: reset temp sort options by closing popup

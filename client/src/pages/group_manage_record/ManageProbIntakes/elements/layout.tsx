@@ -4,8 +4,10 @@ import { TableHeaderBox, TableBodyBox } from './tables';
 import {
   ButtonCreate,
   ButtonConvertActive,
+  ButtonCandidateStatusTrigger,
   ButtonSort,
   ButtonFilter,
+  ButtonDelete,
 } from './buttons';
 import { OptionPageLimit, OptionPageSelect } from './forms';
 import { FormSorting, FormFiltering } from './forms';
@@ -115,6 +117,8 @@ function FormButtonBox(): JSX.Element {
     <div className="flex flex-wrap gap-2">
       <ButtonCreate />
       <ButtonConvertActive />
+      <ButtonCandidateStatusTrigger />
+      <ButtonDelete />
     </div>
   );
 }

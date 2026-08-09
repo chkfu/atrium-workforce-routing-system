@@ -19,8 +19,8 @@ class PbtIntakeRepository extends BaseRepository<TPbtIntakeBase & TSchemaBase> {
 
   //  remarks: list endpoint returns the computed/projected intake result (candidate name,
   //           department, strategy, edu/exp/test/total score) instead of raw FK ids.
-  //  remarks: view_prob_intakes already filters WHERE pint.is_active = TRUE, so inactive
-  //           intakes will not appear in this list (consistent with the view's own definition).
+  //  remarks: view_prob_intakes returns both active and inactive intakes; the table UI
+  //           dims inactive rows rather than hiding them.
   public get_record_batch = async (
     page_opts: Record<string, number> = { page_current: 1, page_limit: 20 },
   ) => {

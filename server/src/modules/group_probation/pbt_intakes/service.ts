@@ -98,58 +98,64 @@ class PbtIntakeService extends BaseService<TPbtIntakeBase & TSchemaBase, PbtInta
   }
 
 
-  //  Main Method
+  //  ==========    Main Method    ==========
 
-  public set_intake_results = async(push_ids: string[], pull_ids: string[]) => {
+  public set_intake_results = async(weight_id: number) => {
     try {
-      await this.run_selection_procedures(push_ids, pull_ids);
+      await this.run_selection_procedures(weight_id);
     } catch(err){
       const err_msg = `[${this.table.toUpperCase()}] error: failed to run selection procedures.`;
       loggers.app_logger.error(`${err_msg}\n${err}`);
       throw new AppError(500, err_msg);
     }
+    let result_rows: any[] = [];
     try {
-      await this.repository.set_select_result(this.result_arr);
+      const result = await this.repository.set_select_result(this.result_arr);
+      result_rows = result.rows;
     } catch(err){
       const err_msg = `[${this.table.toUpperCase()}] error: failed to save selection results.`;
       loggers.app_logger.error(`${err_msg}\n${err}`);
       throw new AppError(500, err_msg);
     }
+    let pending_rows: any[] = [];
     try {
-       await this.repository.set_select_result(this.pending_arr);
+       const result = await this.repository.set_select_result(this.pending_arr);
+       pending_rows = result.rows;
     } catch(err){
       const err_msg = `[${this.table.toUpperCase()}] error: failed to save pending selection results.`;
       loggers.app_logger.error(`${err_msg}\n${err}`);
       throw new AppError(500, err_msg);
     }
+    return [...result_rows, ...pending_rows];
   }
 
 
-  //  Supporting Methods
+  //  ==========    Supporting Methods    ==========
 
   //  remarks: the major select logic, comprise sub-processes of regular and pending
-  public run_selection_procedures = async (push_ids: string[], pull_ids: string[]) => {
+  public run_selection_procedures = async (weight_id: number) => {
     //  learnt: reset for subsequent select action
     this.result_arr = [];
     this.pending_arr = [];
 
     //  remarks: (1) extract candidate total score, department weighting, selection weighting
-    const { candidate_desc, department_desc, pref_desc } = await this.get_selection_inputs();
+    const { candidate_desc, department_desc, weighting_desc, pref_desc } = await this.get_selection_inputs(weight_id);
+    const target_weight = weighting_desc.data.find((weight: any) => Number(weight._id) === Number(weight_id));
+    if (!target_weight) {
+      throw new ValueError(
+        404,
+        `[${this.table.toUpperCase()}] error: weight_id ${weight_id} is not a known weighting strategy.`,
+      );
+    }
     //  remarks: (2) matching
-    //  remarks: (2a) declaration
-    const assign_push = candidate_desc.filter(el => push_ids.includes(el._id));
-    const assign_pull = candidate_desc.filter(el => pull_ids.includes(el._id));
-    const assign_normal = candidate_desc.filter(el => !push_ids.includes(el._id) && !pull_ids.includes(el._id));
-    //  remarks: (2b) matching process
     //  remarks: remaining_capacity already reflects existing staff headcount (view_department_criteria);
     //           clone here since assign_candidates_regular/pending mutate it per assignment
+    //  learnt: prevent changes made to original department_desc array, as [...array] cannot clone nested objects
     const dept_capacity_desc = department_desc.map(dept => ({ ...dept }));
     //  remarks: execute selection processes
     const pref_map = new Map(pref_desc.map(pref => [pref.candidate_id, pref]));
-    this.assign_candidates_regular(assign_push, dept_capacity_desc, pref_map, 'push');
-    this.assign_candidates_regular(assign_normal, dept_capacity_desc, pref_map, 'normal');
-    this.assign_candidates_regular(assign_pull, dept_capacity_desc, pref_map, 'pull');
-    this.pending_arr = this.assign_candidates_pending(this.pending_arr, dept_capacity_desc);
+    this.assign_candidates_regular(candidate_desc, dept_capacity_desc, pref_map, weight_id, 'normal');
+    this.pending_arr = this.assign_candidates_pending(this.pending_arr, dept_capacity_desc, weight_id);
     return { 
       result_arr: this.result_arr, 
       pending_arr: this.pending_arr 
@@ -162,6 +168,7 @@ class PbtIntakeService extends BaseService<TPbtIntakeBase & TSchemaBase, PbtInta
     candidate_list: any[],
     department_list: any[],
     pref_map: Map<number, any>,
+    weight_id: number,
     remarks: string,
   ) => {
     candidate_list.forEach(candidate => {
@@ -189,15 +196,15 @@ class PbtIntakeService extends BaseService<TPbtIntakeBase & TSchemaBase, PbtInta
       //  remarks: assign to lists
       if (matched_dept) {
         matched_dept.remaining_capacity -= 1;
-        this.result_arr.push({ ...candidate, dept_id: matched_dept.dept_id, remarks });
+        this.result_arr.push({ ...candidate, dept_id: matched_dept.dept_id, weight_id, remarks });
       } else {
-        this.pending_arr.push({ ...candidate, dept_id: null, remarks: 'force_assign' });
+        this.pending_arr.push({ ...candidate, dept_id: null, weight_id, remarks: 'force_assign' });
       }
     });
   };
 
   //  remarks: matching logic, as second selection layer without score criteria
-  public assign_candidates_pending = (candidate_list: any[], department_list: any[]) => {
+  public assign_candidates_pending = (candidate_list: any[], department_list: any[], weight_id: number) => {
     const still_pending: any[] = [];
     //  remarks: matching by department designated priority
     candidate_list.forEach(candidate => {
@@ -208,18 +215,18 @@ class PbtIntakeService extends BaseService<TPbtIntakeBase & TSchemaBase, PbtInta
       //  remarks: assign to listsm supposedly quota will be enough for all
       if (matched_dept) {
         matched_dept.remaining_capacity -= 1;
-        this.result_arr.push({ ...candidate, dept_id: matched_dept.dept_id, remarks: 'force_assign' });
+        this.result_arr.push({ ...candidate, dept_id: matched_dept.dept_id, weight_id, remarks: 'force_assign' });
       } else {
-        still_pending.push({ ...candidate, dept_id: null, remarks: 'force_assign_failed' });
+        still_pending.push({ ...candidate, dept_id: null, weight_id, remarks: 'force_assign_failed' });
       }
     });
     return still_pending;
   };
 
   //  remarks: get candidate score list, get department list, get select weighting
-  private get_selection_inputs = async () => {
+  private get_selection_inputs = async (weight_id: number) => {
     //  remarks: candidate total scores in desc order
-    const candidate_desc = await this.slt_score_service.get_slt_score_desc();
+    const candidate_desc = await this.slt_score_service.get_slt_score_desc(weight_id);
     if (!candidate_desc || candidate_desc.length < 1) {
       throw new ValueError(
         404,

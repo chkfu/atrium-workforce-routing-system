@@ -10,14 +10,14 @@ import { RootState } from '../../../../redux/store';
 const table_headers = [
   { label: 'ID', className: 'w-8', key: 'id' },
   { label: 'Candidate', className: 'min-w-20', key: 'candidate' },
-  { label: 'Gender', className: 'min-w-16', key: 'gender' },
-  { label: 'Status', className: 'min-w-20', key: 'status' },
-  { label: 'Department', className: 'min-w-20', key: 'dept' },
-  { label: 'Strategy', className: 'min-w-20', key: 'strategy' },
-  { label: 'Edu Score', className: 'min-w-16', key: 'edu_score' },
-  { label: 'Exp Score', className: 'min-w-16', key: 'exp_score' },
-  { label: 'Test Score', className: 'min-w-16', key: 'test_score' },
-  { label: 'Total Score', className: 'min-w-16', key: 'total_score' },
+  { label: 'Gender', className: 'min-w-24', key: 'gender' },
+  { label: 'Status', className: 'min-w-24', key: 'status' },
+  { label: 'Department', className: 'min-w-40', key: 'dept' },
+  { label: 'Strategy', className: 'min-w-28', key: 'strategy' },
+  { label: 'Edu Score', className: 'min-w-20', key: 'edu_score' },
+  { label: 'Exp Score', className: 'min-w-20', key: 'exp_score' },
+  { label: 'Test Score', className: 'min-w-20', key: 'test_score' },
+  { label: 'Total Score', className: 'min-w-20', key: 'total_score' },
   { label: 'Active', className: 'min-w-20', key: 'active' },
   { label: 'Created', className: 'min-w-20', key: 'created' },
   { label: 'Updated', className: 'min-w-20', key: 'updated' },
@@ -37,7 +37,10 @@ const table_cols = [
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     },
-    element: (el: any) => `${el.candidate_first_name ?? ''} ${el.candidate_last_name ?? ''}`.trim(),
+    element: (el: any) => {
+      const capitalize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
+      return `${capitalize(el.candidate_first_name ?? '')} ${capitalize(el.candidate_last_name ?? '')}`.trim();
+    },
   },
   {
     key: 'gender',
@@ -68,22 +71,22 @@ const table_cols = [
   {
     key: 'edu_score',
     className: 'p-2 text-sm text-gray-500',
-    element: (el: any) => el.intake_edu_score ?? '',
+    element: (el: any) => Number(el.intake_edu_score).toFixed(2) ?? '',
   },
   {
     key: 'exp_score',
     className: 'p-2 text-sm text-gray-500',
-    element: (el: any) => el.intake_exp_score ?? '',
+    element: (el: any) => Number(el.intake_exp_score).toFixed(2) ?? '',
   },
   {
     key: 'test_score',
     className: 'p-2 text-sm text-gray-500',
-    element: (el: any) => el.intake_test_score ?? '',
+    element: (el: any) => Number(el.intake_test_score).toFixed(2) ?? '',
   },
   {
     key: 'total_score',
     className: 'p-2 text-sm font-bold',
-    element: (el: any) => el.intake_total_score ?? '',
+    element: (el: any) => Number(el.intake_total_score).toFixed(2) ?? '',
   },
   {
     key: 'active',

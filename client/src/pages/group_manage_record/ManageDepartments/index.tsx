@@ -61,6 +61,7 @@ export default function ManageDepartment(): JSX.Element {
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isConverting, setIsConverting] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   useEffect(() => {
     setSearchParams((prev) => {
@@ -213,6 +214,8 @@ export default function ManageDepartment(): JSX.Element {
             setIsUpdating,
             isConverting,
             setIsConverting,
+            isDeleting,
+            setIsDeleting,
           }}
         >
           <PanelFromContainer />

@@ -273,6 +273,43 @@ export const handle_convert_submit = async (
   }
 };
 
+//  ==========    delete    ==========
+
+export const handle_delete_submit = async (
+  selectedSltWeight: number[],
+  setIsDeleting: (val: boolean) => void,
+  setSelectedSltWeight: (val: any) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: no selected SltWeight
+    if (!selectedSltWeight || selectedSltWeight.length === 0) {
+      alert('Please select any SltWeight.');
+      return;
+    }
+    setIsDeleting(true);
+    // remarks: delete selected SltWeight
+    await axios.delete(API.SELECT_WEIGHTING, {
+      data: { _ids: selectedSltWeight.map((id) => String(id)) },
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.SELECT_WEIGHTING);
+    const data = res?.data?.data?.result || [];
+    dispatch(setSelectWeight(data));
+    setSelectedSltWeight([]);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageSltWeight] error: Error deleting SltWeight:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageSltWeight] error: Failed to delete SltWeight records';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 //  ==========    sorting    ==========
 
 //  remarks: reset temp sort options by closing popup

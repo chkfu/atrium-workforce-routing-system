@@ -6,7 +6,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
 import { API } from '../../../../config/api';
-import { CreateIntakeSchema } from './schema';
+import { CreateIntakeSchema, UpdateCandidateSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
 
 //  ==========  checkbox status  ==========
@@ -75,18 +75,10 @@ export const handle_create_submit = async (
   dispatch: Dispatch
 ) => {
   try {
-    //  learnt: remove empty string values for enum fields
-    const new_data: Record<string, any> = {};
-    for (const [key, value] of Object.entries(data)) {
-      if ((value as unknown) !== '') {
-        new_data[key] = value;
-      }
-    }
-
     //  remarks: valid case for create
     setIsCreating(true);
     await axios.post(API.PBT_INTAKES, {
-      probation_intakes: [new_data],
+      weight_id: data.select_weight_id,
     });
     alert(`[ManageIntakes] succeed: new intake record has been created.`);
     const res = await axios.get(API.PBT_INTAKES);
@@ -189,6 +181,131 @@ export const handle_convert_submit = async (
     setIsConverting(false);
   }
 };
+
+//  ==========    delete    ==========
+export const handle_delete_submit = async (
+  selectedIntakes: number[],
+  setIsDeleting: (val: boolean) => void,
+  setSelectedIntakes: (val: any) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: no selected intakes
+    if (!selectedIntakes || selectedIntakes.length === 0) {
+      alert('Please select any intake.');
+      return;
+    }
+    setIsDeleting(true);
+    // remarks: delete selected intakes
+    await axios.delete(API.PBT_INTAKES, {
+      data: { _ids: selectedIntakes.map((id) => String(id)) },
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.PBT_INTAKES);
+    const data = res?.data?.data?.result || [];
+    dispatch(setCandidates(data));
+    setSelectedIntakes([]);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageIntakes] error: Error deleting intakes:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageIntakes] error: Failed to delete intake records';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsDeleting(false);
+  }
+}
+
+//  ==========    switch candidate status    ==========
+
+//  remarks: manage update popup (update candidates)
+export const handle_candidates_status_popup = (
+  selectedIntakes: number[],
+  setTriggerUpdate: (val: boolean) => void
+) => {
+  //  remarks: case of no selection
+  if (selectedIntakes.length === 0) {
+    alert('Please select any candidate.');
+    return;
+  }
+  //  remarks: case of selection
+  try {
+    setTriggerUpdate(true);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('Batch Update Error:', {
+      error: err,
+      message: err.message,
+    });
+    alert(
+      `Error: ${err.response?.data?.message || err.message || '[ManageCandidates] error: Failed to update candidates'}`
+    );
+  }
+};
+
+//  remarks: cancel button inside update popup (update candidates)
+export const handle_candidates_status_cancel = (
+  isUpdating: boolean,
+  setTriggerUpdate: (val: boolean) => void,
+  setUpdateDetails: (val: any) => void
+) => {
+  if (isUpdating) return;
+  setTriggerUpdate(false);
+  setUpdateDetails(null);
+};
+
+//  remarks: manage form submission (update candidates)
+export const handle_candidates_status_submit = async (
+  data: yup.InferType<typeof UpdateCandidateSchema>,
+  selectedCandidates: number[],
+  setIsUpdating: (val: boolean) => void,
+  setSelectedCandidates: (val: any) => void,
+  setTriggerUpdate: (val: boolean) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: invalid case with no selection
+    if (selectedCandidates.length === 0) {
+      alert('Please select candidates to update.');
+      return;
+    }
+    //  learnt: remove empty string values for enum fields
+    const updateData: Record<string, any> = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== '') {
+        updateData[key] = value;
+      }
+    }
+    //  remarks: valid case for update
+    setIsUpdating(true);
+    await axios.patch(API.CANDIDATES, {
+      _ids: selectedCandidates.map((id) => String(id)),
+      prob_status: updateData.prob_status,    //  remarks: only allow prob_status to be updated
+    });
+    alert(`[ManageIntakes] succeed: new user status has been updated.`);
+
+    //  remarks: refresh intakes list (this handler is used from the probation intakes table)
+    const res = await axios.get(API.PBT_INTAKES);
+    const updatedIntakes = res?.data?.data?.result || [];
+    dispatch(setCandidates(updatedIntakes));
+    setSelectedCandidates([]);
+    setTriggerUpdate(false);
+  } catch (err: any) {
+    console.error('[ManageIntakes] error: update candidates:', {
+      error: err,
+      message: err.message,
+    });
+    alert(
+      `Error: ${err.response?.data?.message || err.message || 'Error: Failed to update candidate status. Please try again later.'}`
+    );
+  } finally {
+    setIsUpdating(false);
+  }
+};
+
+
 
 //  ==========    sorting    ==========
 

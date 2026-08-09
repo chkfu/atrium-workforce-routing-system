@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { setCandidates } from '../../../redux/slices/CandidateSlice';
+import { setSelectWeight } from '../../../redux/slices/SelectWeightSlice';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import Accordion from '../../../elements/Accordion';
@@ -62,6 +63,7 @@ export default function ManageProbIntakes(): JSX.Element {
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isConverting, setIsConverting] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   useEffect(() => {
     setSearchParams((prev) => {
@@ -133,6 +135,25 @@ export default function ManageProbIntakes(): JSX.Element {
       fetch_candidates()
 
   }, [searchParams.toString()]);
+
+  useEffect(() => {
+    //  remarks: load active weighting strategies for the create form dropdown, sorted alphabetically
+    axios
+      .get(API.SELECT_WEIGHTING, {
+        params: {
+          filter_is_active: true,
+          sort_target: 'strategy_name',
+          sort_order: true,
+          limit: 100,
+        },
+      })
+      .then((res) => {
+        dispatch(setSelectWeight(res.data.data.result));
+      })
+      .catch((err: any) => {
+        console.error('[ManageProbIntakes] error: fetching weighting strategies:', err);
+      });
+  }, []);
   //  loading spinner for pending status
   if (isGetting && !isInitialised) {
     return <LoadSpinner />;
@@ -218,6 +239,8 @@ export default function ManageProbIntakes(): JSX.Element {
             setIsUpdating,
             isConverting,
             setIsConverting,
+            isDeleting,
+            setIsDeleting,
           }}
         >
           <PanelFromContainer />

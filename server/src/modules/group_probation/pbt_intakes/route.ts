@@ -21,13 +21,13 @@ const pbt_intake_controller = new PbtIntakeController(
 router
   .route('/')
   .get(pbt_intake_controller.get_record_batch())
-  .post(pbt_intake_controller.create_record_batch())
-  .patch(pbt_intake_controller.update_record_details_batch())
+  .post(pbt_intake_controller.create_record_single())
   .delete(pbt_intake_controller.remove_record_batch());
 
 router
   .route('/activation')
   .patch(pbt_intake_controller.update_record_active_batch());
+  
 router.route('/empty').delete(pbt_intake_controller.empty_record_all());
 
 router.route('/:id').get(pbt_intake_controller.get_record_by_id());

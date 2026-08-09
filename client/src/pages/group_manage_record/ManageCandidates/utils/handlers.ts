@@ -273,6 +273,42 @@ export const handle_convert_submit = async (
   }
 };
 
+//  ==========    delete    ==========
+export const handle_delete_submit = async (
+  selectedCandidates: number[],
+  setIsDeleting: (val: boolean) => void,
+  setSelectedCandidates: (val: any) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: no selected candidates
+    if (!selectedCandidates || selectedCandidates.length === 0) {
+      alert('Please select any candidate.');
+      return;
+    }
+    setIsDeleting(true);
+    // remarks: delete selected candidates
+    await axios.delete(API.CANDIDATES, {
+      data: { _ids: selectedCandidates.map((id) => String(id)) },
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.CANDIDATES);
+    const data = res?.data?.data?.result || [];
+    dispatch(setCandidates(data));
+    setSelectedCandidates([]);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageCandidates] error: Error deleting candidates:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageCandidates] error: Failed to delete candidate records';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 //  ==========    sorting    ==========
 
 //  remarks: reset temp sort options by closing popup

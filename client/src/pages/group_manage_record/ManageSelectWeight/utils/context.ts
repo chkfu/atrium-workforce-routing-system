@@ -65,6 +65,8 @@ interface SelectWeightContextType {
   setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   isConverting: boolean;
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
+  isDeleting: boolean;
+  setIsDeleting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SelectWeightContext = createContext<SelectWeightContextType | undefined>(undefined);

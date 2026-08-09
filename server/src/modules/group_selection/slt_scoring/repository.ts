@@ -17,9 +17,9 @@ class SltScoreRepository extends BaseRepository<TSltScoreBase & TSchemaBase> {
 
   //  Methods
 
-  public get_candidate_score_desc = async() => {
-    const query = `SELECT * FROM view_select_scoring;`;
-    const result = await pool.query(query)
+  public get_candidate_score_desc = async(weight_id: number) => {
+    const query = `SELECT * FROM view_select_scoring WHERE weight_id = $1 ORDER BY total_score DESC;`;
+    const result = await pool.query(query, [weight_id])
     return result.rows;
   }
 }

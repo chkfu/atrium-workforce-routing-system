@@ -217,9 +217,9 @@ CREATE TABLE IF NOT EXISTS select_weighting(
   exp_nature_vol INTEGER DEFAULT 10,
   exp_year_rate NUMERIC(5,2) DEFAULT 1.33 CHECK (exp_year_rate BETWEEN 0 AND 2),
   --  remarks: test score rules
-  test_apt  NUMERIC(3,2) CHECK (test_apt BETWEEN 0 AND 1),
-  test_int_1st  NUMERIC(3,2) CHECK (test_int_1st BETWEEN 0 AND 1),
-  test_int_2nd  NUMERIC(3,2) CHECK (test_int_2nd BETWEEN 0 AND 1),
+  test_apt  NUMERIC(3,2) DEFAULT 0.33 CHECK (test_apt BETWEEN 0 AND 1),
+  test_int_1st  NUMERIC(3,2) DEFAULT 0.33 CHECK (test_int_1st BETWEEN 0 AND 1),
+  test_int_2nd  NUMERIC(3,2) DEFAULT 0.33 CHECK (test_int_2nd BETWEEN 0 AND 1),
   CONSTRAINT chk_test_weight_sum CHECK (test_apt + test_int_1st + test_int_2nd <= 1),
   --  remarks: overall shares
   weight_edu  NUMERIC(3,2) DEFAULT 0.33 CHECK (weight_edu BETWEEN 0 AND 1),
@@ -337,7 +337,7 @@ SELECT
   ) AS edu_score_total
 FROM candidate_education cedu
 CROSS JOIN select_weighting swei
-WHERE cedu.is_active = TRUE AND swei.is_active = TRUE
+WHERE cedu.is_active = TRUE
 GROUP BY cedu.candidate_id, swei._id;
 
 --  remarks: total score (candidate experience), (attempt 1)
@@ -358,7 +358,7 @@ SELECT
   ) AS exp_score_total
 FROM candidate_experience cexp
 CROSS JOIN select_weighting swei
-WHERE cexp.is_active = TRUE AND swei.is_active = TRUE
+WHERE cexp.is_active = TRUE
 GROUP BY cexp.candidate_id, swei._id;
 
 
@@ -377,7 +377,7 @@ SELECT
   ) AS test_score_total
 FROM candidate_tests ctes
 CROSS JOIN select_weighting swei
-WHERE ctes.is_active = TRUE AND swei.is_active = TRUE
+WHERE ctes.is_active = TRUE
 GROUP BY ctes.candidate_id, swei._id;
 
 
@@ -405,7 +405,6 @@ CROSS JOIN select_weighting swei
 LEFT JOIN view_candidate_edu vedu ON cand._id = vedu.candidate_id AND vedu.weight_id = swei._id
 LEFT JOIN view_candidate_exp vexp ON cand._id = vexp.candidate_id AND vexp.weight_id = swei._id
 LEFT JOIN view_candidate_tests vtes ON cand._id = vtes.candidate_id AND vtes.weight_id = swei._id
-WHERE swei.is_active = TRUE
 ORDER BY total_score DESC;
 
 
@@ -450,7 +449,8 @@ SELECT
   vss.total_score AS intake_total_score,
   pint.is_active AS intake_is_active,
   pint.created_at AS intake_created_at,
-  pint.updated_at AS intake_updated_at
+  pint.updated_at AS intake_updated_at,
+  cand._id AS candidate_id
 FROM probation_intakes pint
 LEFT JOIN candidates cand ON pint.candidate_id = cand._id
 LEFT JOIN departments dept ON pint.dept_intake = dept._id
@@ -458,7 +458,6 @@ LEFT JOIN select_weighting swei ON pint.select_weight_id = swei._id
 LEFT JOIN view_select_scoring vss
   ON pint.candidate_id = vss.candidate_id
   AND pint.select_weight_id = vss.weight_id
-WHERE pint.is_active = TRUE
 ORDER BY vss.total_score DESC;
 
 

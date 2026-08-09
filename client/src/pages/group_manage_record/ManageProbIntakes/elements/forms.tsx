@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FilterTextField from '../../../../elements/FilterTextField';
 import FilterSelectInput from '../../../../elements/FilterSelectInput';
 import FilterDateRangeInput from '../../../../elements/FilterRangeInput';
@@ -11,7 +11,7 @@ import {
   ButtonFilterClear,
   ButtonFilterSubmit,
 } from './buttons';
-import FormTextField from '../../../../elements/FormTextField';
+import FormSelectInput from '../../../../elements/FormSelectInput';
 import ButtonClose from '../../../../elements/ButtonClose';
 import { CreateIntakeSchema } from '../utils/schema';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../utils/handlers';
 import { useIntakesContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
+import { RootState } from '../../../../redux/store';
 
 //  CREATE
 
@@ -35,6 +36,10 @@ export function FormCreate() {
     resolver: yupResolver(CreateIntakeSchema),
   });
   const { setIsCreating, setTriggerCreate } = useIntakesContext();
+  const select_weight = useSelector((state: RootState) => state.select_weight.value);
+  const select_weight_sorted = [...select_weight].sort((a, b) =>
+    a.strategy_name > b.strategy_name ? 1 : -1
+  );
 
   function recalling(data: any) {
     handle_create_submit(data, setIsCreating, setTriggerCreate, dispatch);
@@ -46,12 +51,15 @@ export function FormCreate() {
 
       {/*  section: field inputs - scrollable  */}
       <div className="overflow-y-auto flex-1">
-        <FormTextField
-          label="Weighting Strategy ID"
-          type="number"
+        <FormSelectInput
+          label="Weighting Strategy"
           register={register('select_weight_id')}
           error={errors.select_weight_id}
           required={true}
+          options={select_weight_sorted.map((weight) => ({
+            value: String(weight._id),
+            label: weight.strategy_name,
+          }))}
         />
       </div>
 

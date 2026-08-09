@@ -13,25 +13,30 @@ const director_card_list_personal = (staff_id?: number | null): TCardItem[] => [
 
 const director_card_list_task_panel: TCardItem[] = [
   {
+    title: 'Manage Candidates',
+    description: 'Review and manage candidate applications and profiles.',
+    path: '/manage-candidates',
+  },
+  {
     title: 'Manage Staff',
-    description: 'Oversee and manage all staff members and their roles',
+    description: 'Manage staff members and their assignments.',
     path: '/manage-staff',
   },
   {
     title: 'Manage Departments',
-    description: 'Configure and manage organizational departments',
+    description: 'Organize and manage department information.',
     path: '/manage-departments',
   },
   {
     title: 'Manage Weighting',
-    description: 'Set scoring weights and evaluation criteria',
-    path: '/#',
+    description: 'Adjust weighting scores for candidate selection.',
+    path: '/manage-select-weight',
   },
   {
-    title: 'Manage Strategies',
-    description: 'Define and manage recruitment strategies',
-    path: '/#',
-  },
+    title: 'Generate Intakes',
+    description: 'Run selection procedures and manage probation intake results.',
+    path: '/manage-prob-intakes',
+  }
 ];
 
 //  Manager Dashboard
@@ -64,6 +69,11 @@ const manager_card_list_task_panel: TCardItem[] = [
     title: 'Manage Weighting',
     description: 'Adjust weighting scores for candidate selection.',
     path: '/manage-select-weight',
+  },
+  {
+    title: 'Generate Intakes',
+    description: 'Run selection procedures and manage probation intake results.',
+    path: '/manage-prob-intakes',
   }
 ];
 
@@ -80,9 +90,24 @@ const assistant_card_list_personal = (staff_id?: number | null): TCardItem[] => 
 const assistant_card_list_task_panel: TCardItem[] = [
   {
     title: 'Manage Candidates',
-    description: 'Manage and review candidate applications',
+    description: 'Review and manage candidate applications and profiles.',
     path: '/manage-candidates',
   },
+  {
+    title: 'Manage Staff',
+    description: 'Manage staff members and their assignments.',
+    path: '/manage-staff',
+  },
+  {
+    title: 'Manage Departments',
+    description: 'Organize and manage department information.',
+    path: '/manage-departments',
+  },
+  {
+    title: 'Generate Intakes',
+    description: 'Run selection procedures and manage probation intake results.',
+    path: '/manage-prob-intakes',
+  }
 ];
 
 //  Candidate Dashboard

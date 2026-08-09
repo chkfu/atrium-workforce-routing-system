@@ -30,7 +30,7 @@ const auth_controller = new AuthController(
 //  Build routes
 
 router
-  .route('/')
+  .route('/:weight_id')
   .get(slt_score_controller.get_candidate_score_desc());
 
 //  Testort

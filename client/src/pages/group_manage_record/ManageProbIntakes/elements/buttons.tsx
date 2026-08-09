@@ -1,18 +1,25 @@
 import { useIntakesContext } from '../utils/context';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store';
 import { COLORS } from '../../../../styles/color';
-import { PopupCreate, PopupConvertActive } from './popups';
+import { PopupCreate, PopupConvertActive, PopupCandidatesStatus } from './popups';
 import ButtonConfirm from '../../../../elements/ButtonConfirm';
 import sort_asc from '../../../../assets/svg/sort-asc.svg';
 import {
   handle_convert_submit,
   handle_convert_popup,
   handle_convert_cancel,
+  handle_candidates_status_popup,
+  handle_candidates_status_submit,
+  handle_candidates_status_cancel,
   handle_sort_submit,
   handle_filter_submit,
   handle_temp_filter_clear,
+  handle_delete_submit,
 } from '../utils/handlers';
+import type { UpdateCandidateSchema } from '../utils/schema';
+import type * as yup from 'yup';
 import filter from '../../../../assets/svg/filter_icon.svg';
 
 //  POST: candidates
@@ -147,6 +154,125 @@ export const ButtonConvertSubmit = (): JSX.Element => {
     />
   );
 };
+
+//  DELETE
+export const ButtonDelete = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const { selectedIntakes, setSelectedIntakes, isDeleting, setIsDeleting } = useIntakesContext();
+  return (
+    <ButtonConfirm
+      label={isDeleting ? 'Loading...' : 'Delete'}
+      onClick={() =>
+        handle_delete_submit(selectedIntakes, setIsDeleting, setSelectedIntakes, dispatch)
+      }
+      style={{
+        backgroundColor: COLORS.light_gray,
+        color: COLORS.dark_teal,
+        cursor: isDeleting ? 'none' : 'pointer',
+      }}
+      disabled={isDeleting}
+    />
+  );
+}
+
+//  SWITCH CANDIDATE STATUS
+
+export const ButtonCandidateStatusTrigger = (): JSX.Element => {
+  const { selectedIntakes, setTriggerUpdate } = useIntakesContext();
+  return (
+    <>
+      <ButtonConfirm
+        label="Update Progress"
+        onClick={() => handle_candidates_status_popup(selectedIntakes, setTriggerUpdate)}
+        style={{ backgroundColor: COLORS.light_gray, color: COLORS.dark_teal }}
+      />
+      <PopupCandidatesStatus />
+    </>
+  );
+};
+
+//  remarks: cancel button inside candidate status popup
+export const ButtonCandidateStatusCancel = (): JSX.Element => {
+  const { isUpdating, setTriggerUpdate, setUpdateDetails } = useIntakesContext();
+  return (
+    <ButtonConfirm
+      label="Cancel"
+      onClick={() => handle_candidates_status_cancel(isUpdating, setTriggerUpdate, setUpdateDetails)}
+      style={{
+        transition: 'all 1s ease',
+        backgroundColor: COLORS.light_gray,
+        color: COLORS.dark_teal,
+        cursor: isUpdating ? 'none' : 'pointer',
+      }}
+    />
+  );
+};
+
+//  remarks: save button inside candidate status popup
+export const ButtonCandidateStatusSubmit = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const intakes = useSelector((state: RootState) => state.candidates.value);
+  const {
+    updateDetails,
+    isUpdating,
+    selectedIntakes,
+    setIsUpdating,
+    setSelectedIntakes,
+    setTriggerUpdate,
+  } = useIntakesContext();
+  return (
+    <ButtonConfirm
+      label={isUpdating ? 'Loading...' : 'Save'}
+      onClick={() => {
+        //  learnt: patch targets `candidates`, but selection tracks intake rows -
+        //  translate via the joined `candidate_id` before submitting
+        const candidateIds = intakes
+          .filter((row: any) => selectedIntakes.includes(row.intake_id))
+          .map((row: any) => row.candidate_id);
+        handle_candidates_status_submit(
+          { prob_status: updateDetails } as yup.InferType<typeof UpdateCandidateSchema>,
+          candidateIds,
+          setIsUpdating,
+          setSelectedIntakes,
+          setTriggerUpdate,
+          dispatch
+        );
+      }}
+      style={{
+        transition: 'all 0.5s ease',
+        backgroundColor: COLORS.dark_teal,
+        color: COLORS.light_gray,
+        opacity: updateDetails ? 1 : 0,
+        cursor: isUpdating ? 'none' : 'pointer',
+      }}
+      disabled={!updateDetails || isUpdating}
+    />
+  );
+};
+
+
+export const ButtonSwitchStatus = ({
+  onClick,
+  isConverting,
+}: {
+  onClick: () => void;
+  isConverting: boolean;
+}): JSX.Element => {
+  return (
+    <ButtonConfirm
+      label={isConverting ? 'Loading...' : 'Confirm'}
+      onClick={onClick}
+      style={{
+        transition: 'all 0.5s ease',
+        backgroundColor: COLORS.dark_teal,
+        color: COLORS.light_gray,
+        cursor: isConverting ? 'none' : 'pointer',
+      }}
+      disabled={isConverting}
+    />
+  );
+}
+
 
 //  SORTING
 

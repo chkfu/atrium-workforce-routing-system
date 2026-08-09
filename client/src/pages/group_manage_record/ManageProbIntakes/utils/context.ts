@@ -69,6 +69,8 @@ interface IntakesContextType {
   setIsUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   isConverting: boolean;
   setIsConverting: React.Dispatch<React.SetStateAction<boolean>>;
+  isDeleting: boolean;
+  setIsDeleting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const IntakesContext = createContext<IntakesContextType | undefined>(undefined);

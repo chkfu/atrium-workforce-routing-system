@@ -21,10 +21,10 @@ class SltScoreController extends BaseController<TSltScoreBase & TSchemaBase> {
   }
 
   //  Methods
-
   public get_candidate_score_desc = (): RequestHandler =>
     handle_async(async (req: Request, res: Response, next: NextFunction) => {
-      const result = await this.slt_score_service.get_slt_score_desc();
+      const selected_weight_id = Number(req.params.weight_id);
+      const result = await this.slt_score_service.get_slt_score_desc(selected_weight_id);
       res.status(200).json({
         status: 'success',
         data: {

@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { enum_prob_status } from '../../../../utils/types/page_enums';
 
 //  remarks: schema for creating probation intakes
 export const CreateIntakeSchema = yup.object({
@@ -17,6 +18,7 @@ export const UpdateCandidateSchema = yup.object({
   date_start: yup.date().typeError('Invalid date.'),
   date_end: yup.date().typeError('Invalid date.'),
   remarks: yup.string().trim().max(50, 'Exceeded length of 50 characters.'),
+  prob_status: yup.mixed<enum_prob_status>().oneOf(Object.values(enum_prob_status)),
 });
 
 //  remarks: schema for filtering candidates (all fields optional)

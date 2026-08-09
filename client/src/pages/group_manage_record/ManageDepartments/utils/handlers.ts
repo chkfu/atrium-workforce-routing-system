@@ -274,6 +274,42 @@ export const handle_convert_submit = async (
   }
 };
 
+//  ==========    delete    ==========
+export const handle_delete_submit = async (
+  selectedDepartments: number[],
+  setIsDeleting: (val: boolean) => void,
+  setSelectedDepartments: (val: any) => void,
+  dispatch: Dispatch
+) => {
+  try {
+    //  remarks: no selected Departments
+    if (!selectedDepartments || selectedDepartments.length === 0) {
+      alert('Please select any Departments.');
+      return;
+    }
+    setIsDeleting(true);
+    // remarks: delete selected Departments
+    await axios.delete(API.DEPARTMENTS, {
+      data: { _ids: selectedDepartments.map((id) => String(id)) },
+    });
+    // remarks: refresh with updated data
+    const res = await axios.get(API.DEPARTMENTS);
+    const data = res?.data?.data?.result || [];
+    dispatch(setDepartment(data));
+    setSelectedDepartments([]);
+  } catch (err: any) {
+    // remarks: error handling
+    console.error('[ManageDepartments] error: Error deleting Departments:', err);
+    const errorMsg =
+      err.response?.data?.message ||
+      err.message ||
+      '[ManageDepartments] error: Failed to delete Departments records';
+    alert(`Error: ${errorMsg}`);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 //  ==========    sorting    ==========
 
 //  remarks: reset temp sort options by closing popup

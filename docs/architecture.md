@@ -41,10 +41,8 @@ RESTful API modules has been grouped into seven key categories:
 | group_system     | System operational settings related.              |
 | group_candidate  | New hires related, and their related information. |
 | group_department | Departmental structure and agenda.                |
-| group_selection  | Considerations related to pre-training intakes    |
-| group_probation  | Considerations related to probational performance |
-| group_hiring     | Considerations related to official hiring         |
-| group_final      | Final Result of Intakes                           |
+| group_selection  | Calculation of pre-selection performance.   |
+| group_probation  | Considerations of selection intakes.  |
 
 These core modules will support the two-tiered workflows for candidate selection as shown in below:
 

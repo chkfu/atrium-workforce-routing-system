@@ -16,11 +16,9 @@
 
 ### A. Introduction
 
-Companies often lack consistent procedures on assigning the new hires for internal re-training and jobs, leading to high dropout rates, poor role fits and the waste of resources.
+Companies often lack consistent procedures on assigning the new hires, leading to high dropout rates, poor role fits and the waste of resources.
 
-The Atrium Platform is a full-stack web application that systematically matches candidates with departments throughout the probation period, while enabling management to monitor assignment outcomes during the probation period.
-
-It provides the structured visibility into assignment outcomes during probation, and enable the management to review and adjust their strategies over time.
+The Atrium Platform is a full-stack web application that systematically matches candidates with departments throughout candidate selection. It shows assignment outcomes during the selection stage, which is designed to support strategy review in the future.
 
 <br/>
 
@@ -28,7 +26,7 @@ It provides the structured visibility into assignment outcomes during probation,
 
 This project was initially based on [Jonas Schmedtmann's Node.js Bootcamp](https://github.com/jonasschmedtmann/complete-node-bootcamp) — an online trip booking platform built with Pug, Express, and MongoDB (server-side rendering).
 
-It was subsequently transformed and redesigned into a talent selection platform, with the following changes made upon the original structure:
+It was subsequently transformed and re-designed into a talent selection platform, with the following changes made upon the original structure:
 
 - **Architecture**: Improved from MVC to Domain-Driven Design with a 4-layer backend division of business logic from data access.
 - **Tech stack**: Replaced JavaScript with TypeScript, MongoDB with PostgreSQL, and Pug with React (client-side rendering).
@@ -42,13 +40,13 @@ It was subsequently transformed and redesigned into a talent selection platform,
 
 Calculating candidate scores with configurable factors (e.g. background, interview performance, and training results). Adjustable weightings support flexible and consistent evaluation with comparisons.
 
-### B. Preference-oriented Multi-Round Matching
+### B. Preference-oriented and Multi-Round Matching
 
 Matching candidates and departments according to their preferences and department priorities. Unmatched candidates will be reassigned based on remaining quota after serveral rounds of screening.
 
-### C. Comparable Evaluation of selection strategies
+### C. Comparable Evaluation of Selection Strategies (to be developed)
 
-Systematically re-running the selection process with different configurations, comparing various outcomes (e.g. passing rate, dropout rate, preference satisfaction) for management decision.
+Systematically re-running the selection process with different configurations, comparing various outcomes (e.g. passing rate, dropout rate, preference satisfaction) for management decision. 
 
 <br/>
 
@@ -108,7 +106,7 @@ This project illustrates the request-response lifecycle and highlights the inter
 - React + Redux for frontend state management
 - PostgreSQL and Redis for persistence and caching
 
-The server-side is organised into seven domain modules to keep logic independent, complying with the design principles of "low coupling, high cohesion" (see architecture.md for more design trade-offs and considerations).
+The server-side is organised into multiple domain modules to keep logic independent, complying with the design principles of "low coupling, high cohesion" (see architecture.md for more design trade-offs and considerations).
 
 <br/>
 
@@ -131,4 +129,4 @@ See `client/package.json` and `server/package.json` for the full package list.
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: Jul 20, 2026 </i>
+<i> Last Updated: Aug 10, 2026 </i>

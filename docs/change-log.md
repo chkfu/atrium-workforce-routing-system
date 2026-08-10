@@ -18,9 +18,9 @@ This file records the major version changes of the projects.
 
 <br/>
 
-## [1.0.6] - Jul 22, 2026  -  In Progress
+## [1.0.6] - Aug 10, 2026
 
-<i>Objective: implement scoring first algorithm for the candidate selection stage.</i>
+<i>Objective: build minimal viable product for the whole candidate selection process.</i>
 
 ### Added
 
@@ -33,7 +33,9 @@ This file records the major version changes of the projects.
 ### Edited
 
 - replaced form create handler from normal creation to user registration at profile candidate and staff (with username and password setup).
-- refine name styling in title case at manage pages.
+- improved header section with corresponding interface style upon window width.
+- refined name styling in title case at manage pages.
+- updated documentation upon the changes of project scale (for minimal viable product).
 
 <br/>
 

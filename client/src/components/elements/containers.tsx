@@ -10,17 +10,18 @@ import { ROLE_DASHBOARD } from '../../pages/group_auth/utils/constants';
 //  remarks: logo container
 export const SectionLogo = function () {
   return (
+    <div className="flex items-center justify-center">
     <Link to="/">
-      <div className="flex items-center justify-center">
+      
         {/* Static - Large Logo Banner */}
-        <div className="flex active:scale-98 justify-center items-center p-4 cursor-pointer">
+        <div className="flex active:scale-98 justify-center items-center p-4">
           <img src={logo_atrium} alt="Atrium" width="48" height="48" />
           <h1 className="text-2xl font-bold text-slate-200 font-serif px-2 hover:text-white transition duration-900">
             Atrium
           </h1>
         </div>
-      </div>
     </Link>
+    </div>
   );
 };
 

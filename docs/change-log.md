@@ -2,7 +2,7 @@
 
 Learnt:
 
-The CHANGRLOG.md file records the version-based changes of the system. It
+The CHANGELOG.md file records the version-based changes of the system. It
 store the trace that how the development teams add, edit, fix and remove
 in each release.
 
@@ -14,9 +14,23 @@ summaries for further maintenance.
 
 # CHANGELOG
 
-This file records the major version changes of the projects.
+This file records the major version changes of the project.
 
 <br/>
+
+## [1.0.6] - Aug 12, 2026 - IN PROGRESS
+
+<i>Objective: finalise the preliminary product for online deployment.</i>
+
+### Added
+
+- implemented new content to project front page.
+<!-- - implemented screenshots section at `readme.md` for review. -->
+
+### Edited
+
+<br/>
+
 
 ## [1.0.6] - Aug 10, 2026
 
@@ -41,7 +55,7 @@ This file records the major version changes of the projects.
 
 ## [1.0.5] - Jul 22, 2026
 
-<i>Objective: build authentication-related interface and link navigation </i>
+<i>Objective: build authentication-related interface and link navigation.</i>
 
 ### Added
 

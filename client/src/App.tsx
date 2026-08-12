@@ -20,6 +20,7 @@ import ProfileDepartment from './pages/group_profile/ProfileDepartment';
 import ProfileSelectWeight from './pages/group_profile/ProfileSelectWeight';
 import { HREF } from './config/href';
 import ManageProbIntakes from './pages/group_manage_record/ManageProbIntakes';
+import ApplyInfo from './pages/group_navigation/ApplyInfo';
 
 const routes: RouteObject[] = [
   {
@@ -49,6 +50,10 @@ const routes: RouteObject[] = [
       {
         path: HREF.CONTACT,
         element: <Contact />,
+      },
+      {
+        path: HREF.APPLY_INFO,
+        element: <ApplyInfo />
       },
       //  Group List, by permissions
       {

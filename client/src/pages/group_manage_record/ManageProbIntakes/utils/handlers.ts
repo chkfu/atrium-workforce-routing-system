@@ -5,7 +5,6 @@ import { API } from '../../../../config/api';
 import { CreateIntakeSchema, UpdateCandidateSchema } from './schema';
 import { SetURLSearchParams } from 'react-router-dom';
 import { IProbIntake } from '../../../../utils/types/redux_types';
-import { Dispatch } from '@reduxjs/toolkit';
 
 //  ==========  checkbox status  ==========
 

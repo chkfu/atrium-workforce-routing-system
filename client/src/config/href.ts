@@ -5,6 +5,7 @@ export const HREF = {
   HOME: '/',
   ABOUT: '/about',
   CONTACT: '/contact',
+  APPLY_INFO: '/apply-info',
 
   //  remarks: authentication
   LOGIN: '/login',

@@ -28,6 +28,7 @@ This file records the major version changes of the project.
 <!-- - implemented screenshots section at `readme.md` for review. -->
 
 ### Edited
+- refactored duplicated codes of content section at project front page.
 
 <br/>
 

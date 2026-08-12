@@ -1,5 +1,7 @@
 # Atrium - Workforce Routing System
 
+**Live Demo:** [https://client-seven-pi-16.vercel.app](https://client-seven-pi-16.vercel.app)
+
 <br/>
 
 ## Contents
@@ -81,6 +83,12 @@ $ npm run dev
 
 The client will be available at `http://localhost:5173` (or specified).
 
+### C. Production environment
+
+The server is hosted on `fly.io` at `https://atrium-server-express-20260812.fly.dev`, and the client is hosted on `vercel` at `https://client-seven-pi-16.vercel.app`.
+
+See [Deployment Guide](docs/developer-guide.md#deployment-guide) in the developer guide for setup and redeployment instructions.
+
 <br/>
 
 ## Architecture
@@ -129,4 +137,4 @@ See `client/package.json` and `server/package.json` for the full package list.
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: Aug 10, 2026 </i>
+<i> Last Updated: Aug 12, 2026 </i>

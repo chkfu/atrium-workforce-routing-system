@@ -1,4 +1,4 @@
-import { ICandidate, ICandidateExp, ICandidatePref } from '../../../../utils/types/redux_types';
+import { ICandidate } from '../../../../utils/types/redux_types';
 import axios from 'axios';
 import { API } from '../../../../config/api';
 

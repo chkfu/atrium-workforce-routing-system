@@ -39,7 +39,7 @@ export default function ProfileCandidateP(): JSX.Element {
   const [targetCandidateExp, setTargetCandidateExp] = useState<any>([]);
   const [targetCandidateTest, setTargetCandidateTest] = useState<any>(null);
   const [targetCandidatePref, setTargetCandidatePref] = useState<any>(null);
-  const [getError, setGetError] = useState<any | null>(null);
+  const [, setGetError] = useState<any | null>(null);
   const [pageLoading, setPageLoading] = useState<boolean>(true);
 
   //  remarks: loading time with timeout error page

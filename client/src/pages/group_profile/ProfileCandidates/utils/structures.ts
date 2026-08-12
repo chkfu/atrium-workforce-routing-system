@@ -1,4 +1,4 @@
-import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_exp_nature, enum_gender, enum_prob_status } from "../../../../utils/types/page_enums";
+import { enum_cert_degree, enum_cert_institute, enum_cert_major, enum_gender, enum_prob_status } from "../../../../utils/types/page_enums";
 import { init_select_dept_opts } from "./handlers";
 import { PLACEHOLDER_SELECT } from "../../../../utils/constants";
 

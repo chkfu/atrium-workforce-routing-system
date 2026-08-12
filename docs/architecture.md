@@ -167,6 +167,12 @@ Each layer adheres with the single directional relationship, while processing th
 - Solution: Implemented Redis caching, rate limiting and lock, as the database-level shelter reducing loads and against race competition.
 - Tradeoff: Requires additional redis handlers for the querying methods with more complex modular relations, plus extra costs for setup and maintain the redis server.
 
+#### (3) Concern on Server Awaken Time and Hosting Cost
+
+- Solution: Enable fly.io server to keep in minimal running mode, preventing user's long wait due to the additional time cost to warm up the express server.
+- Tradeoff: The billing cost to maintain the server will be higher without sleeping mode, as the server always need to be readied no matter whether there is potential requests. Exchanges for better stability and consistent services with higher opportunity cost.
+
+
 ### B. Limitations
 
 #### (1) Long-term Data Dependency
@@ -181,4 +187,4 @@ Each layer adheres with the single directional relationship, while processing th
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: June 27, 2026</i>
+<i> Last Updated: Aug 12, 2026</i>

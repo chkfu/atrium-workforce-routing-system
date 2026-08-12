@@ -102,6 +102,47 @@ The deployment procedure will be re-run again to upload the new changes.
 
 <i>** Remarks: The latest URL need to be updated at `client/src/config/api.ts`, enable users requests from the client side must be always accurate. **</i>
 
+<br/>
+
+### B. Server side setup (production environment)
+
+####  (1) initial deployment
+
+This project adopted vercel to host the client side website.
+
+Before building the production, please ensure vercel package is valid in the project by running the command:
+
+```
+$ npm install -g vercel
+```
+
+Run the below command to proceed further, you will be redirected to vercel's website via browser for verification.
+
+```
+$ vercel login
+```
+
+To deploy the client side, please run the command at terminal with:
+
+```
+$ vercel --prod
+```
+
+Please note that any unused path or declaration will crash the buidling process, while conflicts has been found against the typecript `noUnusedParameters` setting,
+
+Finally, the terminal returns the URL of the published site. The website is currently running at: `https://client-seven-pi-16.vercel.app`.
+
+####  (2) subsequent update
+
+For subsequent changes, please run the command `vercel --prod` for latest update.  
+
+<br/>
+
+###  C. Database setup
+
+Both PostgreSQL and Redis are provisioned as third-party cloud services (Neon and Redis Cloud respectively)。They are not deployed alongside the Express server on fly.io.
+
+Their connection logic can be found under `server/src/infra/database`.
 
 <br/>
 
@@ -351,4 +392,4 @@ Considered that the batch record queries involving massive combination of sortin
 
 <i> Author: kchan </i>
 </br>
-<i> Last Updated: July 14, 2026</i>
+<i> Last Updated: Aug 12, 2026</i>

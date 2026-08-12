@@ -19,7 +19,7 @@ exp_app.use(helmet());
 //  TODO: to be applied for frontend communication
 //  2. setup cors, enabling to access server url from designated sites
 const cors_opts = {
-  origin: ['http://localhost:5173'],
+  origin: ['http://localhost:5173', 'https://client-seven-pi-16.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

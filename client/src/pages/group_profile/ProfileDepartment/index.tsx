@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { SectionDetails, SectionSelectCriteria } from './elements/layout';
 import Accordion from '../../../elements/Accordion';
 import { IDepartment, ISelectCriteria } from '../../../utils/types/redux_types';
@@ -20,8 +19,8 @@ export default function ProfileDepartment(): JSX.Element {
   const [targetDept, setTargetDept] = useState<IDepartment | null>(null);
   const [selectCriteria, setSelectCriteria] = useState<ISelectCriteria | null>(null);
   const [pageLoading, setPageLoading] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [getError, setGetError] = useState<string>('');
+  const [, setIsLoading] = useState<boolean>(false);
+  const [, setGetError] = useState<string>('');
 
   //  remarks: loading time with timeout error page
   useEffect(() => {

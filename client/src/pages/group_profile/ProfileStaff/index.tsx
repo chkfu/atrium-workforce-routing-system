@@ -23,7 +23,7 @@ export default function ProfileStaff(): JSX.Element {
   //  remarks: local state management
   const [targetStaff, setTargetStaff] = useState<IStaff | null>(null);
   const [pageLoading, setPageLoading] = useState<boolean>(true)
-  const [getError, setGetError] = useState<any | null>(null);
+  const [, setGetError] = useState<any | null>(null);
 
   //  remarks: loading time with timeout error page
   useEffect(() => {

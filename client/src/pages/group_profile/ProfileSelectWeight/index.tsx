@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { SectionDetails } from './elements/layout';
 import Accordion from '../../../elements/Accordion';
 import { ISelectWeight } from '../../../utils/types/redux_types';
@@ -19,8 +18,8 @@ export default function ProfileSelectWeight(): JSX.Element {
   //  remarks: local state management
   const [targetSelectWeight, setTargetSelectWeight] = useState<ISelectWeight | null>(null);
   const [pageLoading, setPageLoading] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [getError, setGetError] = useState<string>('');
+  const [, setIsLoading] = useState<boolean>(false);
+  const [, setGetError] = useState<string>('');
 
   //  remarks: loading time with timeout error page
   useEffect(() => {

@@ -18,17 +18,18 @@ This file records the major version changes of the project.
 
 <br/>
 
-## [1.0.6] - Aug 12, 2026 - IN PROGRESS
+## [1.0.6] - Aug 12, 2026
 
 <i>Objective: finalise the preliminary MVP product for online deployment.</i>
 
 ### Added
 
 - implemented new content to project front page.
-- published express server online to `fly.io` services.
-<!-- - implemented screenshots section at `readme.md` for review. -->
+- published express server online at `fly.io` service.
+- published client side online at `vercel` service.
 
 ### Edited
+
 - refactored duplicated codes of content section at project front page.
 
 <br/>

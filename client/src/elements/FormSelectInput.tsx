@@ -27,7 +27,6 @@ export default function FormSelectInput({
   required = false,
   placeholder = '--- Please Select ---',
   className = 'mb-4',
-  value = '',
   customisedOnChange,
 }: FormSelectInputProps) {
   return (

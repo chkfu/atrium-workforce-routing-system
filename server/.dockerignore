@@ -1,0 +1,8 @@
+/.git
+/node_modules
+.dockerignore
+.env
+Dockerfile
+fly.toml
+logs
+src/infra/ssl/*.pem

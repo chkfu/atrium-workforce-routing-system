@@ -20,11 +20,12 @@ This file records the major version changes of the project.
 
 ## [1.0.6] - Aug 12, 2026 - IN PROGRESS
 
-<i>Objective: finalise the preliminary product for online deployment.</i>
+<i>Objective: finalise the preliminary MVP product for online deployment.</i>
 
 ### Added
 
 - implemented new content to project front page.
+- published express server online to `fly.io` services.
 <!-- - implemented screenshots section at `readme.md` for review. -->
 
 ### Edited
@@ -35,7 +36,7 @@ This file records the major version changes of the project.
 
 ## [1.0.6] - Aug 10, 2026
 
-<i>Objective: build minimal viable product for the whole candidate selection process.</i>
+<i>Objective: build minimal viable product ("MVP") for the whole candidate selection process.</i>
 
 ### Added
 

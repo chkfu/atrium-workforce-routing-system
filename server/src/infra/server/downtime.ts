@@ -1,8 +1,9 @@
+import http from 'http';
 import https from 'https';
 import logger from '../loggers';
 
 export const downtime = function (
-  server: https.Server | null,
+  server: http.Server | https.Server | null,
   err_name: string,
   err_message: any,
 ) {

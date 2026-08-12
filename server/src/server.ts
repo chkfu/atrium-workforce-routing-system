@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import pg_pool from './infra/database/postgres';
 import redis from './infra/database/redis';
+import http from 'http';
 import https from 'https';
 import logger from './infra/loggers';
 import { downtime } from './infra/server/downtime';
@@ -20,28 +21,37 @@ process.on('uncaughtException', (err: Error) => {
   downtime(null, 'uncaughtException', err);
 });
 
-//  Setup https server with SSL/TLS
-const cert_path = path.resolve(__dirname, './infra/ssl/localhost.pem');
-const key_path = path.resolve(__dirname, './infra/ssl/localhost-key.pem');
+//  Setup server
 
-if (!fs.existsSync(cert_path)) {
-  const err_message: string = `[SERVER] error: SSL cert not found at ${cert_path}`;
-  logger.critical_logger.error(err_message);
-  throw new Error(err_message);
-}
-if (!fs.existsSync(key_path)) {
-  const err_message: string = `[SERVER] error: SSL key not found at ${key_path}`;
-  logger.critical_logger.error(err_message);
-  throw new Error(err_message);
-}
+const is_production: boolean = process.env.NODE_ENV === 'production';
+let app_server: http.Server | https.Server;
 
-const https_server: https.Server = https.createServer(
-  {
-    cert: fs.readFileSync(cert_path),
-    key: fs.readFileSync(key_path),
-  },
-  exp_app,
-);
+//  leanrt: fly.io handles https connection with their supplier's network, only requires http in here
+if (is_production) {
+  app_server = http.createServer(exp_app);
+} else {
+  const cert_path = path.resolve(__dirname, './infra/ssl/localhost.pem');
+  const key_path = path.resolve(__dirname, './infra/ssl/localhost-key.pem');
+
+  if (!fs.existsSync(cert_path)) {
+    const err_message: string = `[SERVER] error: SSL cert not found at ${cert_path}`;
+    logger.critical_logger.error(err_message);
+    throw new Error(err_message);
+  }
+  if (!fs.existsSync(key_path)) {
+    const err_message: string = `[SERVER] error: SSL key not found at ${key_path}`;
+    logger.critical_logger.error(err_message);
+    throw new Error(err_message);
+  }
+
+  app_server = https.createServer(
+    {
+      cert: fs.readFileSync(cert_path),
+      key: fs.readFileSync(key_path),
+    },
+    exp_app,
+  );
+}
 
 (async function start_server() {
   //  Setup postgres database connection
@@ -74,9 +84,10 @@ const https_server: https.Server = https.createServer(
   //  Listen to server
   const exp_server_port: number = Number(process.env.EXP_SERVER_PORT) || 8080;
   try {
-    https_server.listen(exp_server_port, () => {
+    app_server.listen(exp_server_port, () => {
+      const protocol = is_production ? 'http' : 'https';
       logger.app_logger.info(
-        `[SERVER] success: listening to https://localhost:${exp_server_port}`,
+        `[SERVER] success: listening to ${protocol}://localhost:${exp_server_port}`,
       );
     });
   } catch (err) {
@@ -90,5 +101,5 @@ const https_server: https.Server = https.createServer(
 //  learnt: soft downtime, as the server is supposed to be running
 //          ensure all tcp handshakes completed before the forceful exit
 process.on('unhandledRejection', (reason, promise) => {
-  downtime(https_server, 'unhandledRejection', reason);
+  downtime(app_server, 'unhandledRejection', reason);
 });

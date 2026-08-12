@@ -19,6 +19,7 @@ This guide provide the instructions for setting up the dev environment, maintain
 ## Contents
 
 - [Installation Guide](#installation-guide)
+- [Deployment Guide](#deployment-guide)
 - [Database Setup Guide](#database-setups-guide)
 - [SSL/TLS Setup Guide](#ssltls-setup-guide)
 - [Logging Guide](#logging-guide)
@@ -60,6 +61,47 @@ $ npm run dev
 ```
 
 The client will be available at `http://localhost:5173` (or specified).
+
+<br/>
+
+## Installation Guide
+
+### A. Server side setup (production environment)
+
+####  (1) initial deployment
+
+The project used `fly.io` for server-side deployment.  Please ensure the fly package has been installed successfully; if not, run the below command at CLI terminal:
+
+```
+$ brew install flyctl
+```
+
+To prepare for hosting the server, you need to run the operational procedures through:
+
+```
+$ fly launch
+```
+
+The service provider will require to login (with verification) and confirm the server configuration. 
+
+The building procedures will automatically run, and therefore the docker-related files will be generated upon provided information. 
+
+Once completed, the terminal will return the server URL for your further action. The server is currently published at: `https://atrium-server-express-20260812.fly.dev`.
+
+####  (2) subsequent update
+
+If there is any subsequent changes of codebase, you will need to update the published server with the below command:
+
+```
+$ fly deploy
+```
+
+The deployment procedure will be re-run again to upload the new changes.
+
+<br/>
+
+<i>** Remarks: The latest URL need to be updated at `client/src/config/api.ts`, enable users requests from the client side must be always accurate. **</i>
+
 
 <br/>
 

@@ -98,6 +98,9 @@ export function set_cookie_token(res: Response, token: string) {
     ),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    //  leanrt: if lax, only enable request from same network domain
+    //  learnt: samesite: none, instruct cookie to be sent no matter it is CORS
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
   } catch {
     throw Error(`[AuthService] error: failed to clear cookie token.`)
@@ -106,7 +109,12 @@ export function set_cookie_token(res: Response, token: string) {
 
 //  remarks: clear jwt details for logout
 export function clear_cookie_token(res: Response) {
-  res.clearCookie('jwt', { httpOnly: true });
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    //  remarks: refers to earlier comment at set_cookie_token about CORS
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
 }
 
 //  ==========  Token-related Methods  ==========

@@ -13,8 +13,7 @@ import { createClient, RedisClientType } from 'redis';
 import logger from '../loggers';
 
 dotenv.config({
-  path: path.resolve(__dirname, '../../../process.env.example'),
-  override: true,
+  path: path.resolve(__dirname, '../../../.env'),
 });
 
 //  Error handling

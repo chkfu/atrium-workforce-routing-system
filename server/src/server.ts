@@ -12,7 +12,7 @@ import exp_app from './app';
 import AppError from './util/errors/AppError';
 
 //  Setup dotenv env
-dotenv.config({ path: path.resolve(__dirname, '../process.env.example') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 //  BEFORE RUNNING: handle uncaught exceptions
 //  learnt: hard downtime, as no impact when server has not been started

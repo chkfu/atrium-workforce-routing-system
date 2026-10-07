@@ -86,7 +86,7 @@ The service provider will require to login (with verification) and confirm the s
 
 The building procedures will automatically run, and therefore the docker-related files will be generated upon provided information. 
 
-Once completed, the terminal will return the server URL for your further action. The server is currently published at: `https://atrium-server-express-20260812.fly.dev`.
+Once completed, the terminal will return the server URL for your further action. The server is currently published at: `https://atrium-20261007-windblown-lantern-5526.fly.dev`.
 
 ####  (2) subsequent update
 
@@ -104,7 +104,7 @@ The deployment procedure will be re-run again to upload the new changes.
 
 <br/>
 
-### B. Server side setup (production environment)
+### B. Client side setup (production environment)
 
 ####  (1) initial deployment
 
@@ -130,7 +130,7 @@ $ vercel --prod
 
 Please note that any unused path or declaration will crash the buidling process, while conflicts has been found against the typecript `noUnusedParameters` setting,
 
-Finally, the terminal returns the URL of the published site. The website is currently running at: `https://client-seven-pi-16.vercel.app`.
+Finally, the terminal returns the URL of the published site. The client website is currently running at: `https://atrium-client.vercel.app/`.
 
 ####  (2) subsequent update
 

@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [ 
+    {
+      "source": "/api/:path*",
+      "destination": "https://atrium-server-express-20260812.fly.dev/api/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+]
 }

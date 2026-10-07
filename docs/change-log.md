@@ -18,7 +18,7 @@ This file records the major version changes of the project.
 
 <br/>
 
-## [1.0.6] - Aug 12, 2026
+## [1.0.6] - Oct 07, 2026
 
 <i>Objective: finalise the preliminary MVP product for online deployment.</i>
 
@@ -27,10 +27,16 @@ This file records the major version changes of the project.
 - implemented new content to project front page.
 - published express server online at `fly.io` service.
 - published client side online at `vercel` service.
+- apended new test play details for review at `docs/test-play.md`.
 
 ### Edited
 
 - refactored duplicated codes of content section at project front page.
+
+### Fixed
+
+- fix web domain misalignment across fly client and vercel server.
+
 
 <br/>
 

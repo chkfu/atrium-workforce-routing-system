@@ -1,4 +1,6 @@
-const BASE_URL = 'https://atrium-server-express-20260812.fly.dev/api/v1';
+//  learnt: edited rewrite section in vercel.json, which enable client side recognise the same domain access
+//          in order to fix the cors
+const BASE_URL = '/api/v1';
 
 export const API = {
   REGISTER_USER: `${BASE_URL}/auth/register_new_user`,

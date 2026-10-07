@@ -48,6 +48,11 @@ Thumbs.db
 coverage/
 .nyc_output/
 
+# Production
+Dockerfile
+.dockerignore
+fly.toml
+
 # Misc
 *.tsbuildinfo
 .vercel

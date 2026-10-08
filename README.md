@@ -1,6 +1,9 @@
 # Atrium - Workforce Routing System
 
-**Live Demo:** [https://atrium-client.vercel.app](https://atrium-client.vercel.app)
+**Live Demo:** [https://atrium-client.vercel.app/](https://atrium-client.vercel.app)
+<i>
+
+</i>
 
 <br/>
 
@@ -49,6 +52,18 @@ Matching candidates and departments according to their preferences and departmen
 ### C. Comparable Evaluation of Selection Strategies (to be developed)
 
 Systematically re-running the selection process with different configurations, comparing various outcomes (e.g. passing rate, dropout rate, preference satisfaction) for management decision. 
+
+### D. Demo
+
+<p>
+  ** DEMO: Manage Candidate Data **
+  <img src="docs/media/meida_readme_dashboardDemo.gif" width="75%">
+</p>
+
+<p>
+  ** DEMO: Run Candidate Selection **
+  <img src="docs/media//meida_readme_selectionDemo.gif" width="75%">
+</p>
 
 <br/>
 

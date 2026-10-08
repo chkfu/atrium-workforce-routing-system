@@ -57,7 +57,7 @@ function ShrinkedHeader(): JSX.Element {
       <nav className="block lg:hidden duration-300 transition-all border-gray-200 shadow-sm w-full h-auto pt-2">
         {/*  section: menu control  */}
         <button
-          className="flex active:scale-98 justify-self-start items-center p-8 cursor-pointer"
+          className="flex active:scale-98 justify-self-start items-center p-4 cursor-pointer"
           type="button"
           onClick={() => setExpandList((prev) => !prev)}
         >
@@ -71,7 +71,7 @@ function ShrinkedHeader(): JSX.Element {
         </button>
         {/*  section: menu list  */}
         <div
-          className={`absolute bg-teal-800 md:mt-1 px-8 py-12 md:rounded-md shadow-lg md:w-96 w-full h-screen md:h-auto duration-300 overflow-y-auto ${expandList ? 'block' : 'hidden'}`}
+          className={`absolute bg-teal-800 px-8 py-4 md:rounded-md shadow-lg md:w-96 w-full h-screen md:h-auto duration-300 overflow-y-auto ${expandList ? 'block' : 'hidden'}`}
         >
           {/*  section a: navigate section  */}
           <div className="py-2">

@@ -14,7 +14,7 @@ export const HomeHeroSect = function () {
         className="w-full h-full object-cover"
       />
       <div className="absolute h-full w-full top-0 left-0 z-10">
-        <div className="absolute flex flex-col top-1/2 left-1/2 lg:left-1/4 -translate-x-1/2 -translate-y-1/2 bg-white/45 rounded-4xl p-12 min-w-3/5 lg:min-w-1/3 max-w-96 max-h-4/5 lg:max-h-3/5 duration-300 ease-in-out">
+        <div className="absolute flex flex-col top-1/2 left-1/2 min-w-90 lg:left-1/4 -translate-x-1/2 -translate-y-1/2 bg-white/45 rounded-4xl p-12 lg:min-w-120 max-w-96 max-h-4/5 lg:max-h-3/5 duration-300 ease-in-out">
           <h4 className="font-bold text-3xl text-teal-900 py-8 justify-center lg:justify-start">
             Graduate Program 2027
           </h4>

@@ -18,7 +18,7 @@ This file records the major version changes of the project.
 
 <br/>
 
-## [1.0.6] - Oct 07, 2026
+## [1.0.6] - Oct 08, 2026
 
 <i>Objective: finalise the preliminary MVP product for online deployment.</i>
 
@@ -32,6 +32,7 @@ This file records the major version changes of the project.
 ### Edited
 
 - refactored duplicated codes of content section at project front page.
+- refined padding for home page's hero section and shrinked menu
 
 ### Fixed
 

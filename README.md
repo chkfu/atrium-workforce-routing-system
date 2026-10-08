@@ -56,13 +56,13 @@ Systematically re-running the selection process with different configurations, c
 ### D. Demo
 
 <p>
-  ** DEMO: Manage Candidate Data **
-  <img src="docs/media/meida_readme_dashboardDemo.gif" width="75%">
+  <b>DEMO: Manage Candidate Data</b>
+  <img src="docs/media/meida_readme_dashboardDemo.gif" width="100%">
 </p>
 
 <p>
-  ** DEMO: Run Candidate Selection **
-  <img src="docs/media//meida_readme_selectionDemo.gif" width="75%">
+  <b>DEMO: Run Candidate Selection</b>
+  <img src="docs/media//meida_readme_selectionDemo.gif" width="100%">
 </p>
 
 <br/>

@@ -57,7 +57,7 @@ Systematically re-running the selection process with different configurations, c
 
 <p>
   <b>DEMO: Manage Candidate Data</b>
-  <img src="docs/media/meida_readme_dashboardDemo.gif" width="100%">
+  <img src="docs/media/media_readme_dashboardDemo.gif" width="100%">
 </p>
 
 <p>
